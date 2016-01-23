@@ -28,16 +28,6 @@ function nav_click(is_show) {
       .addClass('col-md-10 col-lg-8 col-md-offset-1 col-lg-offset-2'); 
   }  /*col-md-offset-1 col-lg-offset-2*/
 }
-/* 控制文章章节列表按钮 */
-function content_click(is_show){
-  if (is_show) {
-    $('#content_table').show();
-    $('#content_btn i').removeClass('fa-plus').addClass('fa-minus');
-  } else {
-    $('#content_table').hide();
-    $('#content_btn i').removeClass('fa-minus').addClass('fa-plus');
-  }
-}
 
 $(document).ready(function() {
   /* 控制左侧 aside 的动作 */
@@ -47,15 +37,6 @@ $(document).ready(function() {
     nav_click(isClicked);
 
     $(this).data('clicked', !isClicked);
-  });
-
-  $("#content_btn").on('click', function(){
-    isClicked = $(this).data('clicked');
-
-    content_click(!isClicked);
-
-    $(this).data('clicked',!isClicked);
-
   });
 
   $(document).pjax('.pjaxlink', '#pjax', { fragment: "#pjax", timeout: 10000 });
