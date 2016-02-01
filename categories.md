@@ -2,7 +2,7 @@
 layout: page
 title: Category Index
 permalink: /categories/
-banner_image: life.jpg
+banner_image: sea.jpg
 ---
 
 <ul class="tag-box inline">
