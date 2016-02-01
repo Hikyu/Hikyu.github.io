@@ -1,6 +1,6 @@
 ---
 layout: page
-title: Category Index
+title: 分类
 permalink: /categories/
 banner_image: sea.jpg
 ---

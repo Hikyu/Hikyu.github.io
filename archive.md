@@ -1,6 +1,6 @@
 ---
 layout: page
-title: Blog Archive
+title: 归档
 permalink: /archive/
 banner_image: life.jpg
 ---

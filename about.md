@@ -1,6 +1,6 @@
 ---
 layout: page
-title: 关于作者
+title: 作者
 permalink: /about/
 banner_image: superman.jpg
 banner_image_alt: About me
