@@ -3,7 +3,7 @@ title: kyu的博客
 tagline: 人要是没有理想，那和咸鱼有什么区别
 email: 13116075090@sina.cn
 description: > # this means to ignore newlines until "baseurl:"
-  做一个有用的人
+  做一个有用的人....
 baseurl: "/Hikyu.github.io" # the subpath of your site, e.g. /blog/
 url: "http://Hikyu.github.io" # the base hostname & protocol for your site
 logourl: /assets/images/logo.png # Site logo
