@@ -25,9 +25,7 @@ banner_image: life.jpg
     {% assign pages_list = tag[1] %}  
     {% for post in pages_list %}
       {% if post.title != null %}
-      
       <li><a href="{{ site.url }}{{ post.url }}">{{ post.title }}<span class="entry-date"><time datetime="{{ post.date | date_to_xmlschema }}" itemprop="datePublished">{{ post.date | date: "%B %d, %Y" }}</time></a></li>
-      {% endif %}
       {% endif %}
     {% endfor %}
     {% assign pages_list = nil %}
