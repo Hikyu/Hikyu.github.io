@@ -1,37 +1,62 @@
-permalink: /:year/:month/:day/:title.html
-paginate: 10
-markdown: redcarpet
-# 作者信息
-author: 
-  name: kyu
-  email: 13116075090@sina.cn
-  link: http://Hikyu.github.io
-  github: https://github.com/Hikyu
-  wechat: 532411459
-# 站点信息
+# Site settings
 title: kyu的博客
-description: My personal blog
-url: http://Hikyu.github.io
-rss_url: /pages/atom.xml
+tagline: 做一个好人，做一个有用的人
+email: 13116075090@sina.cn
+description: > # this means to ignore newlines until "baseurl:"
+  做一个有用的人.
+baseurl: "/Hikyu.github.io" # the subpath of your site, e.g. /blog/
+url: "http://Hikyu.github.io" # the base hostname & protocol for your site
+logourl: /assets/images/logo.png # Site logo
+author: "kyu"
+author_thumbnail: "/assets/images/avatar.jpg" # Author avatar
+# Theme customization - please change from the defaults!
+theme:
+  # Color for sidebar bar, links, etc
+  highlight_color: "#205081" #205081" # "#272935"
+  # Social media links, leave blank to ignore
+  social: 
+    github: gayanvirajith
+    twitter: gayanvirajith
+    facebook: gayanvirajith
+    gplus: +gayanvirajith
+    # dribble: gayanvirajith
+    pinterest: gayanvirajith
 
-# gavatar头像及Favicon
-gavatar: /public/img/header.png
-favicon: /public/img/header.png
+  # Enable share buttons on post footer
+  show_share_buttons: false
 
-# disqus 设置
-disqus:
-  shortname: painterlin
+  # Show author picure, name and social links on post footer
+  show_author_info: false
 
-# 主题设置，自动激活某个标签
-active: 工具
+  # Disqus comments manager - shortname
+  # disqus_shortname: gaya-webcreate
 
-# 首页除了最新文章外显示分类
-cates: 
-  - Optimization
-  - LaTeX
+  # Google Analytics/Webmaster key, leave blank to ignore
+  google_analytics_key: 
+  google_webmaster_key: 
 
-# 中文本地化
-locals:
-  tags: 标签
-  allarticle: 所有文章
-  archive: 归档
+# Build settings
+markdown: kramdown
+
+# Permalinks
+permalink:        pretty
+
+# Pagination config
+gems: [jekyll-paginate]
+paginate: 5
+paginate_path: "page:num"
+
+# Files/Folders to be excluded from generated _site folder
+exclude: 
+  - CNAME
+  - Gemfile
+  - Rakefile
+  - README.md
+  - .gitignore
+  - .sass-cache
+  - Gemfile.lock
+
+# Sass conversion configs
+sass:
+  sass_dir: assets/css/_sass
+  style: :compressed
