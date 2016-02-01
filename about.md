@@ -2,7 +2,7 @@
 layout: page
 title: 关于作者
 permalink: /about/
-banner_image: nizhan.jpg
+banner_image: superman.jpg
 banner_image_alt: About me
 ---
 
@@ -20,5 +20,4 @@ banner_image_alt: About me
 
 ---
 
-{% include social.html %}
 
