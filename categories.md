@@ -31,6 +31,7 @@ banner_image: life.jpg
       {% endif %}
     {% endfor %}
     {% assign pages_list = nil %}
-    {% assign group = nil %}
+    {% assign group = nil %}   
   </ul>
+  <br>
 {% endfor %}
