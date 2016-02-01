@@ -1,24 +1,22 @@
 ---
 layout: page
-title: About me
+title: 关于作者
 permalink: /about/
 banner_image: sample-banner-image-2.jpg
 banner_image_alt: About me
 ---
 
-Hi, I am Tom Warlker. I am a professional UI/UX designrer and web developer. I love being minimal and creative.
+目前大四，刚入行的程序猿一枚.
+略懂Java,Android.
 
-I prefer to serve with Php and Ruby based stacks and also love to work 
-on [Jekyll][jekyll] and [Processwire CMS/CMF][pw].
 
-### Contact me
+>博客模板来源
+>https://github.com/gayanvirajith/gaya
+### 联系方式
 
-Say `Hello` at gayanvirajith@gmail.com or find
-me on
+欢迎骚扰: QQ532411459
 
 ---
 
 {% include social.html %}
 
-[pw]: http://processwire.com
-[jekyll]: http://jekyllrb.com

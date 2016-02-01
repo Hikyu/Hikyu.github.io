@@ -1,9 +1,9 @@
 # Site settings
 title: kyu的博客
-tagline: 做一个好人，做一个有用的人
+tagline: 人要是没有理想，那和咸鱼有什么区别
 email: 13116075090@sina.cn
 description: > # this means to ignore newlines until "baseurl:"
-  做一个有用的人.
+  做一个有用的人
 baseurl: "/Hikyu.github.io" # the subpath of your site, e.g. /blog/
 url: "http://Hikyu.github.io" # the base hostname & protocol for your site
 logourl: /assets/images/logo.png # Site logo
@@ -12,15 +12,11 @@ author_thumbnail: "/assets/images/avatar.jpg" # Author avatar
 # Theme customization - please change from the defaults!
 theme:
   # Color for sidebar bar, links, etc
-  highlight_color: "#1ec2e5" #205081" # "#272935"
+  highlight_color: "#1E88E5" #1ec2e5" #205081" # "#272935"
   # Social media links, leave blank to ignore
   social: 
-    github: gayanvirajith
-    twitter: gayanvirajith
-    facebook: gayanvirajith
-    gplus: +gayanvirajith
-    # dribble: gayanvirajith
-    pinterest: gayanvirajith
+    github: Hikyu
+    email: 13116075090@sina.cn
 
   # Enable share buttons on post footer
   show_share_buttons: false
