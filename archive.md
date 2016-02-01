@@ -2,7 +2,7 @@
 layout: page
 title: Blog Archive
 permalink: /archive/
-banner_image: dog.jpg
+banner_image: life.jpg
 ---
 
 <div>
