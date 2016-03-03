@@ -6,6 +6,7 @@ categories: markdown
 banner_image: Regrets.jpg
 comments: true
 ---
+
 >[Markdown][markdown-com] 是一种可以使用普通文本编辑器编写的标记语言，通过简单的标记语法，它可以使普通文本内容具有一定的格式。
 
  即：Markdown 就是一种类似于Html的标记语言，比Html更简单，通过转换之后使普通文本内容具有一定的格式。
