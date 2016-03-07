@@ -4,7 +4,9 @@ title:  "notify 与 notifyAll"
 date:   2015-12-21 22:10:55
 categories: java 多线程 
 ---
+
 # notify 与 notifyAll 
+
 今天遇到了这么个情况：
 有线程若干，我需要他们按顺序执行。
 代码大概长这样：
