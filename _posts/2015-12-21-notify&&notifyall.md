@@ -68,7 +68,7 @@ syncTag.threadNO == scriptNO Õâ¸öÌõ¼ş£¬Ö»Òª±»»½ĞÑÁË£¬ÓÖÇ¡ºÃÓµÓĞÁËËø¡£ÄÇËû¾ÍÖ´ĞĞÏ
 Èç¹û²»·ûºÏ£¬¾Í¼ÌĞøwait.·ûºÏÔòÖ´ĞĞ¡£
 ºÜ¼òµ¥£¬½« 
 
-```
+{% highlight ruby linenos %}
 if (syncTag.threadNO != scriptNO) {
     try {
 			syncTag.wait();
@@ -76,11 +76,11 @@ if (syncTag.threadNO != scriptNO) {
 								e.printStackTrace();
 		}
 }
-```
+{% endhighlight %}
 
 Õâ²¿·Ö´úÂë ¸ÄÎª£º 
 
-```
+{% highlight ruby linenos %}
 while (syncTag.threadNO != scriptNO) {
 		try {
 				syncTag.wait();
@@ -88,7 +88,7 @@ while (syncTag.threadNO != scriptNO) {
 				e.printStackTrace();
 		}
 }
-```
+{% endhighlight %}
 
 Õâ¸öÎÊÌâ¾Í½â¾öÁË¡£
 	 
