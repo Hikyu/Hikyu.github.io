@@ -250,7 +250,7 @@ td, th {
     }
 
     .table td, .table th {
-        background-color: #fff !important
+        background-color: #fff 
     }
 
     .btn>.caret, .dropup>.btn>.caret {
@@ -262,11 +262,11 @@ td, th {
     }
 
     .table {
-        border-collapse: collapse !important
+        border-collapse: collapse 
     }
 
     .table-bordered th, .table-bordered td {
-        border: 1px solid #ddd !important
+        border: 1px solid #ddd 
     }
 }
 
