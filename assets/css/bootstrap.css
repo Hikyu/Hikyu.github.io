@@ -2556,3 +2556,8 @@ a.label:hover, a.label:focus {
 .panel-danger>.panel-footer+.panel-collapse>.panel-body {
     border-bottom-color: #ebccd1
 }
+
+.row {
+    margin-left: -15px;
+    margin-right: -15px;
+}
