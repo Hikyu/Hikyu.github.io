@@ -1,8 +1,9 @@
 ---
 layout: book
-title: 2012年阅读书单
+title: 读书|明志
 category: 读书
 keywords: 阅读,书单,2012
+banner_image:Regrets.jpg
 books: 
     - title: 上帝掷骰子吗？
       status: 已读
