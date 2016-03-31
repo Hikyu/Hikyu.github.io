@@ -1,6 +1,6 @@
 ---
 layout: book
-title: 读书|明志
+title: 读书 | 明志
 category: 读书
 keywords: 阅读,书单,2012
 books: 
