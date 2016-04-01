@@ -14,6 +14,16 @@ books:
       link: http://book.douban.com/subject/1200840/
       cover: http://img3.doubanio.com/lpic/s1144911.jpg
       description:
+    - title: 大话设计模式
+      status: 在读
+      author: 程杰
+      publisher: 清华大学出版社
+      start: 2016-03-30
+      end: 
+      language: 中文
+      link: https://book.douban.com/subject/2334288/
+      cover: https://img1.doubanio.com/lpic/s6908318.jpg
+      description: 
     - title: 围城
       status: 未读
       author: 钱锺书 
