@@ -548,7 +548,7 @@ img {
 /* Put some padding arround post images */
 .post .post-content img, .page .post-content img {
   padding: 1em 0;
-  color: #000;
+  color: $gray-dark;
 }
 
 /* Meta info after post-title */
