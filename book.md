@@ -9,11 +9,11 @@ books:
       author: 路遥
       publisher: 人民文学出版社
       start: 2016-04-01
-      end: 
+      end: 2016-04-24
       language: 中文
       link: http://book.douban.com/subject/1200840/
       cover: http://img3.doubanio.com/lpic/s1144911.jpg
-      description:
+      description: 钱当然很重要，这我不是不知道；我一天何尝不为钱而受熬苦！可是，我又觉得，人活这一辈子，还应该有些另外的什么才对……
     - title: 大话设计模式
       status: 在读
       author: 程杰
@@ -53,5 +53,16 @@ books:
       language: 中文
       link: https://book.douban.com/subject/6709783/
       cover: https://img3.doubanio.com/lpic/s6807265.jpg
+      description: 
+
+    - title: 活着
+      status: 在读
+      author: 吴军
+      publisher: 作家出版社
+      start: 2014-04-24
+      end: 
+      language: 中文
+      link: https://book.douban.com/subject/4913064/
+      cover: https://img3.doubanio.com/lpic/s27279654.jpg
       description: 
 ---
