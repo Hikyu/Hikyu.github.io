@@ -5,7 +5,7 @@ category: 读书
 keywords: 阅读,书单,2012
 books: 
     - title: 平凡的世界
-      status: 在读
+      status: 已读
       author: 路遥
       publisher: 人民文学出版社
       start: 2016-04-01
