@@ -1,8 +1,6 @@
 ---
 layout: book
 title: 读书 | 明志
-category: 读书
-keywords: 阅读,书单,2012
 books: 
     - title: 平凡的世界
       status: 已读
@@ -59,10 +57,10 @@ books:
       status: 在读
       author: 吴军
       publisher: 作家出版社
-      start: 2014-04-24
-      end: 
+      start: 2016-04-24
+      end: 2016-04-25
       language: 中文
       link: https://book.douban.com/subject/4913064/
       cover: https://img3.doubanio.com/lpic/s27279654.jpg
-      description: 
+      description: 这是一次残忍的阅读...
 ---
