@@ -54,8 +54,8 @@ books:
       description: 
 
     - title: 活着
-      status: 在读
-      author: 吴军
+      status: 已读
+      author: 余华
       publisher: 作家出版社
       start: 2016-04-24
       end: 2016-04-25
