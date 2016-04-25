@@ -37,7 +37,7 @@ fork="yes"
 
 Build Successfull.
 
-这次的总结并不是为了学习ant(有学习Gradle的计划)，只是从这次解决问题的过程中，学会了两点：
+这次的总结并不是为了学习ant(有学习Gradle的计划)，只是从这次解决问题的过程中，学会了：
 
 1.不要用百度
 
@@ -47,5 +47,7 @@ Build Successfull.
 
 ## 参考
 
-[Change JDK for running <ANT> task from within build xml](http://stackoverflow.com/questions/17594075/change-jdk-for-running-ant-task-from-within-build-xml)
+[Change JDK for running <ANT> task from within build xml][ip]
+
+[ip]:http://stackoverflow.com/questions/17594075/change-jdk-for-running-ant-task-from-within-build-xml
 
