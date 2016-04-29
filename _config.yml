@@ -19,7 +19,7 @@ theme:
     email: 13116075090@sina.cn
 
   # Enable share buttons on post footer
-  show_share_buttons: true
+  show_share_buttons: false
 
   # Show author picure, name and social links on post footer
   show_author_info: true
