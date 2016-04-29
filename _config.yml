@@ -4,7 +4,7 @@ tagline: 即使最平凡的人也要为他生活的那个世界奋斗.
 email: 13116075090@sina.cn
 description: > # this means to ignore newlines until "baseurl:"
   做一个有趣的人
-baseurl: "/kyu" # the subpath of your site, e.g. /blog/
+baseurl: "/Hikyu.github.io" # the subpath of your site, e.g. /blog/
 url: "http://Hikyu.github.io" # the base hostname & protocol for your site
 logourl: /assets/images/logo.png # Site logo
 author: "kyu"
