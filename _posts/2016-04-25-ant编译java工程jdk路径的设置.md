@@ -1,6 +1,7 @@
 ---
 layout: post
 categories: java ant
+comments: true
 ---
 
 > 今天工作的时候涉及到使用ant对项目进行编译，打包。此前只知道ant是一个构建工具（当然，现在也是），也基本上没有接触过。但是build.xml是从仓库下载的已经配置好的文件。本来想着只要在eclipse轻轻一点Ant Build 就万事大吉，但是这个打包却折腾了我两个小时。
