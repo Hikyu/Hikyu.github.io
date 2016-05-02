@@ -143,7 +143,7 @@ $(document).ready(function() {
       alert("Please check Disqus short name configuration on your _config.yml");
     }
   } 
-  $(this).fadeOut(200);
+  // $(this).fadeOut(200);
 }); 
 /*
  * Scroll to top button
