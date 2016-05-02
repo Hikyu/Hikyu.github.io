@@ -132,7 +132,6 @@
 
 $(document).ready(function() {     
     jQuery(".post").fitVids();
-    initDisqusComments();
     if(config.disqus_shortname != '' && config.disqus_shortname != null && config.disqus_shortname != undefined) {
       var disqus_shortname = config.disqus_shortname;
       (function() {
