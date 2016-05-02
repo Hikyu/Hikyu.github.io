@@ -257,7 +257,7 @@ img {
   display: none;
 }
 
-.header .header-logo, .header .header-title,.header .header-search{
+.header .header-logo, .header .header-title{
   @include MQ(M) {
     float: none;
     width: auto;
@@ -346,6 +346,10 @@ img {
 .sidebar .sidebar-nav {
   margin: 0 -1em;
   border-top: 1px solid lighten($color-1, 8%);
+}
+
+.sliderbar .sidebar-search {
+  display: none;
 }
 
 .sidebar .sidebar-nav .sidebar-nav-item {
