@@ -105,7 +105,7 @@
 /*
  * Show disqus comments
  */
-jQuery(document).ready(function() {
+$(document).ready(function() {
 
   jQuery(".post").fitVids();
 
