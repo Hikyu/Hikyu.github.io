@@ -257,10 +257,6 @@ img {
   display: none;
 }
 
-.header .header-search {
-  display: none;s
-}
-
 .header .header-logo, .header .header-title,.header .header-search{
   @include MQ(M) {
     float: none;
