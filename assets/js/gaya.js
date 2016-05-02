@@ -105,7 +105,7 @@
 /*
  * Show disqus comments
  */
-$(document).ready(function() {
+jQuery(document).ready(function() {
 
   jQuery(".post").fitVids();
 
@@ -124,10 +124,10 @@ $(document).ready(function() {
     }
   }
 
-  // $('.load-view').click(function(){
+  $('.load-view').click(function(){
     initDisqusComments();
     $(this).fadeOut(200);
-  // });
+  });
 });
 
 /*
