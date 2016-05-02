@@ -124,10 +124,10 @@ jQuery(document).ready(function() {
     }
   }
 
-  $('.load-view').click(function(){
+  // $('.load-view').click(function(){
     initDisqusComments();
     $(this).fadeOut(200);
-  });
+  // });
 });
 
 /*
