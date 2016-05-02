@@ -64,11 +64,12 @@ layout: default
   </div>
   
   {% if page.comments %}
-    <div class="comments">
-        <!-- <a href="javascript:;" class="load-view">加载评论...</a> -->
-        {% include disqus_comment.html  %}
-        <!-- <div id="disqus_thread"></div>
-        <div id="g-comments"></div> -->
-    </div>
+    <!-- <div class="comments">
+        <a href="javascript:;" class="load-view">加载评论...</a>
+
+        <div id="disqus_thread"></div>
+        <div id="g-comments"></div>
+    </div> -->
+    {% include disqus_comment.html  %}
   {% endif %}
 </div>
