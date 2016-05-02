@@ -1,6 +1,6 @@
 {% capture logo %}
 {% if site.logourl && site.logourl != '' %}
-<p>
+<div>
 	<a href="{{ '' | prepend: site.baseurl | prepend: site.url | append: '/' }}" 
 	  title="{{ site.title }}">
 	  <img 
@@ -10,6 +10,6 @@
 	<form class="navbar-form navbar-right" _lpchecked="1">
   		<input type="text" id="st-search-input" class="form-control col-md-8" placeholder="Search">
 	</form>
-</p>
+</div>
 {% endif %}
 {% endcapture %}{{ logo | strip_newlines }}
