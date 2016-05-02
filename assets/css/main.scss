@@ -350,7 +350,12 @@ img {
 
 .sidebar .sidebar-search {
   padding: .5rem 1rem;
-  width:50px;
+  width:30px;
+  border:1px;
+  border-bottom-style:none;
+  border-top-style:none;
+  border-left-style:none;
+  border-right-style:none;
 }
 
 .sidebar .sidebar-nav .sidebar-nav-item {
