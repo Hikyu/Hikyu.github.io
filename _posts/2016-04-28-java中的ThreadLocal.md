@@ -8,7 +8,7 @@ comments: true
 
 ## **问题背景**：
 
-每次sql语句执行结束之后，最后都会接受后台传回的ReadyForQueryPacket包，标记语句执行完毕。在新版本的协议当中，针对读写分离的功能，在这个包中增加了一些要接收的数据：标记数据库状态的lsn。这个lsn标志着主备机之间的数据是否存在差异。每次执行完sql语句之后，都要将数据库后台传回来的lsn与当前主机的lsn进行比较，从而决定下一步的读写过程。每次取本机的lsn操作长这样：
+每次sql语句执行结束之后，最后都会接受后台传回的ReadyForQueryPacket包，标记语句执行完毕。在新版本的协议当中，针对读写分离的功能，在这个包中增加了一些要接收的数据：标记数据库主机状态的lsn。这个lsn标志着主备机之间的数据是否存在差异。每次执行完sql语句之后，都要将数据库后台传回来的lsn与当前主机的lsn进行比较，从而决定下一步的读写过程。每次取本机的lsn操作长这样：
 
 {% highlight ruby linenos %}
 LsnVo lv = ((LsnVo)DispatchConnection.threadLocalLsn.get());
@@ -30,9 +30,44 @@ LsnVo lv = ((DispatchConnection) conn).getLsnVo();
 
 so,按照上面的改法问题解决了。
 
-那为什么要使用ThreadLocal存储lsn呢？前面也说了lsn是一个线程级变量，每个线程可以有多个connection，但这多个connection应当操作同一个lsn对象。（个人认为这样做的原因：如果将lsn设为connection中的静态变量，意味着他是全局的，多线程共享的，这样做增加了复杂性，因为要解决多线程共享变量的问题。 如果将lsn设为connection私有的，每个connection都有他自己的lsn,这样的话如果一个线程中有大量的connection，就会造成频繁的不必要的从后台获取和提交lsn的动作。所以将lsn设定为线程级变量最为合适。ps:之后问了宇哥，使用ThreadLocal存储lsn的主要原因并不是这个，跟读写分离的机制有关。但就ThreadLocal的使用而言，这么解释也是可以的，增加对ThreadLocal使用场景的理解）
+那为什么要使用ThreadLocal存储lsn呢？前面也说了lsn是一个线程级变量，每个线程可以有多个connection，但这多个connection应当操作同一个lsn对象。
 
 这就是ThreadLocal的一个典型应用场景。
+
+## **ThreadLocal原理**：
+
+使用ThreadLocal存储变量，实现了线程级别的变量，即同一个线程内这个变量只有一个。
+
+ThreadLocal的set和get方法：
+
+{% highlight ruby linenos %}
+public void set(T value) {
+        Thread t = Thread.currentThread();
+        ThreadLocalMap map = getMap(t);
+        if (map != null)
+            map.set(this, value);
+        else
+            createMap(t, value);
+}
+
+public T get() {
+        Thread t = Thread.currentThread();
+        ThreadLocalMap map = getMap(t);
+        if (map != null)
+            return (T)map.get(this);
+
+        // Maps are constructed lazily.  if the map for this thread
+        // doesn't exist, create it, with this ThreadLocal and its
+        // initial value as its only entry.
+        T value = initialValue();
+        createMap(t, value);
+        return value;
+}
+{% endhighlight %}
+
+可以看到，我们存入ThreadLocal的变量最终存到一个ThreadLocalMap中，这个ThreadLocalMap实际上是Thread的成员变量。这个ThreadLocalMap以ThreadLocal为键，是因为，在一个线程中很可能不只有一个ThreadLocal对象，每个ThreadLocal所要存储的Value值也不同。每次调用ThreadLocal的get方法时，都会去当前线程的ThreadLocalMap中找到对应的值。起到线程隔离的效果。
+
+很容易明白他的工作原理。
 
 ## **应用场景**
 
@@ -42,14 +77,20 @@ so,按照上面的改法问题解决了。
 
 2.实现线程间的数据隔离，每个线程都有他自己的变量副本。
 
-对于1，这样的说法现在看起来也有些勉强，首先不能说解决了多线程共享对象的问题，因为如果一个对象需要多个线程共享（在某些场景下这是必须的），那么他在内存中应该只有一份，但是使用ThreadLocal之后会有多个内存对象存在，而不是多个引用指向同一片内存。这样的话只能通过线程同步或者其他方法解决这种问题。但是在上面的场景中，说ThreadLocal解决了多线程共享对象的问题，也说得通。但是要加一个前提，那就是这个所谓的共享对象其实是可以不共享的，并不是必须共享的。
+对于1，这样的说法现在看起来也有些勉强，首先不能说解决了多线程共享对象的问题，因为如果一个对象需要多个线程共享（在某些场景下这是必须的），那么他在内存中应该只有一份，但是使用ThreadLocal之后会有多个内存对象存在，而不是多个引用指向同一片内存。这样的话只能通过线程同步或者其他方法解决这种问题。但是在上面的场景中，说ThreadLocal解决了多线程共享对象的问题，也说得通。但是要加一个前提，那就是这个所谓的共享对象其实是可以不共享的，并不是必须共享的。比如上面的场景中，DispatchConnection 中 的masterLsn代表主机的状态，这个Lsn是可以不设为全局的（虽然主机只有一台，代表主机真实状态的Lsn也只有一个），每个线程可以有自己的masterLsn来表示当前主机的状态，因为在同一个线程中，每次的数据库读写操作是基于上一次操作进行的。
 
-对于2，当时理解的时候就有一个疑惑，既然实现了每个线程都有他自己的变量副本，那在线程类中直接添加成员变量不就行了吗？这样的话每个线程对象都有他自己的变量副本啊，为啥要搞的这么麻烦，用一个ThreadLocal来实现。现在才明白了，有时候这个线程类的创建并不是开发者自己，而是使用你的API的用户。例如上面的场景，你怎么可以要求使用JDBC的用户在创建线程类的时候为他设置一个指定的成员变量呢？这显然是不可能的！我们只能通过上面提到的方法，保证使用JDBC接口的用户创建了线程之后，他的每个线程内所有的connection都是在访问同一个lsn。
+对于2，每个线程有自己的变量副本。在上面的场景中，每个线程都应该操作同一个masterLsn。比如，首先创建了一个DispatchConnection，使用这个connection对数据库进行了更新操作，更新DispatchConnection中的masterLsn，然后关闭这个connection。紧接着又创建一个新的DispatchConnection，使用这个connection对数据库进行一些新的操作，比如查询刚才的更新。这个时候，需要将刚刚获得的masterLsn发送到备机，使备机与主机进行同步工作，然后才可以查询到上一个DispatchConnection所做的更新。所以，虽然创建了新的DispatchConnection，但前后两个DispatchConnection中的masterLsn应该是一样的，即这个masterLsn在同一个线程中应该只有一个，无论创建多少DispatchConnection（masterLsn是DispatchConnection的成员变量），这些connection中的Lsn都指向同一个对象。 故，使用ThreadLocal保存该masterLsn到DispatchConnection中。
 
-我们总结一下使用ThreadLocal的好处：
+我们总结一下使用ThreadLocal存储某个变量的场景，或者说条件：
 
-1.如同上面所说的，可以合并为一点：保证创建的每个线程访问他自己的变量。
+1.这个变量在同一个线程中只允许有一个，比如上面的masterLsn，尽管包含masterLsn的DispatchConnection被创建了多次，但是他们的成员变量masterLsn指向同一个对象。
 
-2.避免了参数的传递增加程序复杂性。
+2.要满足1中的条件，可以将该变量设为static的。此时多个线程共享这同一个变量，内存中独一份。但是这个时候会产生同步问题，代码的复杂度上升，也容易出问题。
 
-3.使你的程序更加优雅。
+所以，使用ThreadLocal的场景应该是这样：**这个变量不同的线程之间不需要共享，也就是这个变量不要求是全局的。同时，在同一个线程中，这个变量要求只有一个，即这个变量为线程级别的变量。**
+
+PS:既然说这个变量是线程级别的变量，那为什么不在这个线程类中创建这样一个变量呢？注意，线程的创建有时是不可控的，在上面的场景中，创建线程的基本上是使用DispatchConnection的用户，我们不能要求用户去创建masterLsn，更何况，这个masterLsn是属于DispatchConnection这个类，而DispatchConnection有可能创建销毁多次。
+
+另外，网上提到使用ThreadLocal的一个好处：避免了参数的传递增加程序复杂性。
+
+我不太理解这个好处从哪里体现出来。如果说要避免参数传递，将这个参数设为类的成员变量也可以解决。应用ThreadLocal的情况是：把ThreadLocal设为了成员变量，把这个参数存入ThreadLocal中。这个虽然说是避免了参数的传递，但这与使用ThreadLocal的目的相去甚远。使用ThreadLocal最主要还是解决线程级别的变量的问题。
