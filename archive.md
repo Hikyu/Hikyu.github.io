@@ -6,7 +6,7 @@ banner_image: life.jpg
 ---
 
 <div>
-  {% for post in site.posts %}
+{% for post in site.posts %}
     {% capture currentyear %}{{post.date | date: "%Y"}}{% endcapture %}
     {% if currentyear != year %}
       {% unless forloop.first %}

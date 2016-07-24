@@ -7,6 +7,14 @@ categories: java
 
 我决定根据上面文章中作者提到的学习路径去看代码，首先就是JDK中的核心代码。第一篇就来研究一下JAVA中的集合类-Arraylist。
 
+## 1.集合基础
+
+java有一套[集合框架](http://docs.oracle.com/javase/tutorial/collections/index.html)，Arraylist等集合类都是这个框架的成员。首先看一下最顶层的几个接口：
+
+<img src="http://docs.oracle.com/javase/tutorial/figures/collections/colls-coreInterfaces.gif" width="800" height="600"  /> 
+
+
+
 
 
 
