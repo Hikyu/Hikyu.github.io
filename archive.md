@@ -12,7 +12,7 @@ banner_image: life.jpg
       {% unless forloop.first %}
       
       {% endunless %}
-      <h2>{{ currentyear }}</h2>
+      <h3>{{ currentyear }}</h3>
    
       {% capture year %}{{currentyear}}{% endcapture %} 
     {% endif %}
