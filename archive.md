@@ -38,6 +38,6 @@ banner_image: life.jpg
         	{% assign archives_year = post_year %}
         	<h2>{{ archives_year }}</h2>
    		{% endif %}
-    {{ post.date | date: "%m-%d" }} - <a href="{{post.url}}">{{ post.title }}</a> </br>
+    {{ post.date | date: "%m-%d" }} - <a href="{{post.url | prepend: site.baseurl }}">{{ post.title }}</a> </br>
 	{% endfor %}
 </div>
