@@ -5,28 +5,22 @@ permalink: /archive/
 banner_image: life.jpg
 ---
 
-<!-- <div>
+<div>
 {% for post in site.posts %}
     {% capture currentyear %}{{post.date | date: "%Y"}}{% endcapture %}
     {% if currentyear != year %}
       {% unless forloop.first %}
       {% endunless %}
-      <ul>
       <h5>{{ currentyear }}</h5>
       {% capture year %}{{currentyear}}{% endcapture %} 
-      
     {% endif %}
-    <h5>{{ currentyear }}</h5>
-
-    {%for month in capture %}
-    <ul>
-  	  <li><a href="{{ post.url | prepend: site.baseurl }}">{{ post.title }}</a></li>
-    </ul>
     
+  	  <li>{{ post.date | date: "%m-%d" }} - <a href="{{ post.url | prepend: site.baseurl }}">{{ post.title }}</a></li>
+   
 {% endfor %}
-</div> -->
+</div>
 
-<div>
+<!-- <div>
 	{% capture archives_year %}
     	{{ 'now' | date: '%Y' }}
 	{% endcapture %}
@@ -41,3 +35,4 @@ banner_image: life.jpg
     {{ post.date | date: "%m-%d" }} - <a href="{{post.url | prepend: site.baseurl }}">{{ post.title }}</a> </br>
 	{% endfor %}
 </div>
+ -->
