@@ -48,7 +48,6 @@ Build Successfull.
 
 ## 参考
 
-[Change JDK for running <ANT> task from within build xml][ip]
+[Change JDK for running <ANT> task from within build xml](http://stackoverflow.com/questions/17594075/change-jdk-for-running-ant-task-from-within-build-xml)
 
-[ip]:http://stackoverflow.com/questions/17594075/change-jdk-for-running-ant-task-from-within-build-xml
 
