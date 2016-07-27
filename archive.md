@@ -8,14 +8,17 @@ banner_image: life.jpg
 <div>
 {% for post in site.posts %}
     {% capture currentyear %}{{post.date | date: "%Y"}}{% endcapture %}
-    {% if currentyear != year %}
+    <!-- {% if currentyear != year %}
       {% unless forloop.first %}
-      <ul>
       {% endunless %}
+      <ul>
       <h5>{{ currentyear }}</h5>
-      </ul>
       {% capture year %}{{currentyear}}{% endcapture %} 
-    {% endif %}
+      
+    {% endif %} -->
+    <ul>
     <li><a href="{{ post.url | prepend: site.baseurl }}">{{ post.title }}</a></li>
+    </ul>
+    
 {% endfor %}
 </div>
