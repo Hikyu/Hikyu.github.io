@@ -10,7 +10,7 @@ comments: true
 
 每次sql语句执行结束之后，最后都会接受后台传回的ReadyForQueryPacket包，标记语句执行完毕。在新版本的协议当中，针对读写分离的功能，在这个包中增加了一些要接收的数据：标记数据库主机状态的lsn。这个lsn标志着主备机之间的数据是否存在差异。每次执行完sql语句之后，都要将数据库后台传回来的lsn与当前主机的lsn进行比较，从而决定下一步的读写过程。每次取本机的lsn操作长这样：
 
-{% highlight ruby linenos %}
+{% highlight java linenos %}
 LsnVo lv = ((LsnVo)DispatchConnection.threadLocalLsn.get());
 {% endhighlight %}
 
@@ -18,7 +18,7 @@ LsnVo lv = ((LsnVo)DispatchConnection.threadLocalLsn.get());
 
 遂改之：
 
-{% highlight ruby linenos %}
+{% highlight java linenos %}
 LsnVo lv = ((DispatchConnection) conn).getLsnVo();
 {% endhighlight %}
 
@@ -40,7 +40,7 @@ so,按照上面的改法问题解决了。
 
 ThreadLocal的set和get方法：
 
-{% highlight ruby linenos %}
+{% highlight java linenos %}
 public void set(T value) {
         Thread t = Thread.currentThread();
         ThreadLocalMap map = getMap(t);

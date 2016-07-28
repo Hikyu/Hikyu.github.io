@@ -8,7 +8,7 @@ comments: true
 
 打包过程中总是报：
 
-{% highlight ruby linenos %}
+{% highlight java linenos %}
 [javac] 警告: [options] 未与 -source 1.5 一起设置引导类路径
 [javac] E:\doc\oscartools\driver\oscarJavaDriver\jdbc\V1.0\build\com\oscar\Driver.java:50: 错误: com.oscar.Driver不是抽象的, 并且未覆盖java.sql.Driver中的抽象方法getParentLogger()
 [javac] public class Driver implements java.sql.Driver {
@@ -31,7 +31,7 @@ comments: true
 
 果然，stackoverflow拯救了我，只需要在build.xml文件中javac标签下添加
 
-{% highlight ruby linenos %}
+{% highlight java linenos %}
 executable="C:\Program Files\Java\jdk1.5.0_22/bin/javac"
 fork="yes"
 {% endhighlight %}
