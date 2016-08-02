@@ -151,7 +151,7 @@ final int hash(Object k) {
 
 `key.equals(k)`：如果上述两个条件没有满足，并不能够断定这两个关键码相等，此刻要使用equals方法判断这两个关键码是否相同。如果相同，说明是我们要找的记录。
 
-`if (e.hash == hash && ((k = e.key) == key || key.equals(k)))`这句代码中其实包含了一种短路思想，|| 之前的判断如果生效，那么之后的key.equals(k)就不会再执行。很明显内存地址的比较要比equals方法高效的多。这也是Hashmap提高查找效率的一个重要手段。
+`if (e.hash == hash && ((k = e.key) == key /|/| key.equals(k)))`这句代码中其实包含了一种短路思想，/|/| 之前的判断如果生效，那么之后的key.equals(k)就不会再执行。很明显内存地址的比较要比equals方法高效的多。这也是Hashmap提高查找效率的一个重要手段。
 
 至此，我们应该对equals和hashcode有了一个相对清晰的认识：hashcode提高了查找指定对象的效率。euqals定义了两个对象之间是否在逻辑上相同。hashcode只在HashMap，HashSet等这样使用了散列思想的地方用到，而equals在判断两个对象之间是否相同时需要用到，比如排序等。
 
