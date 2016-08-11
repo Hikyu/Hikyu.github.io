@@ -5,6 +5,8 @@ categories: java
 
 >最近读了HashMap的源码，对HashCode与equals有了一定的了解，总结一下，顺便理一下HashMap中的核心算法。
 
+>Ps:找到一个[有趣的网站](https://www.cs.usfca.edu/~galles/visualization/OpenHash.html)，可以在线演示HashMap的put、delete过程。
+
 ## **1.** 什么是hashcode,hashcode的作用是什么
 
 hashcode并不是java中独有的。设想一下，如果让你设计一个算法，根据关键码去得到一个集合中的某个值或者这个关键码所在的位置。普通的做法就是挨个比较，高级一点的使用二分检索或者树形检索等算法。但是以上的检索算法都跟集合的长度N有关，当问题规模N很大时，这些检索的效率可能十分低下。
