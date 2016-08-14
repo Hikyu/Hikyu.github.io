@@ -11,7 +11,7 @@
     
     <meta name="description" content="最近在工作过程中总是被编码困扰，出现了很多意想不到的情况。故上网查看资料，总结一番。
 
-1.编码什么是编码？程序员应该都知道计算机能够识别的只是1和0，我们看到的文字、图片、视频等在计算机的 世界里都是以二进制的形式存在的。包括你的硬盘或者网络上传输的字节序列，都是无数个0和1组成的。英文字母，数字">
+编码什么是编码？程序员应该都知道计算机能够识别的只是1和0，我们看到的文字、图片、视频等在计算机的 世界里都是以二进制的形式存在的。包括你的硬盘或者网络上传输的字节序列，都是无数个0和1组成的。英文字母，数字，汉">
     
     
     
@@ -38,7 +38,7 @@
 				<h1 class="site-name"><a href="/" title="于凯的博客">于凯的博客</a></h1>
 				<h2 class="blog-motto">平凡中也有感动</h2>
 			</div>
-			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
 			</a></div>
 			<nav class="animated">
 				<ul>
@@ -51,7 +51,7 @@
 					
 					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
 						<label>Search</label>
-						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
 						<input type="hidden" name="q" value="site:yukai.space">
 					</form>
 					
@@ -75,7 +75,7 @@
     </p>
   <p class="article-time">
     <time datetime="2016-04-20T04:48:55.000Z" itemprop="datePublished">2016-04-20</time>
-    更新日期:<time datetime="2016-08-14T08:26:27.905Z" itemprop="dateModified">2016-08-14</time>
+    Updated:<time datetime="2016-08-14T09:11:22.744Z" itemprop="dateModified">2016-08-14</time>
     
   </p>
 </header>
@@ -83,14 +83,14 @@
 		
 		
 		<div id="toc" class="toc-article">
-			<strong class="toc-title">文章目录</strong>
-		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-编码"><span class="toc-number">1.</span> <span class="toc-text">1.编码</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Ascii编码"><span class="toc-number">1.0.1.</span> <span class="toc-text">Ascii编码</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#GB2312"><span class="toc-number">1.0.2.</span> <span class="toc-text">GB2312</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#UTF-8"><span class="toc-number">1.0.3.</span> <span class="toc-text">UTF-8</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-java-中的编码"><span class="toc-number">2.</span> <span class="toc-text">2. java 中的编码</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#class文件与内存中的编码"><span class="toc-number">2.0.1.</span> <span class="toc-text">class文件与内存中的编码</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#InputStreamReader与OutputStreamWriter"><span class="toc-number">2.0.2.</span> <span class="toc-text">InputStreamReader与OutputStreamWriter</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#String与byte"><span class="toc-number">2.0.3.</span> <span class="toc-text">String与byte[]</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#CharSet"><span class="toc-number">2.0.4.</span> <span class="toc-text">CharSet</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-延伸-byte"><span class="toc-number">3.</span> <span class="toc-text">3.延伸 byte</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">4.</span> <span class="toc-text">参考</span></a></li></ol>
+			<strong class="toc-title">Contents</strong>
+		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#编码"><span class="toc-number">1.</span> <span class="toc-text">编码</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Ascii编码"><span class="toc-number">1.0.1.</span> <span class="toc-text">Ascii编码</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#GB2312"><span class="toc-number">1.0.2.</span> <span class="toc-text">GB2312</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#UTF-8"><span class="toc-number">1.0.3.</span> <span class="toc-text">UTF-8</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#java-中的编码"><span class="toc-number">2.</span> <span class="toc-text">java 中的编码</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#class文件与内存中的编码"><span class="toc-number">2.0.1.</span> <span class="toc-text">class文件与内存中的编码</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#InputStreamReader与OutputStreamWriter"><span class="toc-number">2.0.2.</span> <span class="toc-text">InputStreamReader与OutputStreamWriter</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#String与byte"><span class="toc-number">2.0.3.</span> <span class="toc-text">String与byte[]</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#CharSet"><span class="toc-number">2.0.4.</span> <span class="toc-text">CharSet</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#延伸-byte"><span class="toc-number">3.</span> <span class="toc-text">延伸 byte</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">4.</span> <span class="toc-text">参考</span></a></li></ol>
 		</div>
 		
 		<blockquote>
 <p>最近在工作过程中总是被编码困扰，出现了很多意想不到的情况。故上网查看资料，总结一番。</p>
 </blockquote>
-<h2 id="1-编码"><a href="#1-编码" class="headerlink" title="1.编码"></a>1.编码</h2><p>什么是编码？程序员应该都知道计算机能够识别的只是1和0，我们看到的文字、图片、视频等在计算机的 世界里都是以二进制的形式存在的。包括你的硬盘或者网络上传输的字节序列，都是无数个0和1组成的。英文字母，数字，汉字等都是字符。不同字符对应二进制数的规则，也就是说不同的字符翻译为不同的0、1组合，就是字符的编码。这个过程的逆过程，就是解码。</p>
+<h2 id="编码"><a href="#编码" class="headerlink" title="编码"></a>编码</h2><p>什么是编码？程序员应该都知道计算机能够识别的只是1和0，我们看到的文字、图片、视频等在计算机的 世界里都是以二进制的形式存在的。包括你的硬盘或者网络上传输的字节序列，都是无数个0和1组成的。英文字母，数字，汉字等都是字符。不同字符对应二进制数的规则，也就是说不同的字符翻译为不同的0、1组合，就是字符的编码。这个过程的逆过程，就是解码。</p>
 <ul>
 <li><h4 id="Ascii编码"><a href="#Ascii编码" class="headerlink" title="Ascii编码"></a><strong><a href="http://baike.baidu.com/view/15482.htm?fromtitle=ascii%E7%A0%81&amp;fromid=99077&amp;type=syn" target="_blank" rel="external">Ascii编码</a></strong></h4></li>
 </ul>
@@ -116,7 +116,7 @@
 <p>以汉字”严”为例，演示如何实现UTF-8编码。</p>
 <p>已知”严”的unicode是4E25（100111000100101），根据上表，可以发现4E25处在第三行的范围内（0000 0800-0000 FFFF），因此”严”的UTF-8编码需要三个字节，即格式是”1110xxxx 10xxxxxx 10xxxxxx”。然后，从”严”的最后一个二进制位开始，依次从后向前填入格式中的x，多出的位补0。这样就得到了，”严”的UTF-8编码是”11100100 10111000 10100101″，转换成十六进制就是E4B8A5。</p>
 <p>还有一些编码就不再一一介绍了，具体用到的话可以百度或谷歌。</p>
-<h2 id="2-java-中的编码"><a href="#2-java-中的编码" class="headerlink" title="2. java 中的编码"></a>2. java 中的编码</h2><ul>
+<h2 id="java-中的编码"><a href="#java-中的编码" class="headerlink" title="java 中的编码"></a>java 中的编码</h2><ul>
 <li><h4 id="class文件与内存中的编码"><a href="#class文件与内存中的编码" class="headerlink" title="class文件与内存中的编码"></a><strong>class文件与内存中的编码</strong></h4></li>
 </ul>
 
@@ -144,7 +144,7 @@
 </ul>
 <p>从jdk1.4开始，java提供了Charset 类，这个类中提供 encode 与 decode 分别对应 char[] 到 byte[] 的编码和 byte[] 到 char[] 的解码。</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Charset charset = Charset.forName(<span class="string">"UTF-8"</span>);   </div><div class="line">ByteBuffer byteBuffer = charset.encode(string);   </div><div class="line">CharBuffer charBuffer = charset.decode(byteBuffer);</div></pre></td></tr></table></figure>
-<h2 id="3-延伸-byte"><a href="#3-延伸-byte" class="headerlink" title="3.延伸 byte"></a>3.延伸 byte</h2><p>字节数据类型是一个8位有符号二进制补码整数。它具有-128最小值和127的最大值。</p>
+<h2 id="延伸-byte"><a href="#延伸-byte" class="headerlink" title="延伸 byte"></a>延伸 byte</h2><p>字节数据类型是一个8位有符号二进制补码整数。它具有-128最小值和127的最大值。</p>
 <p>无论是硬盘上数据的存放还是数据在网络上传输，其中的内容都是二进制数据。当你想把一些文本文件或者视频保存时，这些数据会转化为二进制序列存放于你的硬盘。同样，当你使用网络聊天，发语音和图片，程序都会将这些数据转化为（编码）二进制序列进行传输。在java中，这些二进制序列以两个字节为单位，使用Unicode字符集形成byte数组。程序处理的时候再把这些byte数组进行合适的处理（解码）呈现到屏幕上。</p>
 <p>有关byte与其他数据类型的转换不再多写，用到的时候再从网上查资料吧。只要知道其中的原理，soeasy.</p>
 <h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="http://cenalulu.github.io/linux/character-encoding/" target="_blank" rel="external">十分钟搞清字符集和字符编码</a></p>
@@ -205,29 +205,29 @@
 </section>
 
 </div>  
-      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
 
   <div id="toc" class="toc-aside">
-  <strong class="toc-title">文章目录</strong>
-  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-编码"><span class="toc-number">1.</span> <span class="toc-text">1.编码</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Ascii编码"><span class="toc-number">1.0.1.</span> <span class="toc-text">Ascii编码</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#GB2312"><span class="toc-number">1.0.2.</span> <span class="toc-text">GB2312</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#UTF-8"><span class="toc-number">1.0.3.</span> <span class="toc-text">UTF-8</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-java-中的编码"><span class="toc-number">2.</span> <span class="toc-text">2. java 中的编码</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#class文件与内存中的编码"><span class="toc-number">2.0.1.</span> <span class="toc-text">class文件与内存中的编码</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#InputStreamReader与OutputStreamWriter"><span class="toc-number">2.0.2.</span> <span class="toc-text">InputStreamReader与OutputStreamWriter</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#String与byte"><span class="toc-number">2.0.3.</span> <span class="toc-text">String与byte[]</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#CharSet"><span class="toc-number">2.0.4.</span> <span class="toc-text">CharSet</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-延伸-byte"><span class="toc-number">3.</span> <span class="toc-text">3.延伸 byte</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">4.</span> <span class="toc-text">参考</span></a></li></ol>
+  <strong class="toc-title">Contents</strong>
+  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#编码"><span class="toc-number">1.</span> <span class="toc-text">编码</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Ascii编码"><span class="toc-number">1.0.1.</span> <span class="toc-text">Ascii编码</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#GB2312"><span class="toc-number">1.0.2.</span> <span class="toc-text">GB2312</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#UTF-8"><span class="toc-number">1.0.3.</span> <span class="toc-text">UTF-8</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#java-中的编码"><span class="toc-number">2.</span> <span class="toc-text">java 中的编码</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#class文件与内存中的编码"><span class="toc-number">2.0.1.</span> <span class="toc-text">class文件与内存中的编码</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#InputStreamReader与OutputStreamWriter"><span class="toc-number">2.0.2.</span> <span class="toc-text">InputStreamReader与OutputStreamWriter</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#String与byte"><span class="toc-number">2.0.3.</span> <span class="toc-text">String与byte[]</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#CharSet"><span class="toc-number">2.0.4.</span> <span class="toc-text">CharSet</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#延伸-byte"><span class="toc-number">3.</span> <span class="toc-text">延伸 byte</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">4.</span> <span class="toc-text">参考</span></a></li></ol>
   </div>
 
 <div id="asidepart">
-<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
 <aside class="clearfix">
 
   
 <div class="categorieslist">
-	<p class="asidetitle">分类</p>
+	<p class="asidetitle">Categories</p>
 		<ul>
 		
-			<li><a href="/categories/java-多线程/" title="java 多线程">java 多线程<sup>1</sup></a></li>
+			<li><a href="/categories/java-多线程/" title="java 多线程">java 多线程<sup>0</sup></a></li>
 		
 			<li><a href="/categories/工具/" title="工具">工具<sup>6</sup></a></li>
 		
 			<li><a href="/categories/生活/" title="生活">生活<sup>2</sup></a></li>
 		
-			<li><a href="/categories/编程/" title="编程">编程<sup>12</sup></a></li>
+			<li><a href="/categories/编程/" title="编程">编程<sup>13</sup></a></li>
 		
 		</ul>
 </div>
@@ -235,12 +235,12 @@
 
   
 <div class="tagslist">
-	<p class="asidetitle">标签</p>
+	<p class="asidetitle">Tags</p>
 		<ul class="clearfix">
 		
 			<li><a href="/tags/ant/" title="ant">ant<sup>2</sup></a></li>
 		
-			<li><a href="/tags/java/" title="java">java<sup>14</sup></a></li>
+			<li><a href="/tags/java/" title="java">java<sup>15</sup></a></li>
 		
 			<li><a href="/tags/junit/" title="junit">junit<sup>1</sup></a></li>
 		
@@ -248,7 +248,7 @@
 		
 			<li><a href="/tags/python/" title="python">python<sup>1</sup></a></li>
 		
-			<li><a href="/tags/多线程/" title="多线程">多线程<sup>3</sup></a></li>
+			<li><a href="/tags/多线程/" title="多线程">多线程<sup>4</sup></a></li>
 		
 			<li><a href="/tags/快捷键/" title="快捷键">快捷键<sup>1</sup></a></li>
 		
@@ -261,7 +261,7 @@
 
 
   <div class="rsspart">
-	<a href="null" target="_blank" title="rss">RSS 订阅</a>
+	<a href="null" target="_blank" title="rss">RSS</a>
 </div>
 
 </aside>

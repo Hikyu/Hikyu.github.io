@@ -11,7 +11,7 @@
     
     <meta name="description" content="最近读了HashMap的源码，对HashCode与equals有了一定的了解，总结一下，顺便理一下HashMap中的核心算法。
 
-1. 什么是hashcode,hashcode的作用是什么hashcode并不是java中独有的。设想一下，如果让你设计一个算法，根据关键码去得到一个集合中的某个值或者这">
+什么是hashcode,hashcode的作用是什么hashcode并不是java中独有的。设想一下，如果让你设计一个算法，根据关键码去得到一个集合中的某个值或者这个关键">
     
     
     
@@ -38,7 +38,7 @@
 				<h1 class="site-name"><a href="/" title="于凯的博客">于凯的博客</a></h1>
 				<h2 class="blog-motto">平凡中也有感动</h2>
 			</div>
-			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
 			</a></div>
 			<nav class="animated">
 				<ul>
@@ -51,7 +51,7 @@
 					
 					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
 						<label>Search</label>
-						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
 						<input type="hidden" name="q" value="site:yukai.space">
 					</form>
 					
@@ -75,7 +75,7 @@
     </p>
   <p class="article-time">
     <time datetime="2016-04-28T04:48:55.000Z" itemprop="datePublished">2016-04-28</time>
-    更新日期:<time datetime="2016-08-14T08:26:27.883Z" itemprop="dateModified">2016-08-14</time>
+    Updated:<time datetime="2016-08-14T09:11:45.221Z" itemprop="dateModified">2016-08-14</time>
     
   </p>
 </header>
@@ -83,27 +83,27 @@
 		
 		
 		<div id="toc" class="toc-article">
-			<strong class="toc-title">文章目录</strong>
-		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-什么是hashcode-hashcode的作用是什么"><span class="toc-number">1.</span> <span class="toc-text">1. 什么是hashcode,hashcode的作用是什么</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-什么是equals-Object-obj-方法"><span class="toc-number">2.</span> <span class="toc-text">2. 什么是equals(Object obj)方法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-在java中hashcode方法与equals方法的作用"><span class="toc-number">3.</span> <span class="toc-text">3. 在java中hashcode方法与equals方法的作用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-总结"><span class="toc-number">4.</span> <span class="toc-text">3. 总结</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-不同的对象-equals返回false-可以有相同的hashcode"><span class="toc-number">4.0.1.</span> <span class="toc-text">1.不同的对象(equals返回false)可以有相同的hashcode</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-相同的对象-equals返回true-hashcode一定相等"><span class="toc-number">4.0.2.</span> <span class="toc-text">2.相同的对象(equals返回true)hashcode一定相等</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-若重新定义了上面两种方法中的一种，那么另一种方法也需要重新定义（对1、2的遵守）"><span class="toc-number">4.0.3.</span> <span class="toc-text">3.若重新定义了上面两种方法中的一种，那么另一种方法也需要重新定义（对1、2的遵守）</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-equals与"><span class="toc-number">5.</span> <span class="toc-text">4. equals与==</span></a></li></ol>
+			<strong class="toc-title">Contents</strong>
+		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#什么是hashcode-hashcode的作用是什么"><span class="toc-number">1.</span> <span class="toc-text">什么是hashcode,hashcode的作用是什么</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#什么是equals-Object-obj-方法"><span class="toc-number">2.</span> <span class="toc-text">什么是equals(Object obj)方法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#在java中hashcode方法与equals方法的作用"><span class="toc-number">3.</span> <span class="toc-text">在java中hashcode方法与equals方法的作用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">4.</span> <span class="toc-text">总结</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-不同的对象-equals返回false-可以有相同的hashcode"><span class="toc-number">4.0.1.</span> <span class="toc-text">1.不同的对象(equals返回false)可以有相同的hashcode</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-相同的对象-equals返回true-hashcode一定相等"><span class="toc-number">4.0.2.</span> <span class="toc-text">2.相同的对象(equals返回true)hashcode一定相等</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-若重新定义了上面两种方法中的一种，那么另一种方法也需要重新定义（对1、2的遵守）"><span class="toc-number">4.0.3.</span> <span class="toc-text">3.若重新定义了上面两种方法中的一种，那么另一种方法也需要重新定义（对1、2的遵守）</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#equals与"><span class="toc-number">5.</span> <span class="toc-text">equals与==</span></a></li></ol>
 		</div>
 		
 		<blockquote>
 <p>最近读了HashMap的源码，对HashCode与equals有了一定的了解，总结一下，顺便理一下HashMap中的核心算法。</p>
 </blockquote>
-<h2 id="1-什么是hashcode-hashcode的作用是什么"><a href="#1-什么是hashcode-hashcode的作用是什么" class="headerlink" title="1. 什么是hashcode,hashcode的作用是什么"></a><strong>1.</strong> 什么是hashcode,hashcode的作用是什么</h2><p>hashcode并不是java中独有的。设想一下，如果让你设计一个算法，根据关键码去得到一个集合中的某个值或者这个关键码所在的位置。普通的做法就是挨个比较，高级一点的使用二分检索或者树形检索等算法。但是以上的检索算法都跟集合的长度N有关，当问题规模N很大时，这些检索的效率可能十分低下。</p>
+<h2 id="什么是hashcode-hashcode的作用是什么"><a href="#什么是hashcode-hashcode的作用是什么" class="headerlink" title="什么是hashcode,hashcode的作用是什么"></a>什么是hashcode,hashcode的作用是什么</h2><p>hashcode并不是java中独有的。设想一下，如果让你设计一个算法，根据关键码去得到一个集合中的某个值或者这个关键码所在的位置。普通的做法就是挨个比较，高级一点的使用二分检索或者树形检索等算法。但是以上的检索算法都跟集合的长度N有关，当问题规模N很大时，这些检索的效率可能十分低下。</p>
 <p>理想的情况是，根据关键码，我们就可以定位记录所在的位置，而不用去挨个进行比较。也就是说，在关键码与记录存放的位置之间做一种映射。这个映射的方法就是hash(哈希)函数，或者叫散列函数，也就是java中的hashCode()方法，他所返回的值就是hashcode，也就是记录所在的位置。</p>
 <p>按照散列的存储方式构造的存储结构叫做散列表。散列表中的一个位置称之为一个槽。</p>
 <p>hashCode()方法存在于java.lang.Object类当中，任何类都可以继承修改这个方法。hashCode()方法返回调用它的实例的hashCode值，是个int值。</p>
 <p>注：以下代码均来自jdk1.7</p>
 <p>String中hashCode()方法的实现：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">hashCode</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">int</span> h = hash;</div><div class="line">        <span class="keyword">if</span> (h == <span class="number">0</span> &amp;&amp; value.length &gt; <span class="number">0</span>) &#123;</div><div class="line">            <span class="keyword">char</span> val[] = value;</div><div class="line"></div><div class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; value.length; i++) &#123;</div><div class="line">                h = <span class="number">31</span> * h + val[i];</div><div class="line">            &#125;</div><div class="line">            hash = h;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> h;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h2 id="2-什么是equals-Object-obj-方法"><a href="#2-什么是equals-Object-obj-方法" class="headerlink" title="2. 什么是equals(Object obj)方法"></a><strong>2.</strong> 什么是equals(Object obj)方法</h2><p>equals(Object obj)方法同样来自Object类。在Object类中，他是这样实现的：</p>
+<h2 id="什么是equals-Object-obj-方法"><a href="#什么是equals-Object-obj-方法" class="headerlink" title="什么是equals(Object obj)方法"></a>什么是equals(Object obj)方法</h2><p>equals(Object obj)方法同样来自Object类。在Object类中，他是这样实现的：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">equals</span><span class="params">(Object obj)</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> (<span class="keyword">this</span> == obj);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>也就是说，默认的equals(Object obj)方法直接将要比较的两个对象的内存地址进行了比较，一致则返回true。</p>
 <p>这个方法主要用来实现两个对象间的比较，确认他们在逻辑上是否相等。我们同样可以实现自己的equals(Object obj)方法。</p>
 <p>String中equals(Object obj)方法的实现：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">equals</span><span class="params">(Object anObject)</span> </span>&#123;</div><div class="line">        <span class="keyword">if</span> (<span class="keyword">this</span> == anObject) &#123;</div><div class="line">            <span class="keyword">return</span> <span class="keyword">true</span>;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">if</span> (anObject <span class="keyword">instanceof</span> String) &#123;</div><div class="line">            String anotherString = (String) anObject;</div><div class="line">            <span class="keyword">int</span> n = value.length;</div><div class="line">            <span class="keyword">if</span> (n == anotherString.value.length) &#123;</div><div class="line">                <span class="keyword">char</span> v1[] = value;</div><div class="line">                <span class="keyword">char</span> v2[] = anotherString.value;</div><div class="line">                <span class="keyword">int</span> i = <span class="number">0</span>;</div><div class="line">                <span class="keyword">while</span> (n-- != <span class="number">0</span>) &#123;</div><div class="line">                    <span class="keyword">if</span> (v1[i] != v2[i])</div><div class="line">                            <span class="keyword">return</span> <span class="keyword">false</span>;</div><div class="line">                    i++;</div><div class="line">                &#125;</div><div class="line">                <span class="keyword">return</span> <span class="keyword">true</span>;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h2 id="3-在java中hashcode方法与equals方法的作用"><a href="#3-在java中hashcode方法与equals方法的作用" class="headerlink" title="3. 在java中hashcode方法与equals方法的作用"></a><strong>3.</strong> 在java中hashcode方法与equals方法的作用</h2><p>首先看一下HashMap中的put方法：</p>
+<h2 id="在java中hashcode方法与equals方法的作用"><a href="#在java中hashcode方法与equals方法的作用" class="headerlink" title="在java中hashcode方法与equals方法的作用"></a>在java中hashcode方法与equals方法的作用</h2><p>首先看一下HashMap中的put方法：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> V <span class="title">put</span><span class="params">(K key, V value)</span> </span>&#123;</div><div class="line">        <span class="keyword">if</span> (table == EMPTY_TABLE) &#123;</div><div class="line">            inflateTable(threshold);</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">if</span> (key == <span class="keyword">null</span>)</div><div class="line">            <span class="keyword">return</span> putForNullKey(value);</div><div class="line">        <span class="keyword">int</span> hash = hash(key);<span class="comment">//得到hash值</span></div><div class="line">        <span class="keyword">int</span> i = indexFor(hash, table.length);<span class="comment">//找到槽</span></div><div class="line">        <span class="keyword">for</span> (Entry&lt;K,V&gt; e = table[i]; e != <span class="keyword">null</span>; e = e.next) &#123;</div><div class="line">            Object k;</div><div class="line">            <span class="keyword">if</span> (e.hash == hash &amp;&amp; ((k = e.key) == key || key.equals(k))) &#123;</div><div class="line">                V oldValue = e.value;</div><div class="line">                e.value = value;</div><div class="line">                e.recordAccess(<span class="keyword">this</span>);</div><div class="line">                <span class="keyword">return</span> oldValue;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        modCount++;</div><div class="line">        addEntry(hash, key, value, i);</div><div class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
 <p>我们从 int hash = hash(key); 这一行看起，这行起才是put方法的核心。</p>
 <p>首先 int hash = hash(key); key就是我们之前提到的关键码，我们看看HashMap中的这个hash方法做了些什么：</p>
@@ -123,9 +123,9 @@
 <p><code>key.equals(k)</code>：如果上述两个条件没有满足，并不能够断定这两个关键码相等，此刻要使用equals方法判断这两个关键码是否相同。如果相同，说明是我们要找的记录。</p>
 <p><code>if (e.hash == hash &amp;&amp; ((k = e.key) == key || key.equals(k)))</code>这句代码中其实包含了一种短路思想，|| 之前的判断如果生效，那么之后的key.equals(k)就不会再执行。很明显内存地址的比较要比equals方法高效的多。这也是Hashmap提高查找效率的一个重要手段。</p>
 <p>至此，我们应该对equals和hashcode有了一个相对清晰的认识：hashcode提高了查找指定对象的效率。euqals定义了两个对象之间是否在逻辑上相同。hashcode只在HashMap，HashSet等这样使用了散列思想的地方用到，而equals在判断两个对象之间是否相同时需要用到，比如排序等。</p>
-<h2 id="3-总结"><a href="#3-总结" class="headerlink" title="3. 总结"></a><strong>3.</strong> 总结</h2><p>通过上面的分析，我们知道了hashcode与equals的几个关键：</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>通过上面的分析，我们知道了hashcode与equals的几个关键：</p>
 <h4 id="1-不同的对象-equals返回false-可以有相同的hashcode"><a href="#1-不同的对象-equals返回false-可以有相同的hashcode" class="headerlink" title="1.不同的对象(equals返回false)可以有相同的hashcode"></a>1.<strong>不同的对象(equals返回false)可以有相同的hashcode</strong></h4><h4 id="2-相同的对象-equals返回true-hashcode一定相等"><a href="#2-相同的对象-equals返回true-hashcode一定相等" class="headerlink" title="2.相同的对象(equals返回true)hashcode一定相等"></a>2.<strong>相同的对象(equals返回true)hashcode一定相等</strong></h4><h4 id="3-若重新定义了上面两种方法中的一种，那么另一种方法也需要重新定义（对1、2的遵守）"><a href="#3-若重新定义了上面两种方法中的一种，那么另一种方法也需要重新定义（对1、2的遵守）" class="headerlink" title="3.若重新定义了上面两种方法中的一种，那么另一种方法也需要重新定义（对1、2的遵守）"></a>3.<strong>若重新定义了上面两种方法中的一种，那么另一种方法也需要重新定义</strong>（对1、2的遵守）</h4><p><a href="http://stackoverflow.com/questions/27581/what-issues-should-be-considered-when-overriding-equals-and-hashcode-in-java" target="_blank" rel="external">关于如何重写equals方法与hashCode方法</a></p>
-<h2 id="4-equals与"><a href="#4-equals与" class="headerlink" title="4. equals与=="></a><strong>4.</strong> equals与==</h2><p>“==” 比较的是两个对象的内存地址，是物理意义上的相等</p>
+<h2 id="equals与"><a href="#equals与" class="headerlink" title="equals与=="></a>equals与==</h2><p>“==” 比较的是两个对象的内存地址，是物理意义上的相等</p>
 <p>equals比较的是两个对象逻辑意义上的相等，是逻辑意义上的相等</p>
 <p>两个对象进行比较：</p>
 <p><strong>== 返回true，则equals一定返回true</strong>；</p>
@@ -183,29 +183,29 @@
 </section>
 
 </div>  
-      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
 
   <div id="toc" class="toc-aside">
-  <strong class="toc-title">文章目录</strong>
-  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-什么是hashcode-hashcode的作用是什么"><span class="toc-number">1.</span> <span class="toc-text">1. 什么是hashcode,hashcode的作用是什么</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-什么是equals-Object-obj-方法"><span class="toc-number">2.</span> <span class="toc-text">2. 什么是equals(Object obj)方法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-在java中hashcode方法与equals方法的作用"><span class="toc-number">3.</span> <span class="toc-text">3. 在java中hashcode方法与equals方法的作用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-总结"><span class="toc-number">4.</span> <span class="toc-text">3. 总结</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-不同的对象-equals返回false-可以有相同的hashcode"><span class="toc-number">4.0.1.</span> <span class="toc-text">1.不同的对象(equals返回false)可以有相同的hashcode</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-相同的对象-equals返回true-hashcode一定相等"><span class="toc-number">4.0.2.</span> <span class="toc-text">2.相同的对象(equals返回true)hashcode一定相等</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-若重新定义了上面两种方法中的一种，那么另一种方法也需要重新定义（对1、2的遵守）"><span class="toc-number">4.0.3.</span> <span class="toc-text">3.若重新定义了上面两种方法中的一种，那么另一种方法也需要重新定义（对1、2的遵守）</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-equals与"><span class="toc-number">5.</span> <span class="toc-text">4. equals与==</span></a></li></ol>
+  <strong class="toc-title">Contents</strong>
+  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#什么是hashcode-hashcode的作用是什么"><span class="toc-number">1.</span> <span class="toc-text">什么是hashcode,hashcode的作用是什么</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#什么是equals-Object-obj-方法"><span class="toc-number">2.</span> <span class="toc-text">什么是equals(Object obj)方法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#在java中hashcode方法与equals方法的作用"><span class="toc-number">3.</span> <span class="toc-text">在java中hashcode方法与equals方法的作用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">4.</span> <span class="toc-text">总结</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-不同的对象-equals返回false-可以有相同的hashcode"><span class="toc-number">4.0.1.</span> <span class="toc-text">1.不同的对象(equals返回false)可以有相同的hashcode</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-相同的对象-equals返回true-hashcode一定相等"><span class="toc-number">4.0.2.</span> <span class="toc-text">2.相同的对象(equals返回true)hashcode一定相等</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-若重新定义了上面两种方法中的一种，那么另一种方法也需要重新定义（对1、2的遵守）"><span class="toc-number">4.0.3.</span> <span class="toc-text">3.若重新定义了上面两种方法中的一种，那么另一种方法也需要重新定义（对1、2的遵守）</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#equals与"><span class="toc-number">5.</span> <span class="toc-text">equals与==</span></a></li></ol>
   </div>
 
 <div id="asidepart">
-<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
 <aside class="clearfix">
 
   
 <div class="categorieslist">
-	<p class="asidetitle">分类</p>
+	<p class="asidetitle">Categories</p>
 		<ul>
 		
-			<li><a href="/categories/java-多线程/" title="java 多线程">java 多线程<sup>1</sup></a></li>
+			<li><a href="/categories/java-多线程/" title="java 多线程">java 多线程<sup>0</sup></a></li>
 		
 			<li><a href="/categories/工具/" title="工具">工具<sup>6</sup></a></li>
 		
 			<li><a href="/categories/生活/" title="生活">生活<sup>2</sup></a></li>
 		
-			<li><a href="/categories/编程/" title="编程">编程<sup>12</sup></a></li>
+			<li><a href="/categories/编程/" title="编程">编程<sup>13</sup></a></li>
 		
 		</ul>
 </div>
@@ -213,12 +213,12 @@
 
   
 <div class="tagslist">
-	<p class="asidetitle">标签</p>
+	<p class="asidetitle">Tags</p>
 		<ul class="clearfix">
 		
 			<li><a href="/tags/ant/" title="ant">ant<sup>2</sup></a></li>
 		
-			<li><a href="/tags/java/" title="java">java<sup>14</sup></a></li>
+			<li><a href="/tags/java/" title="java">java<sup>15</sup></a></li>
 		
 			<li><a href="/tags/junit/" title="junit">junit<sup>1</sup></a></li>
 		
@@ -226,7 +226,7 @@
 		
 			<li><a href="/tags/python/" title="python">python<sup>1</sup></a></li>
 		
-			<li><a href="/tags/多线程/" title="多线程">多线程<sup>3</sup></a></li>
+			<li><a href="/tags/多线程/" title="多线程">多线程<sup>4</sup></a></li>
 		
 			<li><a href="/tags/快捷键/" title="快捷键">快捷键<sup>1</sup></a></li>
 		
@@ -239,7 +239,7 @@
 
 
   <div class="rsspart">
-	<a href="null" target="_blank" title="rss">RSS 订阅</a>
+	<a href="null" target="_blank" title="rss">RSS</a>
 </div>
 
 </aside>
