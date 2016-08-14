@@ -1,0 +1,405 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>java编程技巧 | 于凯的博客</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
+    <meta name="author" content="于凯">
+    
+    <meta name="description" content="突然想到把自己平时用到的，网上看到的java编程过程中的小技巧总结下来~~
+
+ 1. 循环中尽量不要使用try..catch 代码块，应该将其放在最外层
+ 2. if语句中,判断条件尽量不要使用if(!…)的形式，这样只会使代码更加难以理解
+ 3. 循环内不要不断创建对象引用，而应该：
+1234Ob">
+    
+    
+    
+    
+    
+    <link rel="icon" href="/img/xiaoxin.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/xiaoxin.png">
+    <link rel="apple-touch-icon-precomposed" href="/img/xiaoxin.png">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.svg" alt="于凯的博客" title="于凯的博客"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="于凯的博客">于凯的博客</a></h1>
+				<h2 class="blog-motto">平凡中也有感动</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+					<li>
+					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:yukai.space">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2016/07/24/java_Tips/" title="java编程技巧" itemprop="url">java编程技巧</a>
+  </h1>
+  <p class="article-author">By
+    
+      <a href="http://yukai.space" title="于凯">于凯</a>
+    </p>
+  <p class="article-time">
+    <time datetime="2016-07-24T04:48:55.000Z" itemprop="datePublished">2016-07-24</time>
+    Updated:<time datetime="2016-08-14T08:26:27.869Z" itemprop="dateModified">2016-08-14</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		
+		</div>
+		
+		<blockquote>
+<p>突然想到把自己平时用到的，网上看到的java编程过程中的小技巧总结下来~~</p>
+</blockquote>
+<p> <strong>1</strong>. 循环中尽量不要使用try..catch 代码块，应该将其放在最外层</p>
+<p> <strong>2</strong>. if语句中,判断条件尽量不要使用if(!…)的形式，这样只会使代码更加难以理解</p>
+<p> <strong>3</strong>. 循环内不要不断创建对象引用，而应该：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">Object obj = <span class="keyword">null</span>;</div><div class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt;= count; i++) &#123; </div><div class="line"> obj = <span class="keyword">new</span> Object(); </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p> <strong>4</strong>. 不要在循环条件中重复计算变量，比如：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt;= obj.size(); i++)&#123;...&#125;</div></pre></td></tr></table></figure>
+<p> <strong>5</strong>. 避免使用”魔术数字”,所有的数字值都应该赋予一个有意义的变量，使用这个变量，而不是数字</p>
+<p> <strong>6</strong>. 尽量采用懒加载的策略，即在需要的时候才创建,例如：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">String str = <span class="string">"aaa"</span>;</div><div class="line"><span class="keyword">if</span> (i == <span class="number">1</span>) &#123; </div><div class="line">   list.add(str);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>建议替换为：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="keyword">if</span> (i == <span class="number">1</span>) &#123; </div><div class="line">    String str = <span class="string">"aaa"</span>; list.add(str);</div><div class="line">  &#125;</div></pre></td></tr></table></figure>
+<p> <strong>7</strong>. 使用同步代码块替代同步方法,同步代码块里只放需要同步的代码</p>
+<p> <strong>8</strong>. 乘(除)2或者2的倍数时，尽量选择移位操作，提高性能</p>
+<p> <strong>9</strong>. 使用&amp;&amp; ,|| 操作符时，将首先需要满足的条件置于操作符之前。因为&amp;&amp; 和 || 具有短路性。另外，体会if(e. key==k||k.equals(e.key)) 的细节。判断条件的目的是要求满足k.equals(e.key)。用||将（e.key==k）与 k.equals(e.key)连接起来，在性能上有更好的表现。（HashMap源码）</p>
+<p> <strong>10</strong>. 尽量用for each语句代替for循环</p>
+<p> <strong>11</strong>. 在java中小数类型默认为double,若对精度没有很高要求，应该显示的声明为float.如 3.14f。</p>
+<p> <strong>12</strong>. 调用equals()函数时(或其他类似函数)，将string字符串放在左边进行比较，防止空指针异常。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span>(<span class="string">"hello"</span>.equals(variable))&#123;...&#125;</div></pre></td></tr></table></figure>
+<p> <strong>13</strong>. 在使用一些通过返回int判断状态的函数时，不要相信-1。比如：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span>(string.indexof(character) != -<span class="number">1</span>)&#123;...&#125;`</div></pre></td></tr></table></figure>
+<p>应改为：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span>(string.indexof(character) &gt;<span class="number">0</span> )&#123;...&#125;</div></pre></td></tr></table></figure>
+<p> <strong>14</strong>. 避免意外的赋值，比如：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span>(variable == <span class="number">5</span>)&#123;...&#125;`</div></pre></td></tr></table></figure>
+<p>应改为：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span>(<span class="number">5</span> == variable)&#123;...&#125;</div></pre></td></tr></table></figure>
+<p>避免不小心将5赋给variable。但是在我使用jdk1.7的时候，倘如你在条件判断语句中写出<code>if(variable = 5)</code>这样的句子，编译器会自动报警。不过，养成好的编程习惯总是没有错的~</p>
+<p> <strong>15</strong>. 检查NULL。在调用集合或者数组的成员函数时，请确保他已经存在，而不是NULL。这是我编程时很容易犯的错误。比如：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span>(array.length &gt; <span class="number">0</span>)&#123;...&#125;</div></pre></td></tr></table></figure>
+<p>应改为：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span>(array != <span class="keyword">null</span> &amp;&amp; array.length &gt; <span class="number">0</span>)&#123;...&#125;</div></pre></td></tr></table></figure>
+<p> <strong>16</strong>. 确保只有一个退出点。比如：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">boolean</span> <span class="title">isEligible</span><span class="params">(<span class="keyword">int</span> age)</span></span>&#123;</div><div class="line"></div><div class="line">	<span class="keyword">if</span>(age &gt; <span class="number">18</span>) &#123;</div><div class="line"></div><div class="line">		<span class="keyword">return</span> <span class="keyword">true</span>;</div><div class="line"></div><div class="line">	&#125; <span class="keyword">else</span> &#123;</div><div class="line"></div><div class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>应改为：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">boolean</span> <span class="title">isEligible</span><span class="params">(<span class="keyword">int</span> age)</span></span>&#123;</div><div class="line"></div><div class="line">	<span class="keyword">boolean</span> result;</div><div class="line"></div><div class="line">	<span class="keyword">if</span>(age &gt; <span class="number">18</span>) &#123;</div><div class="line"></div><div class="line">		result = <span class="keyword">true</span>;</div><div class="line"></div><div class="line">	&#125; <span class="keyword">else</span> &#123;</div><div class="line"></div><div class="line">        result = <span class="keyword">false</span>;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="keyword">return</span> result;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p> <strong>17</strong>. 以final类型标记方法参数。当你不小心修改参数值时，编译器会报警。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">boolean</span> <span class="title">isEligible</span><span class="params">(<span class="keyword">final</span> <span class="keyword">int</span> age)</span></span>&#123;...&#125;</div></pre></td></tr></table></figure>
+<p> <strong>18</strong>. 把多个if语句组合成单一if语句。比如：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span>(age &gt; <span class="number">18</span>)&#123;</div><div class="line">	<span class="keyword">if</span>(!man)&#123;...&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>应改为：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span>(age &gt; <span class="number">18</span> &amp;&amp; !man)&#123;...&#125;</div></pre></td></tr></table></figure>
+  
+	</div>
+		<footer class="article-footer clearfix">
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/java/">java</a>
+  </div>
+
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/编程/">编程</a>
+</div>
+
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://yukai.space/2016/07/24/java_Tips/" data-title="java编程技巧 | 于凯的博客" data-tsina="追风少年于二狗" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2016/07/31/为什么是final/" title="为什么是final">
+  <strong>PREVIOUS:</strong><br/>
+  <span>
+  为什么是final</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2016/07/18/Ant的使用/"  title="ANT的使用">
+ <strong>NEXT:</strong><br/> 
+ <span>ANT的使用
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section class="comment">
+	<div class="ds-thread"></div>
+</section>
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+  
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">Categories</p>
+		<ul>
+		
+			<li><a href="/categories/java-多线程/" title="java 多线程">java 多线程<sup>1</sup></a></li>
+		
+			<li><a href="/categories/工具/" title="工具">工具<sup>6</sup></a></li>
+		
+			<li><a href="/categories/生活/" title="生活">生活<sup>2</sup></a></li>
+		
+			<li><a href="/categories/编程/" title="编程">编程<sup>12</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			<li><a href="/tags/ant/" title="ant">ant<sup>2</sup></a></li>
+		
+			<li><a href="/tags/java/" title="java">java<sup>14</sup></a></li>
+		
+			<li><a href="/tags/junit/" title="junit">junit<sup>1</sup></a></li>
+		
+			<li><a href="/tags/markdown/" title="markdown">markdown<sup>1</sup></a></li>
+		
+			<li><a href="/tags/python/" title="python">python<sup>1</sup></a></li>
+		
+			<li><a href="/tags/多线程/" title="多线程">多线程<sup>3</sup></a></li>
+		
+			<li><a href="/tags/快捷键/" title="快捷键">快捷键<sup>1</sup></a></li>
+		
+			<li><a href="/tags/测试/" title="测试">测试<sup>1</sup></a></li>
+		
+			<li><a href="/tags/编码/" title="编码">编码<sup>2</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  <div class="rsspart">
+	<a href="null" target="_blank" title="rss">RSS</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<div class="social-font clearfix">
+		
+		<a href="http://weibo.com/http://weibo.com/5381447277" target="_blank" title="weibo"></a>
+		
+		
+		
+		<a href="https://github.com/https://github.com/Hikyu" target="_blank" title="github"></a>
+		
+		
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/A-limon/pacman" target="_blank" title="Pacman">Pacman</a> © 2016 
+		
+		<a href="http://yukai.space" target="_blank" title="于凯">于凯</a>
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"null"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+  </body>
+</html>

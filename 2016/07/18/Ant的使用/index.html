@@ -1,0 +1,375 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>ANT的使用 | 于凯的博客</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
+    <meta name="author" content="于凯">
+    
+    <meta name="description" content="之前写Android的时候一直想学习构建工具Gradle，但一直没有花功夫去研究。由于平时工作中使用的IDE为Eclipse，所以免不了和Ant打交道。今天工作的时候需要自己使用Ant打包一个工程，遂研究一番。
+
+1.教程Ant是一个很成熟的构建工具了，网上也有许多教程。参考了很多。学习下面两篇教程">
+    
+    
+    
+    
+    
+    <link rel="icon" href="/img/xiaoxin.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/xiaoxin.png">
+    <link rel="apple-touch-icon-precomposed" href="/img/xiaoxin.png">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.svg" alt="于凯的博客" title="于凯的博客"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="于凯的博客">于凯的博客</a></h1>
+				<h2 class="blog-motto">平凡中也有感动</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+					<li>
+					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:yukai.space">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2016/07/18/Ant的使用/" title="ANT的使用" itemprop="url">ANT的使用</a>
+  </h1>
+  <p class="article-author">By
+    
+      <a href="http://yukai.space" title="于凯">于凯</a>
+    </p>
+  <p class="article-time">
+    <time datetime="2016-07-18T04:48:55.000Z" itemprop="datePublished">2016-07-18</time>
+    Updated:<time datetime="2016-08-14T08:26:27.862Z" itemprop="dateModified">2016-08-14</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-教程"><span class="toc-number">1.</span> <span class="toc-text">1.教程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-实践"><span class="toc-number">2.</span> <span class="toc-text">2.实践</span></a></li></ol>
+		</div>
+		
+		<blockquote>
+<p>之前写Android的时候一直想学习构建工具Gradle，但一直没有花功夫去研究。由于平时工作中使用的IDE为Eclipse，所以免不了和<a href="http://ant.apache.org/" target="_blank" rel="external">Ant</a>打交道。今天工作的时候需要自己使用Ant打包一个工程，遂研究一番。</p>
+</blockquote>
+<h2 id="1-教程"><a href="#1-教程" class="headerlink" title="1.教程"></a>1.教程</h2><p>Ant是一个很成熟的构建工具了，网上也有许多教程。参考了很多。学习下面两篇教程可以快速上手。</p>
+<p><a href="http://www.tutorialspoint.com/ant/index.htm" target="_blank" rel="external">Ant Tutorial</a></p>
+<p><a href="http://www.uml.org.cn/j2ee/j2ee091302.htm#content" target="_blank" rel="external">Ant 实践</a></p>
+<p>另外附上Ant常用命令：</p>
+<p><a href="https://ant.apache.org/manual/tasksoverview.html" target="_blank" rel="external">Overview of Apache Ant Tasks</a></p>
+<h2 id="2-实践"><a href="#2-实践" class="headerlink" title="2.实践"></a>2.实践</h2><p>下面是自己写的build.xml。存在这里，以后用到可以参考。</p>
+<p>下面的例子用来编译、打包一个java工程，这个工程是一个Hibernate方言包的开发。该工程还引用到了其他jar包。</p>
+<ul>
+<li><strong>build.xml</strong></li>
+</ul>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div></pre></td><td class="code"><pre><div class="line">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</div><div class="line"><span class="comment">&lt;!--</span></div><div class="line">    Oscar XcluseterHibernate Ant build file</div><div class="line">--&gt;</div><div class="line"><span class="tag">&lt;<span class="name">project</span> <span class="attr">name</span>=<span class="string">"OSCAR-XCLUSETER-HIBERNATE"</span> <span class="attr">default</span>=<span class="string">"usage"</span> <span class="attr">basedir</span>=<span class="string">"."</span>&gt;</span></div><div class="line">	<span class="tag">&lt;<span class="name">target</span> <span class="attr">name</span>=<span class="string">"build"</span> <span class="attr">depends</span>=<span class="string">"clean"</span> /&gt;</span></div><div class="line"></div><div class="line">	<span class="tag">&lt;<span class="name">target</span> <span class="attr">name</span>=<span class="string">"init"</span> <span class="attr">description</span>=<span class="string">"default init"</span>&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">property</span> <span class="attr">file</span>=<span class="string">"build.properties"</span> /&gt;</span></div><div class="line"></div><div class="line">		<span class="comment">&lt;!-- Project Properties --&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"project"</span> <span class="attr">value</span>=<span class="string">"oscarXcluseterHibernate3"</span> /&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"name"</span> <span class="attr">value</span>=<span class="string">"OSCAR HIBERNATE"</span> /&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">tstamp</span>&gt;</span></div><div class="line">			<span class="tag">&lt;<span class="name">format</span> <span class="attr">property</span>=<span class="string">"year"</span> <span class="attr">pattern</span>=<span class="string">"yyyy"</span> <span class="attr">locale</span>=<span class="string">"zh_CN"</span> /&gt;</span></div><div class="line">			<span class="tag">&lt;<span class="name">format</span> <span class="attr">property</span>=<span class="string">"builddate"</span> <span class="attr">pattern</span>=<span class="string">"yyMMdd"</span> <span class="attr">locale</span>=<span class="string">"zh_CN"</span> /&gt;</span></div><div class="line">		<span class="tag">&lt;/<span class="name">tstamp</span>&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"version"</span> <span class="attr">value</span>=<span class="string">"$&#123;version.major&#125;.$&#123;version.minor&#125;.$&#123;version.revision&#125;$&#123;version.suffix&#125;"</span> /&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"version.number"</span> <span class="attr">value</span>=<span class="string">"$&#123;version.major&#125;.$&#123;version.minor&#125;.$&#123;version.revision&#125;"</span> /&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"version.major.minor"</span> <span class="attr">value</span>=<span class="string">"$&#123;version.major&#125;.$&#123;version.minor&#125;"</span> /&gt;</span></div><div class="line"></div><div class="line">		<span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"final.name"</span> <span class="attr">value</span>=<span class="string">"$&#123;project&#125;"</span> /&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"vesrion.build"</span> <span class="attr">value</span>=<span class="string">"build$&#123;builddate&#125; $&#123;version.subbuild&#125; $&#123;version.buildID&#125; for ALL "</span> /&gt;</span></div><div class="line"></div><div class="line">		<span class="comment">&lt;!-- Build Defaults --&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"src.dir"</span> <span class="attr">value</span>=<span class="string">"$&#123;basedir&#125;/src"</span> /&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"lib.dir"</span> <span class="attr">value</span>=<span class="string">"$&#123;basedir&#125;/lib"</span> /&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"build.home"</span> <span class="attr">value</span>=<span class="string">"$&#123;basedir&#125;"</span> /&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"build.src"</span> <span class="attr">value</span>=<span class="string">"$&#123;basedir&#125;/build"</span> /&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"build.dest"</span> <span class="attr">value</span>=<span class="string">"$&#123;basedir&#125;/antClasses"</span> /&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"build.release"</span> <span class="attr">value</span>=<span class="string">"$&#123;basedir&#125;/release"</span> /&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"build.tmp"</span> <span class="attr">value</span>=<span class="string">"$&#123;basedir&#125;/tmp"</span> /&gt;</span></div><div class="line"></div><div class="line">		<span class="comment">&lt;!-- JAR artifacts --&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"hiberante3.jar"</span> <span class="attr">value</span>=<span class="string">"$&#123;lib.dir&#125;/hibernate3.jar"</span> /&gt;</span></div><div class="line"></div><div class="line">		<span class="comment">&lt;!-- Version info filter set --&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">tstamp</span>&gt;</span></div><div class="line">			<span class="tag">&lt;<span class="name">format</span> <span class="attr">property</span>=<span class="string">"DSTAMP"</span> <span class="attr">pattern</span>=<span class="string">"yyyyMMdd"</span> <span class="attr">locale</span>=<span class="string">"zh_CN"</span> /&gt;</span></div><div class="line">			<span class="tag">&lt;<span class="name">format</span> <span class="attr">property</span>=<span class="string">"TSTAMP"</span> <span class="attr">pattern</span>=<span class="string">"hhmm"</span> /&gt;</span></div><div class="line">		<span class="tag">&lt;/<span class="name">tstamp</span>&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">filterset</span> <span class="attr">id</span>=<span class="string">"version.filters"</span>&gt;</span></div><div class="line">			<span class="tag">&lt;<span class="name">filter</span> <span class="attr">token</span>=<span class="string">"VERSION_NUMBER"</span> <span class="attr">value</span>=<span class="string">"$&#123;version.number&#125;"</span> /&gt;</span></div><div class="line">			<span class="tag">&lt;<span class="name">filter</span> <span class="attr">token</span>=<span class="string">"BUNDLE_NAME"</span> <span class="attr">value</span>=<span class="string">"$&#123;vesrion.name&#125;"</span> /&gt;</span></div><div class="line">			<span class="tag">&lt;<span class="name">filter</span> <span class="attr">token</span>=<span class="string">"BUNDLE_VERSION"</span> <span class="attr">value</span>=<span class="string">"$&#123;version&#125;$&#123;DSTAMP&#125;$&#123;TSTAMP&#125;"</span> /&gt;</span></div><div class="line">			<span class="tag">&lt;<span class="name">filter</span> <span class="attr">token</span>=<span class="string">"BUILD_VERSION"</span> <span class="attr">value</span>=<span class="string">"$&#123;vesrion.build&#125;"</span> /&gt;</span></div><div class="line">		<span class="tag">&lt;/<span class="name">filterset</span>&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">path</span> <span class="attr">id</span>=<span class="string">"classpath"</span>&gt;</span></div><div class="line">			<span class="tag">&lt;<span class="name">pathelement</span> <span class="attr">location</span>=<span class="string">"$&#123;hiberante3.jar&#125;"</span> /&gt;</span></div><div class="line">		<span class="tag">&lt;/<span class="name">path</span>&gt;</span></div><div class="line">	<span class="tag">&lt;/<span class="name">target</span>&gt;</span></div><div class="line"></div><div class="line">	<span class="tag">&lt;<span class="name">target</span> <span class="attr">name</span>=<span class="string">"usage"</span> <span class="attr">depends</span>=<span class="string">"init"</span>&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">echo</span> <span class="attr">message</span>=<span class="string">"$&#123;name&#125; Build file"</span> /&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">echo</span> <span class="attr">message</span>=<span class="string">"-------------------------------------------------------------"</span> /&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">echo</span> <span class="attr">message</span>=<span class="string">""</span> /&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">echo</span> <span class="attr">message</span>=<span class="string">" available targets are:"</span> /&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">echo</span> <span class="attr">message</span>=<span class="string">""</span> /&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">echo</span> <span class="attr">message</span>=<span class="string">"   package  --&gt; generates oscarXcluseterHibernate file"</span> /&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">echo</span> <span class="attr">message</span>=<span class="string">"   build    --&gt; compiles the source code"</span> /&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">echo</span> <span class="attr">message</span>=<span class="string">"   clean    --&gt; cleans up the directory"</span> /&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">echo</span> <span class="attr">message</span>=<span class="string">""</span> /&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">echo</span> <span class="attr">message</span>=<span class="string">" See the comments inside the build.xml file for more details."</span> /&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">echo</span> <span class="attr">message</span>=<span class="string">"-------------------------------------------------------------"</span> /&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">echo</span> <span class="attr">message</span>=<span class="string">""</span> /&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">echo</span> <span class="attr">message</span>=<span class="string">""</span> /&gt;</span></div><div class="line">	<span class="tag">&lt;/<span class="name">target</span>&gt;</span></div><div class="line"></div><div class="line">	<span class="comment">&lt;!-- Just build --&gt;</span></div><div class="line">	<span class="tag">&lt;<span class="name">target</span> <span class="attr">name</span>=<span class="string">"compile-prepare"</span> <span class="attr">depends</span>=<span class="string">"init"</span> <span class="attr">description</span>=<span class="string">"Prepare for compile"</span>&gt;</span></div><div class="line"></div><div class="line">		<span class="comment">&lt;!-- create directories --&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">mkdir</span> <span class="attr">dir</span>=<span class="string">"$&#123;build.src&#125;"</span> /&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">mkdir</span> <span class="attr">dir</span>=<span class="string">"$&#123;build.dest&#125;"</span> /&gt;</span></div><div class="line"></div><div class="line">		<span class="comment">&lt;!-- copy src files --&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">copy</span> <span class="attr">todir</span>=<span class="string">"$&#123;build.src&#125;"</span> <span class="attr">overwrite</span>=<span class="string">"yes"</span>&gt;</span></div><div class="line">			<span class="tag">&lt;<span class="name">fileset</span> <span class="attr">dir</span>=<span class="string">"$&#123;src.dir&#125;"</span>&gt;</span></div><div class="line">				<span class="tag">&lt;<span class="name">exclude</span> <span class="attr">name</span>=<span class="string">"**/*.MF"</span> /&gt;</span></div><div class="line">			<span class="tag">&lt;/<span class="name">fileset</span>&gt;</span></div><div class="line">		<span class="tag">&lt;/<span class="name">copy</span>&gt;</span></div><div class="line">	<span class="tag">&lt;/<span class="name">target</span>&gt;</span></div><div class="line"></div><div class="line">	<span class="tag">&lt;<span class="name">target</span> <span class="attr">name</span>=<span class="string">"compile"</span> <span class="attr">depends</span>=<span class="string">"compile-prepare"</span> <span class="attr">description</span>=<span class="string">"compile the project"</span>&gt;</span></div><div class="line"></div><div class="line">		<span class="comment">&lt;!-- Compiles the source directory  --&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">javac</span> <span class="attr">srcdir</span>=<span class="string">"$&#123;build.src&#125;"</span> </span></div><div class="line">			<span class="attr">destdir</span>=<span class="string">"$&#123;build.dest&#125;"</span> </div><div class="line">			<span class="attr">debug</span>=<span class="string">"$&#123;build.debug&#125;"</span> </div><div class="line">			<span class="attr">deprecation</span>=<span class="string">"$&#123;build.deprecation&#125;"</span> </div><div class="line">			<span class="attr">source</span>=<span class="string">"$&#123;build.source&#125;"</span> </div><div class="line">			<span class="attr">target</span>=<span class="string">"$&#123;build.target&#125;"</span> </div><div class="line">			<span class="attr">compiler</span>=<span class="string">"$&#123;build.compiler&#125;"</span> </div><div class="line">			<span class="attr">optimize</span>=<span class="string">"$&#123;build.optimize&#125;"</span> </div><div class="line">			<span class="attr">includes</span>=<span class="string">"**/*.java"</span> </div><div class="line">			<span class="attr">excludes</span>=<span class="string">"**/CVS/**,**/.svn/**"</span> </div><div class="line">			<span class="attr">encoding</span>=<span class="string">"GB18030"</span></div><div class="line">			<span class="attr">includeantruntime</span>=<span class="string">"false"</span></div><div class="line">			<span class="attr">executable</span>=<span class="string">"C:\Program Files\Java\jdk1.5.0_22\bin\javac"</span></div><div class="line">			<span class="attr">fork</span>=<span class="string">"yes"</span>&gt;</div><div class="line">			<span class="tag">&lt;<span class="name">classpath</span> <span class="attr">refid</span>=<span class="string">"classpath"</span> /&gt;</span></div><div class="line">		<span class="tag">&lt;/<span class="name">javac</span>&gt;</span></div><div class="line"></div><div class="line">		<span class="comment">&lt;!-- copy src files exclude java file--&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">copy</span> <span class="attr">todir</span>=<span class="string">"$&#123;build.dest&#125;"</span> <span class="attr">overwrite</span>=<span class="string">"yes"</span>&gt;</span></div><div class="line">			<span class="tag">&lt;<span class="name">fileset</span> <span class="attr">dir</span>=<span class="string">"$&#123;build.src&#125;"</span>&gt;</span></div><div class="line">				<span class="tag">&lt;<span class="name">exclude</span> <span class="attr">name</span>=<span class="string">"**/*.java"</span> /&gt;</span></div><div class="line">			<span class="tag">&lt;/<span class="name">fileset</span>&gt;</span></div><div class="line">		<span class="tag">&lt;/<span class="name">copy</span>&gt;</span></div><div class="line">	<span class="tag">&lt;/<span class="name">target</span>&gt;</span></div><div class="line"></div><div class="line">	<span class="tag">&lt;<span class="name">target</span> <span class="attr">name</span>=<span class="string">"build-manifests"</span> <span class="attr">depends</span>=<span class="string">"init,compile-prepare"</span>&gt;</span></div><div class="line">		<span class="comment">&lt;!-- Filtering tokens for JAR manifests--&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">filter</span> <span class="attr">token</span>=<span class="string">"source.jdk"</span> <span class="attr">value</span>=<span class="string">"$&#123;build.source&#125;"</span> /&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">filter</span> <span class="attr">token</span>=<span class="string">"target.jdk"</span> <span class="attr">value</span>=<span class="string">"$&#123;build.target&#125;"</span> /&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">mkdir</span> <span class="attr">dir</span>=<span class="string">"$&#123;build.tmp&#125;"</span> /&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">copy</span> <span class="attr">todir</span>=<span class="string">"$&#123;build.tmp&#125;"</span> <span class="attr">overwrite</span>=<span class="string">"yes"</span> <span class="attr">filtering</span>=<span class="string">"yes"</span> <span class="attr">encoding</span>=<span class="string">"GB18030"</span>&gt;</span></div><div class="line">			<span class="tag">&lt;<span class="name">filterset</span> <span class="attr">refid</span>=<span class="string">"version.filters"</span> /&gt;</span></div><div class="line">			<span class="tag">&lt;<span class="name">fileset</span> <span class="attr">dir</span>=<span class="string">"src/META-INF"</span> <span class="attr">includes</span>=<span class="string">"MANIFEST.MF"</span> /&gt;</span></div><div class="line">		<span class="tag">&lt;/<span class="name">copy</span>&gt;</span></div><div class="line">	<span class="tag">&lt;/<span class="name">target</span>&gt;</span></div><div class="line"></div><div class="line">	<span class="tag">&lt;<span class="name">target</span> <span class="attr">name</span>=<span class="string">"package"</span> <span class="attr">depends</span>=<span class="string">"compile,build-manifests"</span> <span class="attr">description</span>=<span class="string">"create jar file"</span>&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">mkdir</span> <span class="attr">dir</span>=<span class="string">"$&#123;build.release&#125;"</span> /&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">jar</span> <span class="attr">jarfile</span>=<span class="string">"$&#123;build.release&#125;/$&#123;final.name&#125;.jar"</span> <span class="attr">manifest</span>=<span class="string">"$&#123;build.tmp&#125;/MANIFEST.MF"</span> <span class="attr">basedir</span>=<span class="string">"$&#123;build.dest&#125;"</span> <span class="attr">includes</span>=<span class="string">"**"</span> /&gt;</span></div><div class="line">	<span class="tag">&lt;/<span class="name">target</span>&gt;</span></div><div class="line"></div><div class="line">	<span class="tag">&lt;<span class="name">target</span> <span class="attr">name</span>=<span class="string">"clean"</span> <span class="attr">depends</span>=<span class="string">"package"</span>&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">delete</span> <span class="attr">dir</span>=<span class="string">"$&#123;build.src&#125;"</span> /&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">delete</span> <span class="attr">dir</span>=<span class="string">"$&#123;build.dest&#125;"</span> /&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">delete</span> <span class="attr">dir</span>=<span class="string">"$&#123;build.tmp&#125;"</span> /&gt;</span></div><div class="line">	<span class="tag">&lt;/<span class="name">target</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">project</span>&gt;</span></div></pre></td></tr></table></figure>
+<ul>
+<li><strong>build.properties</strong></li>
+</ul>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"># -----------------------------------------------------------------------------</div><div class="line"># build.properties</div><div class="line">#</div><div class="line"># This is an example "build.properties" file, used to customize building </div><div class="line"># OSCAR-JDBC for your local environment.  It defines the location of all external</div><div class="line"># modules that OSCAR-JDBC depends on.</div><div class="line"># -----------------------------------------------------------------------------</div><div class="line"></div><div class="line"># ----- Version Control Flags -----</div><div class="line">vesrion.name=Main</div><div class="line">version.major=1</div><div class="line">version.minor=0</div><div class="line">version.revision=0</div><div class="line">version.suffix=x</div><div class="line">version.subbuild=001</div><div class="line">version.buildID=00000000</div><div class="line"></div><div class="line">build.source=1.5</div><div class="line">build.target=1.5</div><div class="line">build.debug=false</div><div class="line">build.optimize=true</div><div class="line">build.compiler=javac1.5</div></pre></td></tr></table></figure>  
+	</div>
+		<footer class="article-footer clearfix">
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/java/">java</a><a href="/tags/ant/">ant</a>
+  </div>
+
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/工具/">工具</a>
+</div>
+
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://yukai.space/2016/07/18/Ant的使用/" data-title="ANT的使用 | 于凯的博客" data-tsina="追风少年于二狗" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2016/07/24/java_Tips/" title="java编程技巧">
+  <strong>PREVIOUS:</strong><br/>
+  <span>
+  java编程技巧</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2016/07/12/java源码阅读-集合类-ArrayList/"  title="java源码阅读-Arraylist">
+ <strong>NEXT:</strong><br/> 
+ <span>java源码阅读-Arraylist
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section class="comment">
+	<div class="ds-thread"></div>
+</section>
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-教程"><span class="toc-number">1.</span> <span class="toc-text">1.教程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-实践"><span class="toc-number">2.</span> <span class="toc-text">2.实践</span></a></li></ol>
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">Categories</p>
+		<ul>
+		
+			<li><a href="/categories/java-多线程/" title="java 多线程">java 多线程<sup>1</sup></a></li>
+		
+			<li><a href="/categories/工具/" title="工具">工具<sup>6</sup></a></li>
+		
+			<li><a href="/categories/生活/" title="生活">生活<sup>2</sup></a></li>
+		
+			<li><a href="/categories/编程/" title="编程">编程<sup>12</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			<li><a href="/tags/ant/" title="ant">ant<sup>2</sup></a></li>
+		
+			<li><a href="/tags/java/" title="java">java<sup>14</sup></a></li>
+		
+			<li><a href="/tags/junit/" title="junit">junit<sup>1</sup></a></li>
+		
+			<li><a href="/tags/markdown/" title="markdown">markdown<sup>1</sup></a></li>
+		
+			<li><a href="/tags/python/" title="python">python<sup>1</sup></a></li>
+		
+			<li><a href="/tags/多线程/" title="多线程">多线程<sup>3</sup></a></li>
+		
+			<li><a href="/tags/快捷键/" title="快捷键">快捷键<sup>1</sup></a></li>
+		
+			<li><a href="/tags/测试/" title="测试">测试<sup>1</sup></a></li>
+		
+			<li><a href="/tags/编码/" title="编码">编码<sup>2</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  <div class="rsspart">
+	<a href="null" target="_blank" title="rss">RSS</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<div class="social-font clearfix">
+		
+		<a href="http://weibo.com/http://weibo.com/5381447277" target="_blank" title="weibo"></a>
+		
+		
+		
+		<a href="https://github.com/https://github.com/Hikyu" target="_blank" title="github"></a>
+		
+		
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/A-limon/pacman" target="_blank" title="Pacman">Pacman</a> © 2016 
+		
+		<a href="http://yukai.space" target="_blank" title="于凯">于凯</a>
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"null"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+  </body>
+</html>

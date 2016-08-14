@@ -1,0 +1,396 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>java中的类型转换 | 于凯的博客</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
+    <meta name="author" content="于凯">
+    
+    <meta name="description" content="以前一直对java中的类型转换了解的不是很清楚，因为平时写代码有IDE的帮助，所以往往忽略这一块的内容，但往往就是这样的小知识点不清楚，很有可能造成很大的错误。所以在闲暇时间总结一下这些可能被遗忘的知识点。网上已经有很多相关的介绍文章了，现在来梳理一番：
+
+基本类型
+基本类型优先级
+
+首先来看jav">
+    
+    
+    
+    
+    
+    <link rel="icon" href="/img/xiaoxin.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/xiaoxin.png">
+    <link rel="apple-touch-icon-precomposed" href="/img/xiaoxin.png">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.svg" alt="于凯的博客" title="于凯的博客"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="于凯的博客">于凯的博客</a></h1>
+				<h2 class="blog-motto">平凡中也有感动</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+					<li>
+					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:yukai.space">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2016/04/28/java中的类型转换/" title="java中的类型转换" itemprop="url">java中的类型转换</a>
+  </h1>
+  <p class="article-author">By
+    
+      <a href="http://yukai.space" title="于凯">于凯</a>
+    </p>
+  <p class="article-time">
+    <time datetime="2016-04-28T04:48:55.000Z" itemprop="datePublished">2016-04-28</time>
+    Updated:<time datetime="2016-08-14T08:26:27.899Z" itemprop="dateModified">2016-08-14</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#基本类型"><span class="toc-number">1.</span> <span class="toc-text">基本类型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#类类型"><span class="toc-number">2.</span> <span class="toc-text">类类型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">3.</span> <span class="toc-text">参考</span></a></li></ol>
+		</div>
+		
+		<blockquote>
+<p>以前一直对java中的类型转换了解的不是很清楚，因为平时写代码有IDE的帮助，所以往往忽略这一块的内容，但往往就是这样的小知识点不清楚，很有可能造成很大的错误。所以在闲暇时间总结一下这些可能被遗忘的知识点。网上已经有很多相关的介绍文章了，现在来梳理一番：</p>
+</blockquote>
+<h2 id="基本类型"><a href="#基本类型" class="headerlink" title="基本类型"></a><strong>基本类型</strong></h2><ul>
+<li><strong>基本类型优先级</strong></li>
+</ul>
+<p>首先来看java中的基本类型有哪些：</p>
+<p>byte：byte数据类型是一个8位有符号二进制补码整数。</p>
+<p>short：short数据类型为16位有符号二进制补码整数。</p>
+<p>int：int数据类型是一个32位有符号二进制补码整数</p>
+<p>long: long数据类型是一个64位二进制补码整数</p>
+<p>float: float数据类型是单精度、32位、符合IEEE 754标准的浮点数</p>
+<p>boolean: boolean数据类型只有两个可能的值：true和false</p>
+<p>double: double数据类型是双精度、64位、符合IEEE 754标准的浮点数；</p>
+<p>char: char数据类型是一个16位的Unicode字符</p>
+<p>基本类型优先级由低到高排序：</p>
+<p>(byte short char) int long float double</p>
+<p>其中，byte short char 平级</p>
+<ul>
+<li><strong>转换规则</strong></li>
+</ul>
+<p>1.有多种数据类型混合计算的时候，低优先级类型自动提升为优先级最大的那个类型再来继续计算</p>
+<p>3.高优先级类型转换为低优先级类型时，需要强制类型转换，并且有可能丢失精度或溢出。</p>
+<p>2.byte short char 他们三者在计算时，首先会转换为int类型</p>
+<p>3.由于byte short char三者平级，他们之间互相转换时需进行强制类型转换。</p>
+<p>4.boolean不能与其他类型转换</p>
+<h2 id="类类型"><a href="#类类型" class="headerlink" title="类类型"></a><strong>类类型</strong></h2><p>类类型之间的转换有以下几个规则：</p>
+<p>1.当源类型与目标类型不存在父子关系时，转换无法进行，编译时会出现错误。包括两个类为继承同一个父类这种情况，也是不可以进行转换的。</p>
+<p>2.源类型是子类，目标类型是父类时，不必强制转换。只是屏蔽了一些子类才有的功能。</p>
+<p>3.源类型是父类，目标类型是子类时，要分两种情况：第一，源类型指向的对象就是父类类型。此时不能进行强制转换，编译器可以通过，但运行时会报类型转换错误。第二，源类型指向的对象是子类类型。此时可以进行强制转换，还原子类。</p>
+<p>说的比较拗口，用代码来解释吧。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="class"><span class="keyword">class</span> <span class="title">Father</span> </span>&#123;&#125;</div><div class="line">	</div><div class="line">    <span class="class"><span class="keyword">class</span> <span class="title">Son</span> <span class="keyword">extends</span> <span class="title">Father</span></span>&#123;&#125;</div><div class="line">	</div><div class="line">    <span class="class"><span class="keyword">class</span> <span class="title">Daughter</span> <span class="keyword">extends</span> <span class="title">Father</span> </span>&#123;&#125;</div><div class="line"></div><div class="line">    <span class="meta">@org</span>.junit.<span class="function">Test</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test</span><span class="params">()</span>&#123;</div><div class="line">        Father fatherApp;</div><div class="line">        Son sonApp;</div><div class="line">        Daughter daughterApp;</div><div class="line">        Father fatherIns=<span class="keyword">new</span> Father();</div><div class="line">        Son sonIns=<span class="keyword">new</span> Son();</div><div class="line">        Daughter daughterIns=<span class="keyword">new</span> Daughter();</div><div class="line">		</div><div class="line">        <span class="comment">//目标类型为父类，源类型为子类，自动转换</span></div><div class="line">        fatherApp=sonIns;   </div><div class="line">        <span class="comment">//源类型为父类，目标类型为子类，且源类型指向父类对象,运行时报错。</span></div><div class="line">        sonApp=(Son) fatherIns;</div><div class="line">        <span class="comment">//源类型为父类，目标类型为子类，且源类型指向子类对象，还原子类        </span></div><div class="line">        sonApp=(Son) fatherApp;</div><div class="line">        <span class="comment">//目标类型与源类型不存在父子关系，编译无法通过</span></div><div class="line">        daughterApp=sonIns;  </div><div class="line">		</div><div class="line">    &#125;	</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a><strong>参考</strong></h2><p><a href="http://blog.csdn.net/mazhimazh/article/details/16799925" target="_blank" rel="external">Java 7之基础类型第1篇 - Java数据类型</a></p>
+<p><a href="https://docs.oracle.com/javase/tutorial/java/nutsandbolts/datatypes.html" target="_blank" rel="external">The Java™ Tutorials</a></p>
+<p><a href="http://blog.csdn.net/darxin/article/details/5163043" target="_blank" rel="external"> Java中的类型转换</a></p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/java/">java</a>
+  </div>
+
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/编程/">编程</a>
+</div>
+
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://yukai.space/2016/04/28/java中的类型转换/" data-title="java中的类型转换 | 于凯的博客" data-tsina="追风少年于二狗" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2016/06/21/java中的ThreadLocal/" title="java中的ThreadLocal">
+  <strong>PREVIOUS:</strong><br/>
+  <span>
+  java中的ThreadLocal</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2016/04/28/java中的equals与hashcode/"  title="java中的equals与hashcode">
+ <strong>NEXT:</strong><br/> 
+ <span>java中的equals与hashcode
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section class="comment">
+	<div class="ds-thread"></div>
+</section>
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#基本类型"><span class="toc-number">1.</span> <span class="toc-text">基本类型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#类类型"><span class="toc-number">2.</span> <span class="toc-text">类类型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">3.</span> <span class="toc-text">参考</span></a></li></ol>
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">Categories</p>
+		<ul>
+		
+			<li><a href="/categories/java-多线程/" title="java 多线程">java 多线程<sup>1</sup></a></li>
+		
+			<li><a href="/categories/工具/" title="工具">工具<sup>6</sup></a></li>
+		
+			<li><a href="/categories/生活/" title="生活">生活<sup>2</sup></a></li>
+		
+			<li><a href="/categories/编程/" title="编程">编程<sup>12</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			<li><a href="/tags/ant/" title="ant">ant<sup>2</sup></a></li>
+		
+			<li><a href="/tags/java/" title="java">java<sup>14</sup></a></li>
+		
+			<li><a href="/tags/junit/" title="junit">junit<sup>1</sup></a></li>
+		
+			<li><a href="/tags/markdown/" title="markdown">markdown<sup>1</sup></a></li>
+		
+			<li><a href="/tags/python/" title="python">python<sup>1</sup></a></li>
+		
+			<li><a href="/tags/多线程/" title="多线程">多线程<sup>3</sup></a></li>
+		
+			<li><a href="/tags/快捷键/" title="快捷键">快捷键<sup>1</sup></a></li>
+		
+			<li><a href="/tags/测试/" title="测试">测试<sup>1</sup></a></li>
+		
+			<li><a href="/tags/编码/" title="编码">编码<sup>2</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  <div class="rsspart">
+	<a href="null" target="_blank" title="rss">RSS</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<div class="social-font clearfix">
+		
+		<a href="http://weibo.com/http://weibo.com/5381447277" target="_blank" title="weibo"></a>
+		
+		
+		
+		<a href="https://github.com/https://github.com/Hikyu" target="_blank" title="github"></a>
+		
+		
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/A-limon/pacman" target="_blank" title="Pacman">Pacman</a> © 2016 
+		
+		<a href="http://yukai.space" target="_blank" title="于凯">于凯</a>
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"null"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+  </body>
+</html>
