@@ -10,7 +10,7 @@ tags:
 
 >之前写Android的时候一直想学习构建工具Gradle，但一直没有花功夫去研究。由于平时工作中使用的IDE为Eclipse，所以免不了和[Ant](http://ant.apache.org/)打交道。今天工作的时候需要自己使用Ant打包一个工程，遂研究一番。
 
-## 1.教程
+## 教程
 
 Ant是一个很成熟的构建工具了，网上也有许多教程。参考了很多。学习下面两篇教程可以快速上手。
 
@@ -22,7 +22,7 @@ Ant是一个很成熟的构建工具了，网上也有许多教程。参考了�
 
 [Overview of Apache Ant Tasks](https://ant.apache.org/manual/tasksoverview.html)
 
-## 2.实践
+## 实践
 
 下面是自己写的build.xml。存在这里，以后用到可以参考。
 

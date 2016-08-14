@@ -9,7 +9,7 @@ date:   2016-04-28 12:48:55
 
 >最近读了HashMap的源码，对HashCode与equals有了一定的了解，总结一下，顺便理一下HashMap中的核心算法。
 
-## **1.** 什么是hashcode,hashcode的作用是什么
+## 什么是hashcode,hashcode的作用是什么
 
 hashcode并不是java中独有的。设想一下，如果让你设计一个算法，根据关键码去得到一个集合中的某个值或者这个关键码所在的位置。普通的做法就是挨个比较，高级一点的使用二分检索或者树形检索等算法。但是以上的检索算法都跟集合的长度N有关，当问题规模N很大时，这些检索的效率可能十分低下。
 
@@ -38,7 +38,7 @@ public int hashCode() {
 }
 ```
 
-## **2.** 什么是equals(Object obj)方法
+## 什么是equals(Object obj)方法
 
 equals(Object obj)方法同样来自Object类。在Object类中，他是这样实现的：
 
@@ -78,7 +78,7 @@ public boolean equals(Object anObject) {
 }
 ```
 
-## **3.** 在java中hashcode方法与equals方法的作用
+## 在java中hashcode方法与equals方法的作用
 
 首先看一下HashMap中的put方法：
 
@@ -159,7 +159,7 @@ final int hash(Object k) {
 
 至此，我们应该对equals和hashcode有了一个相对清晰的认识：hashcode提高了查找指定对象的效率。euqals定义了两个对象之间是否在逻辑上相同。hashcode只在HashMap，HashSet等这样使用了散列思想的地方用到，而equals在判断两个对象之间是否相同时需要用到，比如排序等。
 
-## **3.** 总结
+## 总结
 
 通过上面的分析，我们知道了hashcode与equals的几个关键：
 
@@ -171,7 +171,7 @@ final int hash(Object k) {
 
 [关于如何重写equals方法与hashCode方法](http://stackoverflow.com/questions/27581/what-issues-should-be-considered-when-overriding-equals-and-hashcode-in-java)
 
-## **4.** equals与==
+## equals与==
 
 "==" 比较的是两个对象的内存地址，是物理意义上的相等
 

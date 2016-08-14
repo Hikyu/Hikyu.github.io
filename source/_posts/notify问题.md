@@ -2,7 +2,10 @@
 layout: post
 title:  "notify 问题"
 date:   2015-12-21 12:48:55
-categories: java 多线程 
+categories: 编程
+tags:
+- java
+- 多线程 
 ---
 
 今天遇到了这么个情况：
