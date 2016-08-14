@@ -1,0 +1,99 @@
+---
+layout: post
+title:  "notify 问题"
+date:   2015-12-21 12:48:55
+categories: java 多线程 
+---
+
+今天遇到了这么个情况：
+有线程若干，我需要他们按顺序执行。
+代码大概长这样：
+
+```
+class SyncTag {
+	public int threadNO;
+	public SyncTag() {
+	    threadNO = 0;
+	}
+}
+class ThreadA extend Thread{
+	SyncTag syncTag;
+	int scriptNO;
+	ThreadA(SyncTag syncTag,int scriptNO){
+			this.syncTag=syncTag;
+			this.scriptNO=scriptNO;
+	}
+	public void Run(){
+			synchronized (syncTag) {
+                if (syncTag.threadNO != scriptNO) {
+                        try {
+                                syncTag.wait();
+                        } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                        }
+                }
+                dosomething();
+                syncTag.threadNO++;
+                syncTag.notifyAll();
+			}
+	}
+}
+public class Test{
+	public static void main(String args[]){
+		    SyncTag syncTag=new SyncTag();
+			for(int i=0;i<10;++i){
+				ThreadA t=new ThreadA(syncTag,i);
+				t.start();
+			}
+	}
+}
+```
+
+结果却不是像我预料的那样。这十个线程的执行顺序竟然是混乱的，无序的。虽然他们是之间实现了串行执行。
+研究一番，发现是 notify 与notifyAll 在捣鬼。
+当调用 同步对象（syncTag）的notify方法 的时候，唤醒了N多等待资源线程中的一个（即 调用了同步对象的wait 方法而阻塞的那些线程）；至于唤醒哪个线程，是不确定的。
+其他的线程仍然在阻塞，需要被notify 或者 notifyAll 唤醒。
+		 
+当调用同步对象（syncTag）的notifyAll方法 的时候，所有进入wait 方法而阻塞的那些线程都被唤醒了。他们中的一个会抢到同步锁（syncTag），继续执行下去，
+剩下的没有获得锁的线程则继续等待。与上面情况不同的是，这些等待的线层不再需要notify或者notifyAll去唤醒了，一旦拥有锁的线程放弃锁，这些线程就一拥而上，去抢占锁，抢到的运行，
+没抢到的老实等着。
+		 
+这就是notify 与 notifyAll两者的区别.
+		 
+那么我遇到的问题是否是因为使用了notifyAll 的原因呢？其实并不是。即使我改成notify ，这些线程也没有按照顺序去运行。
+原因在于：当某个先执行的线程（线程0）调用了notify 或者notifyAll 之后，某个线程被选中了。但是这个选中的线程并不一定是线程1.因为唤醒某个线程之后，他并不会再去检查是否符合
+syncTag.threadNO == scriptNO 这个条件，只要被唤醒了，又恰好拥有了锁。那他就执行下去了。我们只需要让他在执行之前再检查一下是否 符合syncTag.threadNO == scriptNO 这个条件，
+如果不符合，就继续wait.符合则执行。
+很简单，将 
+
+```java
+if (syncTag.threadNO != scriptNO) {
+        try {
+                syncTag.wait();
+            } catch (InterruptedException e) {
+                                    e.printStackTrace();
+            }
+}
+```
+
+这部分代码 改为： 
+
+```java
+while (syncTag.threadNO != scriptNO) {
+		try {
+				syncTag.wait();
+		} catch (InterruptedException e) {
+				e.printStackTrace();
+		}
+}
+```
+
+这个问题就解决了。
+	 
+## **延伸**：
+假设这样一种情况：我们按照上面的方法把代码改了，但同时把下面的 notifyAll 改为 notify.问题又出现了：
+设想一下，如果线程0执行完毕之后调用syncTag.notify（），唤醒某个线程（线程3），但是在这个线程中恰好不满足 syncTag.threadNO == scriptNO
+这个条件。那么这个线程（线程3）会继续wait. 这个时候，所有的线程都在 wait,但并没有一个线程在运行，也没有其他线程能够调用 notify或者notifyAll来唤醒他们
+中的一个。于是陷入死锁，无尽的等待。
+		 
+所以，具体使用notify还是notifyAll 就得具体情况具体分析了。

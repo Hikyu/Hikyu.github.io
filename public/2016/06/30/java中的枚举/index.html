@@ -1,0 +1,405 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>java中的枚举 | 于凯的博客</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
+    <meta name="author" content="于凯">
+    
+    <meta name="description" content="已经好久没有动博客了，毕业之后的第一篇。下班了单开一篇，把毕业照补上。
+
+Java中的枚举是在JDK1.5以后出现的。之前的开发过程中并没有用过，但是有碰到过关于枚举的代码。貌似是一种更为简单有效的常量定义方式。学习之，希望以后的写代码过程中可以熟悉并掌握枚举的用法。
+1. 使用场景：每当需要一组固">
+    
+    
+    
+    
+    
+    <link rel="icon" href="/img/xiaoxin.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/xiaoxin.png">
+    <link rel="apple-touch-icon-precomposed" href="/img/xiaoxin.png">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.svg" alt="于凯的博客" title="于凯的博客"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="于凯的博客">于凯的博客</a></h1>
+				<h2 class="blog-motto">平凡中也有感动</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+					<li>
+					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:yukai.space">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2016/06/30/java中的枚举/" title="java中的枚举" itemprop="url">java中的枚举</a>
+  </h1>
+  <p class="article-author">By
+    
+      <a href="http://yukai.space" title="于凯">于凯</a>
+    </p>
+  <p class="article-time">
+    <time datetime="2016-06-30T04:48:55.000Z" itemprop="datePublished">2016-06-30</time>
+    更新日期:<time datetime="2016-08-14T07:00:24.031Z" itemprop="dateModified">2016-08-14</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-使用场景："><span class="toc-number">1.</span> <span class="toc-text">1. 使用场景：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-与-public-static-final-的常量定义方式进行比较："><span class="toc-number">2.</span> <span class="toc-text">2. 与 public static final 的常量定义方式进行比较：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-枚举类型的使用"><span class="toc-number">3.</span> <span class="toc-text">3. 枚举类型的使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-参考"><span class="toc-number">4.</span> <span class="toc-text">4. 参考</span></a></li></ol>
+		</div>
+		
+		<blockquote>
+<p>已经好久没有动博客了，毕业之后的第一篇。下班了单开一篇，把毕业照补上。</p>
+</blockquote>
+<p>Java中的枚举是在JDK1.5以后出现的。之前的开发过程中并没有用过，但是有碰到过关于枚举的代码。貌似是一种更为简单有效的常量定义方式。学习之，希望以后的写代码过程中可以熟悉并掌握枚举的用法。</p>
+<h2 id="1-使用场景："><a href="#1-使用场景：" class="headerlink" title="1. 使用场景："></a><strong>1.</strong> 使用场景：</h2><p>每当需要一组固定的常量的时候，如一周的天数、一年四季等。或者是在我们编译前就知道其包含的所有值的集合，比如定义了一些状态等等。这个时候就有可能需要使用枚举了。</p>
+<h2 id="2-与-public-static-final-的常量定义方式进行比较："><a href="#2-与-public-static-final-的常量定义方式进行比较：" class="headerlink" title="2. 与 public static final 的常量定义方式进行比较："></a><strong>2.</strong> 与 public static final 的常量定义方式进行比较：</h2><p>在以上的场景中，回顾以往的做法，比如我们定义这样一些状态：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">State</span> </span>&#123;</div><div class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> Normal = <span class="number">0</span>;<span class="comment">//正常</span></div><div class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> Update = <span class="number">1</span>;<span class="comment">//已更新</span></div><div class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> Delete = <span class="number">2</span>;<span class="comment">//已删除</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>使用的时候，在程序中直接使用 类名.常量名 就可以了。但是这样还存在一些问题。比如：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doSomething</span><span class="params">(<span class="keyword">int</span> state)</span></span>&#123;</div><div class="line">	<span class="keyword">switch</span>(state)&#123;</div><div class="line">		<span class="keyword">case</span> State.Normal:</div><div class="line">		  ...</div><div class="line">		  <span class="keyword">break</span>;</div><div class="line">		<span class="keyword">case</span> State.Update:</div><div class="line">		  ...</div><div class="line">		  <span class="keyword">break</span>;</div><div class="line">		<span class="keyword">case</span> State.Delete:</div><div class="line">		  ...</div><div class="line">		  <span class="keyword">break</span>;</div><div class="line">		<span class="keyword">default</span>:</div><div class="line">		  ...</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ol>
+<li><p>在程序运行过程中，传入的state变量很有可能并不是我们期待的。比如 doSomething(4) 这样的调用方式有可能出现问题，因为我们想要的参数值仅仅是Normal、Update、Delete中的一个。为此，我们不得不在default分支中做一些处理来应对这种情况。换句话说，这是类型不安全的。</p>
+</li>
+<li><p>另外，在我们对程序进行调试的过程中，上面定义的常量会转换成一些毫无意义的整数值，也就是所谓的魔术数字。给我们的调试带来痛苦。</p>
+</li>
+<li><p>因为整形枚举属于编译期常量，所以编译过程完成后，所有客户端和服务器端引用的地方，会直接将整数值写入。这样，当你修改旧的枚举整数值后或者增加新的枚举值后，所有引用地方代码都需要重新编译，否则运行时刻就会出现错误。</p>
+</li>
+</ol>
+<p>那如果换成枚举常量呢？</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="keyword">enum</span> State &#123;</div><div class="line">	Normal,Update,Delete</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>类型安全检查：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doSomething</span><span class="params">(State state)</span></span>&#123;</div><div class="line">	<span class="keyword">switch</span>(state)&#123;</div><div class="line">		<span class="keyword">case</span> Normal:</div><div class="line">		  ...</div><div class="line">		  <span class="keyword">break</span>;</div><div class="line">		<span class="keyword">case</span> Update:</div><div class="line">		  ...</div><div class="line">		  <span class="keyword">break</span>;</div><div class="line">		<span class="keyword">case</span> Delete:</div><div class="line">		  ...</div><div class="line">		  <span class="keyword">break</span>;</div><div class="line">		<span class="keyword">default</span>:</div><div class="line">		  ...</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>调用doSomething(State state)方法时，在编译期间就会限定类型，不允许越界的情况出现。</p>
+<p>另外，枚举提供了一些内置的方法，比如，列出所有的枚举值等。这些方法简化了常量的使用。</p>
+<h2 id="3-枚举类型的使用"><a href="#3-枚举类型的使用" class="headerlink" title="3. 枚举类型的使用"></a><strong>3.</strong> 枚举类型的使用</h2><ul>
+<li><strong>常量</strong>：</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="keyword">enum</span> State&#123;</div><div class="line">	Normal,Update,Delete</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>遍历枚举常量：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">for</span>(State state:State.values())&#123;</div><div class="line">		System.out.println(state);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li><strong>自定义属性、方法</strong>：</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="keyword">enum</span> State&#123;</div><div class="line">	<span class="comment">//若之后为枚举类型添加属性或方法，最后一个枚举常量后面记得加分号</span></div><div class="line">	Normal(<span class="string">"正常"</span>,<span class="number">0</span>),Update(<span class="string">"已更新"</span>,<span class="number">1</span>),Delete(<span class="string">"已删除"</span>,<span class="number">2</span>);</div><div class="line">	<span class="keyword">private</span> String name;</div><div class="line">	<span class="keyword">private</span> <span class="keyword">int</span> index;</div><div class="line">	<span class="comment">// 构造方法，注意：构造方法不能为public，因为enum并不可以被实例化</span></div><div class="line">    <span class="function"><span class="keyword">private</span> <span class="title">State</span><span class="params">(String name, <span class="keyword">int</span> index)</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.name = name;</div><div class="line">        <span class="keyword">this</span>.index = index;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">// get set 方法</span></div><div class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getName</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> name;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setName</span><span class="params">(String name)</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.name = name;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getIndex</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> index;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setIndex</span><span class="params">(<span class="keyword">int</span> index)</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.index = index;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">// 普通方法</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">getName</span><span class="params">(<span class="keyword">int</span> index)</span> </span>&#123;</div><div class="line">        <span class="keyword">for</span> (State c : State .values()) &#123;</div><div class="line">            <span class="keyword">if</span> (c.getIndex() == index) &#123;</div><div class="line">                <span class="keyword">return</span> c.name;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">//覆盖toString方法,这样调试就不会看到魔术数字啦</span></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span></span>&#123;</div><div class="line">    	<span class="keyword">return</span> name+<span class="string">":"</span>+index;</div><div class="line">    &#125;    </div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test</span><span class="params">()</span></span>&#123;</div><div class="line">	<span class="keyword">for</span> (State state : State.values()) &#123;</div><div class="line">	    <span class="comment">//输出：正常:0 已更新:1 已删除:2</span></div><div class="line">		System.out.println(state);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>实际上，以上枚举声明定义的类型是一个final类，因此枚举类型不可以被继承。所有的枚举都继承自java.lang.Enum类。<br>其中，Normal、Update、Delete是这个枚举类的三个实例，他们都是static final类型的对象。Normal(“正常”,0),Update(“已更新”,1),Delete(“已删除”,2)正是调用了State类的私有构造函数State(String name, int index)进行实例化的。</p>
+<p>因此，枚举类型可以作为一个类来使用，其不能被继承。所以他比常量枚举更加强大。</p>
+<ul>
+<li><strong>实现接口</strong></li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">HandleState</span></span>&#123;</div><div class="line">	<span class="function"><span class="keyword">void</span> <span class="title">printState</span><span class="params">()</span></span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="keyword">enum</span> State implements HandleState&#123;</div><div class="line">	<span class="comment">//若之后为枚举类型添加属性或方法，最后一个枚举常量后面记得加分号</span></div><div class="line">	Normal(<span class="string">"正常"</span>,<span class="number">0</span>),Update(<span class="string">"已更新"</span>,<span class="number">1</span>),Delete(<span class="string">"已删除"</span>,<span class="number">2</span>);</div><div class="line">	<span class="keyword">private</span> String name;</div><div class="line">	<span class="keyword">private</span> <span class="keyword">int</span> index;</div><div class="line">	<span class="comment">// 构造方法，注意：构造方法不能为public，因为enum并不可以被实例化</span></div><div class="line">    <span class="function"><span class="keyword">private</span> <span class="title">State</span><span class="params">(String name, <span class="keyword">int</span> index)</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.name = name;</div><div class="line">        <span class="keyword">this</span>.index = index;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">// get set 方法</span></div><div class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getName</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> name;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setName</span><span class="params">(String name)</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.name = name;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getIndex</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> index;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setIndex</span><span class="params">(<span class="keyword">int</span> index)</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.index = index;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">// 普通方法</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">getName</span><span class="params">(<span class="keyword">int</span> index)</span> </span>&#123;</div><div class="line">        <span class="keyword">for</span> (State c : State .values()) &#123;</div><div class="line">            <span class="keyword">if</span> (c.getIndex() == index) &#123;</div><div class="line">                <span class="keyword">return</span> c.name;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">//覆盖toString方法,这样调试就不会看到魔术数字啦</span></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span></span>&#123;</div><div class="line">    	<span class="keyword">return</span> name+<span class="string">":"</span>+index;</div><div class="line">    &#125;  </div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">printState</span><span class="params">()</span> </span>&#123;</div><div class="line">		System.out.println(<span class="keyword">this</span>);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>可以看到，枚举和一般的类一样都可以实现接口。</p>
+<ul>
+<li><strong>Enum 相关工具类</strong></li>
+</ul>
+<p>JDK5.0 中在增加 Enum 类的同时，也增加了两个工具类 EnumSet 和 EnumMap，这两个类都放在 java.util 包中。具体的使用就查看官方文档吧，这里不再赘述。</p>
+<h2 id="4-参考"><a href="#4-参考" class="headerlink" title="4. 参考"></a><strong>4.</strong> 参考</h2><p><a href="https://hacpai.com/article/1437056657634" target="_blank" rel="external">java enum的用法详解[转]</a></p>
+<p><a href="https://www.ibm.com/developerworks/cn/java/j-lo-enum/" target="_blank" rel="external">Java 语言中Enum类型的使用介绍</a></p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/java/">java</a>
+  </div>
+
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/编程/">编程</a>
+</div>
+
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://yukai.space/2016/06/30/java中的枚举/" data-title="java中的枚举 | 于凯的博客" data-tsina="追风少年于二狗" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2016/06/30/毕业了/" title="毕业了">
+  <strong>PREVIOUS:</strong><br/>
+  <span>
+  毕业了</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2016/06/21/java中的ThreadLocal/"  title="java中的ThreadLocal">
+ <strong>NEXT:</strong><br/> 
+ <span>java中的ThreadLocal
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section class="comment">
+	<div class="ds-thread"></div>
+</section>
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-使用场景："><span class="toc-number">1.</span> <span class="toc-text">1. 使用场景：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-与-public-static-final-的常量定义方式进行比较："><span class="toc-number">2.</span> <span class="toc-text">2. 与 public static final 的常量定义方式进行比较：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-枚举类型的使用"><span class="toc-number">3.</span> <span class="toc-text">3. 枚举类型的使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-参考"><span class="toc-number">4.</span> <span class="toc-text">4. 参考</span></a></li></ol>
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+			<li><a href="/categories/java-多线程/" title="java 多线程">java 多线程<sup>1</sup></a></li>
+		
+			<li><a href="/categories/工具/" title="工具">工具<sup>6</sup></a></li>
+		
+			<li><a href="/categories/生活/" title="生活">生活<sup>2</sup></a></li>
+		
+			<li><a href="/categories/编程/" title="编程">编程<sup>12</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			<li><a href="/tags/ant/" title="ant">ant<sup>2</sup></a></li>
+		
+			<li><a href="/tags/java/" title="java">java<sup>14</sup></a></li>
+		
+			<li><a href="/tags/junit/" title="junit">junit<sup>1</sup></a></li>
+		
+			<li><a href="/tags/markdown/" title="markdown">markdown<sup>1</sup></a></li>
+		
+			<li><a href="/tags/python/" title="python">python<sup>1</sup></a></li>
+		
+			<li><a href="/tags/多线程/" title="多线程">多线程<sup>3</sup></a></li>
+		
+			<li><a href="/tags/快捷键/" title="快捷键">快捷键<sup>1</sup></a></li>
+		
+			<li><a href="/tags/测试/" title="测试">测试<sup>1</sup></a></li>
+		
+			<li><a href="/tags/编码/" title="编码">编码<sup>2</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  <div class="rsspart">
+	<a href="null" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<div class="social-font clearfix">
+		
+		<a href="http://weibo.com/http://weibo.com/5381447277" target="_blank" title="weibo"></a>
+		
+		
+		
+		<a href="https://github.com/https://github.com/Hikyu" target="_blank" title="github"></a>
+		
+		
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/A-limon/pacman" target="_blank" title="Pacman">Pacman</a> © 2016 
+		
+		<a href="http://yukai.space" target="_blank" title="于凯">于凯</a>
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"null"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+  </body>
+</html>

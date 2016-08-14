@@ -1,0 +1,423 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>java中的编码问题 | 于凯的博客</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
+    <meta name="author" content="于凯">
+    
+    <meta name="description" content="最近在工作过程中总是被编码困扰，出现了很多意想不到的情况。故上网查看资料，总结一番。
+
+1.编码什么是编码？程序员应该都知道计算机能够识别的只是1和0，我们看到的文字、图片、视频等在计算机的 世界里都是以二进制的形式存在的。包括你的硬盘或者网络上传输的字节序列，都是无数个0和1组成的。英文字母，数字">
+    
+    
+    
+    
+    
+    <link rel="icon" href="/img/xiaoxin.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/xiaoxin.png">
+    <link rel="apple-touch-icon-precomposed" href="/img/xiaoxin.png">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.svg" alt="于凯的博客" title="于凯的博客"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="于凯的博客">于凯的博客</a></h1>
+				<h2 class="blog-motto">平凡中也有感动</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+					<li>
+					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:yukai.space">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2016/04/20/java中的编码问题/" title="java中的编码问题" itemprop="url">java中的编码问题</a>
+  </h1>
+  <p class="article-author">By
+    
+      <a href="http://yukai.space" title="于凯">于凯</a>
+    </p>
+  <p class="article-time">
+    <time datetime="2016-04-20T04:48:55.000Z" itemprop="datePublished">2016-04-20</time>
+    更新日期:<time datetime="2016-08-14T06:58:18.544Z" itemprop="dateModified">2016-08-14</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-编码"><span class="toc-number">1.</span> <span class="toc-text">1.编码</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Ascii编码"><span class="toc-number">1.0.1.</span> <span class="toc-text">Ascii编码</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#GB2312"><span class="toc-number">1.0.2.</span> <span class="toc-text">GB2312</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#UTF-8"><span class="toc-number">1.0.3.</span> <span class="toc-text">UTF-8</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-java-中的编码"><span class="toc-number">2.</span> <span class="toc-text">2. java 中的编码</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#class文件与内存中的编码"><span class="toc-number">2.0.1.</span> <span class="toc-text">class文件与内存中的编码</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#InputStreamReader与OutputStreamWriter"><span class="toc-number">2.0.2.</span> <span class="toc-text">InputStreamReader与OutputStreamWriter</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#String与byte"><span class="toc-number">2.0.3.</span> <span class="toc-text">String与byte[]</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#CharSet"><span class="toc-number">2.0.4.</span> <span class="toc-text">CharSet</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-延伸-byte"><span class="toc-number">3.</span> <span class="toc-text">3.延伸 byte</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">4.</span> <span class="toc-text">参考</span></a></li></ol>
+		</div>
+		
+		<blockquote>
+<p>最近在工作过程中总是被编码困扰，出现了很多意想不到的情况。故上网查看资料，总结一番。</p>
+</blockquote>
+<h2 id="1-编码"><a href="#1-编码" class="headerlink" title="1.编码"></a>1.编码</h2><p>什么是编码？程序员应该都知道计算机能够识别的只是1和0，我们看到的文字、图片、视频等在计算机的 世界里都是以二进制的形式存在的。包括你的硬盘或者网络上传输的字节序列，都是无数个0和1组成的。英文字母，数字，汉字等都是字符。不同字符对应二进制数的规则，也就是说不同的字符翻译为不同的0、1组合，就是字符的编码。这个过程的逆过程，就是解码。</p>
+<ul>
+<li><h4 id="Ascii编码"><a href="#Ascii编码" class="headerlink" title="Ascii编码"></a><strong><a href="http://baike.baidu.com/view/15482.htm?fromtitle=ascii%E7%A0%81&amp;fromid=99077&amp;type=syn" target="_blank" rel="external">Ascii编码</a></strong></h4></li>
+</ul>
+<p>标准的ASCII编码使用的是7（2^7 = 128）位二进制数来表示所有的大小写字母、数字和标点符号已经一些特殊的控制字符，最前面的一位统一规定为0。(一个字节8位)。缺点是只能显示128个字符，显示的字符十分有限，比如对中文就无能为力了。</p>
+<ul>
+<li><h4 id="GB2312"><a href="#GB2312" class="headerlink" title="GB2312"></a><strong><a href="http://baike.baidu.com/view/443268.htm?fromtitle=GB2312&amp;fromid=483170&amp;type=syn" target="_blank" rel="external">GB2312</a></strong></h4></li>
+</ul>
+<p>GB2312编码适用于汉字处理、汉字通信等系统之间的信息交换，通行于中国大陆；新加坡等地也采用此编码。中国大陆几乎所有的中文系统和国际化的软件都支持GB 2312。</p>
+<ul>
+<li><h4 id="UTF-8"><a href="#UTF-8" class="headerlink" title="UTF-8"></a><strong><a href="http://baike.baidu.com/view/25412.htm" target="_blank" rel="external">UTF-8</a></strong></h4></li>
+</ul>
+<p>事实上世界上那么多国家，存在更多的字符是前面的编码所不能表示的。不同国家的不同编码之间也不能够兼容。所以就需要一套通用的编码能够表示世界上所有的符号，这就是<a href="http://baike.baidu.com/item/unicode" target="_blank" rel="external">Unicode编码</a><br>事实上，Unicode也是一套字符集。</p>
+<p><strong>字符集</strong>简单说就是字符的集合。它规定了每个字符对应的二进制编码。比如Unicode是一个很大的集合，现在的规模可以容纳100多万个符号。每个符号的编码都不一样，比如，U+0639表示阿拉伯字母Ain，U+0041表示英语的大写字母A，U+4E25表示汉字”严”。需要注意的是，Unicode只是一个符号集，它只规定了符号的二进制代码，却没有规定这个二进制代码应该如何存储。那既然字符集中的每一个字符都有一个自己的序号，直接把序号作为存储内容就好了。为什么还要多此一举通过字符编码把序号转换成另外一种存储格式呢？</p>
+<p>这是因为：</p>
+<p>比如，汉字”严”的unicode是十六进制数4E25，转换成二进制数足足有15位（100111000100101），也就是说这个符号的表示至少需要2个字节。表示其他更大的符号，可能需要3个字节或者4个字节，甚至更多。<br>这里就有两个严重的问题，第一个问题是，如何才能区别Unicode和ASCII？计算机怎么知道三个字节表示一个符号，而不是分别表示三个符号呢？第二个问题是，我们已经知道，英文字母只用一个字节表示就够了，如果Unicode统一规定，每个符号用三个或四个字节表示，那么每个英文字母前都必然有二到三个字节是0，这对于存储来说是极大的浪费，文本文件的大小会因此大出二三倍，这是无法接受的。</p>
+<p>UTF-8就是在互联网上使用最广的一种Unicode的实现方式。UTF-8最大的一个特点，就是它是一种变长的编码方式。它可以使用1~4个字节表示一个符号，根据不同的符号而变化字节长度。</p>
+<p>UTF-8的编码规则很简单，只有两条： </p>
+<p>1）对于单字节的符号，字节的第一位设为0，后面7位为这个符号的unicode码。因此对于英语字母，UTF-8编码和ASCII码是相同的。 </p>
+<p>2）对于n字节的符号（n&gt;1），第一个字节的前n位都设为1，第n+1位设为0，后面字节的前两位一律设为10。剩下的没有提及的二进制位，全部为这个符号的unicode码。</p>
+<p>下面以utf-8为例，看下编码的过程。</p>
+<img src="/2016/04/20/java中的编码问题/utf8.png" alt="utf-8" title="utf-8">
+<p>根据上面的转换表，理解UTF-8的转换编码规则就变得非常简单了：第一个字节的第一位如果为0，则表示这个字节单独就是一个字符;如果为1，连续多少个1就表示该字符占有多少个字节。</p>
+<p>以汉字”严”为例，演示如何实现UTF-8编码。</p>
+<p>已知”严”的unicode是4E25（100111000100101），根据上表，可以发现4E25处在第三行的范围内（0000 0800-0000 FFFF），因此”严”的UTF-8编码需要三个字节，即格式是”1110xxxx 10xxxxxx 10xxxxxx”。然后，从”严”的最后一个二进制位开始，依次从后向前填入格式中的x，多出的位补0。这样就得到了，”严”的UTF-8编码是”11100100 10111000 10100101″，转换成十六进制就是E4B8A5。</p>
+<p>还有一些编码就不再一一介绍了，具体用到的话可以百度或谷歌。</p>
+<h2 id="2-java-中的编码"><a href="#2-java-中的编码" class="headerlink" title="2. java 中的编码"></a>2. java 中的编码</h2><ul>
+<li><h4 id="class文件与内存中的编码"><a href="#class文件与内存中的编码" class="headerlink" title="class文件与内存中的编码"></a><strong>class文件与内存中的编码</strong></h4></li>
+</ul>
+
+<p>上图说明了java编码转换的过程</p>
+<p>首先，java源文件是可以用很多种编码保存的。在使用javac编译源文件时，如果没有指定源文件的编码，javac会默认源文件是以系统默认编码编写的，（Windows通常为GBK），javac使用该编码格式对源文件进行解码并将其中的字符以UTF-8输出到Class文件中。如果源文件并不是已系统默认编码保存的，那么javac读进来的时候就会出现乱码问题。</p>
+<p>java程序在运行时，jvm内存中的所有字符的表现形式都是UTF-16。如果需要用户输入信息，则会采用file.encoding编码格式对用户输入的信息进行编码同时转换为Unicode编码格式保存到内存中。程序运行后，将产生的结果再转化为file.encoding格式返回给操作系统并输出到界面去。</p>
+<p><strong>总结</strong>:Java语言中 不同字符集编码的转换 都是通过Unicode编码作为中介来完成的。</p>
+<ul>
+<li><h4 id="InputStreamReader与OutputStreamWriter"><a href="#InputStreamReader与OutputStreamWriter" class="headerlink" title="InputStreamReader与OutputStreamWriter"></a><strong>InputStreamReader与OutputStreamWriter</strong></h4></li>
+</ul>
+<img src="/2016/04/20/java中的编码问题/reader.png" alt="reader.png" title="">
+<img src="/2016/04/20/java中的编码问题/writer.png" alt="writer.png" title="">
+<p>Reader 类是 Java 的 I/O 中读字符的父类，而 InputStream 类是读字节的父类，InputStreamReader 类就是关联字节到字符的桥梁，它负责在 I/O 过程中处理读取字节到字符的转换，而具体字节到字符的解码实现它由 StreamDecoder 去实现，在 StreamDecoder 解码过程中必须由用户指定 Charset 编码格式。值得注意的是如果你没有指定 Charset，将使用本地环境中的默认字符集，例如在中文环境中将使用 GBK 编码。</p>
+<p>写的情况也是类似，字符的父类是 Writer，字节的父类是 OutputStream，通过 OutputStreamWriter 转换字符到字节。同样 StreamEncoder 类负责将字符编码成字节，编码格式和默认编码规则与解码是一致的。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">String file = <span class="string">"c:/stream.txt"</span>; </div><div class="line">String charset = <span class="string">"UTF-8"</span>; </div><div class="line"><span class="comment">// 写字符换转成字节流</span></div><div class="line">FileOutputStream outputStream = <span class="keyword">new</span> FileOutputStream(file); </div><div class="line">OutputStreamWriter writer = <span class="keyword">new</span> OutputStreamWriter( </div><div class="line">outputStream, charset); </div><div class="line"><span class="keyword">try</span> &#123; </div><div class="line">   writer.write(<span class="string">"这是要保存的中文字符"</span>); </div><div class="line">&#125; <span class="keyword">finally</span> &#123; </div><div class="line">   writer.close(); </div><div class="line">&#125; </div><div class="line"><span class="comment">// 读取字节转换成字符</span></div><div class="line">FileInputStream inputStream = <span class="keyword">new</span> FileInputStream(file); </div><div class="line">InputStreamReader reader = <span class="keyword">new</span> InputStreamReader( </div><div class="line">inputStream, charset); </div><div class="line">StringBuffer buffer = <span class="keyword">new</span> StringBuffer(); </div><div class="line"><span class="keyword">char</span>[] buf = <span class="keyword">new</span> <span class="keyword">char</span>[<span class="number">64</span>]; </div><div class="line"><span class="keyword">int</span> count = <span class="number">0</span>; </div><div class="line"><span class="keyword">try</span> &#123; </div><div class="line">   <span class="keyword">while</span> ((count = reader.read(buf)) != -<span class="number">1</span>) &#123; </div><div class="line">       buffer.append(buf, <span class="number">0</span>, count); </div><div class="line">   &#125; </div><div class="line">&#125; <span class="keyword">finally</span> &#123; </div><div class="line">   reader.close(); </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li><h4 id="String与byte"><a href="#String与byte" class="headerlink" title="String与byte[]"></a><strong>String与byte[]</strong></h4></li>
+</ul>
+<p>利用String类的getBytes()方法返回不同字符集的字节流数据，其本质是从Unicode字符集编码向其它字符集编码转换的过程。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">String str=<span class="string">"中"</span>;  </div><div class="line"><span class="comment">// 将内存中的str(utf-16)转换为系统默认编码的字节数组</span></div><div class="line"><span class="keyword">byte</span>[] bytes1 = str.getBytes();  </div><div class="line"><span class="comment">// 将内存中的str(utf-16)转换为ISO-8859-1编码的字节数组                 </span></div><div class="line"><span class="keyword">byte</span>[] bytes2 = str.getBytes(<span class="string">"ISO-8859-1"</span>);</div><div class="line"><span class="comment">// 正常显示中    </span></div><div class="line">System.out.println(<span class="keyword">new</span> String(bytes1));  </div><div class="line"><span class="comment">// 输出"?"      </span></div><div class="line">System.out.println(<span class="keyword">new</span> String(bytes2));</div></pre></td></tr></table></figure>
+<p>利用String类的构造方法根据不同字符集的字节流数据产生一个字符串对象，其本质是从其它字符集编码向Unicode字符集编码转换的过程。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// GBK中0xD6 0xD0表示“中”，0x31表示字符“1”</span></div><div class="line"><span class="keyword">byte</span>[] bytes = &#123;(<span class="keyword">byte</span>)<span class="number">0xD6</span>, (<span class="keyword">byte</span>)<span class="number">0xD0</span>, (<span class="keyword">byte</span>)<span class="number">0x31</span>&#125;;  </div><div class="line"><span class="comment">// 将bytes按照系统默认编码格式(GBK)解码,产生Unicode字符</span></div><div class="line">String str1 = <span class="keyword">new</span> String(bytes);                      </div><div class="line"><span class="comment">// 将bytes按照ISO-8859-1解码，产生Unicode字符</span></div><div class="line">String str2= <span class="keyword">new</span> String(bytes,<span class="string">"ISO-8859-1"</span>);          </div><div class="line"><span class="comment">// 中1  将Unicode字符转换为GBK编码输出</span></div><div class="line">System.out.println(str1);                             </div><div class="line"></div><div class="line"><span class="comment">/*</span></div><div class="line"> *在ISO-8859-1编码方式中没有对应0xD6和0xD0</div><div class="line"> *的字符，所以前两个字符会产生两个问号，由于0x31*在ISO-8859-1编码中对应字符“1”</div><div class="line"> *（ISO-8859-1也兼容ASCII），所以此语句得到str的值是“??1”。</div><div class="line"> */ </div><div class="line">System.out.println(str2);    <span class="comment">// ??1</span></div></pre></td></tr></table></figure>
+<ul>
+<li><h4 id="CharSet"><a href="#CharSet" class="headerlink" title="CharSet"></a><strong>CharSet</strong></h4></li>
+</ul>
+<p>从jdk1.4开始，java提供了Charset 类，这个类中提供 encode 与 decode 分别对应 char[] 到 byte[] 的编码和 byte[] 到 char[] 的解码。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Charset charset = Charset.forName(<span class="string">"UTF-8"</span>);   </div><div class="line">ByteBuffer byteBuffer = charset.encode(string);   </div><div class="line">CharBuffer charBuffer = charset.decode(byteBuffer);</div></pre></td></tr></table></figure>
+<h2 id="3-延伸-byte"><a href="#3-延伸-byte" class="headerlink" title="3.延伸 byte"></a>3.延伸 byte</h2><p>字节数据类型是一个8位有符号二进制补码整数。它具有-128最小值和127的最大值。</p>
+<p>无论是硬盘上数据的存放还是数据在网络上传输，其中的内容都是二进制数据。当你想把一些文本文件或者视频保存时，这些数据会转化为二进制序列存放于你的硬盘。同样，当你使用网络聊天，发语音和图片，程序都会将这些数据转化为（编码）二进制序列进行传输。在java中，这些二进制序列以两个字节为单位，使用Unicode字符集形成byte数组。程序处理的时候再把这些byte数组进行合适的处理（解码）呈现到屏幕上。</p>
+<p>有关byte与其他数据类型的转换不再多写，用到的时候再从网上查资料吧。只要知道其中的原理，soeasy.</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="http://cenalulu.github.io/linux/character-encoding/" target="_blank" rel="external">十分钟搞清字符集和字符编码</a></p>
+<p><a href="http://www.ruanyifeng.com/blog/2007/10/ascii_unicode_and_utf-8.html" target="_blank" rel="external">字符编码笔记：ASCII，Unicode和UTF-8</a></p>
+<p><a href="http://wiki.jikexueyuan.com/project/java-chinese-garbled-solution/java-code-conversion-process.html" target="_blank" rel="external">java编码转换过程</a></p>
+<p><a href="http://blog.csdn.net/mazhimazh/article/details/19327421" target="_blank" rel="external">Java 7之基础 - 编码与解码</a></p>
+<p><a href="https://www.ibm.com/developerworks/cn/java/j-lo-chinesecoding/" target="_blank" rel="external">深入分析 Java 中的中文编码问题</a></p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/java/">java</a><a href="/tags/编码/">编码</a>
+  </div>
+
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/编程/">编程</a>
+</div>
+
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://yukai.space/2016/04/20/java中的编码问题/" data-title="java中的编码问题 | 于凯的博客" data-tsina="追风少年于二狗" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2016/04/25/ant编译java工程jdk路径的设置/" title="ANT编译java工程经jdk路径的设置">
+  <strong>PREVIOUS:</strong><br/>
+  <span>
+  ANT编译java工程经jdk路径的设置</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2016/04/15/关于抽象类和接口/"  title="关于抽象类和接口">
+ <strong>NEXT:</strong><br/> 
+ <span>关于抽象类和接口
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section class="comment">
+	<div class="ds-thread"></div>
+</section>
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-编码"><span class="toc-number">1.</span> <span class="toc-text">1.编码</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Ascii编码"><span class="toc-number">1.0.1.</span> <span class="toc-text">Ascii编码</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#GB2312"><span class="toc-number">1.0.2.</span> <span class="toc-text">GB2312</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#UTF-8"><span class="toc-number">1.0.3.</span> <span class="toc-text">UTF-8</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-java-中的编码"><span class="toc-number">2.</span> <span class="toc-text">2. java 中的编码</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#class文件与内存中的编码"><span class="toc-number">2.0.1.</span> <span class="toc-text">class文件与内存中的编码</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#InputStreamReader与OutputStreamWriter"><span class="toc-number">2.0.2.</span> <span class="toc-text">InputStreamReader与OutputStreamWriter</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#String与byte"><span class="toc-number">2.0.3.</span> <span class="toc-text">String与byte[]</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#CharSet"><span class="toc-number">2.0.4.</span> <span class="toc-text">CharSet</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-延伸-byte"><span class="toc-number">3.</span> <span class="toc-text">3.延伸 byte</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">4.</span> <span class="toc-text">参考</span></a></li></ol>
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+			<li><a href="/categories/java-多线程/" title="java 多线程">java 多线程<sup>1</sup></a></li>
+		
+			<li><a href="/categories/工具/" title="工具">工具<sup>6</sup></a></li>
+		
+			<li><a href="/categories/生活/" title="生活">生活<sup>2</sup></a></li>
+		
+			<li><a href="/categories/编程/" title="编程">编程<sup>12</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			<li><a href="/tags/ant/" title="ant">ant<sup>2</sup></a></li>
+		
+			<li><a href="/tags/java/" title="java">java<sup>14</sup></a></li>
+		
+			<li><a href="/tags/junit/" title="junit">junit<sup>1</sup></a></li>
+		
+			<li><a href="/tags/markdown/" title="markdown">markdown<sup>1</sup></a></li>
+		
+			<li><a href="/tags/python/" title="python">python<sup>1</sup></a></li>
+		
+			<li><a href="/tags/多线程/" title="多线程">多线程<sup>3</sup></a></li>
+		
+			<li><a href="/tags/快捷键/" title="快捷键">快捷键<sup>1</sup></a></li>
+		
+			<li><a href="/tags/测试/" title="测试">测试<sup>1</sup></a></li>
+		
+			<li><a href="/tags/编码/" title="编码">编码<sup>2</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  <div class="rsspart">
+	<a href="null" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<div class="social-font clearfix">
+		
+		<a href="http://weibo.com/http://weibo.com/5381447277" target="_blank" title="weibo"></a>
+		
+		
+		
+		<a href="https://github.com/https://github.com/Hikyu" target="_blank" title="github"></a>
+		
+		
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/A-limon/pacman" target="_blank" title="Pacman">Pacman</a> © 2016 
+		
+		<a href="http://yukai.space" target="_blank" title="于凯">于凯</a>
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"null"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+  </body>
+</html>

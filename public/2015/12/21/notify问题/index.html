@@ -1,0 +1,364 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>notify 问题 | 于凯的博客</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
+    <meta name="author" content="于凯">
+    
+    <meta name="description" content="今天遇到了这么个情况：有线程若干，我需要他们按顺序执行。代码大概长这样：
+12345678910111213141516171819202122232425262728293031323334353637class SyncTag &amp;#123;	public int threadNO;	public">
+    
+    
+    
+    
+    
+    <link rel="icon" href="/img/xiaoxin.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/xiaoxin.png">
+    <link rel="apple-touch-icon-precomposed" href="/img/xiaoxin.png">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.svg" alt="于凯的博客" title="于凯的博客"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="于凯的博客">于凯的博客</a></h1>
+				<h2 class="blog-motto">平凡中也有感动</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+					<li>
+					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:yukai.space">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/12/21/notify问题/" title="notify 问题" itemprop="url">notify 问题</a>
+  </h1>
+  <p class="article-author">By
+    
+      <a href="http://yukai.space" title="于凯">于凯</a>
+    </p>
+  <p class="article-time">
+    <time datetime="2015-12-21T04:48:55.000Z" itemprop="datePublished">2015-12-21</time>
+    更新日期:<time datetime="2016-08-14T05:34:17.960Z" itemprop="dateModified">2016-08-14</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#延伸："><span class="toc-number">1.</span> <span class="toc-text">延伸：</span></a></li></ol>
+		</div>
+		
+		<p>今天遇到了这么个情况：<br>有线程若干，我需要他们按顺序执行。<br>代码大概长这样：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line">class SyncTag &#123;</div><div class="line">	public int threadNO;</div><div class="line">	public SyncTag() &#123;</div><div class="line">	    threadNO = 0;</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line">class ThreadA extend Thread&#123;</div><div class="line">	SyncTag syncTag;</div><div class="line">	int scriptNO;</div><div class="line">	ThreadA(SyncTag syncTag,int scriptNO)&#123;</div><div class="line">			this.syncTag=syncTag;</div><div class="line">			this.scriptNO=scriptNO;</div><div class="line">	&#125;</div><div class="line">	public void Run()&#123;</div><div class="line">			synchronized (syncTag) &#123;</div><div class="line">                if (syncTag.threadNO != scriptNO) &#123;</div><div class="line">                        try &#123;</div><div class="line">                                syncTag.wait();</div><div class="line">                        &#125; catch (InterruptedException e) &#123;</div><div class="line">                                    e.printStackTrace();</div><div class="line">                        &#125;</div><div class="line">                &#125;</div><div class="line">                dosomething();</div><div class="line">                syncTag.threadNO++;</div><div class="line">                syncTag.notifyAll();</div><div class="line">			&#125;</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line">public class Test&#123;</div><div class="line">	public static void main(String args[])&#123;</div><div class="line">		    SyncTag syncTag=new SyncTag();</div><div class="line">			for(int i=0;i&lt;10;++i)&#123;</div><div class="line">				ThreadA t=new ThreadA(syncTag,i);</div><div class="line">				t.start();</div><div class="line">			&#125;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>结果却不是像我预料的那样。这十个线程的执行顺序竟然是混乱的，无序的。虽然他们是之间实现了串行执行。<br>研究一番，发现是 notify 与notifyAll 在捣鬼。<br>当调用 同步对象（syncTag）的notify方法 的时候，唤醒了N多等待资源线程中的一个（即 调用了同步对象的wait 方法而阻塞的那些线程）；至于唤醒哪个线程，是不确定的。<br>其他的线程仍然在阻塞，需要被notify 或者 notifyAll 唤醒。</p>
+<p>当调用同步对象（syncTag）的notifyAll方法 的时候，所有进入wait 方法而阻塞的那些线程都被唤醒了。他们中的一个会抢到同步锁（syncTag），继续执行下去，<br>剩下的没有获得锁的线程则继续等待。与上面情况不同的是，这些等待的线层不再需要notify或者notifyAll去唤醒了，一旦拥有锁的线程放弃锁，这些线程就一拥而上，去抢占锁，抢到的运行，<br>没抢到的老实等着。</p>
+<p>这就是notify 与 notifyAll两者的区别.</p>
+<p>那么我遇到的问题是否是因为使用了notifyAll 的原因呢？其实并不是。即使我改成notify ，这些线程也没有按照顺序去运行。<br>原因在于：当某个先执行的线程（线程0）调用了notify 或者notifyAll 之后，某个线程被选中了。但是这个选中的线程并不一定是线程1.因为唤醒某个线程之后，他并不会再去检查是否符合<br>syncTag.threadNO == scriptNO 这个条件，只要被唤醒了，又恰好拥有了锁。那他就执行下去了。我们只需要让他在执行之前再检查一下是否 符合syncTag.threadNO == scriptNO 这个条件，<br>如果不符合，就继续wait.符合则执行。<br>很简单，将 </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span> (syncTag.threadNO != scriptNO) &#123;</div><div class="line">        <span class="keyword">try</span> &#123;</div><div class="line">                syncTag.wait();</div><div class="line">            &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</div><div class="line">                                    e.printStackTrace();</div><div class="line">            &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这部分代码 改为： </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">while</span> (syncTag.threadNO != scriptNO) &#123;</div><div class="line">		<span class="keyword">try</span> &#123;</div><div class="line">				syncTag.wait();</div><div class="line">		&#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</div><div class="line">				e.printStackTrace();</div><div class="line">		&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这个问题就解决了。</p>
+<h2 id="延伸："><a href="#延伸：" class="headerlink" title="延伸："></a><strong>延伸</strong>：</h2><p>假设这样一种情况：我们按照上面的方法把代码改了，但同时把下面的 notifyAll 改为 notify.问题又出现了：<br>设想一下，如果线程0执行完毕之后调用syncTag.notify（），唤醒某个线程（线程3），但是在这个线程中恰好不满足 syncTag.threadNO == scriptNO<br>这个条件。那么这个线程（线程3）会继续wait. 这个时候，所有的线程都在 wait,但并没有一个线程在运行，也没有其他线程能够调用 notify或者notifyAll来唤醒他们<br>中的一个。于是陷入死锁，无尽的等待。</p>
+<p>所以，具体使用notify还是notifyAll 就得具体情况具体分析了。</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/java-多线程/">java 多线程</a>
+</div>
+
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://yukai.space/2015/12/21/notify问题/" data-title="notify 问题 | 于凯的博客" data-tsina="追风少年于二狗" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2016/03/03/markdown/" title="Markdown">
+  <strong>PREVIOUS:</strong><br/>
+  <span>
+  Markdown</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2015/12/17/java中的volatile与synchronized/"  title="java中的volatile与synchronized">
+ <strong>NEXT:</strong><br/> 
+ <span>java中的volatile与synchronized
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section class="comment">
+	<div class="ds-thread"></div>
+</section>
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#延伸："><span class="toc-number">1.</span> <span class="toc-text">延伸：</span></a></li></ol>
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+			<li><a href="/categories/java-多线程/" title="java 多线程">java 多线程<sup>1</sup></a></li>
+		
+			<li><a href="/categories/工具/" title="工具">工具<sup>6</sup></a></li>
+		
+			<li><a href="/categories/生活/" title="生活">生活<sup>2</sup></a></li>
+		
+			<li><a href="/categories/编程/" title="编程">编程<sup>12</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			<li><a href="/tags/ant/" title="ant">ant<sup>2</sup></a></li>
+		
+			<li><a href="/tags/java/" title="java">java<sup>14</sup></a></li>
+		
+			<li><a href="/tags/junit/" title="junit">junit<sup>1</sup></a></li>
+		
+			<li><a href="/tags/markdown/" title="markdown">markdown<sup>1</sup></a></li>
+		
+			<li><a href="/tags/python/" title="python">python<sup>1</sup></a></li>
+		
+			<li><a href="/tags/多线程/" title="多线程">多线程<sup>3</sup></a></li>
+		
+			<li><a href="/tags/快捷键/" title="快捷键">快捷键<sup>1</sup></a></li>
+		
+			<li><a href="/tags/测试/" title="测试">测试<sup>1</sup></a></li>
+		
+			<li><a href="/tags/编码/" title="编码">编码<sup>2</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  <div class="rsspart">
+	<a href="null" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<div class="social-font clearfix">
+		
+		<a href="http://weibo.com/http://weibo.com/5381447277" target="_blank" title="weibo"></a>
+		
+		
+		
+		<a href="https://github.com/https://github.com/Hikyu" target="_blank" title="github"></a>
+		
+		
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/A-limon/pacman" target="_blank" title="Pacman">Pacman</a> © 2016 
+		
+		<a href="http://yukai.space" target="_blank" title="于凯">于凯</a>
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"null"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+  </body>
+</html>

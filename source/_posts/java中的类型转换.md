@@ -1,0 +1,104 @@
+---
+layout: post
+title:  "java中的类型转换"
+categories: 编程
+tags: 
+- java
+date:   2016-04-28 12:48:55
+---
+
+>以前一直对java中的类型转换了解的不是很清楚，因为平时写代码有IDE的帮助，所以往往忽略这一块的内容，但往往就是这样的小知识点不清楚，很有可能造成很大的错误。所以在闲暇时间总结一下这些可能被遗忘的知识点。网上已经有很多相关的介绍文章了，现在来梳理一番：
+
+## **基本类型**
+
+- **基本类型优先级**
+
+首先来看java中的基本类型有哪些：
+
+byte：byte数据类型是一个8位有符号二进制补码整数。
+
+short：short数据类型为16位有符号二进制补码整数。
+
+int：int数据类型是一个32位有符号二进制补码整数
+
+long: long数据类型是一个64位二进制补码整数
+
+float: float数据类型是单精度、32位、符合IEEE 754标准的浮点数
+
+boolean: boolean数据类型只有两个可能的值：true和false
+
+double: double数据类型是双精度、64位、符合IEEE 754标准的浮点数；
+
+char: char数据类型是一个16位的Unicode字符
+
+基本类型优先级由低到高排序：
+
+(byte short char) int long float double
+
+其中，byte short char 平级
+
+- **转换规则**
+
+1.有多种数据类型混合计算的时候，低优先级类型自动提升为优先级最大的那个类型再来继续计算
+
+3.高优先级类型转换为低优先级类型时，需要强制类型转换，并且有可能丢失精度或溢出。
+
+2.byte short char 他们三者在计算时，首先会转换为int类型
+
+3.由于byte short char三者平级，他们之间互相转换时需进行强制类型转换。
+
+4.boolean不能与其他类型转换
+
+
+## **类类型**
+
+类类型之间的转换有以下几个规则：
+
+1.当源类型与目标类型不存在父子关系时，转换无法进行，编译时会出现错误。包括两个类为继承同一个父类这种情况，也是不可以进行转换的。
+
+2.源类型是子类，目标类型是父类时，不必强制转换。只是屏蔽了一些子类才有的功能。
+
+3.源类型是父类，目标类型是子类时，要分两种情况：第一，源类型指向的对象就是父类类型。此时不能进行强制转换，编译器可以通过，但运行时会报类型转换错误。第二，源类型指向的对象是子类类型。此时可以进行强制转换，还原子类。
+  
+说的比较拗口，用代码来解释吧。
+
+```java
+public class Test {
+
+    class Father {}
+	
+    class Son extends Father{}
+	
+    class Daughter extends Father {}
+
+    @org.junit.Test
+    public void test(){
+        Father fatherApp;
+        Son sonApp;
+        Daughter daughterApp;
+        Father fatherIns=new Father();
+        Son sonIns=new Son();
+        Daughter daughterIns=new Daughter();
+		
+        //目标类型为父类，源类型为子类，自动转换
+        fatherApp=sonIns;   
+        //源类型为父类，目标类型为子类，且源类型指向父类对象,运行时报错。
+        sonApp=(Son) fatherIns;
+        //源类型为父类，目标类型为子类，且源类型指向子类对象，还原子类        
+        sonApp=(Son) fatherApp;
+        //目标类型与源类型不存在父子关系，编译无法通过
+        daughterApp=sonIns;  
+		
+    }	
+}
+```
+
+
+
+## **参考**
+
+[Java 7之基础类型第1篇 - Java数据类型](http://blog.csdn.net/mazhimazh/article/details/16799925)
+
+[The Java™ Tutorials](https://docs.oracle.com/javase/tutorial/java/nutsandbolts/datatypes.html)
+
+[ Java中的类型转换](http://blog.csdn.net/darxin/article/details/5163043)

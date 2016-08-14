@@ -1,0 +1,442 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>关于抽象类和接口 | 于凯的博客</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
+    <meta name="author" content="于凯">
+    
+    <meta name="description" content="1. 抽象类：
+使用了关键词abstract声明的类叫作“抽象类”。如果一个类里包含了一个或多个抽象方法，类就必须指定成abstract（抽象）.
+
+
+抽象类不能被实例化
+
+如果一个类继承了抽象类，则该类必须实现所继承抽象类的所有抽象方法，否则该类也必须声明为abstract类
+
+抽象方法必须为pu">
+    
+    
+    
+    
+    
+    <link rel="icon" href="/img/xiaoxin.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/xiaoxin.png">
+    <link rel="apple-touch-icon-precomposed" href="/img/xiaoxin.png">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.svg" alt="于凯的博客" title="于凯的博客"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="于凯的博客">于凯的博客</a></h1>
+				<h2 class="blog-motto">平凡中也有感动</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+					<li>
+					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:yukai.space">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2016/04/15/关于抽象类和接口/" title="关于抽象类和接口" itemprop="url">关于抽象类和接口</a>
+  </h1>
+  <p class="article-author">By
+    
+      <a href="http://yukai.space" title="于凯">于凯</a>
+    </p>
+  <p class="article-time">
+    <time datetime="2016-04-15T14:48:55.000Z" itemprop="datePublished">2016-04-15</time>
+    更新日期:<time datetime="2016-08-14T07:00:23.842Z" itemprop="dateModified">2016-08-14</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-抽象类："><span class="toc-number">1.</span> <span class="toc-text">1. 抽象类：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-接口："><span class="toc-number">2.</span> <span class="toc-text">2. 接口：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-区别与联系："><span class="toc-number">3.</span> <span class="toc-text">3. 区别与联系：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#资料"><span class="toc-number">4.</span> <span class="toc-text">资料:</span></a></li></ol>
+		</div>
+		
+		<h2 id="1-抽象类："><a href="#1-抽象类：" class="headerlink" title="1. 抽象类："></a><strong>1.</strong> 抽象类：</h2><blockquote>
+<p>使用了关键词abstract声明的类叫作“抽象类”。如果一个类里包含了一个或多个抽象方法，类就必须指定成abstract（抽象）.</p>
+</blockquote>
+<ul>
+<li><p>抽象类不能被实例化</p>
+</li>
+<li><p>如果一个类继承了抽象类，则该类必须实现所继承抽象类的所有抽象方法，否则该类也必须声明为abstract类</p>
+</li>
+<li><p>抽象方法必须为public或者protected，缺省情况是public。若声明为private，则子类无法实现该方法。</p>
+</li>
+<li><p>可以有抽象的构造方法，但该方法不能被用来实例化对象，只能由继承该类的子类通过super()调用。</p>
+</li>
+<li><p>不可以有抽象的静态方法。因为在java中，静态方法是不可以被继承的，与抽象类的定义矛盾。</p>
+</li>
+<li><p>抽象类不一定必须包含抽象方法，但包含抽象方法的类一定是抽象类。</p>
+</li>
+<li><p>子类中的抽象方法不能与父类的抽象方法同名</p>
+</li>
+<li><p>其余情况抽象类与普通类相同。</p>
+</li>
+</ul>
+<h2 id="2-接口："><a href="#2-接口：" class="headerlink" title="2. 接口："></a><strong>2.</strong> 接口：</h2><blockquote>
+<p>接口（英文：Interface），在JAVA编程语言中是一个抽象类型，是抽象方法的集合，接口通常以interface来声明。一个类通过继承接口的方式，从而来继承接口的抽象方法.</p>
+</blockquote>
+<ul>
+<li><p>接口中所有的方法都必须为抽象方法，方法会被隐式地指定为public abstract方法且只能是public abstract方法。</p>
+</li>
+<li><p>接口中的变量被隐式地指定为public static final变量，并且只能是public static final变量。</p>
+</li>
+<li><p>接口之间也可以继承，子接口可以继承父接口中的常量和抽象方法并添加新的抽象方法。</p>
+</li>
+<li><p>接口中没有构造方法，不能被实例化。</p>
+</li>
+<li><p>如果一个非抽象类遵循了某个接口，就必须实现该接口中的所有方法。对于遵循某个接口的抽象类，可以不实现该接口中的抽象方法。</p>
+</li>
+<li><p>接口中不能含有静态代码块以及静态方法。</p>
+</li>
+<li><p>在实现多接口的时候一定要避免方法名的重复。</p>
+</li>
+</ul>
+<h2 id="3-区别与联系："><a href="#3-区别与联系：" class="headerlink" title="3. 区别与联系："></a><strong>3.</strong> 区别与联系：</h2><ul>
+<li><p><strong>语义</strong></p>
+<ol>
+<li><p>一个类只能继承一个抽象类，但可以实现多个接口。</p>
+</li>
+<li><p>抽象类可以提供成员方法的实现细节，而接口中只能存在public abstract 方法</p>
+</li>
+</ol>
+</li>
+<li><p><strong>设计思想</strong></p>
+<blockquote>
+<p>抽象类是对一种事物的抽象，即对类抽象，而接口是对行为的抽象。</p>
+</blockquote>
+<ol>
+<li><p>抽象类可以看作对一群个体的抽象，二接口只是某个个体所具有的功能。抽象类是对整个类整体进行抽象，包括属性，行为，但是接口却是对类局部(行为)进行抽象。</p>
+<p>对于抽象类，如果需要添加新的方法，可以直接在抽象类中添加具体的实现，子类可以不进行变更；而对于接口则不行，如果接口进行了变更，则所有实现这个接口的类都必须进行相应的改动。</p>
+</li>
+<li><p>抽象类是从子类中发现公共部分然后泛化成抽象类，子类继承该父类即可，但是接口不同，实现它的子类可以不存在任何关系。</p>
+<p>抽象类所体现的是一种继承关系，要想使得继承关系合理，父类和派生类之间必须存在”is-a” 关系，即父类和派生类在概念本质上应该是相同的。对于接口则不然，并不要求接口的实现者和接口定义在概念本质上是一致的， 仅仅是实现了接口定义的契约而已。</p>
+</li>
+<li><p>抽象类是自底向上抽象而来的，接口是自顶向下设计出来的。</p>
+<p>对于抽象类而言，它是自下而上来设计的，我们要先知道子类才能抽象出父类，而接口则不同，它根本就不需要知道子类的存在，只需要定义一个规则即可，至于什么子类、什么时候怎么实现它一概不知。比如我们只有一个猫类在这里，如果你这是就抽象成一个动物类，是不是设计有点儿过度？我们起码要有两个动物类，猫、狗在这里，我们在抽象他们的共同点形成动物抽象类吧！所以说抽象类往往都是通过重构而来的！但是接口就不同，比如说飞，我们根本就不知道会有什么东西来实现这个飞接口，怎么实现也不得而知，我们要做的就是事前定义好飞的行为接口。</p>
+</li>
+</ol>
+<p><strong>示例</strong></p>
+<p>门都有open( )和close( )两个动作，此时我们可以定义通过抽象类和接口来定义这个抽象概念：</p>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">Door</span> </span>&#123;</div><div class="line">      <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">open</span><span class="params">()</span></span>;</div><div class="line">      <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">close</span><span class="params">()</span></span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>或</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">interface</span> <span class="title">Door</span> </span>&#123;</div><div class="line">      <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">open</span><span class="params">()</span></span>;</div><div class="line">      <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">close</span><span class="params">()</span></span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>但是现在如果我们需要门具有报警alarm( )的功能，那么该如何实现？下面提供两种思路：</p>
+<p>1.将这三个功能都放在抽象类里面，但是这样一来所有继承于这个抽象类的子类都具备了报警功能，但是有的门并不一定具备报警功能；</p>
+<p>2.将这三个功能都放在接口里面，需要用到报警功能的类就需要实现这个接口中的open()和close(),也许这个类根本就不具备open( )和close( )这两个功能，比如火灾报警器。</p>
+<p>从这里可以看出， Door的open() ,close()和alarm()根本就属于两个不同范畴内的行为，open()和close()    属于门本身固有的行为特性，而alarm()属于延伸的附加行为。因此最好的解决办法是单独将报警设计为一个接口，包含alarm()行为,Door设计为单独的一个抽象类，包含open和close两种行为。再设计一个报警门继承Door类和实现Alarm接口。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">interface</span> <span class="title">Alram</span> </span>&#123;</div><div class="line">      <span class="function"><span class="keyword">void</span> <span class="title">alarm</span><span class="params">()</span></span>;</div><div class="line">&#125;</div><div class="line"><span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">Door</span> </span>&#123;</div><div class="line">      <span class="function"><span class="keyword">void</span> <span class="title">open</span><span class="params">()</span></span>;</div><div class="line">      <span class="function"><span class="keyword">void</span> <span class="title">close</span><span class="params">()</span></span>;</div><div class="line">&#125;</div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">AlarmDoor</span> <span class="keyword">extends</span> <span class="title">Door</span> <span class="keyword">implements</span> <span class="title">Alarm</span> </span>&#123;</div><div class="line">      <span class="function"><span class="keyword">void</span> <span class="title">oepn</span><span class="params">()</span> </span>&#123;</div><div class="line">           <span class="comment">//....</span></div><div class="line">      &#125;</div><div class="line">      <span class="function"><span class="keyword">void</span> <span class="title">close</span><span class="params">()</span> </span>&#123;</div><div class="line">           <span class="comment">//....</span></div><div class="line">      &#125;</div><div class="line">      <span class="function"><span class="keyword">void</span> <span class="title">alarm</span><span class="params">()</span> </span>&#123;</div><div class="line">           <span class="comment">//....</span></div><div class="line">      &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="资料"><a href="#资料" class="headerlink" title="资料:"></a><strong>资料:</strong></h2><p>   <a href="https://www.zhihu.com/question/20111251" target="_blank" rel="external">Java 中的接口有什么作用？</a></p>
+<p>   <a href="http://blog.csdn.net/chenssy/article/details/12858267" target="_blank" rel="external">java提高篇（四）—–抽象类与接口</a></p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/java/">java</a>
+  </div>
+
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/编程/">编程</a>
+</div>
+
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://yukai.space/2016/04/15/关于抽象类和接口/" data-title="关于抽象类和接口 | 于凯的博客" data-tsina="追风少年于二狗" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2016/04/20/java中的编码问题/" title="java中的编码问题">
+  <strong>PREVIOUS:</strong><br/>
+  <span>
+  java中的编码问题</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2016/04/14/他可是科比·布莱恩特!/"  title="他可是科比布莱恩特">
+ <strong>NEXT:</strong><br/> 
+ <span>他可是科比布莱恩特
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section class="comment">
+	<div class="ds-thread"></div>
+</section>
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-抽象类："><span class="toc-number">1.</span> <span class="toc-text">1. 抽象类：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-接口："><span class="toc-number">2.</span> <span class="toc-text">2. 接口：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-区别与联系："><span class="toc-number">3.</span> <span class="toc-text">3. 区别与联系：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#资料"><span class="toc-number">4.</span> <span class="toc-text">资料:</span></a></li></ol>
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+			<li><a href="/categories/java-多线程/" title="java 多线程">java 多线程<sup>1</sup></a></li>
+		
+			<li><a href="/categories/工具/" title="工具">工具<sup>6</sup></a></li>
+		
+			<li><a href="/categories/生活/" title="生活">生活<sup>2</sup></a></li>
+		
+			<li><a href="/categories/编程/" title="编程">编程<sup>12</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			<li><a href="/tags/ant/" title="ant">ant<sup>2</sup></a></li>
+		
+			<li><a href="/tags/java/" title="java">java<sup>14</sup></a></li>
+		
+			<li><a href="/tags/junit/" title="junit">junit<sup>1</sup></a></li>
+		
+			<li><a href="/tags/markdown/" title="markdown">markdown<sup>1</sup></a></li>
+		
+			<li><a href="/tags/python/" title="python">python<sup>1</sup></a></li>
+		
+			<li><a href="/tags/多线程/" title="多线程">多线程<sup>3</sup></a></li>
+		
+			<li><a href="/tags/快捷键/" title="快捷键">快捷键<sup>1</sup></a></li>
+		
+			<li><a href="/tags/测试/" title="测试">测试<sup>1</sup></a></li>
+		
+			<li><a href="/tags/编码/" title="编码">编码<sup>2</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  <div class="rsspart">
+	<a href="null" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<div class="social-font clearfix">
+		
+		<a href="http://weibo.com/http://weibo.com/5381447277" target="_blank" title="weibo"></a>
+		
+		
+		
+		<a href="https://github.com/https://github.com/Hikyu" target="_blank" title="github"></a>
+		
+		
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/A-limon/pacman" target="_blank" title="Pacman">Pacman</a> © 2016 
+		
+		<a href="http://yukai.space" target="_blank" title="于凯">于凯</a>
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"null"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+  </body>
+</html>

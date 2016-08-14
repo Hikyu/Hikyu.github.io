@@ -1,0 +1,390 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>java中的ThreadLocal | 于凯的博客</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
+    <meta name="author" content="于凯">
+    
+    <meta name="description" content="今天测试那边在做压力测试的时候，发现新版本的Jdbc占用CPU很高，导致并发量降低，研究半天，发现出问题的地方在于每条语句执行过后都会调用ThreadLocal的get方法。研究一番ThreadLocal…
+
+问题背景：每次sql语句执行结束之后，最后都会接受后台传回的ReadyForQueryPa">
+    
+    
+    
+    
+    
+    <link rel="icon" href="/img/xiaoxin.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/xiaoxin.png">
+    <link rel="apple-touch-icon-precomposed" href="/img/xiaoxin.png">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.svg" alt="于凯的博客" title="于凯的博客"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="于凯的博客">于凯的博客</a></h1>
+				<h2 class="blog-motto">平凡中也有感动</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+					<li>
+					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:yukai.space">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2016/06/21/java中的ThreadLocal/" title="java中的ThreadLocal" itemprop="url">java中的ThreadLocal</a>
+  </h1>
+  <p class="article-author">By
+    
+      <a href="http://yukai.space" title="于凯">于凯</a>
+    </p>
+  <p class="article-time">
+    <time datetime="2016-06-21T04:48:55.000Z" itemprop="datePublished">2016-06-21</time>
+    更新日期:<time datetime="2016-08-14T06:57:52.706Z" itemprop="dateModified">2016-08-14</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#问题背景："><span class="toc-number">1.</span> <span class="toc-text">问题背景：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ThreadLocal原理："><span class="toc-number">2.</span> <span class="toc-text">ThreadLocal原理：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#应用场景"><span class="toc-number">3.</span> <span class="toc-text">应用场景</span></a></li></ol>
+		</div>
+		
+		<blockquote>
+<p>今天测试那边在做压力测试的时候，发现新版本的Jdbc占用CPU很高，导致并发量降低，研究半天，发现出问题的地方在于每条语句执行过后都会调用ThreadLocal的get方法。研究一番ThreadLocal…</p>
+</blockquote>
+<h2 id="问题背景："><a href="#问题背景：" class="headerlink" title="问题背景："></a><strong>问题背景</strong>：</h2><p>每次sql语句执行结束之后，最后都会接受后台传回的ReadyForQueryPacket包，标记语句执行完毕。在新版本的协议当中，针对读写分离的功能，在这个包中增加了一些要接收的数据：标记数据库主机状态的lsn。这个lsn标志着主备机之间的数据是否存在差异。每次执行完sql语句之后，都要将数据库后台传回来的lsn与当前主机的lsn进行比较，从而决定下一步的读写过程。每次取本机的lsn操作长这样：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">LsnVo lv = ((LsnVo)DispatchConnection.threadLocalLsn.get());</div></pre></td></tr></table></figure>
+<p>其中，threadLocalLsn是DispatchConnection中的一个ThreadLocal类的静态对象。由于每次执行sql语句之后都会执行它的get方法，导致不必要的cpu浪费。这就是cpu异常的原因。</p>
+<p>遂改之：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">LsnVo lv = ((DispatchConnection) conn).getLsnVo();</div></pre></td></tr></table></figure>
+<p>将threadLocalLsn的get方法的执行提前到DispatchConnection的构造函数中去，之后的每次读取都是直接读取在DispatchConnection保存的成员变量。避免了频繁的get方法调用。</p>
+<p>曾经在这里还有个疑问，那就是我认为不可以将这个get方法提前到DispatchConnection初始化当中，理由是如果有多个线程操作同一个DispatchConnection对象的时候，他们其实读取的是同一个lsn,造成共享变量的问题，而实际上lsn是一个线程级变量，不应该被多个线程共享。</p>
+<p>后来，宇哥跟我解释说一般不会有多个线程操作同一个connection 的场景，因为这样很容易造成不可预知的后果（事务提交等被打乱）。看来还是对数据库这块的知识太缺乏啊！</p>
+<p>PS:后来还是出问题了，使用线程池的时候，确实有可能发生上面多线程并发的情况。改回原来版本，性能下降问题依然存在，现未找到合适的解决办法。2016/7/29</p>
+<p>so,按照上面的改法问题解决了。</p>
+<p>那为什么要使用ThreadLocal存储lsn呢？前面也说了lsn是一个线程级变量，每个线程可以有多个connection，但这多个connection应当操作同一个lsn对象。</p>
+<p>这就是ThreadLocal的一个典型应用场景。</p>
+<h2 id="ThreadLocal原理："><a href="#ThreadLocal原理：" class="headerlink" title="ThreadLocal原理："></a><strong>ThreadLocal原理</strong>：</h2><p>使用ThreadLocal存储变量，实现了线程级别的变量，即同一个线程内这个变量只有一个。</p>
+<p>ThreadLocal的set和get方法：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">set</span><span class="params">(T value)</span> </span>&#123;</div><div class="line">        Thread t = Thread.currentThread();</div><div class="line">        ThreadLocalMap map = getMap(t);</div><div class="line">        <span class="keyword">if</span> (map != <span class="keyword">null</span>)</div><div class="line">            map.set(<span class="keyword">this</span>, value);</div><div class="line">        <span class="keyword">else</span></div><div class="line">            createMap(t, value);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">public</span> T <span class="title">get</span><span class="params">()</span> </span>&#123;</div><div class="line">        Thread t = Thread.currentThread();</div><div class="line">        ThreadLocalMap map = getMap(t);</div><div class="line">        <span class="keyword">if</span> (map != <span class="keyword">null</span>)</div><div class="line">            <span class="keyword">return</span> (T)map.get(<span class="keyword">this</span>);</div><div class="line"></div><div class="line">        <span class="comment">// Maps are constructed lazily.  if the map for this thread</span></div><div class="line">        <span class="comment">// doesn't exist, create it, with this ThreadLocal and its</span></div><div class="line">        <span class="comment">// initial value as its only entry.</span></div><div class="line">        T value = initialValue();</div><div class="line">        createMap(t, value);</div><div class="line">        <span class="keyword">return</span> value;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>可以看到，我们存入ThreadLocal的变量最终存到一个ThreadLocalMap中，这个ThreadLocalMap实际上是Thread的成员变量。这个ThreadLocalMap以ThreadLocal为键，是因为，在一个线程中很可能不只有一个ThreadLocal对象，每个ThreadLocal所要存储的Value值也不同。每次调用ThreadLocal的get方法时，都会去当前线程的ThreadLocalMap中找到对应的值。起到线程隔离的效果。</p>
+<p>很容易明白他的工作原理。</p>
+<h2 id="应用场景"><a href="#应用场景" class="headerlink" title="应用场景"></a><strong>应用场景</strong></h2><p>之前看了网上很多资料说ThreadLocal的应用场景：</p>
+<p>1.解决了多线程共享对象的问题，</p>
+<p>2.实现线程间的数据隔离，每个线程都有他自己的变量副本。</p>
+<p>对于1，这样的说法现在看起来也有些勉强，首先不能说解决了多线程共享对象的问题，因为如果一个对象需要多个线程共享（在某些场景下这是必须的），那么他在内存中应该只有一份，但是使用ThreadLocal之后会有多个内存对象存在，而不是多个引用指向同一片内存。这样的话只能通过线程同步或者其他方法解决这种问题。但是在上面的场景中，说ThreadLocal解决了多线程共享对象的问题，也说得通。但是要加一个前提，那就是这个所谓的共享对象其实是可以不共享的，并不是必须共享的。比如上面的场景中，DispatchConnection 中 的masterLsn代表主机的状态，这个Lsn是可以不设为全局的（虽然主机只有一台，代表主机真实状态的Lsn也只有一个），每个线程可以有自己的masterLsn来表示当前主机的状态，因为在同一个线程中，每次的数据库读写操作是基于上一次操作进行的。</p>
+<p>对于2，每个线程有自己的变量副本。在上面的场景中，每个线程都应该操作同一个masterLsn。比如，首先创建了一个DispatchConnection，使用这个connection对数据库进行了更新操作，更新DispatchConnection中的masterLsn，然后关闭这个connection。紧接着又创建一个新的DispatchConnection，使用这个connection对数据库进行一些新的操作，比如查询刚才的更新。这个时候，需要将刚刚获得的masterLsn发送到备机，使备机与主机进行同步工作，然后才可以查询到上一个DispatchConnection所做的更新。所以，虽然创建了新的DispatchConnection，但前后两个DispatchConnection中的masterLsn应该是一样的，即这个masterLsn在同一个线程中应该只有一个，无论创建多少DispatchConnection（masterLsn是DispatchConnection的成员变量），这些connection中的Lsn都指向同一个对象。 故，使用ThreadLocal保存该masterLsn到DispatchConnection中。</p>
+<p>我们总结一下使用ThreadLocal存储某个变量的场景，或者说条件：</p>
+<p>1.这个变量在同一个线程中只允许有一个，比如上面的masterLsn，尽管包含masterLsn的DispatchConnection被创建了多次，但是他们的成员变量masterLsn指向同一个对象。</p>
+<p>2.要满足1中的条件，可以将该变量设为static的。此时多个线程共享这同一个变量，内存中独一份。但是这个时候会产生同步问题，代码的复杂度上升，也容易出问题。</p>
+<p>所以，使用ThreadLocal的场景应该是这样：<strong>这个变量不同的线程之间不需要共享，也就是这个变量不要求是全局的。同时，在同一个线程中，这个变量要求只有一个，即这个变量为线程级别的变量。</strong></p>
+<p>PS:既然说这个变量是线程级别的变量，那为什么不在这个线程类中创建这样一个变量呢？注意，线程的创建有时是不可控的，在上面的场景中，创建线程的基本上是使用DispatchConnection的用户，我们不能要求用户去创建masterLsn，更何况，这个masterLsn是属于DispatchConnection这个类，而DispatchConnection有可能创建销毁多次。</p>
+<p>另外，网上提到使用ThreadLocal的一个好处：避免了参数的传递增加程序复杂性。</p>
+<p>我不太理解这个好处从哪里体现出来。如果说要避免参数传递，将这个参数设为类的成员变量也可以解决。应用ThreadLocal的情况是：把ThreadLocal设为了成员变量，把这个参数存入ThreadLocal中。这个虽然说是避免了参数的传递，但这与使用ThreadLocal的目的相去甚远。使用ThreadLocal最主要还是解决线程级别的变量的问题。</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/java/">java</a><a href="/tags/多线程/">多线程</a>
+  </div>
+
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/编程/">编程</a>
+</div>
+
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://yukai.space/2016/06/21/java中的ThreadLocal/" data-title="java中的ThreadLocal | 于凯的博客" data-tsina="追风少年于二狗" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2016/06/30/java中的枚举/" title="java中的枚举">
+  <strong>PREVIOUS:</strong><br/>
+  <span>
+  java中的枚举</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2016/04/28/java中的equals与hashcode/"  title="java中的equals与hashcode">
+ <strong>NEXT:</strong><br/> 
+ <span>java中的equals与hashcode
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section class="comment">
+	<div class="ds-thread"></div>
+</section>
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#问题背景："><span class="toc-number">1.</span> <span class="toc-text">问题背景：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ThreadLocal原理："><span class="toc-number">2.</span> <span class="toc-text">ThreadLocal原理：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#应用场景"><span class="toc-number">3.</span> <span class="toc-text">应用场景</span></a></li></ol>
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+			<li><a href="/categories/java-多线程/" title="java 多线程">java 多线程<sup>1</sup></a></li>
+		
+			<li><a href="/categories/工具/" title="工具">工具<sup>6</sup></a></li>
+		
+			<li><a href="/categories/生活/" title="生活">生活<sup>2</sup></a></li>
+		
+			<li><a href="/categories/编程/" title="编程">编程<sup>12</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			<li><a href="/tags/ant/" title="ant">ant<sup>2</sup></a></li>
+		
+			<li><a href="/tags/java/" title="java">java<sup>14</sup></a></li>
+		
+			<li><a href="/tags/junit/" title="junit">junit<sup>1</sup></a></li>
+		
+			<li><a href="/tags/markdown/" title="markdown">markdown<sup>1</sup></a></li>
+		
+			<li><a href="/tags/python/" title="python">python<sup>1</sup></a></li>
+		
+			<li><a href="/tags/多线程/" title="多线程">多线程<sup>3</sup></a></li>
+		
+			<li><a href="/tags/快捷键/" title="快捷键">快捷键<sup>1</sup></a></li>
+		
+			<li><a href="/tags/测试/" title="测试">测试<sup>1</sup></a></li>
+		
+			<li><a href="/tags/编码/" title="编码">编码<sup>2</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  <div class="rsspart">
+	<a href="null" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<div class="social-font clearfix">
+		
+		<a href="http://weibo.com/http://weibo.com/5381447277" target="_blank" title="weibo"></a>
+		
+		
+		
+		<a href="https://github.com/https://github.com/Hikyu" target="_blank" title="github"></a>
+		
+		
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/A-limon/pacman" target="_blank" title="Pacman">Pacman</a> © 2016 
+		
+		<a href="http://yukai.space" target="_blank" title="于凯">于凯</a>
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"null"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+  </body>
+</html>

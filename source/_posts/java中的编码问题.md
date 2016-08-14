@@ -1,0 +1,172 @@
+---
+layout: post
+title:  "java中的编码问题"
+categories: 编程
+tags: 
+- java
+- 编码
+date:   2016-04-20 12:48:55
+---
+
+>最近在工作过程中总是被编码困扰，出现了很多意想不到的情况。故上网查看资料，总结一番。
+
+## 1.编码
+什么是编码？程序员应该都知道计算机能够识别的只是1和0，我们看到的文字、图片、视频等在计算机的 世界里都是以二进制的形式存在的。包括你的硬盘或者网络上传输的字节序列，都是无数个0和1组成的。英文字母，数字，汉字等都是字符。不同字符对应二进制数的规则，也就是说不同的字符翻译为不同的0、1组合，就是字符的编码。这个过程的逆过程，就是解码。
+
+- #### **[Ascii编码](http://baike.baidu.com/view/15482.htm?fromtitle=ascii%E7%A0%81&fromid=99077&type=syn)**
+
+标准的ASCII编码使用的是7（2^7 = 128）位二进制数来表示所有的大小写字母、数字和标点符号已经一些特殊的控制字符，最前面的一位统一规定为0。(一个字节8位)。缺点是只能显示128个字符，显示的字符十分有限，比如对中文就无能为力了。
+
+- #### **[GB2312](http://baike.baidu.com/view/443268.htm?fromtitle=GB2312&fromid=483170&type=syn)**
+
+GB2312编码适用于汉字处理、汉字通信等系统之间的信息交换，通行于中国大陆；新加坡等地也采用此编码。中国大陆几乎所有的中文系统和国际化的软件都支持GB 2312。
+
+- #### **[UTF-8](http://baike.baidu.com/view/25412.htm)**
+
+事实上世界上那么多国家，存在更多的字符是前面的编码所不能表示的。不同国家的不同编码之间也不能够兼容。所以就需要一套通用的编码能够表示世界上所有的符号，这就是[Unicode编码](http://baike.baidu.com/item/unicode)
+事实上，Unicode也是一套字符集。
+
+**字符集**简单说就是字符的集合。它规定了每个字符对应的二进制编码。比如Unicode是一个很大的集合，现在的规模可以容纳100多万个符号。每个符号的编码都不一样，比如，U+0639表示阿拉伯字母Ain，U+0041表示英语的大写字母A，U+4E25表示汉字"严"。需要注意的是，Unicode只是一个符号集，它只规定了符号的二进制代码，却没有规定这个二进制代码应该如何存储。那既然字符集中的每一个字符都有一个自己的序号，直接把序号作为存储内容就好了。为什么还要多此一举通过字符编码把序号转换成另外一种存储格式呢？
+
+这是因为：
+
+比如，汉字"严"的unicode是十六进制数4E25，转换成二进制数足足有15位（100111000100101），也就是说这个符号的表示至少需要2个字节。表示其他更大的符号，可能需要3个字节或者4个字节，甚至更多。
+这里就有两个严重的问题，第一个问题是，如何才能区别Unicode和ASCII？计算机怎么知道三个字节表示一个符号，而不是分别表示三个符号呢？第二个问题是，我们已经知道，英文字母只用一个字节表示就够了，如果Unicode统一规定，每个符号用三个或四个字节表示，那么每个英文字母前都必然有二到三个字节是0，这对于存储来说是极大的浪费，文本文件的大小会因此大出二三倍，这是无法接受的。
+
+
+UTF-8就是在互联网上使用最广的一种Unicode的实现方式。UTF-8最大的一个特点，就是它是一种变长的编码方式。它可以使用1~4个字节表示一个符号，根据不同的符号而变化字节长度。
+
+UTF-8的编码规则很简单，只有两条： 
+
+1）对于单字节的符号，字节的第一位设为0，后面7位为这个符号的unicode码。因此对于英语字母，UTF-8编码和ASCII码是相同的。 
+
+2）对于n字节的符号（n>1），第一个字节的前n位都设为1，第n+1位设为0，后面字节的前两位一律设为10。剩下的没有提及的二进制位，全部为这个符号的unicode码。
+
+下面以utf-8为例，看下编码的过程。
+
+{% asset_img utf8.png utf-8 %}
+
+根据上面的转换表，理解UTF-8的转换编码规则就变得非常简单了：第一个字节的第一位如果为0，则表示这个字节单独就是一个字符;如果为1，连续多少个1就表示该字符占有多少个字节。
+
+以汉字”严”为例，演示如何实现UTF-8编码。
+
+已知”严”的unicode是4E25（100111000100101），根据上表，可以发现4E25处在第三行的范围内（0000 0800-0000 FFFF），因此”严”的UTF-8编码需要三个字节，即格式是”1110xxxx 10xxxxxx 10xxxxxx”。然后，从”严”的最后一个二进制位开始，依次从后向前填入格式中的x，多出的位补0。这样就得到了，”严”的UTF-8编码是”11100100 10111000 10100101″，转换成十六进制就是E4B8A5。
+
+还有一些编码就不再一一介绍了，具体用到的话可以百度或谷歌。
+
+## 2. java 中的编码
+
+- #### **class文件与内存中的编码**
+
+{% asset_img javaencode.jpg %}
+
+上图说明了java编码转换的过程
+
+首先，java源文件是可以用很多种编码保存的。在使用javac编译源文件时，如果没有指定源文件的编码，javac会默认源文件是以系统默认编码编写的，（Windows通常为GBK），javac使用该编码格式对源文件进行解码并将其中的字符以UTF-8输出到Class文件中。如果源文件并不是已系统默认编码保存的，那么javac读进来的时候就会出现乱码问题。
+
+java程序在运行时，jvm内存中的所有字符的表现形式都是UTF-16。如果需要用户输入信息，则会采用file.encoding编码格式对用户输入的信息进行编码同时转换为Unicode编码格式保存到内存中。程序运行后，将产生的结果再转化为file.encoding格式返回给操作系统并输出到界面去。
+
+**总结**:Java语言中 不同字符集编码的转换 都是通过Unicode编码作为中介来完成的。
+
+- #### **InputStreamReader与OutputStreamWriter**
+
+{% asset_img reader.png %}
+{% asset_img writer.png %}
+
+Reader 类是 Java 的 I/O 中读字符的父类，而 InputStream 类是读字节的父类，InputStreamReader 类就是关联字节到字符的桥梁，它负责在 I/O 过程中处理读取字节到字符的转换，而具体字节到字符的解码实现它由 StreamDecoder 去实现，在 StreamDecoder 解码过程中必须由用户指定 Charset 编码格式。值得注意的是如果你没有指定 Charset，将使用本地环境中的默认字符集，例如在中文环境中将使用 GBK 编码。
+
+写的情况也是类似，字符的父类是 Writer，字节的父类是 OutputStream，通过 OutputStreamWriter 转换字符到字节。同样 StreamEncoder 类负责将字符编码成字节，编码格式和默认编码规则与解码是一致的。
+
+```java
+ String file = "c:/stream.txt"; 
+ String charset = "UTF-8"; 
+ // 写字符换转成字节流
+ FileOutputStream outputStream = new FileOutputStream(file); 
+ OutputStreamWriter writer = new OutputStreamWriter( 
+ outputStream, charset); 
+ try { 
+    writer.write("这是要保存的中文字符"); 
+ } finally { 
+    writer.close(); 
+ } 
+ // 读取字节转换成字符
+ FileInputStream inputStream = new FileInputStream(file); 
+ InputStreamReader reader = new InputStreamReader( 
+ inputStream, charset); 
+ StringBuffer buffer = new StringBuffer(); 
+ char[] buf = new char[64]; 
+ int count = 0; 
+ try { 
+    while ((count = reader.read(buf)) != -1) { 
+        buffer.append(buf, 0, count); 
+    } 
+ } finally { 
+    reader.close(); 
+ }
+```
+
+- #### **String与byte[]**
+
+利用String类的getBytes()方法返回不同字符集的字节流数据，其本质是从Unicode字符集编码向其它字符集编码转换的过程。
+
+```java
+String str="中";  
+// 将内存中的str(utf-16)转换为系统默认编码的字节数组
+byte[] bytes1 = str.getBytes();  
+// 将内存中的str(utf-16)转换为ISO-8859-1编码的字节数组                 
+byte[] bytes2 = str.getBytes("ISO-8859-1");
+// 正常显示中    
+System.out.println(new String(bytes1));  
+// 输出"?"      
+System.out.println(new String(bytes2));      
+```
+
+利用String类的构造方法根据不同字符集的字节流数据产生一个字符串对象，其本质是从其它字符集编码向Unicode字符集编码转换的过程。
+
+```java
+// GBK中0xD6 0xD0表示“中”，0x31表示字符“1”
+byte[] bytes = {(byte)0xD6, (byte)0xD0, (byte)0x31};  
+// 将bytes按照系统默认编码格式(GBK)解码,产生Unicode字符
+String str1 = new String(bytes);                      
+// 将bytes按照ISO-8859-1解码，产生Unicode字符
+String str2= new String(bytes,"ISO-8859-1");          
+// 中1  将Unicode字符转换为GBK编码输出
+System.out.println(str1);                             
+
+/*
+ *在ISO-8859-1编码方式中没有对应0xD6和0xD0
+ *的字符，所以前两个字符会产生两个问号，由于0x31*在ISO-8859-1编码中对应字符“1”
+ *（ISO-8859-1也兼容ASCII），所以此语句得到str的值是“??1”。
+ */ 
+System.out.println(str2);    // ??1                             
+```
+
+- #### **CharSet**
+
+从jdk1.4开始，java提供了Charset 类，这个类中提供 encode 与 decode 分别对应 char[] 到 byte[] 的编码和 byte[] 到 char[] 的解码。
+
+```java
+Charset charset = Charset.forName("UTF-8");   
+ByteBuffer byteBuffer = charset.encode(string);   
+CharBuffer charBuffer = charset.decode(byteBuffer); 
+```
+
+## 3.延伸 byte
+
+字节数据类型是一个8位有符号二进制补码整数。它具有-128最小值和127的最大值。
+
+无论是硬盘上数据的存放还是数据在网络上传输，其中的内容都是二进制数据。当你想把一些文本文件或者视频保存时，这些数据会转化为二进制序列存放于你的硬盘。同样，当你使用网络聊天，发语音和图片，程序都会将这些数据转化为（编码）二进制序列进行传输。在java中，这些二进制序列以两个字节为单位，使用Unicode字符集形成byte数组。程序处理的时候再把这些byte数组进行合适的处理（解码）呈现到屏幕上。
+
+有关byte与其他数据类型的转换不再多写，用到的时候再从网上查资料吧。只要知道其中的原理，soeasy.
+
+## 参考
+
+[十分钟搞清字符集和字符编码](http://cenalulu.github.io/linux/character-encoding/)
+
+[字符编码笔记：ASCII，Unicode和UTF-8](http://www.ruanyifeng.com/blog/2007/10/ascii_unicode_and_utf-8.html)
+
+[java编码转换过程](http://wiki.jikexueyuan.com/project/java-chinese-garbled-solution/java-code-conversion-process.html)
+
+[Java 7之基础 - 编码与解码](http://blog.csdn.net/mazhimazh/article/details/19327421)
+
+[深入分析 Java 中的中文编码问题](https://www.ibm.com/developerworks/cn/java/j-lo-chinesecoding/)
