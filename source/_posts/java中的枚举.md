@@ -227,7 +227,7 @@ public enum State implements HandleState{
 
 JDK5.0 中在增加 Enum 类的同时，也增加了两个工具类 EnumSet 和 EnumMap，这两个类都放在 java.util 包中。具体的使用就查看官方文档吧，这里不再赘述。
 
-## **4.** 参考
+## 参考
 
 [java enum的用法详解[转]](https://hacpai.com/article/1437056657634)
 

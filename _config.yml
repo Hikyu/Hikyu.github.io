@@ -3,11 +3,11 @@
 ## Source: https://github.com/hexojs/hexo/
 
 # Site
-title: 于凯的博客
-subtitle: 平凡中也有感动
+title: YuKai's blog
+subtitle: 平凡之中也有感动
 description: 学习总结，生活总结。
 author: 于凯
-language: zh
+language: zh-CN
 timezone:
 
 # URL
