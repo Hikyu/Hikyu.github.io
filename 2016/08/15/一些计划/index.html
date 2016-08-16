@@ -4,13 +4,12 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>notify 问题 | YuKai&#39;s blog</title>
+    <title>一些计划 | YuKai&#39;s blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
     
     <meta name="author" content="于凯">
     
-    <meta name="description" content="今天遇到了这么个情况：有线程若干，我需要他们按顺序执行。代码大概长这样：
-12345678910111213141516171819202122232425262728293031323334353637class SyncTag &amp;#123;	public int threadNO;	public">
+    <meta name="description" content="转眼之间毕业已有整整两个月。这两个月里，大家各奔东西，找工作的找工作，考研的继续考研。跟我一起工作了一个多月的哥们也要辞职去考研了，直接原因是刚发的工资让我们都很失望，房价的飞速上涨又让我们这些刚刚步入工作岗位的年轻人感到一阵恐慌。最后或许考研是个不错的解决方案，起码三年内不用考虑这些烂事了，据说考">
     
     
     
@@ -64,15 +63,15 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2015/12/21/notify问题/" title="notify 问题" itemprop="url">notify 问题</a>
+      <a href="/2016/08/15/一些计划/" title="一些计划" itemprop="url">一些计划</a>
   </h1>
   <p class="article-author">By
     
       <a href="http://yukai.space" title="于凯">于凯</a>
     </p>
   <p class="article-time">
-    <time datetime="2015-12-21T04:48:55.000Z" itemprop="datePublished">2015-12-21</time>
-    更新日期:<time datetime="2016-08-14T13:21:15.796Z" itemprop="dateModified">2016-08-14</time>
+    <time datetime="2016-08-15T06:54:55.000Z" itemprop="datePublished">2016-08-15</time>
+    更新日期:<time datetime="2016-08-16T12:33:32.282Z" itemprop="dateModified">2016-08-16</time>
     
   </p>
 </header>
@@ -81,34 +80,49 @@
 		
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
-		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#延伸："><span class="toc-number">1.</span> <span class="toc-text">延伸：</span></a></li></ol>
+		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#关于学习"><span class="toc-number">1.</span> <span class="toc-text">关于学习</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#java"><span class="toc-number">1.1.</span> <span class="toc-text">java</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Linux"><span class="toc-number">1.2.</span> <span class="toc-text">Linux</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Groovy"><span class="toc-number">1.3.</span> <span class="toc-text">Groovy</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#数据库"><span class="toc-number">1.4.</span> <span class="toc-text">数据库</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#关于减肥"><span class="toc-number">2.</span> <span class="toc-text">关于减肥</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#关于理财"><span class="toc-number">3.</span> <span class="toc-text">关于理财</span></a></li></ol>
 		</div>
 		
-		<p>今天遇到了这么个情况：<br>有线程若干，我需要他们按顺序执行。<br>代码大概长这样：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line">class SyncTag &#123;</div><div class="line">	public int threadNO;</div><div class="line">	public SyncTag() &#123;</div><div class="line">	    threadNO = 0;</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line">class ThreadA extend Thread&#123;</div><div class="line">	SyncTag syncTag;</div><div class="line">	int scriptNO;</div><div class="line">	ThreadA(SyncTag syncTag,int scriptNO)&#123;</div><div class="line">			this.syncTag=syncTag;</div><div class="line">			this.scriptNO=scriptNO;</div><div class="line">	&#125;</div><div class="line">	public void Run()&#123;</div><div class="line">			synchronized (syncTag) &#123;</div><div class="line">                if (syncTag.threadNO != scriptNO) &#123;</div><div class="line">                        try &#123;</div><div class="line">                                syncTag.wait();</div><div class="line">                        &#125; catch (InterruptedException e) &#123;</div><div class="line">                                    e.printStackTrace();</div><div class="line">                        &#125;</div><div class="line">                &#125;</div><div class="line">                dosomething();</div><div class="line">                syncTag.threadNO++;</div><div class="line">                syncTag.notifyAll();</div><div class="line">			&#125;</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line">public class Test&#123;</div><div class="line">	public static void main(String args[])&#123;</div><div class="line">		    SyncTag syncTag=new SyncTag();</div><div class="line">			for(int i=0;i&lt;10;++i)&#123;</div><div class="line">				ThreadA t=new ThreadA(syncTag,i);</div><div class="line">				t.start();</div><div class="line">			&#125;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>结果却不是像我预料的那样。这十个线程的执行顺序竟然是混乱的，无序的。虽然他们是之间实现了串行执行。<br>研究一番，发现是 notify 与notifyAll 在捣鬼。<br>当调用 同步对象（syncTag）的notify方法 的时候，唤醒了N多等待资源线程中的一个（即 调用了同步对象的wait 方法而阻塞的那些线程）；至于唤醒哪个线程，是不确定的。<br>其他的线程仍然在阻塞，需要被notify 或者 notifyAll 唤醒。</p>
-<p>当调用同步对象（syncTag）的notifyAll方法 的时候，所有进入wait 方法而阻塞的那些线程都被唤醒了。他们中的一个会抢到同步锁（syncTag），继续执行下去，<br>剩下的没有获得锁的线程则继续等待。与上面情况不同的是，这些等待的线层不再需要notify或者notifyAll去唤醒了，一旦拥有锁的线程放弃锁，这些线程就一拥而上，去抢占锁，抢到的运行，<br>没抢到的老实等着。</p>
-<p>这就是notify 与 notifyAll两者的区别.</p>
-<p>那么我遇到的问题是否是因为使用了notifyAll 的原因呢？其实并不是。即使我改成notify ，这些线程也没有按照顺序去运行。<br>原因在于：当某个先执行的线程（线程0）调用了notify 或者notifyAll 之后，某个线程被选中了。但是这个选中的线程并不一定是线程1.因为唤醒某个线程之后，他并不会再去检查是否符合<br>syncTag.threadNO == scriptNO 这个条件，只要被唤醒了，又恰好拥有了锁。那他就执行下去了。我们只需要让他在执行之前再检查一下是否 符合syncTag.threadNO == scriptNO 这个条件，<br>如果不符合，就继续wait.符合则执行。<br>很简单，将 </p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span> (syncTag.threadNO != scriptNO) &#123;</div><div class="line">        <span class="keyword">try</span> &#123;</div><div class="line">                syncTag.wait();</div><div class="line">            &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</div><div class="line">                                    e.printStackTrace();</div><div class="line">            &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>这部分代码 改为： </p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">while</span> (syncTag.threadNO != scriptNO) &#123;</div><div class="line">		<span class="keyword">try</span> &#123;</div><div class="line">				syncTag.wait();</div><div class="line">		&#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</div><div class="line">				e.printStackTrace();</div><div class="line">		&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>这个问题就解决了。</p>
-<h2 id="延伸："><a href="#延伸：" class="headerlink" title="延伸："></a><strong>延伸</strong>：</h2><p>假设这样一种情况：我们按照上面的方法把代码改了，但同时把下面的 notifyAll 改为 notify.问题又出现了：<br>设想一下，如果线程0执行完毕之后调用syncTag.notify（），唤醒某个线程（线程3），但是在这个线程中恰好不满足 syncTag.threadNO == scriptNO<br>这个条件。那么这个线程（线程3）会继续wait. 这个时候，所有的线程都在 wait,但并没有一个线程在运行，也没有其他线程能够调用 notify或者notifyAll来唤醒他们<br>中的一个。于是陷入死锁，无尽的等待。</p>
-<p>所以，具体使用notify还是notifyAll 就得具体情况具体分析了。</p>
+		<p><iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="http://music.163.com/outchain/player?type=2&id=168153&auto=1&height=66"></iframe><br>转眼之间毕业已有整整两个月。这两个月里，大家各奔东西，找工作的找工作，考研的继续考研。跟我一起工作了一个多月的哥们也要辞职去考研了，直接原因是刚发的工资让我们都很失望，房价的飞速上涨又让我们这些刚刚步入工作岗位的年轻人感到一阵恐慌。最后或许考研是个不错的解决方案，起码三年内不用考虑这些烂事了，据说考研后薪资与本科生大大的不同，具体情况因人而异吧。哥们的离职让我也感到迷茫：拿着几千块的工资，在这房价动辄几百万的大城市生活，我好像找不到该努力的方向。生活就是这样，真的猛士，敢于直面这操蛋的人生。也是时候来点正能量了，无论如何生活都是要继续的。砖，还是要搬的。</p>
+<p>上周末把博客从Jekyll迁移到了Hexo，使用了PacMan的模板。在此要感谢模板的<a href="https://github.com/A-limon/pacman" target="_blank" rel="external">作者</a>，使我这样一个对前端一窍不通的菜鸟也能整出另自己满意的博客效果。花了61大洋买了五年的域名<a href="www.yukai.space">www.yukai.space</a>作为博客的新域名。域名是从阿里云上买的，我认为是相当便宜了。希望有一个新的开始。在此作出一些生活和学习上的计划，让自己能有所改变吧。</p>
+<h2 id="关于学习"><a href="#关于学习" class="headerlink" title="关于学习"></a>关于学习</h2><p>程序员的价值在于不断学习，工作中我也发现自己真的是太菜了，专业水平有待提高，从以下几个方面开始吧：</p>
+<h3 id="java"><a href="#java" class="headerlink" title="java"></a>java</h3><p>吃饭的家伙，必须得用好了。虽然用java写过不少”小DEMO”,但是java中的很多东西自己并没有涉及，或者只是知道怎么用。说白了就是基础上还要下功夫。这点上决定从读JDK源代码开始，现在在读java中的集合类。前段时间在重构JDBC的过程中，发现自己对面向对象好像理解的较之前更为深刻了。面向对象和设计模式也是我接下来要重点关注的地方。毕竟是要励志成为架构师的男人，哈哈哈。下面列出读书清单：</p>
+<ul>
+<li><p>Thinking In Java</p>
+</li>
+<li><p>Effect Java</p>
+</li>
+<li><p>大话设计模式</p>
+</li>
+<li><p>深入理解Jvm虚拟机</p>
+</li>
+<li><p>重构：改善既有的代码</p>
+</li>
+</ul>
+<p>前两本书可以作为工具书来使用。后三本计划在今年之前读一遍。</p>
+<h3 id="Linux"><a href="#Linux" class="headerlink" title="Linux"></a>Linux</h3><p>一直都有学习Linux的想法，但是自己的工作跟Linux基本不沾边，所以给了我偷懒的理由。接下来的学习计划中，要开始接触Linux，不求有多懂，起码要到会用的程度吧，比如熟悉命令行，shell等这些最基本的东西，顺利的话，希望将来的开发环境可以逐渐转移到Linux上去，我也不知道为什么要这么做，就是觉得应该这么做。</p>
+<p>从 鸟哥的Linux私房菜 开始吧。</p>
+<h3 id="Groovy"><a href="#Groovy" class="headerlink" title="Groovy"></a>Groovy</h3><p>第一次知道这个语言还是在学校弄安卓的时候，Gradle所使用的构建语言。Groovy可以说是java平台的脚本语言。如今函数式编程大火，自己也应该多接触一些类似的东西，方便以后向java8过渡。</p>
+<h3 id="数据库"><a href="#数据库" class="headerlink" title="数据库"></a>数据库</h3><p>说来惭愧，自己虽然是在开发数据库产品的公司工作，但数据库知识却匮乏的一塌糊涂，甚至于书写基本的sql语句都有问题。先把&lt;&lt;数据库系统概论&gt;&gt;通读一遍吧。贪多嚼不烂。</p>
+<p>以上说的都是一些大概的学习计划，至于具体的细节，我现在也没有清晰的想法。本来还想定一些关于英语及前端知识等的学习计划，但是发现在当前的工作中并不是能够体现其作用。所以先把上面所说的几点做好吧。至于所谓的做好我也无法论断是多好，只是自己心里有个谱。上面所列几点的学习时间暂定为到今年年底。</p>
+<h2 id="关于减肥"><a href="#关于减肥" class="headerlink" title="关于减肥"></a>关于减肥</h2><p>确切的说，应该叫健身，因为本身也不算很胖，140上下吧。去年的现在大概是120左右，刚上大学那会才112。工作之后猛涨十多斤，这让人感到恐慌。女票也一直催我减肥，六块腹肌也逐渐要融为一体了。前段时间每天跑步，坚持了不到一个月吧，因为种种原因停止了（说实话，上一天班去跑步真的有点累）。还是应该健身的，毕竟还有八块腹肌的梦。那样应该感觉很帅吧。下面是我定的每天要锻炼的项目：</p>
+<p>腹肌轮：80</p>
+<p>卷腹：50</p>
+<p>哑铃深蹲：40</p>
+<p>俯卧撑：80</p>
+<p>其他健身动作：若干</p>
+<p>跑步：一周至少三次</p>
+<h2 id="关于理财"><a href="#关于理财" class="headerlink" title="关于理财"></a>关于理财</h2><p>写下这个题目我都有点不好意思。现在浑身上下就剩一千多块，工资也不多。下个月初又要交房租了。刚工作就遭遇经济危机。前几天看了一篇理财的文章，觉得自己也应该把钱管理起来了，起码做到收支平衡吧。具体的计划就不在这里写了，今晚好好计划计划，先从记账开始。</p>
+<p>写了上面这些，感觉对于接下来的规划还不是很清晰。但起码心中有数，希望在接下来的日子里可以充实一些。</p>
+<p>以上</p>
   
 	</div>
 		<footer class="article-footer clearfix">
 
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/java/">java</a><a href="/tags/多线程/">多线程</a>
-  </div>
-
 
 <div class="article-categories">
   <span></span>
-  <a class="article-category-link" href="/categories/编程/">编程</a>
+  <a class="article-category-link" href="/categories/生活/">生活</a>
 </div>
 
 
@@ -116,7 +130,7 @@
 <div class="article-share" id="share">
 
 <!--
-  <div data-url="http://yukai.space/2015/12/21/notify问题/" data-title="notify 问题 | YuKai&#39;s blog" data-tsina="5381447277" class="share clearfix">
+  <div data-url="http://yukai.space/2016/08/15/一些计划/" data-title="一些计划 | YuKai&#39;s blog" data-tsina="5381447277" class="share clearfix">
   </div>
 -->
 
@@ -127,18 +141,18 @@
 <nav class="article-nav clearfix">
  
  <div class="prev" >
- <a href="/2016/03/03/markdown/" title="Markdown">
+ <a href="/2016/08/16/synchronized的一些用法/" title="synchronized的用法">
   <strong>PREVIOUS:</strong><br/>
   <span>
-  Markdown</span>
+  synchronized的用法</span>
 </a>
 </div>
 
 
 <div class="next">
-<a href="/2015/12/17/java中的volatile与synchronized/"  title="java中的volatile与synchronized">
+<a href="/2016/07/31/为什么是final/"  title="为什么是final">
  <strong>NEXT:</strong><br/> 
- <span>java中的volatile与synchronized
+ <span>为什么是final
 </span>
 </a>
 </div>
@@ -146,16 +160,12 @@
 </nav>
 
 	
-<section class="comment">
-	<div class="ds-thread"></div>
-</section>
-
 </div>  
       <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
 
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
-  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#延伸："><span class="toc-number">1.</span> <span class="toc-text">延伸：</span></a></li></ol>
+  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#关于学习"><span class="toc-number">1.</span> <span class="toc-text">关于学习</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#java"><span class="toc-number">1.1.</span> <span class="toc-text">java</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Linux"><span class="toc-number">1.2.</span> <span class="toc-text">Linux</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Groovy"><span class="toc-number">1.3.</span> <span class="toc-text">Groovy</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#数据库"><span class="toc-number">1.4.</span> <span class="toc-text">数据库</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#关于减肥"><span class="toc-number">2.</span> <span class="toc-text">关于减肥</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#关于理财"><span class="toc-number">3.</span> <span class="toc-text">关于理财</span></a></li></ol>
   </div>
 
 <div id="asidepart">
@@ -366,18 +376,6 @@ $(document).ready(function(){
 });     
 </script>
 
-
-<script type="text/javascript">
-  var duoshuoQuery = {short_name:"null"};
-  (function() {
-    var ds = document.createElement('script');
-    ds.type = 'text/javascript';ds.async = true;
-    ds.src = '//static.duoshuo.com/embed.js';
-    ds.charset = 'UTF-8';
-    (document.getElementsByTagName('head')[0] 
-    || document.getElementsByTagName('body')[0]).appendChild(ds);
-  })();
-</script> 
 
 
 
