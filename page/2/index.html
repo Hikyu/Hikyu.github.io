@@ -62,6 +62,22 @@
 
   <section class="post" itemscope itemprop="blogPost">
   
+    <a href="/2016/06/21/java中的ThreadLocal/" title="java中的ThreadLocal" itemprop="url">
+  
+    <h1 itemprop="name">java中的ThreadLocal</h1>
+    
+     
+           <p itemprop="description" >今天测试那边在做压力测试的时候，发现新版本的Jdbc占用CPU很高，导致并发量降低，研究半天，发现出问题的地方在于每条语句执行过后都会调用ThreadLocal的get方法。研究一番ThreadLocal…
+
+问题背景：每次sql语句执行结束之后，最后都会接受后台传回的Ready</p>
+        
+    
+    <time datetime="2016-06-21T04:48:55.000Z" itemprop="datePublished">2016-06-21</time>
+  </a>
+</section>
+
+  <section class="post" itemscope itemprop="blogPost">
+  
     <a href="/2016/04/28/java中的类型转换/" title="java中的类型转换" itemprop="url">
   
     <h1 itemprop="name">java中的类型转换</h1>
@@ -71,6 +87,22 @@
 
 基本类型
 基本类型优先</p>
+        
+    
+    <time datetime="2016-04-28T04:48:55.000Z" itemprop="datePublished">2016-04-28</time>
+  </a>
+</section>
+
+  <section class="post" itemscope itemprop="blogPost">
+  
+    <a href="/2016/04/28/java中的equals与hashcode/" title="java中的equals与hashcode" itemprop="url">
+  
+    <h1 itemprop="name">java中的equals与hashcode</h1>
+    
+     
+           <p itemprop="description" >最近读了HashMap的源码，对HashCode与equals有了一定的了解，总结一下，顺便理一下HashMap中的核心算法。
+
+什么是hashcode,hashcode的作用是什么hashcode并不是java中独有的。设想一下，如果让你设计一个算法，根据关键码去得到一个集合中</p>
         
     
     <time datetime="2016-04-28T04:48:55.000Z" itemprop="datePublished">2016-04-28</time>
@@ -199,45 +231,6 @@ JUnit Tutorial
   </a>
 </section>
 
-  <section class="post" itemscope itemprop="blogPost">
-  
-    <a href="/2016/03/22/常用快捷键总结/" title="常用快捷键总结" itemprop="url">
-  
-    <h1 itemprop="name">常用快捷键总结</h1>
-    
-     
-           <p itemprop="description" >ECLIPSE: 查看代码
- Ctrl+O 搜索当前类变量及方法
- Ctrl+H 打开搜索对话框
- Ctrl+Shift+G  搜索选中变量或方法的引用
- Ctrl+D 删除当前行
- Ctrl+Shift+F 格式化代码
- F4 查看当前类继承结构
- Ctrl+Shift+R 搜</p>
-        
-    
-    <time datetime="2016-03-22T08:31:55.000Z" itemprop="datePublished">2016-03-22</time>
-  </a>
-</section>
-
-  <section class="post" itemscope itemprop="blogPost">
-  
-    <a href="/2016/03/03/markdown/" title="Markdown" itemprop="url">
-  
-    <h1 itemprop="name">Markdown</h1>
-    
-     
-           <p itemprop="description" >Markdown 是一种可以使用普通文本编辑器编写的标记语言，通过简单的标记语法，它可以使普通文本内容具有一定的格式。
-
- 即：Markdown 就是一种类似于Html的标记语言，比Html更简单，通过转换之后使普通文本内容具有一定的格式。
-常用语法 makedown 语法  
-</p>
-        
-    
-    <time datetime="2016-03-03T14:10:55.000Z" itemprop="datePublished">2016-03-03</time>
-  </a>
-</section>
-
 
   <nav id="page-nav" class="clearfix">
     <a class="extend prev" rel="prev" href="/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/3/">Next &raquo;</a>
@@ -257,9 +250,11 @@ JUnit Tutorial
 		
 			<li><a href="/categories/工具/" title="工具">工具<sup>6</sup></a></li>
 		
+			<li><a href="/categories/技术/" title="技术">技术<sup>1</sup></a></li>
+		
 			<li><a href="/categories/生活/" title="生活">生活<sup>3</sup></a></li>
 		
-			<li><a href="/categories/编程/" title="编程">编程<sup>14</sup></a></li>
+			<li><a href="/categories/编程/" title="编程">编程<sup>15</sup></a></li>
 		
 		</ul>
 </div>
@@ -272,7 +267,7 @@ JUnit Tutorial
 		
 			<li><a href="/tags/ant/" title="ant">ant<sup>2</sup></a></li>
 		
-			<li><a href="/tags/java/" title="java">java<sup>16</sup></a></li>
+			<li><a href="/tags/java/" title="java">java<sup>17</sup></a></li>
 		
 			<li><a href="/tags/junit/" title="junit">junit<sup>1</sup></a></li>
 		
@@ -280,11 +275,15 @@ JUnit Tutorial
 		
 			<li><a href="/tags/python/" title="python">python<sup>1</sup></a></li>
 		
+			<li><a href="/tags/加密/" title="加密">加密<sup>1</sup></a></li>
+		
 			<li><a href="/tags/多线程/" title="多线程">多线程<sup>5</sup></a></li>
 		
 			<li><a href="/tags/快捷键/" title="快捷键">快捷键<sup>1</sup></a></li>
 		
 			<li><a href="/tags/测试/" title="测试">测试<sup>1</sup></a></li>
+		
+			<li><a href="/tags/源码/" title="源码">源码<sup>1</sup></a></li>
 		
 			<li><a href="/tags/编码/" title="编码">编码<sup>2</sup></a></li>
 		
@@ -296,7 +295,7 @@ JUnit Tutorial
   <div class="tagcloudlist">
     <p class="asidetitle">标签云</p>
     <div class="tagcloudlist clearfix">
-       <a href="/tags/ant/" style="font-size: 13.33px;">ant</a> <a href="/tags/java/" style="font-size: 20px;">java</a> <a href="/tags/junit/" style="font-size: 10px;">junit</a> <a href="/tags/markdown/" style="font-size: 10px;">markdown</a> <a href="/tags/python/" style="font-size: 10px;">python</a> <a href="/tags/多线程/" style="font-size: 16.67px;">多线程</a> <a href="/tags/快捷键/" style="font-size: 10px;">快捷键</a> <a href="/tags/测试/" style="font-size: 10px;">测试</a> <a href="/tags/编码/" style="font-size: 13.33px;">编码</a>
+       <a href="/tags/ant/" style="font-size: 13.33px;">ant</a> <a href="/tags/java/" style="font-size: 20px;">java</a> <a href="/tags/junit/" style="font-size: 10px;">junit</a> <a href="/tags/markdown/" style="font-size: 10px;">markdown</a> <a href="/tags/python/" style="font-size: 10px;">python</a> <a href="/tags/加密/" style="font-size: 10px;">加密</a> <a href="/tags/多线程/" style="font-size: 16.67px;">多线程</a> <a href="/tags/快捷键/" style="font-size: 10px;">快捷键</a> <a href="/tags/测试/" style="font-size: 10px;">测试</a> <a href="/tags/源码/" style="font-size: 10px;">源码</a> <a href="/tags/编码/" style="font-size: 13.33px;">编码</a>
     </div>
   </div>
 
@@ -304,7 +303,7 @@ JUnit Tutorial
   
   <div class="archiveslist">
     <p class="asidetitle"><a href="/archives">归档</a></p>
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">八月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">七月 2016</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">六月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">四月 2016</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">三月 2016</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">十二月 2015</a><span class="archive-list-count">3</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">八月 2016</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">七月 2016</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">六月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">四月 2016</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">三月 2016</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">十二月 2015</a><span class="archive-list-count">3</span></li></ul>
   </div>
 
 
@@ -320,8 +319,8 @@ JUnit Tutorial
 	
 	
 	<section class="info">
-		<p> 博客不值钱，值钱的是回忆 <br/>
-			愿有忆可回</p>
+		<p> 既来之 <br/>
+			则安之</p>
 	</section>
 	 
 	<div class="social-font clearfix">

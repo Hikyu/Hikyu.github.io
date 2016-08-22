@@ -4,13 +4,14 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>毕业了 | YuKai&#39;s blog</title>
+    <title>Java集合框架学习总结 | YuKai&#39;s blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
     
     <meta name="author" content="于凯">
     
-    <meta name="description" content="毕业的日子真的过的很快。原来以为很遥远的事情，现在回头看，好像是一个瞬间。
-转眼之间已经毕业13天了，毕业后上班第三天。有时候会细细回味大学时光，趁现在还记得。隐约想起高中毕业后感伤的自己，如同现在一样。曾经心中暗自海誓山盟，却也敌不过时间的风化。曾经拼命想要记住的细节也早就淡的跟阳光下的影子一样，">
+    <meta name="description" content="看Jdk的源码有大概一个月时间了，中间零零散散算是把Java的集合看了个大概。源码还有很多地方不甚明白，但对java集合框架总体上有了个认识。总结一下，以后有时间再把源码理一遍。下一步的Jdk源码阅读计划是：Java IO
+框架
+上图并没有把所有的接口和类都列出来，只是把我认为最常用和最核心的几个类">
     
     
     
@@ -64,15 +65,15 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2016/06/30/毕业了/" title="毕业了" itemprop="url">毕业了</a>
+      <a href="/2016/08/16/Java集合框架学习总结/" title="Java集合框架学习总结" itemprop="url">Java集合框架学习总结</a>
   </h1>
   <p class="article-author">By
     
       <a href="http://yukai.space" title="于凯">于凯</a>
     </p>
   <p class="article-time">
-    <time datetime="2016-06-30T15:48:55.000Z" itemprop="datePublished">2016-06-30</time>
-    更新日期:<time datetime="2016-08-14T09:31:11.130Z" itemprop="dateModified">2016-08-14</time>
+    <time datetime="2016-08-16T14:50:16.000Z" itemprop="datePublished">2016-08-16</time>
+    更新日期:<time datetime="2016-08-22T12:57:58.716Z" itemprop="dateModified">2016-08-22</time>
     
   </p>
 </header>
@@ -81,30 +82,33 @@
 		
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
-		
+		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#框架"><span class="toc-number">1.</span> <span class="toc-text">框架</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#List"><span class="toc-number">2.</span> <span class="toc-text">List</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Iterator"><span class="toc-number">2.1.</span> <span class="toc-text">Iterator</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Collection"><span class="toc-number">2.2.</span> <span class="toc-text">Collection</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#List-1"><span class="toc-number">2.3.</span> <span class="toc-text">List</span></a></li></ol></li></ol>
 		</div>
 		
-		<p><iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="http://music.163.com/outchain/player?type=2&id=27759600&auto=1&height=66"><br></iframe><br>毕业的日子真的过的很快。原来以为很遥远的事情，现在回头看，好像是一个瞬间。</p>
-<p>转眼之间已经毕业13天了，毕业后上班第三天。有时候会细细回味大学时光，趁现在还记得。隐约想起高中毕业后感伤的自己，如同现在一样。曾经心中暗自海誓山盟，却也敌不过时间的风化。曾经拼命想要记住的细节也早就淡的跟阳光下的影子一样，好像从来没有发生过。曾经要好的兄弟一年也不见的联系几次。害怕过几年之后，对大学的感情也就麻木了。</p>
-<p>但是时间总会过去，没有人能够阻止。我们要做的，就是在剩下的时光里，慢慢品味这段逝去的青春。失去的才是美好的，不是么？</p>
-<p>大学四年里，成绩不好不坏，人缘不多不少。很感谢这段大学时光，给我的人生留下无限美好的回忆。首先要感谢我的父母，作为农民，供养一个大学生着实不易，他们给了我向上的勇气。然后是我的女朋友，她是一个又懒又笨的女生，但是很可爱也很美丽。希望以后的平淡时光有你陪伴我，我会好好珍惜。还有陪我度过大学四年操蛋时光的兄弟们，一起打球互损，一起声色犬马。希望若干年后的我们再次遇见依然能够如同当初一样，啤酒虽好，可不要贪杯噢。当然还有帮助我的老师们，希望我们一直是好朋友，珍重。</p>
-<p>希望若干年以后再看到这些话，我能如同现在的心情一样，满足，遗憾，感怀。</p>
-<img src="/2016/06/30/毕业了/graduation1.jpg" alt="毕业照" title="毕业照">
-<img src="/2016/06/30/毕业了/graduation2.jpg" alt="毕设之后金客来" title="毕设之后金客来">
-<img src="/2016/06/30/毕业了/graduation3.jpg" alt="跳蚤市场卖书" title="跳蚤市场卖书">
-<img src="/2016/06/30/毕业了/graduation4.jpg" alt="去唱K" title="去唱K">
-<img src="/2016/06/30/毕业了/graduation5.jpg" alt="毕业照之前" title="毕业照之前">
-<img src="/2016/06/30/毕业了/graduation6.jpg" alt="机房老师" title="机房老师">
-<img src="/2016/06/30/毕业了/graduation7.jpg" alt="毕业照之前" title="毕业照之前">
-<img src="/2016/06/30/毕业了/graduation8.jpg" alt="我和张蕾" title="我和张蕾">
+		<p>看Jdk的源码有大概一个月时间了，中间零零散散算是把<a href="https://docs.oracle.com/javase/7/docs/technotes/guides/collections/index.html" target="_blank" rel="external">Java的集合</a>看了个大概。源码还有很多地方不甚明白，但对java集合框架总体上有了个认识。总结一下，以后有时间再把源码理一遍。下一步的Jdk源码阅读计划是：<a href="https://docs.oracle.com/javase/7/docs/api/java/io/package-summary.html#package_description" target="_blank" rel="external">Java IO</a></p>
+<h2 id="框架"><a href="#框架" class="headerlink" title="框架"></a>框架</h2><img src="/2016/08/16/Java集合框架学习总结/collection.png" alt="集合框架" title="集合框架">
+<p>上图并没有把所有的接口和类都列出来，只是把我认为最常用和最核心的几个类和接口的继承关系表示出来。</p>
+<p>通过上图可以看出，java集合框架主要分为两棵树，一棵继承自Collection，一棵继承自Map。接下来分四个部分总结一下。</p>
+<h2 id="List"><a href="#List" class="headerlink" title="List"></a>List</h2><h3 id="Iterator"><a href="#Iterator" class="headerlink" title="Iterator"></a>Iterator</h3><p>在总结List之前，先看一下Iterable这个接口,它只包含一个方法:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="function">Iterator&lt;T&gt; <span class="title">iterator</span><span class="params">()</span></span>;</div></pre></td></tr></table></figure>
+<p>这个方法返回一个<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Iterator.html" target="_blank" rel="external">Iterator</a>，也就是一个迭代器，通过这个迭代器，我们可以在不了解集合内部实现的情况下遍历他,这也是设计模式中很重要的一个模式：迭代器模式(关于设计模式，待学习透彻后，会再写一篇博客总结).关于迭代器模式的好处就不再多说，顺便提一下，我们经常用到的foreach循环，内部也是通过迭代器实现的。</p>
+<h3 id="Collection"><a href="#Collection" class="headerlink" title="Collection"></a><a href="https://docs.oracle.com/javase/8/docs/api/java/util/Collection.html" target="_blank" rel="external">Collection</a></h3><p>Collection 提供了集合的一些基本操作,Collection 接口提供的主要方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">boolean add(Object o) 添加对象到集合；</div><div class="line">boolean remove(Object o) 删除指定的对象；</div><div class="line">int size() 返回当前集合中元素的数量；</div><div class="line">boolean contains(Object o) 查找集合中是否有指定的对象；</div><div class="line">boolean isEmpty() 判断集合是否为空；</div><div class="line">Iterator iterator() 返回一个迭代器；</div><div class="line">boolean containsAll(Collection c) 查找集合中是否有集合 C 中的元素；</div><div class="line">boolean addAll(Collection c) 将集合 C 中所有的元素添加给该集合；</div><div class="line">void clear() 删除集合中所有元素；</div><div class="line">void removeAll(Collection c) 从集合中删除 C 集合中也有的元素；</div><div class="line">void retainAll(Collection c) 从集合中删除集合 C 中不包含的元素。</div></pre></td></tr></table></figure>
+<p>没发现有什么好说的。</p>
+<h3 id="List-1"><a href="#List-1" class="headerlink" title="List"></a><a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" target="_blank" rel="external">List</a></h3><p>List</p>
   
 	</div>
 		<footer class="article-footer clearfix">
 
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/java/">java</a><a href="/tags/源码/">源码</a>
+  </div>
+
 
 <div class="article-categories">
   <span></span>
-  <a class="article-category-link" href="/categories/生活/">生活</a>
+  <a class="article-category-link" href="/categories/编程/">编程</a>
 </div>
 
 
@@ -112,7 +116,7 @@
 <div class="article-share" id="share">
 
 <!--
-  <div data-url="http://yukai.space/2016/06/30/毕业了/" data-title="毕业了 | YuKai&#39;s blog" data-tsina="5381447277" class="share clearfix">
+  <div data-url="http://yukai.space/2016/08/16/Java集合框架学习总结/" data-title="Java集合框架学习总结 | YuKai&#39;s blog" data-tsina="5381447277" class="share clearfix">
   </div>
 -->
 
@@ -123,18 +127,18 @@
 <nav class="article-nav clearfix">
  
  <div class="prev" >
- <a href="/2016/07/12/java源码阅读-集合类-ArrayList/" title="java源码阅读-Arraylist">
+ <a href="/2016/08/22/关于加密的一点总结/" title="关于加密的一点总结">
   <strong>PREVIOUS:</strong><br/>
   <span>
-  java源码阅读-Arraylist</span>
+  关于加密的一点总结</span>
 </a>
 </div>
 
 
 <div class="next">
-<a href="/2016/06/30/java中的枚举/"  title="java中的枚举">
+<a href="/2016/08/16/synchronized的一些用法/"  title="synchronized的用法">
  <strong>NEXT:</strong><br/> 
- <span>java中的枚举
+ <span>synchronized的用法
 </span>
 </a>
 </div>
@@ -151,7 +155,7 @@
 
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
-  
+  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#框架"><span class="toc-number">1.</span> <span class="toc-text">框架</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#List"><span class="toc-number">2.</span> <span class="toc-text">List</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Iterator"><span class="toc-number">2.1.</span> <span class="toc-text">Iterator</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Collection"><span class="toc-number">2.2.</span> <span class="toc-text">Collection</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#List-1"><span class="toc-number">2.3.</span> <span class="toc-text">List</span></a></li></ol></li></ol>
   </div>
 
 <div id="asidepart">
