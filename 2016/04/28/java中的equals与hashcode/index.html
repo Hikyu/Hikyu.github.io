@@ -73,7 +73,7 @@
     </p>
   <p class="article-time">
     <time datetime="2016-04-28T04:48:55.000Z" itemprop="datePublished">2016-04-28</time>
-    更新日期:<time datetime="2016-08-14T15:32:58.814Z" itemprop="dateModified">2016-08-14</time>
+    更新日期:<time datetime="2016-08-23T00:09:51.223Z" itemprop="dateModified">2016-08-23</time>
     
   </p>
 </header>
@@ -111,7 +111,7 @@
 <p>要理解接下来的代码，我们就需要知道哈希算法的另一个概念：冲突。</p>
 <p>散列函数可能对于不相等的关键码计算出相同的hashcode，该现象称为冲突。怎么理解呢？比如我们有这样一个串abcd，我们给出这样一个散列函数：将每一个字符的ascii值加起来除以字符的个数，得到他们的平均值就是这个串的hashcode。那么，可以保证没有其他的串经过这样的算法得到相同的hashcode吗？反过来说，能否给出一个散列函数，其可以保证对于所有调用它的对象都可以返回一个唯一的hashcode？恐怕这是很难做到的吧。此时就会产生冲突。从另一个角度来讲，我们的散列表长度是有限的，有用这有限的空间存储更多的记录，势必会产生冲突。这也是我们理解hashcode的一个重要的点：<strong>不同的对象(equals返回false)可以有相同的hashcode</strong>。</p>
 <p>那么，产生冲突怎么办呢？产生冲突之后，不同的对象在散列表中找到了相同的位置，为了解决这个问题，我们将这个槽中的内容设计成一个链表，当产生冲突的时候，就将新的元素放到链表中，他看起来是这样的：</p>
-<img src="/2016/04/28/java中的equals与hashcode/entry.png" alt="科比" title="科比">
+<img src="/2016/04/28/java中的equals与hashcode/entry.png" alt="冲突" title="冲突">
 <p>其中：A，B，C分别为三条记录，他们就是产生冲突的三条记录。1,2,3….为散列表的索引位置。</p>
 <p>接下来的代码  <code>for (Entry&lt;K,V&gt; e = table[i]; e != null; e = e.next)</code>就容易理解了。找到记录所对应的槽之后，遍历这个链表直到找到与关键码相同的位置(可能之前已经有以这个关键码为key的value插入)。如果遍历完链表还没有找到这样的值，说明还不存在此关键码对应的记录，直接插入即可：<code>addEntry(hash, key, value, i);</code>.</p>
 <p>那么，怎么判断两个关键码在逻辑上是否相同呢？</p>
