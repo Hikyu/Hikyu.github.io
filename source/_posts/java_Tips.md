@@ -125,7 +125,6 @@ date:   2016-7-24 12:48:55
 
 ```java
     private boolean isEligible(int age){
-
     	boolean result;
 
     	if(age > 18) {
@@ -138,7 +137,6 @@ date:   2016-7-24 12:48:55
     	}
 
     	return result;
-
     }
 ```
 
@@ -161,5 +159,17 @@ date:   2016-7-24 12:48:55
 ```java
 	if(age > 18 && !man){...}
 ```
+
+ **19**.  尽量不返回null
+
+ null可以表达两种意思，一种是不存在、为空，一种是出现错误。返回null会让调用者感到迷惑，同时也会因为传递null造成很多意想不到的错误。可以针对需要返回null的情况为null专门构造一个类，比如函数返回一个connection，可以为返回null的情况实现一个名为FakeConnection的类，返回这个类的对象。需要把null放进“容器数据结构”里面的情况同理。
+
+ **20**. if嵌套不超过三层。
+
+ **21**. 实现RandomAccess接口的类实例，假如是随机访问的，使用普通for循环效率将高于使用foreach循环；反过来，如果是顺序访问的，则使用Iterator会效率更高。(for each底层通过Iterator实现)
+
+实现RandomAccess接口的代表类：ArrayList
+未实现RandomAccess接口的代表类：LinkedList
+
 
 
