@@ -62,18 +62,17 @@
 
   <section class="post" itemscope itemprop="blogPost">
   
-    <a href="/2016/04/28/java中的类型转换/" title="java中的类型转换" itemprop="url">
+    <a href="/2016/06/21/java中的ThreadLocal/" title="java中的ThreadLocal" itemprop="url">
   
-    <h1 itemprop="name">java中的类型转换</h1>
+    <h1 itemprop="name">java中的ThreadLocal</h1>
     
      
-           <p itemprop="description" >以前一直对java中的类型转换了解的不是很清楚，因为平时写代码有IDE的帮助，所以往往忽略这一块的内容，但往往就是这样的小知识点不清楚，很有可能造成很大的错误。所以在闲暇时间总结一下这些可能被遗忘的知识点。网上已经有很多相关的介绍文章了，现在来梳理一番：
+           <p itemprop="description" >今天测试那边在做压力测试的时候，发现新版本的Jdbc占用CPU很高，导致并发量降低，研究半天，发现出问题的地方在于每条语句执行过后都会调用ThreadLocal的get方法。研究一番ThreadLocal…
 
-基本类型
-基本类型优先</p>
+问题背景：每次sql语句执行结束之后，最后都会接受后台传回的Ready</p>
         
     
-    <time datetime="2016-04-28T04:48:55.000Z" itemprop="datePublished">2016-04-28</time>
+    <time datetime="2016-06-21T04:48:55.000Z" itemprop="datePublished">2016-06-21</time>
   </a>
 </section>
 
@@ -87,6 +86,23 @@
            <p itemprop="description" >最近读了HashMap的源码，对HashCode与equals有了一定的了解，总结一下，顺便理一下HashMap中的核心算法。
 
 什么是hashcode,hashcode的作用是什么hashcode并不是java中独有的。设想一下，如果让你设计一个算法，根据关键码去得到一个集合中</p>
+        
+    
+    <time datetime="2016-04-28T04:48:55.000Z" itemprop="datePublished">2016-04-28</time>
+  </a>
+</section>
+
+  <section class="post" itemscope itemprop="blogPost">
+  
+    <a href="/2016/04/28/java中的类型转换/" title="java中的类型转换" itemprop="url">
+  
+    <h1 itemprop="name">java中的类型转换</h1>
+    
+     
+           <p itemprop="description" >以前一直对java中的类型转换了解的不是很清楚，因为平时写代码有IDE的帮助，所以往往忽略这一块的内容，但往往就是这样的小知识点不清楚，很有可能造成很大的错误。所以在闲暇时间总结一下这些可能被遗忘的知识点。网上已经有很多相关的介绍文章了，现在来梳理一番：
+
+基本类型
+基本类型优先</p>
         
     
     <time datetime="2016-04-28T04:48:55.000Z" itemprop="datePublished">2016-04-28</time>
@@ -215,27 +231,6 @@ JUnit Tutorial
   </a>
 </section>
 
-  <section class="post" itemscope itemprop="blogPost">
-  
-    <a href="/2016/03/22/常用快捷键总结/" title="常用快捷键总结" itemprop="url">
-  
-    <h1 itemprop="name">常用快捷键总结</h1>
-    
-     
-           <p itemprop="description" >ECLIPSE: 查看代码
- Ctrl+O 搜索当前类变量及方法
- Ctrl+H 打开搜索对话框
- Ctrl+Shift+G  搜索选中变量或方法的引用
- Ctrl+D 删除当前行
- Ctrl+Shift+F 格式化代码
- F4 查看当前类继承结构
- Ctrl+Shift+R 搜</p>
-        
-    
-    <time datetime="2016-03-22T08:31:55.000Z" itemprop="datePublished">2016-03-22</time>
-  </a>
-</section>
-
 
   <nav id="page-nav" class="clearfix">
     <a class="extend prev" rel="prev" href="/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/3/">Next &raquo;</a>
@@ -259,7 +254,7 @@ JUnit Tutorial
 		
 			<li><a href="/categories/生活/" title="生活">生活<sup>3</sup></a></li>
 		
-			<li><a href="/categories/编程/" title="编程">编程<sup>14</sup></a></li>
+			<li><a href="/categories/编程/" title="编程">编程<sup>15</sup></a></li>
 		
 		</ul>
 </div>
@@ -272,7 +267,7 @@ JUnit Tutorial
 		
 			<li><a href="/tags/ant/" title="ant">ant<sup>2</sup></a></li>
 		
-			<li><a href="/tags/java/" title="java">java<sup>16</sup></a></li>
+			<li><a href="/tags/java/" title="java">java<sup>17</sup></a></li>
 		
 			<li><a href="/tags/junit/" title="junit">junit<sup>1</sup></a></li>
 		
@@ -282,7 +277,7 @@ JUnit Tutorial
 		
 			<li><a href="/tags/加密/" title="加密">加密<sup>1</sup></a></li>
 		
-			<li><a href="/tags/多线程/" title="多线程">多线程<sup>5</sup></a></li>
+			<li><a href="/tags/多线程/" title="多线程">多线程<sup>6</sup></a></li>
 		
 			<li><a href="/tags/快捷键/" title="快捷键">快捷键<sup>1</sup></a></li>
 		
@@ -308,7 +303,7 @@ JUnit Tutorial
   
   <div class="archiveslist">
     <p class="asidetitle"><a href="/archives">归档</a></p>
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">八月 2016</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">七月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">六月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">四月 2016</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">三月 2016</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">十二月 2015</a><span class="archive-list-count">3</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">八月 2016</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">七月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">六月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">四月 2016</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">三月 2016</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">十二月 2015</a><span class="archive-list-count">3</span></li></ul>
   </div>
 
 
