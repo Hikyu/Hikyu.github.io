@@ -76,7 +76,7 @@
     </p>
   <p class="article-time">
     <time datetime="2016-07-24T04:48:55.000Z" itemprop="datePublished">2016-07-24</time>
-    更新日期:<time datetime="2016-08-29T14:00:24.189Z" itemprop="dateModified">2016-08-29</time>
+    更新日期:<time datetime="2016-08-29T14:02:45.716Z" itemprop="dateModified">2016-08-29</time>
     
   </p>
 </header>
@@ -125,7 +125,7 @@
 <p> <strong>16</strong>. 确保只有一个退出点。比如：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">boolean</span> <span class="title">isEligible</span><span class="params">(<span class="keyword">int</span> age)</span></span>&#123;</div><div class="line"></div><div class="line">	<span class="keyword">if</span>(age &gt; <span class="number">18</span>) &#123;</div><div class="line"></div><div class="line">		<span class="keyword">return</span> <span class="keyword">true</span>;</div><div class="line"></div><div class="line">	&#125; <span class="keyword">else</span> &#123;</div><div class="line"></div><div class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>应改为：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">boolean</span> <span class="title">isEligible</span><span class="params">(<span class="keyword">int</span> age)</span></span>&#123;</div><div class="line"></div><div class="line">	<span class="keyword">boolean</span> result;</div><div class="line"></div><div class="line">	<span class="keyword">if</span>(age &gt; <span class="number">18</span>) &#123;</div><div class="line"></div><div class="line">		result = <span class="keyword">true</span>;</div><div class="line"></div><div class="line">	&#125; <span class="keyword">else</span> &#123;</div><div class="line"></div><div class="line">        result = <span class="keyword">false</span>;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="keyword">return</span> result;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">boolean</span> <span class="title">isEligible</span><span class="params">(<span class="keyword">int</span> age)</span></span>&#123;</div><div class="line">	<span class="keyword">boolean</span> result;</div><div class="line"></div><div class="line">	<span class="keyword">if</span>(age &gt; <span class="number">18</span>) &#123;</div><div class="line"></div><div class="line">		result = <span class="keyword">true</span>;</div><div class="line"></div><div class="line">	&#125; <span class="keyword">else</span> &#123;</div><div class="line"></div><div class="line">        result = <span class="keyword">false</span>;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="keyword">return</span> result;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p> <strong>17</strong>. 以final类型标记方法参数。当你不小心修改参数值时，编译器会报警。</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">boolean</span> <span class="title">isEligible</span><span class="params">(<span class="keyword">final</span> <span class="keyword">int</span> age)</span></span>&#123;...&#125;</div></pre></td></tr></table></figure>
 <p> <strong>18</strong>. 把多个if语句组合成单一if语句。比如：</p>
@@ -210,7 +210,7 @@
 		
 			<li><a href="/categories/工具/" title="工具">工具<sup>6</sup></a></li>
 		
-			<li><a href="/categories/技术/" title="技术">技术<sup>1</sup></a></li>
+			<li><a href="/categories/技术/" title="技术">技术<sup>2</sup></a></li>
 		
 			<li><a href="/categories/生活/" title="生活">生活<sup>3</sup></a></li>
 		
@@ -227,7 +227,7 @@
 		
 			<li><a href="/tags/ant/" title="ant">ant<sup>2</sup></a></li>
 		
-			<li><a href="/tags/java/" title="java">java<sup>16</sup></a></li>
+			<li><a href="/tags/java/" title="java">java<sup>17</sup></a></li>
 		
 			<li><a href="/tags/junit/" title="junit">junit<sup>1</sup></a></li>
 		
@@ -263,7 +263,7 @@
   
   <div class="archiveslist">
     <p class="asidetitle"><a href="/archives">归档</a></p>
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">八月 2016</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">七月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">六月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">四月 2016</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">三月 2016</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">十二月 2015</a><span class="archive-list-count">3</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">九月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">八月 2016</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">七月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">六月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">四月 2016</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">三月 2016</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">十二月 2015</a><span class="archive-list-count">2</span></li></ul>
   </div>
 
 

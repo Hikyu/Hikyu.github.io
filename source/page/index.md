@@ -9,7 +9,7 @@ comments: false
  dream: "两亩地一头牛，老婆孩子热炕头"
 {% endcodeblock %}
 
-本博客的目的在于记录工作和学习中的遇到的问题及解决方法，将学到的一些知识点总结下来。也不乏生活中的一些总结。
+本博客的目的在于记录工作和学习中的遇到的问题及解决方法，将学到的一些知识点总结下来。也有生活中的一些总结。
 
 # 博客基础
 
@@ -27,6 +27,12 @@ Markdown
 
 设计模式
 
-<center>
-<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=450 src="http://music.163.com/outchain/player?type=0&id=310482021&auto=1&height=430"></iframe>
-</center>
+# 书单
+
+《重构 改善既有代码的设计》  人民邮电出版社
+
+《深入理解JVM虚拟机》  机械工业出版社
+
+《大话设计模式》  清华大学出版社  
+
+

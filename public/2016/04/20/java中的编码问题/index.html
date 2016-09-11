@@ -73,7 +73,7 @@
     </p>
   <p class="article-time">
     <time datetime="2016-04-20T04:48:55.000Z" itemprop="datePublished">2016-04-20</time>
-    更新日期:<time datetime="2016-08-14T09:11:22.744Z" itemprop="dateModified">2016-08-14</time>
+    更新日期:<time datetime="2016-08-31T13:35:43.063Z" itemprop="dateModified">2016-08-31</time>
     
   </p>
 </header>
@@ -104,7 +104,8 @@
 <p><strong>字符集</strong>简单说就是字符的集合。它规定了每个字符对应的二进制编码。比如Unicode是一个很大的集合，现在的规模可以容纳100多万个符号。每个符号的编码都不一样，比如，U+0639表示阿拉伯字母Ain，U+0041表示英语的大写字母A，U+4E25表示汉字”严”。需要注意的是，Unicode只是一个符号集，它只规定了符号的二进制代码，却没有规定这个二进制代码应该如何存储。那既然字符集中的每一个字符都有一个自己的序号，直接把序号作为存储内容就好了。为什么还要多此一举通过字符编码把序号转换成另外一种存储格式呢？</p>
 <p>这是因为：</p>
 <p>比如，汉字”严”的unicode是十六进制数4E25，转换成二进制数足足有15位（100111000100101），也就是说这个符号的表示至少需要2个字节。表示其他更大的符号，可能需要3个字节或者4个字节，甚至更多。<br>这里就有两个严重的问题，第一个问题是，如何才能区别Unicode和ASCII？计算机怎么知道三个字节表示一个符号，而不是分别表示三个符号呢？第二个问题是，我们已经知道，英文字母只用一个字节表示就够了，如果Unicode统一规定，每个符号用三个或四个字节表示，那么每个英文字母前都必然有二到三个字节是0，这对于存储来说是极大的浪费，文本文件的大小会因此大出二三倍，这是无法接受的。</p>
-<p>UTF-8就是在互联网上使用最广的一种Unicode的实现方式。UTF-8最大的一个特点，就是它是一种变长的编码方式。它可以使用1~4个字节表示一个符号，根据不同的符号而变化字节长度。</p>
+<p><strong>字符编码</strong>就是用来解决以上所说的如何存储字符对应二进制编码问题的。</p>
+<p>UTF-8就是在互联网上使用最广的一种Unicode的实现方式。即，UTF-8就是对应Unicode字符集的一种字符编码。UTF-8最大的一个特点，就是它是一种变长的编码方式。它可以使用1~4个字节表示一个符号，根据不同的符号而变化字节长度。</p>
 <p>UTF-8的编码规则很简单，只有两条： </p>
 <p>1）对于单字节的符号，字节的第一位设为0，后面7位为这个符号的unicode码。因此对于英语字母，UTF-8编码和ASCII码是相同的。 </p>
 <p>2）对于n字节的符号（n&gt;1），第一个字节的前n位都设为1，第n+1位设为0，后面字节的前两位一律设为10。剩下的没有提及的二进制位，全部为这个符号的unicode码。</p>
@@ -223,7 +224,7 @@
 		
 			<li><a href="/categories/工具/" title="工具">工具<sup>6</sup></a></li>
 		
-			<li><a href="/categories/技术/" title="技术">技术<sup>1</sup></a></li>
+			<li><a href="/categories/技术/" title="技术">技术<sup>2</sup></a></li>
 		
 			<li><a href="/categories/生活/" title="生活">生活<sup>3</sup></a></li>
 		
@@ -240,7 +241,7 @@
 		
 			<li><a href="/tags/ant/" title="ant">ant<sup>2</sup></a></li>
 		
-			<li><a href="/tags/java/" title="java">java<sup>16</sup></a></li>
+			<li><a href="/tags/java/" title="java">java<sup>17</sup></a></li>
 		
 			<li><a href="/tags/junit/" title="junit">junit<sup>1</sup></a></li>
 		
@@ -276,7 +277,7 @@
   
   <div class="archiveslist">
     <p class="asidetitle"><a href="/archives">归档</a></p>
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">八月 2016</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">七月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">六月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">四月 2016</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">三月 2016</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">十二月 2015</a><span class="archive-list-count">3</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">九月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">八月 2016</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">七月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">六月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">四月 2016</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">三月 2016</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">十二月 2015</a><span class="archive-list-count">2</span></li></ul>
   </div>
 
 
