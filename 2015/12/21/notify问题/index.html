@@ -72,7 +72,7 @@
     </p>
   <p class="article-time">
     <time datetime="2015-12-21T04:48:55.000Z" itemprop="datePublished">2015-12-21</time>
-    更新日期:<time datetime="2016-08-14T13:21:15.796Z" itemprop="dateModified">2016-08-14</time>
+    更新日期:<time datetime="2016-09-11T12:55:44.102Z" itemprop="dateModified">2016-09-11</time>
     
   </p>
 </header>
@@ -94,6 +94,7 @@
 <p>这部分代码 改为： </p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">while</span> (syncTag.threadNO != scriptNO) &#123;</div><div class="line">		<span class="keyword">try</span> &#123;</div><div class="line">				syncTag.wait();</div><div class="line">		&#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</div><div class="line">				e.printStackTrace();</div><div class="line">		&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>这个问题就解决了。</p>
+<p>所以，应该记住这样一个原则：<strong>永远在循环（loop）里调用 wait 和 notify，不是在 If 语句</strong>。</p>
 <h2 id="延伸："><a href="#延伸：" class="headerlink" title="延伸："></a><strong>延伸</strong>：</h2><p>假设这样一种情况：我们按照上面的方法把代码改了，但同时把下面的 notifyAll 改为 notify.问题又出现了：<br>设想一下，如果线程0执行完毕之后调用syncTag.notify（），唤醒某个线程（线程3），但是在这个线程中恰好不满足 syncTag.threadNO == scriptNO<br>这个条件。那么这个线程（线程3）会继续wait. 这个时候，所有的线程都在 wait,但并没有一个线程在运行，也没有其他线程能够调用 notify或者notifyAll来唤醒他们<br>中的一个。于是陷入死锁，无尽的等待。</p>
 <p>所以，具体使用notify还是notifyAll 就得具体情况具体分析了。</p>
   

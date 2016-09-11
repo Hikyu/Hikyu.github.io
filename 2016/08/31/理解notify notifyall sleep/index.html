@@ -71,7 +71,7 @@
     </p>
   <p class="article-time">
     <time datetime="2016-08-31T13:27:09.000Z" itemprop="datePublished">2016-08-31</time>
-    更新日期:<time datetime="2016-08-31T16:18:28.478Z" itemprop="dateModified">2016-09-01</time>
+    更新日期:<time datetime="2016-09-11T14:09:14.810Z" itemprop="dateModified">2016-09-11</time>
     
   </p>
 </header>
@@ -80,7 +80,7 @@
 		
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
-		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#从线程状态说起"><span class="toc-number">1.</span> <span class="toc-text">从线程状态说起</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#wait"><span class="toc-number">2.</span> <span class="toc-text">wait</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#notify"><span class="toc-number">3.</span> <span class="toc-text">notify</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#notifyAll"><span class="toc-number">4.</span> <span class="toc-text">notifyAll</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#sleep"><span class="toc-number">5.</span> <span class="toc-text">sleep</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用场景"><span class="toc-number">6.</span> <span class="toc-text">使用场景</span></a></li></ol>
+		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#从线程状态说起"><span class="toc-number">1.</span> <span class="toc-text">从线程状态说起</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#wait"><span class="toc-number">2.</span> <span class="toc-text">wait</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#notify"><span class="toc-number">3.</span> <span class="toc-text">notify</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#notifyAll"><span class="toc-number">4.</span> <span class="toc-text">notifyAll</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#sleep"><span class="toc-number">5.</span> <span class="toc-text">sleep</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#synchronized"><span class="toc-number">6.</span> <span class="toc-text">synchronized</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用场景"><span class="toc-number">7.</span> <span class="toc-text">使用场景</span></a></li></ol>
 		</div>
 		
 		<p>今天下班时和同事偶尔谈起了锁的一些问题，发现自己对这些基本一无所知。只是会使用synchronized关键字来进行简单的同步。之前也想把java并发包的源码看一下，但是最近一直没有时间，阅读源码计划也搁置了一段时间了，等重构完JDBC就先把java IO部分理一下吧。晚上回来翻了一下操作系统的书，总结一下java中基础的notify、notifyall、sleep。网上关于这三个关键字的文章有很多，理解一下，记下来。</p>
@@ -106,14 +106,17 @@
 <p>线程创建和终止状态不再讨论。</p>
 <h2 id="wait"><a href="#wait" class="headerlink" title="wait"></a>wait</h2><p>wait、notify、notifyAll三个方法都是Object的方法。每个对象都拥有这三个方法。</p>
 <p>当在线程中调用某个对象A的wait方法时，释放该对象的锁，同时让出cpu的使用权。前提是需拥有该对象A的锁，故wait方法需要在synchronized(A)的作用域中使用。</p>
-<p>调用wait方法，相当于上图中从执行到活动阻塞的过程。但也有一些区别，wait方法释放了对象的锁，然后阻塞，等待被唤醒。</p>
-<h2 id="notify"><a href="#notify" class="headerlink" title="notify"></a>notify</h2><p>当在线程Y中调用某个对象A的notify方法时，系统从众多等待被唤醒的线程(调用了A的wait方法的线程)中选出一个线程X，将其唤醒。此时该线程X会重新开始对A对象锁的请求。跟wait一样，notify也需要在synchronized(A)的作用域中调用，当Y线程运行出synchronized(A)的作用域后，释放A对象的锁。</p>
-<p>此时，线程X会得到A对象的锁(只唤醒了他一个嘛)，这个过程相当于上图从活动阻塞到活动就绪的过程。此时线程等待调度执行。</p>
+<p>调用wait方法，相当于上图中<strong>执行-&gt;活动阻塞-&gt;静止阻塞</strong>的过程。同时，wait方法释放了对象的锁，然后阻塞，挂起，等待被唤醒。</p>
+<h2 id="notify"><a href="#notify" class="headerlink" title="notify"></a>notify</h2><p>当在线程Y中调用某个对象A的notify方法时，系统从众多等待被唤醒(挂起)的线程(调用了A的wait方法的线程)中选出一个线程X，将其唤醒(激活),这个过程相当于上图中<strong>静止阻塞-&gt;活动阻塞</strong>的过程。此时该线程X会重新开始对A对象锁的请求。跟wait一样，notify也需要在synchronized(A)的作用域中调用，当Y线程运行出synchronized(A)的作用域后，释放A对象的锁。</p>
+<p>此时，线程X会得到A对象的锁(只唤醒了他一个嘛)，这个过程相当于上图<strong>活动阻塞-&gt;活动就绪</strong>的过程。此时线程等待调度执行。</p>
 <p>需要注意的是，notify不恰当使用很有可能造成死锁问题。</p>
-<h2 id="notifyAll"><a href="#notifyAll" class="headerlink" title="notifyAll"></a>notifyAll</h2><p>当在线程Y中调用某个对象A的notifyAll方法时，系统将所有等待被唤醒的线程(调用了A的wait方法的线程)唤醒。这些线程会竞争A对象的锁。(注意notify与notifyAll的区别就在于唤醒一个等待线程还是所有的等待线程。线程被唤醒后将参与对锁的竞争，未被唤醒的线程不参与锁的竞争。)之后就跟notify一样了，线程Y运行出synchronized(A)的作用域，释放A对象的锁。</p>
+<h2 id="notifyAll"><a href="#notifyAll" class="headerlink" title="notifyAll"></a>notifyAll</h2><p>当在线程Y中调用某个对象A的notifyAll方法时，系统将所有等待被唤醒(挂起)的线程(调用了A的wait方法的线程)唤醒(激活)。这些线程会开始竞争A对象的锁。(注意notify与notifyAll的区别就在于唤醒一个等待线程还是所有的等待线程。线程被唤醒后将参与对锁的竞争，未被唤醒的线程不参与锁的竞争。)之后就跟notify一样了，线程Y运行出synchronized(A)的作用域，释放A对象的锁。</p>
 <h2 id="sleep"><a href="#sleep" class="headerlink" title="sleep"></a>sleep</h2><p>与以上三个关键字不同的是，sleep方法是Thread中的方法。</p>
-<p>当调用某个线程Y的sleep(1000)方法时，线程Y挂起，放弃cpu的使用权。与wait不同的是，他不会释放对象的锁。故sleep方法可以在非synchronized作用域使用。</p>
-<p>调用线程Y的sleep(1000)sleep方法，相当于上图中从执行到静止就绪状态。当过1000毫秒之后，线程Y被激活，从静止就绪转为活动就绪状态。此时线程Y等待调度执行。</p>
+<p>当调用某个线程Y的sleep(1000)方法时，线程Y挂起，放弃cpu的使用权。与wait不同的是，他不会释放对象的锁。故sleep方法可以在非synchronized作用域使用。调用sleep的目的是不让当前线程独自霸占该进程所获的CPU资源，以留一定时间给其他线程执行的机会;</p>
+<p>调用线程Y的sleep(1000)sleep方法，相当于上图中<strong>执行-&gt;静止就绪状态</strong>。当过1000毫秒之后，线程Y被激活，从静止就绪转为活动就绪状态。此时线程Y等待调度执行。</p>
+<h2 id="synchronized"><a href="#synchronized" class="headerlink" title="synchronized"></a>synchronized</h2><p>当程序执行遇到synchronized关键字的时候，若此时锁被占用，则线程被阻塞。相当于上图中<strong>执行-&gt;活动阻塞</strong>过程。</p>
+<p>PS：上述的几个状态跟java中描述的Thread.state并不尽相同。而且底层真正的运行情况(OS的线程状态)是否是跟以上描述相同也有待考究。但是我理解的这几个关键字对外的表现应该与上述描述是一样的。</p>
+<p>参考知乎上的一个提问：<a href="https://www.zhihu.com/question/23328075" target="_blank" rel="external">java sleep和wait的区别的疑惑?</a></p>
 <h2 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h2><p>Object.wait()方法需要在synchronized的作用域中使用。某线程中调用对象A的wait方法会释放该对象A的锁,线程让出cpu。什么时候会用到这个方法？获得对象的锁却又主动释放它？</p>
 <p>在一些生产者消费者的问题中可能会用到wait和notify方法。比如使用一个buffer，当消费者获得buffer的锁，检测到buffer为空时使用wait方法，释放锁，等待生产者填满buffer后调用buffer的notify方法通知消费者去使用buffer。</p>
 <p>例子自己写了一个，感觉挺low，网上很多优秀的例子，代码就不贴了。</p>
@@ -176,7 +179,7 @@
 
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
-  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#从线程状态说起"><span class="toc-number">1.</span> <span class="toc-text">从线程状态说起</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#wait"><span class="toc-number">2.</span> <span class="toc-text">wait</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#notify"><span class="toc-number">3.</span> <span class="toc-text">notify</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#notifyAll"><span class="toc-number">4.</span> <span class="toc-text">notifyAll</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#sleep"><span class="toc-number">5.</span> <span class="toc-text">sleep</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用场景"><span class="toc-number">6.</span> <span class="toc-text">使用场景</span></a></li></ol>
+  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#从线程状态说起"><span class="toc-number">1.</span> <span class="toc-text">从线程状态说起</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#wait"><span class="toc-number">2.</span> <span class="toc-text">wait</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#notify"><span class="toc-number">3.</span> <span class="toc-text">notify</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#notifyAll"><span class="toc-number">4.</span> <span class="toc-text">notifyAll</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#sleep"><span class="toc-number">5.</span> <span class="toc-text">sleep</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#synchronized"><span class="toc-number">6.</span> <span class="toc-text">synchronized</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用场景"><span class="toc-number">7.</span> <span class="toc-text">使用场景</span></a></li></ol>
   </div>
 
 <div id="asidepart">
