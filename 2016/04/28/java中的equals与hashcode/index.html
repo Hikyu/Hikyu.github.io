@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>java中的equals与hashcode | YuKai&#39;s blog</title>
+    <title>通过HashMap认识equals与hashcode | YuKai&#39;s blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
     
     <meta name="author" content="于凯">
@@ -65,7 +65,7 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2016/04/28/java中的equals与hashcode/" title="java中的equals与hashcode" itemprop="url">java中的equals与hashcode</a>
+      <a href="/2016/04/28/java中的equals与hashcode/" title="通过HashMap认识equals与hashcode" itemprop="url">通过HashMap认识equals与hashcode</a>
   </h1>
   <p class="article-author">By
     
@@ -73,7 +73,7 @@
     </p>
   <p class="article-time">
     <time datetime="2016-04-28T04:48:55.000Z" itemprop="datePublished">2016-04-28</time>
-    更新日期:<time datetime="2016-08-23T00:09:51.223Z" itemprop="dateModified">2016-08-23</time>
+    更新日期:<time datetime="2016-09-13T14:07:47.583Z" itemprop="dateModified">2016-09-13</time>
     
   </p>
 </header>
@@ -89,7 +89,7 @@
 <p>最近读了HashMap的源码，对HashCode与equals有了一定的了解，总结一下，顺便理一下HashMap中的核心算法。</p>
 </blockquote>
 <h2 id="什么是hashcode-hashcode的作用是什么"><a href="#什么是hashcode-hashcode的作用是什么" class="headerlink" title="什么是hashcode,hashcode的作用是什么"></a>什么是hashcode,hashcode的作用是什么</h2><p>hashcode并不是java中独有的。设想一下，如果让你设计一个算法，根据关键码去得到一个集合中的某个值或者这个关键码所在的位置。普通的做法就是挨个比较，高级一点的使用二分检索或者树形检索等算法。但是以上的检索算法都跟集合的长度N有关，当问题规模N很大时，这些检索的效率可能十分低下。</p>
-<p>理想的情况是，根据关键码，我们就可以定位记录所在的位置，而不用去挨个进行比较。也就是说，在关键码与记录存放的位置之间做一种映射。这个映射的方法就是hash(哈希)函数，或者叫散列函数，也就是java中的hashCode()方法，他所返回的值就是hashcode，也就是记录所在的位置。</p>
+<p>理想的情况是，根据关键码，我们就可以定位记录所在的位置，而不用去挨个进行比较。也就是说，在关键码与记录存放的位置之间做一种映射。这个映射的方法就是hash(哈希)函数，或者叫散列函数，也就是java中的hashCode()方法，他所返回的值就是hashcode，根据hashcode可以找到记录的位置。</p>
 <p>按照散列的存储方式构造的存储结构叫做散列表。散列表中的一个位置称之为一个槽。</p>
 <p>hashCode()方法存在于java.lang.Object类当中，任何类都可以继承修改这个方法。hashCode()方法返回调用它的实例的hashCode值，是个int值。</p>
 <p>注：以下代码均来自jdk1.7</p>
@@ -106,18 +106,25 @@
 <p>我们从 int hash = hash(key); 这一行看起，这行起才是put方法的核心。</p>
 <p>首先 int hash = hash(key); key就是我们之前提到的关键码，我们看看HashMap中的这个hash方法做了些什么：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">final</span> <span class="keyword">int</span> <span class="title">hash</span><span class="params">(Object k)</span> </span>&#123;</div><div class="line">        <span class="keyword">int</span> h = hashSeed;</div><div class="line">        <span class="keyword">if</span> (<span class="number">0</span> != h &amp;&amp; k <span class="keyword">instanceof</span> String) &#123;</div><div class="line">            <span class="keyword">return</span> sun.misc.Hashing.stringHash32((String) k);</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        h ^= k.hashCode();</div><div class="line"></div><div class="line">        <span class="comment">// This function ensures that hashCodes that differ only by</span></div><div class="line">        <span class="comment">// constant multiples at each bit position have a bounded</span></div><div class="line">        <span class="comment">// number of collisions (approximately 8 at default load factor).</span></div><div class="line">        h ^= (h &gt;&gt;&gt; <span class="number">20</span>) ^ (h &gt;&gt;&gt; <span class="number">12</span>);</div><div class="line">        <span class="keyword">return</span> h ^ (h &gt;&gt;&gt; <span class="number">7</span>) ^ (h &gt;&gt;&gt; <span class="number">4</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>可以看到，这个方法里调用了key本身的hashCode方法，得到了他的hashcode，然后对该hashcode进行了一些操作，最终返回操作后的int值。返回的这个值就是HashMap要用到的hashcode值，他指向了记录所在的位置。那么现在有一个问题：为什么要专门调用这个hash(Onject key)方法来对key的hashcode进行包装然后再使用呢？可以直接使用key的hashcode的呀，这样做看起来不是多此一举吗？其实这跟记录在散列表中的存放方式有关系(HashMap底层存储就是一个散列表数组),有兴趣可以看看<a href="https://www.zhihu.com/question/20733617" target="_blank" rel="external">这个</a></p>
-<p>接下来，int i = indexFor(hash, table.length);找到所谓的槽，也就是记录存在的位置。</p>
+<p>可以看到，这个方法里调用了key本身的hashCode方法，得到了key的hashcode，然后对该hashcode进行了一些移位操作，最终返回操作后的int值。返回的这个值就是HashMap要用到的hashcode值，通过他可以找到记录所在的位置。那么现在有一个问题：为什么要专门调用这个hash(Onject key)方法来对key的hashcode进行包装然后再使用呢？可以直接使用key的hashcode的呀，这样做看起来不是多此一举吗？</p>
+<p>其实这样做的目的是为下面的函数做准备的，我们看接下来要执行的代码：</p>
+<p><code>int i = indexFor(hash, table.length);</code>找到所谓的槽，也就是记录存在的位置。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">/**</div><div class="line">  * Returns index for hash code h.</div><div class="line">  */</div><div class="line">static int indexFor(int h, int length) &#123;</div><div class="line">     // assert Integer.bitCount(length) == 1 : &quot;length must be a non-zero power of 2&quot;;</div><div class="line">    return h &amp; (length-1);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>可以看到，indexFor(int h, int length)如何通过hashcode得到记录的位置。indexFor方法内部是一个取模运算，h是我们通过上面的hash方法得到的，length是散列表的长度。HashMap中的散列表是一个数组，通过取模运算能保证indexFor方法的返回值(记录的位置)一定在这个数组内，没有超过其长度。因为h往往是一个很大的数字(int可以表示40亿这么大的数字)，而散列表的初始长度是可以由我们指定的(默认是16),另一方面，就算给他这么大的数组，内存也是放不下的。所以取模运算是必须的。经过取模运算得到的才是真正的槽值。</p>
+<p>回到上一个问题，<strong>为什么要专门调用这个hash(Onject key)方法来对key的hashcode进行包装然后再使用呢？而不是直接使用key的hashcode的</strong>？</p>
+<p>想明白这个问题，参考<a href="https://www.zhihu.com/question/20733617" target="_blank" rel="external">JDK 源码中 HashMap 的 hash 方法原理是什么？</a>。我们上面也说了这样做的目的是为indexFor方法做准备的，总的来说就是为了让取模运算不会出现一种极端情况：<strong>大量的不同的h经过取模后返回同样的槽值</strong>。这样会带来严重的性能问题，也就是严重的冲突情况导致性能下降。关于冲突，看下文。</p>
 <p>要理解接下来的代码，我们就需要知道哈希算法的另一个概念：冲突。</p>
-<p>散列函数可能对于不相等的关键码计算出相同的hashcode，该现象称为冲突。怎么理解呢？比如我们有这样一个串abcd，我们给出这样一个散列函数：将每一个字符的ascii值加起来除以字符的个数，得到他们的平均值就是这个串的hashcode。那么，可以保证没有其他的串经过这样的算法得到相同的hashcode吗？反过来说，能否给出一个散列函数，其可以保证对于所有调用它的对象都可以返回一个唯一的hashcode？恐怕这是很难做到的吧。此时就会产生冲突。从另一个角度来讲，我们的散列表长度是有限的，有用这有限的空间存储更多的记录，势必会产生冲突。这也是我们理解hashcode的一个重要的点：<strong>不同的对象(equals返回false)可以有相同的hashcode</strong>。</p>
+<p>散列函数可能对于不相等的关键码计算出相同的hashcode，该现象称为冲突。怎么理解呢？</p>
+<p>比如我们有这样一个串abcd，我们给出这样一个散列函数：将每一个字符的ascii值加起来除以字符的个数，得到他们的平均值就是这个串的hashcode。那么，可以保证没有其他的串经过这样的算法得到相同的hashcode吗？也就是说，无限多的元素通过散列函数映射到有穷集合上，一定会产生冲突。这也是我们理解hashcode的一个重要的点：<strong>不同的对象(equals返回false)可以有相同的hashcode</strong>。</p>
 <p>那么，产生冲突怎么办呢？产生冲突之后，不同的对象在散列表中找到了相同的位置，为了解决这个问题，我们将这个槽中的内容设计成一个链表，当产生冲突的时候，就将新的元素放到链表中，他看起来是这样的：</p>
 <img src="/2016/04/28/java中的equals与hashcode/entry.png" alt="冲突" title="冲突">
 <p>其中：A，B，C分别为三条记录，他们就是产生冲突的三条记录。1,2,3….为散列表的索引位置。</p>
 <p>接下来的代码  <code>for (Entry&lt;K,V&gt; e = table[i]; e != null; e = e.next)</code>就容易理解了。找到记录所对应的槽之后，遍历这个链表直到找到与关键码相同的位置(可能之前已经有以这个关键码为key的value插入)。如果遍历完链表还没有找到这样的值，说明还不存在此关键码对应的记录，直接插入即可：<code>addEntry(hash, key, value, i);</code>.</p>
 <p>那么，怎么判断两个关键码在逻辑上是否相同呢？</p>
 <p><code>if (e.hash == hash &amp;&amp; ((k = e.key) == key || key.equals(k)))</code></p>
-<p>可以看到，首先判断关键码的hashcode与链表记录的关键码hashcode是否相同：e.hash == hash 。为什么要加这样的判断我们之前也提到了，那就是冲突造成同一个槽里有不同的对象存在，这些对象的hashcode可能相同，也可能不同(hashcode经过取模运算散列到同一个位置)。我们知道<strong>不同的对象(equals返回false)可以有相同的hashcode</strong>。相同的对象hashcode也必须相等吗？试想一下，如果两个对象相同，但是他们的hashcode不同，那么这两个对象很有可能被散列在不同的槽里，造成了同一个对象重复存储的问题。所以，我们又得出一个重要结论：<strong>相同的对象(equals返回true)hashcode一定相等</strong>。</p>
-<p><code>e.hash == hash &amp;&amp; ((k = e.key) == key</code>这段代码首先判断hashcode是否相等，然后判断关键码是否相等。注意，是判断<strong>关键码是否相等</strong>，直接比较内存地址，如果满足以上条件，那么可以断定两个关键码相同，是我们要找的记录。</p>
+<p>可以看到，首先判断关键码的hashcode与链表记录的关键码hashcode是否相同：·<code>e.hash == hash</code>。为什么要加这样的判断？回头看看indexFor方法，经过取模运算后，不同的hashcode可以被散列在同一个槽中。通过这句代码可以将那些因为取模运算散列到同一个槽里的不同对象排除。</p>
+<p>我们知道<strong>不同的对象(equals返回false)可以有相同的hashcode</strong>。相同的对象hashcode也必须相等吗？试想一下，如果两个对象相同，但是他们的hashcode不同，那么这两个对象很有可能被散列在不同的槽里，造成了同一个对象重复存储的问题。所以，我们又得出一个重要结论：<strong>相同的对象(equals返回true)hashcode一定相等</strong>。</p>
+<p><code>e.hash == hash &amp;&amp; ((k = e.key) == key</code>：这段代码首先判断hashcode是否相等，然后判断关键码是否相等。注意，是判断<strong>关键码是否相等</strong>，直接比较内存地址，如果满足以上条件，那么可以断定两个关键码相同，是我们要找的记录。</p>
 <p><code>key.equals(k)</code>：如果上述两个条件没有满足，并不能够断定这两个关键码相等，此刻要使用equals方法判断这两个关键码是否相同。如果相同，说明是我们要找的记录。</p>
 <p><code>if (e.hash == hash &amp;&amp; ((k = e.key) == key || key.equals(k)))</code>这句代码中其实包含了一种短路思想，|| 之前的判断如果生效，那么之后的key.equals(k)就不会再执行。很明显内存地址的比较要比equals方法高效的多。这也是Hashmap提高查找效率的一个重要手段。</p>
 <p>至此，我们应该对equals和hashcode有了一个相对清晰的认识：hashcode提高了查找指定对象的效率。euqals定义了两个对象之间是否在逻辑上相同。hashcode只在HashMap，HashSet等这样使用了散列思想的地方用到，而equals在判断两个对象之间是否相同时需要用到，比如排序等。</p>
@@ -148,7 +155,7 @@
 <div class="article-share" id="share">
 
 <!--
-  <div data-url="http://yukai.space/2016/04/28/java中的equals与hashcode/" data-title="java中的equals与hashcode | YuKai&#39;s blog" data-tsina="5381447277" class="share clearfix">
+  <div data-url="http://yukai.space/2016/04/28/java中的equals与hashcode/" data-title="通过HashMap认识equals与hashcode | YuKai&#39;s blog" data-tsina="5381447277" class="share clearfix">
   </div>
 -->
 
