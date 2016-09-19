@@ -92,6 +92,8 @@ while (syncTag.threadNO != scriptNO) {
 ```
 
 这个问题就解决了。
+
+所以，应该记住这样一个原则：**永远在循环（loop）里调用 wait 和 notify，不是在 If 语句**。
 	 
 ## **延伸**：
 假设这样一种情况：我们按照上面的方法把代码改了，但同时把下面的 notifyAll 改为 notify.问题又出现了：
