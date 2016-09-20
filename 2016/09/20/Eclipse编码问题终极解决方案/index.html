@@ -4,14 +4,14 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>Java集合框架学习总结 | YuKai&#39;s blog</title>
+    <title>Eclipse编码问题终极解决方案 | YuKai&#39;s blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
     
     <meta name="author" content="于凯">
     
-    <meta name="description" content="看Jdk的源码有大概一个月时间了，中间零零散散算是把Java的集合看了个大概。源码还有很多地方不甚明白，但对java集合框架总体上有了个认识。总结一下，以后有时间再把源码理一遍。下一步的Jdk源码阅读计划是：Java IO
-框架
-上图并没有把所有的接口和类都列出来，只是把我认为最常用和最核心的几个类">
+    <meta name="description" content="今天在Eclipse中导入一个新项目的时候，出现了乱码问题。研究一番…
+显示乱码的根本原因在于：文件本身的编码和编辑器打开和编辑文件使用的编码不一致。当编辑器以不同于文件的编码去解码该文件的时候，就会导致读出来乱码。大部分情况下英文显示正常是因为大部分编码都兼容ASCII，中文则会显示乱码。
+编辑器">
     
     
     
@@ -65,15 +65,15 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2016/08/16/Java集合框架学习总结/" title="Java集合框架学习总结" itemprop="url">Java集合框架学习总结</a>
+      <a href="/2016/09/20/Eclipse编码问题终极解决方案/" title="Eclipse编码问题终极解决方案" itemprop="url">Eclipse编码问题终极解决方案</a>
   </h1>
   <p class="article-author">By
     
       <a href="http://yukai.space" title="于凯">于凯</a>
     </p>
   <p class="article-time">
-    <time datetime="2016-08-16T14:50:16.000Z" itemprop="datePublished">2016-08-16</time>
-    更新日期:<time datetime="2016-08-22T12:57:58.716Z" itemprop="dateModified">2016-08-22</time>
+    <time datetime="2016-09-20T13:57:08.000Z" itemprop="datePublished">2016-09-20</time>
+    更新日期:<time datetime="2016-09-20T15:51:08.324Z" itemprop="dateModified">2016-09-20</time>
     
   </p>
 </header>
@@ -82,33 +82,59 @@
 		
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
-		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#框架"><span class="toc-number">1.</span> <span class="toc-text">框架</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#List"><span class="toc-number">2.</span> <span class="toc-text">List</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Iterator"><span class="toc-number">2.1.</span> <span class="toc-text">Iterator</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Collection"><span class="toc-number">2.2.</span> <span class="toc-text">Collection</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#List-1"><span class="toc-number">2.3.</span> <span class="toc-text">List</span></a></li></ol></li></ol>
+		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#编辑器显示乱码问题"><span class="toc-number">1.</span> <span class="toc-text">编辑器显示乱码问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Console显示乱码问题"><span class="toc-number">2.</span> <span class="toc-text">Console显示乱码问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">3.</span> <span class="toc-text">总结</span></a></li></ol>
 		</div>
 		
-		<p>看Jdk的源码有大概一个月时间了，中间零零散散算是把<a href="https://docs.oracle.com/javase/7/docs/technotes/guides/collections/index.html" target="_blank" rel="external">Java的集合</a>看了个大概。源码还有很多地方不甚明白，但对java集合框架总体上有了个认识。总结一下，以后有时间再把源码理一遍。下一步的Jdk源码阅读计划是：<a href="https://docs.oracle.com/javase/7/docs/api/java/io/package-summary.html#package_description" target="_blank" rel="external">Java IO</a></p>
-<h2 id="框架"><a href="#框架" class="headerlink" title="框架"></a>框架</h2><img src="/2016/08/16/Java集合框架学习总结/collection.png" alt="集合框架" title="集合框架">
-<p>上图并没有把所有的接口和类都列出来，只是把我认为最常用和最核心的几个类和接口的继承关系表示出来。</p>
-<p>通过上图可以看出，java集合框架主要分为两棵树，一棵继承自Collection，一棵继承自Map。接下来分四个部分总结一下。</p>
-<h2 id="List"><a href="#List" class="headerlink" title="List"></a>List</h2><h3 id="Iterator"><a href="#Iterator" class="headerlink" title="Iterator"></a>Iterator</h3><p>在总结List之前，先看一下Iterable这个接口,它只包含一个方法:</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="function">Iterator&lt;T&gt; <span class="title">iterator</span><span class="params">()</span></span>;</div></pre></td></tr></table></figure>
-<p>这个方法返回一个<a href="https://docs.oracle.com/javase/8/docs/api/java/util/Iterator.html" target="_blank" rel="external">Iterator</a>，也就是一个迭代器，通过这个迭代器，我们可以在不了解集合内部实现的情况下遍历他,这也是设计模式中很重要的一个模式：迭代器模式(关于设计模式，待学习透彻后，会再写一篇博客总结).关于迭代器模式的好处就不再多说，顺便提一下，我们经常用到的foreach循环，内部也是通过迭代器实现的。</p>
-<h3 id="Collection"><a href="#Collection" class="headerlink" title="Collection"></a><a href="https://docs.oracle.com/javase/8/docs/api/java/util/Collection.html" target="_blank" rel="external">Collection</a></h3><p>Collection 提供了集合的一些基本操作,Collection 接口提供的主要方法：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">boolean add(Object o) 添加对象到集合；</div><div class="line">boolean remove(Object o) 删除指定的对象；</div><div class="line">int size() 返回当前集合中元素的数量；</div><div class="line">boolean contains(Object o) 查找集合中是否有指定的对象；</div><div class="line">boolean isEmpty() 判断集合是否为空；</div><div class="line">Iterator iterator() 返回一个迭代器；</div><div class="line">boolean containsAll(Collection c) 查找集合中是否有集合 C 中的元素；</div><div class="line">boolean addAll(Collection c) 将集合 C 中所有的元素添加给该集合；</div><div class="line">void clear() 删除集合中所有元素；</div><div class="line">void removeAll(Collection c) 从集合中删除 C 集合中也有的元素；</div><div class="line">void retainAll(Collection c) 从集合中删除集合 C 中不包含的元素。</div></pre></td></tr></table></figure>
-<p>没发现有什么好说的。</p>
-<h3 id="List-1"><a href="#List-1" class="headerlink" title="List"></a><a href="https://docs.oracle.com/javase/8/docs/api/java/util/List.html" target="_blank" rel="external">List</a></h3><p>List</p>
+		<p>今天在Eclipse中导入一个新项目的时候，出现了乱码问题。研究一番…</p>
+<p>显示乱码的根本原因在于：<strong>文件本身的编码和编辑器打开和编辑文件使用的编码不一致</strong>。当编辑器以不同于文件的编码去解码该文件的时候，就会导致读出来乱码。大部分情况下英文显示正常是因为大部分编码都兼容ASCII，中文则会显示乱码。</p>
+<h2 id="编辑器显示乱码问题"><a href="#编辑器显示乱码问题" class="headerlink" title="编辑器显示乱码问题"></a>编辑器显示乱码问题</h2><p>在Eclipse中，设置编辑器显示和编辑文件所采用编码的方法有四种：</p>
+<p>1.Windows-&gt;Preference-&gt;General-&gt;Workspace ：修改整个工作空间</p>
+<img src="/2016/09/20/Eclipse编码问题终极解决方案/1.png" alt="全局修改" title="全局修改">
+<p>2.右键Project-&gt;Properties-&gt;Resource ：修改某个工程</p>
+<img src="/2016/09/20/Eclipse编码问题终极解决方案/2.png" alt="工程修改" title="工程修改">
+<p>3.右键文件-&gt;Properties ：修改某个文件</p>
+<img src="/2016/09/20/Eclipse编码问题终极解决方案/3.png" alt="文件修改" title="文件修改">
+<p>4.Windows-&gt;Preference-&gt;General-&gt;Content types-&gt;Default encoding :全局修改某种类型的文件</p>
+<img src="/2016/09/20/Eclipse编码问题终极解决方案/4.png" alt="全局文件修改" title="全局文件修改">
+<p>其中，3的优先级最高。也就是说某个文件被编辑器以哪种编码读取最终是由3中的Text file encoding决定的。一般情况下，如果我们不在3中显示指定编码(选择Other那一项)，Eclipse都会默认使用Default那一项的编码。那么，这个Default的编码又是如何决定的呢？</p>
+<img src="/2016/09/20/Eclipse编码问题终极解决方案/5.png" alt="文件修改" title="文件修改">
+<p>注意上图中圈起来的部分：这部分表示了Default采用哪种编码是如何决定的。</p>
+<p>可能会出现三种情况：</p>
+<p>1.determined from content: xxx </p>
+<ol>
+<li>determined from content type: xxx</li>
+</ol>
+<p>3.inherit from container </p>
+<p>其中：</p>
+<p>1表示文件内容本身指定了编码，比如下图。</p>
+<img src="/2016/09/20/Eclipse编码问题终极解决方案/6.png" alt="文件修改" title="文件修改">
+<p>Encoding Bit Order Mark，简写为BOM，表明文件本身指定了采用哪种编码方式。编辑器会优先采用这种编码。</p>
+<p>2表示采用了针对该文件类型的全局修改，也就是上面提到的第4种设置方式。</p>
+<p>3表示继承了上一级指定的编码，这个继承关系就是我们在上面提到的：修改某个文件-&gt;修改文件所属的工程-&gt;修改整个工作空间。-&gt;表示继承于。</p>
+<p>上面这3种情况的优先级：1&gt;2&gt;3 。也就是说如果文件本身表明了编码方式，Eclipse优先采用这种编码解码文件。若没有指定，Eclipse会查看该文件类型是否在上面的第4种方式设置中指定了编码，如有则采用该编码。如没有指定，则从下往上搜索继承关系链中指定的编码。（继承关系链：文件-&gt;工程-&gt;工作空间）</p>
+<p>通过上面的分析明白了Eclipse 编辑器选择显示文件所采用编码的原理，相信再次遇到编辑器中的乱码问题都可以找到合适的解决方案。上面的分析不仅仅适用于java文件，同样适用于xml等其他类型文件的乱码问题。</p>
+<p>另外一定要注意：<strong>如果通过上面4中方式的某一种修改影响了某个文件的编码，则当你再次编辑完保存该文件时，则采用此时该文件在Eclipse中指定的编码方式保存到本地。</strong></p>
+<p>以上的对乱码问题的分析都是基于通过修改Eclipse编辑器显示文件内容采用的编码，使其与文件本身的编码一致的方式来解决的。还有另一种思路是反过来，修改文件编码与Eclipse显示文件内容所采用的编码一致来解决乱码问题。可以使用文件编码批量转换工具进行批量转换，比如UltraCodingSwitch等。</p>
+<h2 id="Console显示乱码问题"><a href="#Console显示乱码问题" class="headerlink" title="Console显示乱码问题"></a>Console显示乱码问题</h2><p>右键要运行的类-&gt;Run As-&gt;Run Configuratios</p>
+<img src="/2016/09/20/Eclipse编码问题终极解决方案/6.png" alt="Console编码" title="Console编码">
+<p>可修改上图中Other中的编码来指定显示打印内容的编码。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>通过以上分析知道了如何在Eclipse中解决乱码的问题。其实文章一开始就说了，显示乱码的根本原因在于：<strong>文件本身的编码和编辑器打开文件使用的编码不一致</strong>。明白了这一点，就算在其他编辑器或编译器中或者任何能够显示文本内容的遇到乱码的情况都能够找到问题的根源，从而解决乱码问题。</p>
+<p>至于文件本身的编码，可以通过一定的手段去改变。如通过记事本等工具修改编码后另存为等方式。</p>
+<p>Java中输出一段内容到文件可以通过指定流的编码来指定输出字符的编码。</p>
+<p>以上</p>
   
 	</div>
 		<footer class="article-footer clearfix">
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/java/">java</a><a href="/tags/源码/">源码</a>
+  <span></span> <a href="/tags/Eclipse/">Eclipse</a>
   </div>
 
 
 <div class="article-categories">
   <span></span>
-  <a class="article-category-link" href="/categories/编程/">编程</a>
+  <a class="article-category-link" href="/categories/工具/">工具</a>
 </div>
 
 
@@ -116,7 +142,7 @@
 <div class="article-share" id="share">
 
 <!--
-  <div data-url="http://yukai.space/2016/08/16/Java集合框架学习总结/" data-title="Java集合框架学习总结 | YuKai&#39;s blog" data-tsina="5381447277" class="share clearfix">
+  <div data-url="http://yukai.space/2016/09/20/Eclipse编码问题终极解决方案/" data-title="Eclipse编码问题终极解决方案 | YuKai&#39;s blog" data-tsina="5381447277" class="share clearfix">
   </div>
 -->
 
@@ -126,19 +152,11 @@
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2016/08/22/关于加密的一点总结/" title="关于加密的一点总结">
-  <strong>PREVIOUS:</strong><br/>
-  <span>
-  关于加密的一点总结</span>
-</a>
-</div>
-
 
 <div class="next">
-<a href="/2016/08/16/synchronized的一些用法/"  title="synchronized的用法">
+<a href="/2016/09/19/Spring项目打包为jar/"  title="记一次苦逼经历--关于spring项目打包为jar运行">
  <strong>NEXT:</strong><br/> 
- <span>synchronized的用法
+ <span>记一次苦逼经历--关于spring项目打包为jar运行
 </span>
 </a>
 </div>
@@ -155,7 +173,7 @@
 
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
-  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#框架"><span class="toc-number">1.</span> <span class="toc-text">框架</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#List"><span class="toc-number">2.</span> <span class="toc-text">List</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Iterator"><span class="toc-number">2.1.</span> <span class="toc-text">Iterator</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Collection"><span class="toc-number">2.2.</span> <span class="toc-text">Collection</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#List-1"><span class="toc-number">2.3.</span> <span class="toc-text">List</span></a></li></ol></li></ol>
+  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#编辑器显示乱码问题"><span class="toc-number">1.</span> <span class="toc-text">编辑器显示乱码问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Console显示乱码问题"><span class="toc-number">2.</span> <span class="toc-text">Console显示乱码问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">3.</span> <span class="toc-text">总结</span></a></li></ol>
   </div>
 
 <div id="asidepart">
