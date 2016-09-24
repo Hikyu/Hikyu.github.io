@@ -72,7 +72,7 @@
     </p>
   <p class="article-time">
     <time datetime="2016-09-24T08:30:44.000Z" itemprop="datePublished">2016-09-24</time>
-    更新日期:<time datetime="2016-09-24T09:40:29.879Z" itemprop="dateModified">2016-09-24</time>
+    更新日期:<time datetime="2016-09-24T09:45:37.519Z" itemprop="dateModified">2016-09-24</time>
     
   </p>
 </header>
@@ -81,27 +81,29 @@
 		
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
-		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-Spring项目通过export方法打包为jar的问题"><span class="toc-number">1.</span> <span class="toc-text">1.Spring项目通过export方法打包为jar的问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-使用-PathVariable注解时抛出java-lang-IllegalArgumentException异常"><span class="toc-number">2.</span> <span class="toc-text">2.使用@PathVariable注解时抛出java.lang.IllegalArgumentException异常</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-在-PathVariable注解后面加上参数名，比如：-PathVariable-“groupName”"><span class="toc-number">2.1.</span> <span class="toc-text">1.在@PathVariable注解后面加上参数名，比如：@PathVariable(“groupName”)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-编译时将debug信息勾选进去："><span class="toc-number">2.2.</span> <span class="toc-text">2.编译时将debug信息勾选进去：</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-Windows环境下使用Curl，要使用双引号包裹内容"><span class="toc-number">3.</span> <span class="toc-text">3. Windows环境下使用Curl，要使用双引号包裹内容</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#持续更新中…"><span class="toc-number">4.</span> <span class="toc-text">持续更新中….</span></a></li></ol>
+		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Spring项目通过export方法打包为jar的问题"><span class="toc-number">1.</span> <span class="toc-text">Spring项目通过export方法打包为jar的问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用-PathVariable注解时抛出java-lang-IllegalArgumentException异常"><span class="toc-number">2.</span> <span class="toc-text">使用@PathVariable注解时抛出java.lang.IllegalArgumentException异常</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Windows环境下使用Curl，要使用双引号包裹内容"><span class="toc-number">3.</span> <span class="toc-text">Windows环境下使用Curl，要使用双引号包裹内容</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#持续更新中…"><span class="toc-number">4.</span> <span class="toc-text">持续更新中….</span></a></li></ol>
 		</div>
 		
 		<p>昨天晚上12.30才进的家门，回来之后还远程合了个代码打了个包，发布restAPI新版本之用。这一周的主要工作就是在做一个web服务器，是一个集群的中间件。因为着急发布新版本，所以昨晚加班到12点多…</p>
 <p>主要实现了几个接口，实现了ssl双向验证功能。其实ssl双向验证的功能主要是了解ssl原理之后如何配置的问题。期间还学习了session和cookie的原理。ssl与cookie、session单开一篇进行总结。这篇日志记录一下这周工作中遇到的一些坑，不一定是技术上的，但是遇到这些小问题还是耽误了一些时间。这篇日志也会持续更新，把以后遇到的坑都总结到这里来。</p>
 <p>希望以后遇到类似的情况能够迅速找到原因将其解决，同时也希望能帮助到可能会看到这篇文章的人。</p>
-<h2 id="1-Spring项目通过export方法打包为jar的问题"><a href="#1-Spring项目通过export方法打包为jar的问题" class="headerlink" title="1.Spring项目通过export方法打包为jar的问题"></a>1.Spring项目通过export方法打包为jar的问题</h2><p>在前面的日志中已经有<a href="http://yukai.space/2016/09/19/Spring%E9%A1%B9%E7%9B%AE%E6%89%93%E5%8C%85%E4%B8%BAjar/">专门的一篇</a>来总结这个问题:<strong>当通过export方式打包Spring项目时，一定要记得勾选Add Directory Entries这个选项，否则spring无法正确扫描到controller，发生404</strong></p>
-<h2 id="2-使用-PathVariable注解时抛出java-lang-IllegalArgumentException异常"><a href="#2-使用-PathVariable注解时抛出java-lang-IllegalArgumentException异常" class="headerlink" title="2.使用@PathVariable注解时抛出java.lang.IllegalArgumentException异常"></a>2.使用@PathVariable注解时抛出java.lang.IllegalArgumentException异常</h2><p>假如你的项目中有一个类似下面的controller来接收一个请求：</p>
+<h2 id="Spring项目通过export方法打包为jar的问题"><a href="#Spring项目通过export方法打包为jar的问题" class="headerlink" title="Spring项目通过export方法打包为jar的问题"></a>Spring项目通过export方法打包为jar的问题</h2><p>在前面的日志中已经有<a href="http://yukai.space/2016/09/19/Spring%E9%A1%B9%E7%9B%AE%E6%89%93%E5%8C%85%E4%B8%BAjar/">专门的一篇</a>来总结这个问题:<strong>当通过export方式打包Spring项目时，一定要记得勾选Add Directory Entries这个选项，否则spring无法正确扫描到controller，发生404</strong></p>
+<h2 id="使用-PathVariable注解时抛出java-lang-IllegalArgumentException异常"><a href="#使用-PathVariable注解时抛出java-lang-IllegalArgumentException异常" class="headerlink" title="使用@PathVariable注解时抛出java.lang.IllegalArgumentException异常"></a>使用@PathVariable注解时抛出java.lang.IllegalArgumentException异常</h2><p>假如你的项目中有一个类似下面的controller来接收一个请求：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@GET</span></div><div class="line"><span class="meta">@RequestMapping</span>(<span class="string">"web/&#123;groupName&#125;"</span>)</div><div class="line"><span class="meta">@Consumes</span>(MediaType.APPLICATION_JSON)</div><div class="line"><span class="meta">@Produces</span>(MediaType.APPLICATION_JSON)</div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">getWorkerAddress</span><span class="params">(HttpServletRequest request, HttpServletResponse response,</span></span></div><div class="line">		@PathVariable String groupName) &#123;</div><div class="line">		doSomething...</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>当你的项目运行时你发起一个<a href="http://ip:port/web/groupName1这样的请求，那么很有可能服务器会报这样一个异常：**java.lang.IllegalArgumentException" target="_blank" rel="external">http://ip:port/web/groupName1这样的请求，那么很有可能服务器会报这样一个异常：**java.lang.IllegalArgumentException</a>: Name for argument type [java.lang.String] not available, and parameter name information not found in class file either.**</p>
 <p>大概的意思就是参数名称信息没有在类文件中找到。若是浏览器为客户端，浏览器的页面是这样的：</p>
 <img src="/2016/09/24/记录这周工作遇到的坑/error.png" alt="error" title="error">
 <p>解决这个异常的方法有两种：</p>
-<h3 id="1-在-PathVariable注解后面加上参数名，比如：-PathVariable-“groupName”"><a href="#1-在-PathVariable注解后面加上参数名，比如：-PathVariable-“groupName”" class="headerlink" title="1.在@PathVariable注解后面加上参数名，比如：@PathVariable(“groupName”)"></a>1.在@PathVariable注解后面加上参数名，比如：@PathVariable(“groupName”)</h3><h3 id="2-编译时将debug信息勾选进去："><a href="#2-编译时将debug信息勾选进去：" class="headerlink" title="2.编译时将debug信息勾选进去："></a>2.编译时将debug信息勾选进去：</h3><img src="/2016/09/24/记录这周工作遇到的坑/compiler.png" alt="compiler" title="compiler">
+<p><strong>1.在@PathVariable注解后面加上参数名，比如：@PathVariable(“groupName”)</strong></p>
+<p><strong>2.编译时将debug信息勾选进去：</strong></p>
+<img src="/2016/09/24/记录这周工作遇到的坑/compiler.png" alt="compiler" title="compiler">
 <p>编译时把上图绿色框中的单选框勾选，就不会报异常。原因在于Local variable属性建立了方法的栈帧中局部变量部分内容与源代码中局部变量名称和描述符之间的映射关系。</p>
 <p>顺便了解一下上面四个选项的作用：</p>
 
 <p>图片截取自：<a href="http://help.eclipse.org/neon/index.jsp?topic=%2Forg.eclipse.jdt.doc.user%2Freference%2Fpreferences%2Fjava%2Fref-preferences-compiler.htm" target="_blank" rel="external">Eclipse用户手册</a></p>
 <p>其实就是java工程编译时的一些选项。当我们在debug时遇到问题，比如断点打不上，source not found等等或许修改这些选项可以得到解决。</p>
 <p>参考一篇文章：<a href="http://daimojingdeyu.iteye.com/blog/679030" target="_blank" rel="external">java编译时生成调试信息选项详解（javac -g）</a></p>
-<h2 id="3-Windows环境下使用Curl，要使用双引号包裹内容"><a href="#3-Windows环境下使用Curl，要使用双引号包裹内容" class="headerlink" title="3. Windows环境下使用Curl，要使用双引号包裹内容"></a>3. Windows环境下使用Curl，要使用双引号包裹内容</h2><p>web服务器是通过curl来测试的。之前自己也没用过这个所谓的命令行浏览器工具。在机器上装好curl之后，把测试那边提供的脚本拿过来，由于脚本是linux环境下的，做了一点修改之后(其实就是直接换成.bat啦)就直接跑了。脚本内容类似这样：</p>
+<h2 id="Windows环境下使用Curl，要使用双引号包裹内容"><a href="#Windows环境下使用Curl，要使用双引号包裹内容" class="headerlink" title="Windows环境下使用Curl，要使用双引号包裹内容"></a>Windows环境下使用Curl，要使用双引号包裹内容</h2><p>web服务器是通过curl来测试的。之前自己也没用过这个所谓的命令行浏览器工具。在机器上装好curl之后，把测试那边提供的脚本拿过来，由于脚本是linux环境下的，做了一点修改之后(其实就是直接换成.bat啦)就直接跑了。脚本内容类似这样：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">curl -X POST -H &apos;content-type: application/json&apos; -d @del.txt https://localhost:8899/web/rest/data/load/topictarget  -k -b cookie.txt&gt;delresult.txt</div></pre></td></tr></table></figure>
 <p>但是实际测试的过程中，发现收到的post的数据为null，确定了不是服务器的问题之后，感觉应该是curl使用的问题。查了一些资料，是说post的数据要使用双引号包裹，而不是单引号。由于是从del.txt中提取post的数据，所以不存在这个问题。后来将content-type: application/json 的单引号换成双引号之后，问题解决。</p>
 <p><strong>所以：Windows环境下使用Curl，要使用双引号包裹需要加引号的内容，而不是单引号</strong></p>
@@ -156,7 +158,7 @@
 
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
-  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-Spring项目通过export方法打包为jar的问题"><span class="toc-number">1.</span> <span class="toc-text">1.Spring项目通过export方法打包为jar的问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-使用-PathVariable注解时抛出java-lang-IllegalArgumentException异常"><span class="toc-number">2.</span> <span class="toc-text">2.使用@PathVariable注解时抛出java.lang.IllegalArgumentException异常</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-在-PathVariable注解后面加上参数名，比如：-PathVariable-“groupName”"><span class="toc-number">2.1.</span> <span class="toc-text">1.在@PathVariable注解后面加上参数名，比如：@PathVariable(“groupName”)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-编译时将debug信息勾选进去："><span class="toc-number">2.2.</span> <span class="toc-text">2.编译时将debug信息勾选进去：</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-Windows环境下使用Curl，要使用双引号包裹内容"><span class="toc-number">3.</span> <span class="toc-text">3. Windows环境下使用Curl，要使用双引号包裹内容</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#持续更新中…"><span class="toc-number">4.</span> <span class="toc-text">持续更新中….</span></a></li></ol>
+  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Spring项目通过export方法打包为jar的问题"><span class="toc-number">1.</span> <span class="toc-text">Spring项目通过export方法打包为jar的问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用-PathVariable注解时抛出java-lang-IllegalArgumentException异常"><span class="toc-number">2.</span> <span class="toc-text">使用@PathVariable注解时抛出java.lang.IllegalArgumentException异常</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Windows环境下使用Curl，要使用双引号包裹内容"><span class="toc-number">3.</span> <span class="toc-text">Windows环境下使用Curl，要使用双引号包裹内容</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#持续更新中…"><span class="toc-number">4.</span> <span class="toc-text">持续更新中….</span></a></li></ol>
   </div>
 
 <div id="asidepart">
