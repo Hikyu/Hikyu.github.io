@@ -72,7 +72,7 @@
     </p>
   <p class="article-time">
     <time datetime="2016-09-24T08:30:44.000Z" itemprop="datePublished">2016-09-24</time>
-    更新日期:<time datetime="2016-09-24T09:45:37.519Z" itemprop="dateModified">2016-09-24</time>
+    更新日期:<time datetime="2016-09-25T01:37:35.296Z" itemprop="dateModified">2016-09-25</time>
     
   </p>
 </header>
@@ -90,7 +90,7 @@
 <h2 id="Spring项目通过export方法打包为jar的问题"><a href="#Spring项目通过export方法打包为jar的问题" class="headerlink" title="Spring项目通过export方法打包为jar的问题"></a>Spring项目通过export方法打包为jar的问题</h2><p>在前面的日志中已经有<a href="http://yukai.space/2016/09/19/Spring%E9%A1%B9%E7%9B%AE%E6%89%93%E5%8C%85%E4%B8%BAjar/">专门的一篇</a>来总结这个问题:<strong>当通过export方式打包Spring项目时，一定要记得勾选Add Directory Entries这个选项，否则spring无法正确扫描到controller，发生404</strong></p>
 <h2 id="使用-PathVariable注解时抛出java-lang-IllegalArgumentException异常"><a href="#使用-PathVariable注解时抛出java-lang-IllegalArgumentException异常" class="headerlink" title="使用@PathVariable注解时抛出java.lang.IllegalArgumentException异常"></a>使用@PathVariable注解时抛出java.lang.IllegalArgumentException异常</h2><p>假如你的项目中有一个类似下面的controller来接收一个请求：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@GET</span></div><div class="line"><span class="meta">@RequestMapping</span>(<span class="string">"web/&#123;groupName&#125;"</span>)</div><div class="line"><span class="meta">@Consumes</span>(MediaType.APPLICATION_JSON)</div><div class="line"><span class="meta">@Produces</span>(MediaType.APPLICATION_JSON)</div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">getWorkerAddress</span><span class="params">(HttpServletRequest request, HttpServletResponse response,</span></span></div><div class="line">		@PathVariable String groupName) &#123;</div><div class="line">		doSomething...</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>当你的项目运行时你发起一个<a href="http://ip:port/web/groupName1这样的请求，那么很有可能服务器会报这样一个异常：**java.lang.IllegalArgumentException" target="_blank" rel="external">http://ip:port/web/groupName1这样的请求，那么很有可能服务器会报这样一个异常：**java.lang.IllegalArgumentException</a>: Name for argument type [java.lang.String] not available, and parameter name information not found in class file either.**</p>
+<p>当你的项目运行时你发起一个<code>http://ip:port/web/groupName1</code>这样的请求，那么很有可能服务器会报这样一个异常：<strong>java.lang.IllegalArgumentException: Name for argument type [java.lang.String] not available, and parameter name information not found in class file either.</strong></p>
 <p>大概的意思就是参数名称信息没有在类文件中找到。若是浏览器为客户端，浏览器的页面是这样的：</p>
 <img src="/2016/09/24/记录这周工作遇到的坑/error.png" alt="error" title="error">
 <p>解决这个异常的方法有两种：</p>
