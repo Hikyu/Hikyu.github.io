@@ -1,0 +1,474 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>ssl使用总结 | YuKai&#39;s blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
+    <meta name="author" content="于凯">
+    
+    <meta name="description" content="这次维护的web服务器要求使用Https双向认证，了解了一下如何在客户端和服务器之间进行ssl的配置，在此记录。另外，这篇日志主要记录如何使用，并不深入底层原理。
+
+简单认识ssl和证书在理解这部分内容之前，建议先看看前面对的一篇总结：关于加密的一点总结
+SSL(Secure Sockets Lay">
+    
+    
+    
+    
+    
+    <link rel="icon" href="/img/xiaoxin.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/xiaoxin.png">
+    <link rel="apple-touch-icon-precomposed" href="/img/xiaoxin.png">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="YuKai&#39;s blog">YuKai&#39;s blog</a></h1>
+				<h2 class="blog-motto">平凡之中也有感动</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					
+						<li><a href="/">首页</a></li>
+					
+						<li><a href="/archives">归档</a></li>
+					
+						<li><a href="/page">关于</a></li>
+					
+					<li>
+					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:yukai.space">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2016/09/25/ssl总结/" title="ssl使用总结" itemprop="url">ssl使用总结</a>
+  </h1>
+  <p class="article-author">By
+    
+      <a href="http://yukai.space" title="于凯">于凯</a>
+    </p>
+  <p class="article-time">
+    <time datetime="2016-09-25T02:09:10.000Z" itemprop="datePublished">2016-09-25</time>
+    更新日期:<time datetime="2016-09-27T14:41:05.959Z" itemprop="dateModified">2016-09-27</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#简单认识ssl和证书"><span class="toc-number">1.</span> <span class="toc-text">简单认识ssl和证书</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Https-单向认证"><span class="toc-number">2.</span> <span class="toc-text">Https 单向认证</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Https双向认证"><span class="toc-number">3.</span> <span class="toc-text">Https双向认证</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#关于证书的一些格式"><span class="toc-number">4.</span> <span class="toc-text">关于证书的一些格式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">5.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">6.</span> <span class="toc-text">参考</span></a></li></ol>
+		</div>
+		
+		<blockquote>
+<p>这次维护的web服务器要求使用Https双向认证，了解了一下如何在客户端和服务器之间进行ssl的配置，在此记录。另外，这篇日志主要记录如何使用，并不深入底层原理。</p>
+</blockquote>
+<h2 id="简单认识ssl和证书"><a href="#简单认识ssl和证书" class="headerlink" title="简单认识ssl和证书"></a>简单认识ssl和证书</h2><p>在理解这部分内容之前，建议先看看前面对的一篇总结：<a href="http://yukai.space/2016/08/22/%E5%85%B3%E4%BA%8E%E5%8A%A0%E5%AF%86%E7%9A%84%E4%B8%80%E7%82%B9%E6%80%BB%E7%BB%93/">关于加密的一点总结</a></p>
+<p>SSL(Secure Sockets Layer 安全套接层),及其继任者传输层安全（Transport Layer Security，TLS）是为网络通信提供安全及数据完整性的一种安全协议。TLS与SSL在传输层对网络连接进行加密。</p>
+<p>SSL协议提供的服务主要有：</p>
+<p>1、认证用户和服务器，确保数据发送到正确的客户机和服务器；</p>
+<p>2、加密数据以防止数据中途被窃取；</p>
+<p>3、维护数据的完整性，确保数据在传输过程中不被改变。</p>
+<p>其实，ssl就是一种协议。我们知道Http协议是明文传输的，安全性不高。Https就是在Http基础之上加一层ssl协议，来达到加密通信的目的。具体的ssl握手过程，可以参考<a href="http://baike.baidu.com/view/14121.htm#6" target="_blank" rel="external">百度百科</a></p>
+<p>附上一张图方便理解：</p>
+<img src="/2016/09/25/ssl总结/sslprocess.jpg" alt="sslprocess" title="sslprocess">
+<p>图片来自网络</p>
+<p>可以看到ssl握手过程中服务器向客户端发送了自己的证书。这个证书是加密过程的重要内容。在前面的<a href="http://yukai.space/2016/08/22/%E5%85%B3%E4%BA%8E%E5%8A%A0%E5%AF%86%E7%9A%84%E4%B8%80%E7%82%B9%E6%80%BB%E7%BB%93/">关于加密的一点总结</a>这篇博客中，在关于数字证书的一节，我们知道了数字证书可以证明服务器的身份，服务器证书中包含了服务器的公钥，用于之后的通信。</p>
+<p>那么，简单了解下证书的工作原理。</p>
+<p>首先看一下证书中有哪些内容：</p>
+<img src="/2016/09/25/ssl总结/zhifubao.png" alt="支付宝证书" title="支付宝证书">
+<img src="/2016/09/25/ssl总结/zhufubao1.png" alt="支付宝证书" title="支付宝证书">
+<img src="/2016/09/25/ssl总结/zhufubao2.png" alt="支付宝证书" title="支付宝证书">
+<p>上面是我从谷chorme浏览器中截取的支付宝所使用证书的信息截图。</p>
+<p>可以看到，里面有颁发者和使用者。颁发者就是颁发此证书的CA(证书颁发机构),使用者就是与我们通信的服务器，也就是该证书的持有者。证书中还包含了我们上面提到的公钥。</p>
+<p>我们知道，证书能够证明服务器的身份，那么他是如何证明的呢？我们以浏览器为例：</p>
+<p>首先，浏览器(客户端)接收到服务器发来的证书A之后，会去验证这个证书A是否被篡改或者是伪造的。浏览器首先会去操作系统中内置根证书库中搜索A的颁发者的证书。关于这一点要解释一下，数字证书的颁发机构也有自己的证书，这个证书就是根证书，这个根证书在我的系统刚安装好时，就被微软等公司默认安装在操作系统当中了。</p>
+<p>如果在操作系统中找到了服务器证书中的颁发者的证书Root，那么继续下一步，否则，就知道这个服务器证书的颁发者是个不受信任的CA发布的，此时，浏览器会给出警告。若我们选择相信这个CA并继续，则继续下一步。</p>
+<p>接下来，浏览器从Root中得到Root的公钥，然后用该公钥对A中的指纹算法和指纹进行解密。注意，为了保证安全，在证书的发布机构发布证书时，证书的指纹和指纹算法，都会加密后再和证书放到一起发布，以防有人修改指纹后伪造相应的数字证书。</p>
+<p>那么什么是指纹算法和指纹呢？这个是用来保证证书的完整性的，也就是说确保证书没有被修改过。 其原理就是在发布证书时，发布者根据指纹算法(一个hash算法)计算整个证书的hash值(指纹)并和证书放在一起，使用者在打开证书时，自己也根据指纹算法计算一下证书的hash值(指纹)，如果和刚开始的值对得上，就说明证书没有被修改过，因为证书的内容被修改后，根据证书的内容计算的出的hash值(指纹)是会变化的。</p>
+<p>此时就可以判断该证书是否是仿冒或者经过伪造篡改的。如没有，则证明这个服务器是可信任的。接下来就可以使用该服务器提供的公钥来进行通信了。</p>
+<p>通过上面的分析我们知道了，ssl协议中，首先通过证书来证明服务器的身份，然后取出证书中的公钥，接下来就可以按照<a href="http://yukai.space/2016/08/22/%E5%85%B3%E4%BA%8E%E5%8A%A0%E5%AF%86%E7%9A%84%E4%B8%80%E7%82%B9%E6%80%BB%E7%BB%93/">关于加密的一点总结</a>这篇博客中说到的通信方式通信了。这大概上就是ssl的原理，当然实际中ssl的细节还是要复杂很多。</p>
+<p>了解了ssl的基本原理，对我们实现服务器的https通信有很大的帮助。</p>
+<h2 id="Https-单向认证"><a href="#Https-单向认证" class="headerlink" title="Https 单向认证"></a>Https 单向认证</h2><p>单向认证就是服务器必须向客户端发送自己的证书来证明自己的身份，然后进行加密通信。现在服务器的基础框架是springboot，演示如何配置服务器和客户端：</p>
+<p>服务器：</p>
+<p>打开springboot的配置文件application.properties:</p>
+<p>server.ssl.key-store=server.keystore</p>
+<p>server.ssl.key-store-password=123456</p>
+<p>server.ssl.keyStoreType=JKS</p>
+<p>server.ssl.keyAlias:server</p>
+<p>先解释一下上面几个配置：</p>
+<p>.keystore: keystore文件中存储了密钥和证书。密钥包括私钥和公钥，而证书中只包含公钥。这个证书就是我们上面所说的证书。注意：密钥和证书是一一对应的。</p>
+<p>password: 生成keystore文件时所填的密码。</p>
+<p>keyStoreType: keystore类型。</p>
+<p>keyAlias: 生成密钥的别名。</p>
+<p>keysotre文件是怎么生成的呢？使用jdk自带的工具：keytool。生成keystore文件的命令如下：</p>
+<p><code>keytool -genkey -alias server -keyalg RSA -validity 365 -keystore server.keystore</code></p>
+<p>其中：-alias 指定生成密钥的别名，-keystore 指定生成的keystore文件的位置和名称。其他的参数的含义可以通过keytool -help来查找。</p>
+<p>一个keystore文件中可以存储多个证书和证书对应的密钥，这些证书和其对应的密钥通过唯一的别名alias来指定，也就是说，通过alias可以导出证书。但是要注意，无法通过keytool导出私钥。</p>
+<p>看一下如何从keystore文件中导出证书：</p>
+<p><code>keytool -export -alias server -keystore server.keystore -file serverCA.crt</code></p>
+<p>-alias指定了要导出的证书文件，-file 指定了要导出的证书文件的位置和名称。</p>
+<p>了解了上面的几个配置，再结合之前对ssl原理的总结，不难知道：</p>
+<p>我们指定的别名(server.ssl.keyAlias:server)之后,服务器通过该别名从keystore文件中获得对应的证书，并将其发送给客户端，同时使用keystore中alias对应的私钥(keytool虽然导不出私钥，但可以通过代码等方式获得)可以对与客户端通信的内容进行加密和解密。这便是keystore文件的作用：存储证书和私钥。</p>
+<p>服务器端的配置完成了。现在有一个问题，虽然服务器可以发送证书到客户端了，但是客户端并不会信任我们这个证书。如果这个时候通过浏览器以https的方式访问服务器，浏览器会提醒你，此连接不受信任。那是因为虽然服务器将证书发送到了浏览器(客户端)，但是浏览器并不认为这个证书能够证明服务器的身份。那为什么https访问支付宝等网站没有报这个警告呢？想想上面的内容，浏览器或操作系统内置了颁发给支付宝证书的机构的根证书，通过这个根证书的公钥对支付宝发来的证书进行解密可以证明这个证书确实是由支付宝发过来的，从而证明了服务器的身份。</p>
+<p>虽然浏览器并不能验证我们的证书，我们可以手动的把证书添加到浏览器的信任列表中。这个证书就是我们上面通过keytool导出的证书，将这个证书手动添加到浏览器信任列表里面，再次访问服务器就不会有警告啦。(具体的添加方式不再赘述)(从这点上也可以看出自签名证书的不安全性，有可能被假冒和伪造)</p>
+<p>so,通过上面的方式我们已经将ssl单向验证配置好了。那么，如果客户端是自己用java写的呢？下面举一个例子，使用HttpsURLConnection实现：</p>
+<p>首先生成客户端的信任证书库，用来存放客户端所信任的证书：</p>
+<p><code>keytool -keystore truststore.jks -alias client -import -trustcacerts -file serverCA.crt</code></p>
+<p>-file 指定要信任的证书，此例中应该是我们上面导出的证书serverCA.crt</p>
+<p>-keystore 指定要生成的信任库路径和名称。</p>
+<p>然后生成我们自己的信任证书管理器：</p>
+<p>参考了网上的代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyX509TrustManager</span> <span class="keyword">implements</span> <span class="title">X509TrustManager</span> </span>&#123;</div><div class="line">	<span class="comment">/*</span></div><div class="line">	 * The default X509TrustManager returned by SunX509. We'll delegate</div><div class="line">	 * decisions to it, and fall back to the logic in this class if the default</div><div class="line">	 * X509TrustManager doesn't trust it.</div><div class="line">	 */</div><div class="line">	X509TrustManager sunJSSEX509TrustManager;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="title">MyX509TrustManager</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</div><div class="line">		<span class="comment">// create a "default" JSSE X509TrustManager.</span></div><div class="line">		KeyStore ks = KeyStore.getInstance(<span class="string">"JKS"</span>);</div><div class="line">		<span class="comment">//注意 src/clientTrustCA.jks就是上面生成的信任证书库</span></div><div class="line">		ks.load(<span class="keyword">new</span> FileInputStream(<span class="string">"src/clientTrustCA.jks"</span>), <span class="string">"123456"</span>.toCharArray());</div><div class="line">		TrustManagerFactory tmf = TrustManagerFactory.getInstance(<span class="string">"SunX509"</span>, <span class="string">"SunJSSE"</span>);</div><div class="line">		tmf.init(ks);</div><div class="line">		TrustManager tms[] = tmf.getTrustManagers();</div><div class="line">		<span class="comment">/*</span></div><div class="line">		 * Iterate over the returned trustmanagers, look for an instance of</div><div class="line">		 * X509TrustManager. If found, use that as our "default" trust manager.</div><div class="line">		 */</div><div class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; tms.length; i++) &#123;</div><div class="line">			<span class="keyword">if</span> (tms[i] <span class="keyword">instanceof</span> X509TrustManager) &#123;</div><div class="line">				sunJSSEX509TrustManager = (X509TrustManager) tms[i];</div><div class="line">				<span class="keyword">return</span>;</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">		<span class="comment">/*</span></div><div class="line">		 * Find some other way to initialize, or else we have to fail the</div><div class="line">		 * constructor.</div><div class="line">		 */</div><div class="line">		<span class="keyword">throw</span> <span class="keyword">new</span> Exception(<span class="string">"Couldn't initialize"</span>);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="comment">/*</span></div><div class="line">	 * Delegate to the default trust manager.</div><div class="line">	 */</div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">checkClientTrusted</span><span class="params">(X509Certificate[] chain, String authType)</span> <span class="keyword">throws</span> CertificateException </span>&#123;</div><div class="line">		<span class="keyword">try</span> &#123;</div><div class="line">			sunJSSEX509TrustManager.checkClientTrusted(chain, authType);</div><div class="line">		&#125; <span class="keyword">catch</span> (CertificateException excep) &#123;</div><div class="line">			<span class="comment">// do any special handling here, or rethrow exception.</span></div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="comment">/*</span></div><div class="line">	 * Delegate to the default trust manager.</div><div class="line">	 */</div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">checkServerTrusted</span><span class="params">(X509Certificate[] chain, String authType)</span> <span class="keyword">throws</span> CertificateException </span>&#123;</div><div class="line">		<span class="keyword">try</span> &#123;</div><div class="line">			sunJSSEX509TrustManager.checkServerTrusted(chain, authType);</div><div class="line">		&#125; <span class="keyword">catch</span> (CertificateException excep) &#123;</div><div class="line">			<span class="comment">/*</span></div><div class="line">			 * Possibly pop up a dialog box asking whether to trust the cert</div><div class="line">			 * chain.</div><div class="line">			 */</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="comment">/*</span></div><div class="line">	 * Merely pass this through.</div><div class="line">	 */</div><div class="line">	<span class="keyword">public</span> X509Certificate[] getAcceptedIssuers() &#123;</div><div class="line">		<span class="keyword">return</span> sunJSSEX509TrustManager.getAcceptedIssuers();</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>接着使用这个管理器：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">TrustManager[] tm = &#123; <span class="keyword">new</span> MyX509TrustManager() &#125;;</div><div class="line">SSLContext sslContext = SSLContext.getInstance(<span class="string">"SSL"</span>, <span class="string">"SunJSSE"</span>);</div><div class="line">sslContext.init(<span class="keyword">null</span>, tm, <span class="keyword">new</span> java.security.SecureRandom());</div><div class="line"><span class="comment">// 从上述SSLContext对象中得到SSLSocketFactory对象</span></div><div class="line">SSLSocketFactory ssf = sslContext.getSocketFactory();</div><div class="line"></div><div class="line"><span class="comment">// 创建URL对象</span></div><div class="line">URL myURL = <span class="keyword">new</span> URL(url);</div><div class="line"><span class="comment">// 创建HttpsURLConnection对象，并设置其SSLSocketFactory对象</span></div><div class="line">HttpsURLConnection httpsConn = (HttpsURLConnection) myURL.openConnection();</div><div class="line">httpsConn.setSSLSocketFactory(ssf);</div></pre></td></tr></table></figure>
+<p>接下来就可以使用这个HttpsURLConnection来访问服务器啦。</p>
+<h2 id="Https双向认证"><a href="#Https双向认证" class="headerlink" title="Https双向认证"></a>Https双向认证</h2><p>所谓的Https双向认证就是不仅仅客户端要验证浏览器的身份，浏览器也要向服务器证明自己的身份，也就是第一幅图片中的5。</p>
+<p>理解了单向认证，双向认证实现起来也就不难了。</p>
+<p>首先像我们之前一样使用keytool生成keystore文件client.keystore，这个文件是为客户端使用准备的。</p>
+<p>然后通过client.keystore导出证书client.crt。</p>
+<p>接着生成信任库文件serverTrust.jks,将client.crt导入其中。</p>
+<p>在单向认证中我们给出了客户端单向认证时的java代码，用来下面给出双向认证的代码：</p>
+<p>生成读取keystore的类：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyKeyManager</span></span>&#123;</div><div class="line">	<span class="comment">// 相关的 jks 文件及其密码定义</span></div><div class="line">	 <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">static</span> String CERT_STORE=<span class="string">"src/client.keystore"</span>;</div><div class="line">	 <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">static</span> String CERT_STORE_PASSWORD=<span class="string">"123456"</span>;</div><div class="line">	 </div><div class="line">	 <span class="keyword">public</span> <span class="keyword">static</span> KeyManager[] getKeyManagers() <span class="keyword">throws</span> Exception&#123;</div><div class="line">		 <span class="comment">// 载入 jks 文件</span></div><div class="line">		 FileInputStream f_certStore=<span class="keyword">new</span> FileInputStream(CERT_STORE); </div><div class="line">		 KeyStore ks=KeyStore.getInstance(<span class="string">"jks"</span>); </div><div class="line">		 ks.load(f_certStore, CERT_STORE_PASSWORD.toCharArray()); </div><div class="line">		 f_certStore.close(); </div><div class="line"></div><div class="line">		 <span class="comment">// 创建并初始化证书库工厂</span></div><div class="line">		 String alg=KeyManagerFactory.getDefaultAlgorithm(); </div><div class="line">		 KeyManagerFactory kmFact=KeyManagerFactory.getInstance(alg); </div><div class="line">		 kmFact.init(ks, CERT_STORE_PASSWORD.toCharArray()); </div><div class="line"></div><div class="line">		 KeyManager[] kms=kmFact.getKeyManagers(); </div><div class="line">		 <span class="keyword">return</span> kms;</div><div class="line">	 &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>像上面单向认证中那样使用它：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">TrustManager[] tm = &#123; <span class="keyword">new</span> MyX509TrustManager() &#125;;</div><div class="line">KeyManager[] km = MyKeyManager.getKeyManagers();</div><div class="line">SSLContext sslContext = SSLContext.getInstance(<span class="string">"SSL"</span>, <span class="string">"SunJSSE"</span>);</div><div class="line">sslContext.init(km, tm, <span class="keyword">new</span> java.security.SecureRandom());</div><div class="line"><span class="comment">// 从上述SSLContext对象中得到SSLSocketFactory对象</span></div><div class="line">SSLSocketFactory ssf = sslContext.getSocketFactory();</div><div class="line"></div><div class="line"><span class="comment">// 创建URL对象</span></div><div class="line">URL myURL = <span class="keyword">new</span> URL(url);</div><div class="line"><span class="comment">// 创建HttpsURLConnection对象，并设置其SSLSocketFactory对象</span></div><div class="line">HttpsURLConnection httpsConn = (HttpsURLConnection) myURL.openConnection();</div><div class="line">httpsConn.setSSLSocketFactory(ssf);</div></pre></td></tr></table></figure>
+<p>然后使用HttpsURLConnection就可以使用了。但是此时服务器端还需要配置，因为客户端仅仅是将自己的证书发过去了，服务器应该如何信任它呢？</p>
+<p>打开springboot的配置文件application.properties添加以下配置:</p>
+<p>#Whether client authentication is wanted (“want”) or needed (“need”). Requires a trust store.</p>
+<p>server.ssl.client-auth=need</p>
+<p>server.ssl.trust-store=serverTrust.jks </p>
+<p>server.ssl.trust-store-password=123456</p>
+<p>其中，serverTrust.jks就是刚刚生成的服务器端信任库。</p>
+<p>以上步骤全部做完，服务器和客户端就可以愉快的使用Https进行双向认证通信了。</p>
+<h2 id="关于证书的一些格式"><a href="#关于证书的一些格式" class="headerlink" title="关于证书的一些格式"></a>关于证书的一些格式</h2><p>在使用keytool和openssl的时候，会发现有好多种格式让人头晕眼花。不妨参考这篇文章：<a href="http://www.cnblogs.com/guogangj/p/4118605.html" target="_blank" rel="external">那些证书相关的玩意儿(SSL,X.509,PEM,DER,CRT,CER,KEY,CSR,P12等)</a></p>
+<p>我现在也不是理解的十分清楚，故不再赘述。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>感觉这篇博客没有把自己想要总结的内容全部记录下来，但是现在也不想再写了。服务器实际测试的时候是使用curl这样一个命令行浏览器进行的，使用curl作为客户端进行双向认证的时候也遇到了不少问题，总结了一份配置的<a href="https://github.com/Hikyu/SSL-Configuration/blob/master/ssl%E5%8F%8C%E5%90%91%E8%AE%A4%E8%AF%81%E9%85%8D%E7%BD%AE.md" target="_blank" rel="external">readme</a>，放在github上面，以作记录。readme中的配置方法可能还有一些瑕疵，有些格式转换可能会有冗余，但是整个配置是没有问题的，经过了自己的验证。证书这一块内容感觉还不是理解的特别透彻，尤其是ssl协议的交互和证书格式的一些问题，留作以后学习吧！真的不想看了…</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="http://www.cnblogs.com/JeffreySun/archive/2010/06/24/1627247.html" target="_blank" rel="external">数字证书原理</a>:这篇一定要看，总结的很好！</p>
+<p><a href="http://www.live-in.org/archives/1302.html" target="_blank" rel="external">浏览器和SSL证书通讯过程</a></p>
+<p><a href="http://www.cnblogs.com/devinzhang/archive/2012/02/28/2371631.html" target="_blank" rel="external">Java安全通信：HTTPS与SSL</a></p>
+<p><a href="http://www.ibm.com/developerworks/cn/java/j-lo-socketkeytool/" target="_blank" rel="external">Java 安全套接字编程以及 keytool 使用最佳实践</a></p>
+<p><a href="http://blog.csdn.net/liuchunming033/article/details/48470575" target="_blank" rel="external">openssl生成SSL证书的流程</a></p>
+<p><a href="https://freessl.wosign.com/911.html" target="_blank" rel="external">如何添加自签名SSL证书 自签名SSL证书存风险</a></p>
+<p><a href="http://www.360doc.com/content/11/1226/02/3700464_174996042.shtml" target="_blank" rel="external">keystore提取私钥和证书(重要×××)</a></p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/java/">java</a><a href="/tags/加密/">加密</a>
+  </div>
+
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/技术/">技术</a>
+</div>
+
+
+
+<div class="article-share" id="share">
+
+<!--
+  <div data-url="http://yukai.space/2016/09/25/ssl总结/" data-title="ssl使用总结 | YuKai&#39;s blog" data-tsina="5381447277" class="share clearfix">
+  </div>
+-->
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2016/09/24/记录这周工作遇到的坑/"  title="记录工作遇到的坑">
+ <strong>NEXT:</strong><br/> 
+ <span>记录工作遇到的坑
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section class="comment">
+	<div class="ds-thread"></div>
+</section>
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#简单认识ssl和证书"><span class="toc-number">1.</span> <span class="toc-text">简单认识ssl和证书</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Https-单向认证"><span class="toc-number">2.</span> <span class="toc-text">Https 单向认证</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Https双向认证"><span class="toc-number">3.</span> <span class="toc-text">Https双向认证</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#关于证书的一些格式"><span class="toc-number">4.</span> <span class="toc-text">关于证书的一些格式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">5.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">6.</span> <span class="toc-text">参考</span></a></li></ol>
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+			<li><a href="/categories/工具/" title="工具">工具<sup>7</sup></a></li>
+		
+			<li><a href="/categories/技术/" title="技术">技术<sup>5</sup></a></li>
+		
+			<li><a href="/categories/生活/" title="生活">生活<sup>3</sup></a></li>
+		
+			<li><a href="/categories/编程/" title="编程">编程<sup>14</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			<li><a href="/tags/Eclipse/" title="Eclipse">Eclipse<sup>1</sup></a></li>
+		
+			<li><a href="/tags/ant/" title="ant">ant<sup>2</sup></a></li>
+		
+			<li><a href="/tags/curl/" title="curl">curl<sup>1</sup></a></li>
+		
+			<li><a href="/tags/java/" title="java">java<sup>18</sup></a></li>
+		
+			<li><a href="/tags/junit/" title="junit">junit<sup>1</sup></a></li>
+		
+			<li><a href="/tags/markdown/" title="markdown">markdown<sup>1</sup></a></li>
+		
+			<li><a href="/tags/python/" title="python">python<sup>1</sup></a></li>
+		
+			<li><a href="/tags/spring/" title="spring">spring<sup>2</sup></a></li>
+		
+			<li><a href="/tags/加密/" title="加密">加密<sup>2</sup></a></li>
+		
+			<li><a href="/tags/多线程/" title="多线程">多线程<sup>5</sup></a></li>
+		
+			<li><a href="/tags/快捷键/" title="快捷键">快捷键<sup>1</sup></a></li>
+		
+			<li><a href="/tags/服务器/" title="服务器">服务器<sup>1</sup></a></li>
+		
+			<li><a href="/tags/测试/" title="测试">测试<sup>1</sup></a></li>
+		
+			<li><a href="/tags/源码/" title="源码">源码<sup>1</sup></a></li>
+		
+			<li><a href="/tags/编码/" title="编码">编码<sup>2</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  
+  <div class="tagcloudlist">
+    <p class="asidetitle">标签云</p>
+    <div class="tagcloudlist clearfix">
+       <a href="/tags/Eclipse/" style="font-size: 10px;">Eclipse</a> <a href="/tags/ant/" style="font-size: 13.33px;">ant</a> <a href="/tags/curl/" style="font-size: 10px;">curl</a> <a href="/tags/java/" style="font-size: 20px;">java</a> <a href="/tags/junit/" style="font-size: 10px;">junit</a> <a href="/tags/markdown/" style="font-size: 10px;">markdown</a> <a href="/tags/python/" style="font-size: 10px;">python</a> <a href="/tags/spring/" style="font-size: 13.33px;">spring</a> <a href="/tags/加密/" style="font-size: 13.33px;">加密</a> <a href="/tags/多线程/" style="font-size: 16.67px;">多线程</a> <a href="/tags/快捷键/" style="font-size: 10px;">快捷键</a> <a href="/tags/服务器/" style="font-size: 10px;">服务器</a> <a href="/tags/测试/" style="font-size: 10px;">测试</a> <a href="/tags/源码/" style="font-size: 10px;">源码</a> <a href="/tags/编码/" style="font-size: 13.33px;">编码</a>
+    </div>
+  </div>
+
+
+  
+  <div class="archiveslist">
+    <p class="asidetitle"><a href="/archives">归档</a></p>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">九月 2016</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">八月 2016</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">七月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">六月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">四月 2016</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">三月 2016</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">十二月 2015</a><span class="archive-list-count">2</span></li></ul>
+  </div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> 既来之 <br/>
+			则安之</p>
+	</section>
+	 
+	<div class="social-font clearfix">
+		
+		<a href="http://weibo.com/5381447277" target="_blank" title="weibo"></a>
+		
+		
+		
+		<a href="https://github.com/Hikyu" target="_blank" title="github"></a>
+		
+		
+		
+	</div>
+	<!--
+		<p class="copyright">Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/A-limon/pacman" target="_blank" title="Pacman">Pacman</a> © 2016 
+		
+		<a href="http://yukai.space" target="_blank" title="于凯">于凯</a>
+		
+		</p>
+	-->
+	<p class="copyright">Copyright 2016 yukai.space AllRights Reserved.</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"null"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+  </body>
+</html>
