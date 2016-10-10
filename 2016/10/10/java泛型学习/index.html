@@ -71,7 +71,7 @@
     </p>
   <p class="article-time">
     <time datetime="2016-10-10T12:05:03.000Z" itemprop="datePublished">2016-10-10</time>
-    更新日期:<time datetime="2016-10-10T15:48:05.584Z" itemprop="dateModified">2016-10-10</time>
+    更新日期:<time datetime="2016-10-10T15:49:41.234Z" itemprop="dateModified">2016-10-10</time>
     
   </p>
 </header>
@@ -149,7 +149,7 @@
 <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Test</span>&lt;<span class="title">T</span>&gt; </span>&#123;&#125;</div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line">		Test&lt;Double&gt; test = <span class="keyword">new</span> Test();</div><div class="line">		<span class="comment">//正常运行</span></div><div class="line">		getT(test);</div><div class="line">&#125;</div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">getT</span><span class="params">(Test&lt;? extends Number&gt; t)</span> </span>&#123;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>Test&lt;? extends Number&gt;扩展了形参的类型，可以是Test<double>、Test<integer>等，尖括号中的类型必须是Number或继承于Number。同样的，通配符也适用于super，如Test&lt;? super A&gt;。</integer></double></p>
 <p>如果类型参数中既没有extends 关键字，也没有super关键字，只有一个?，代表无限定通配符。</p>
-<p>List&lt;?&gt;与List<object>并不相同，无论A是什么类型，List<a>是List&lt;?&gt;的子类，但是，List<a>不是List<object>的子类，想想上面的例子。</object></a></a></object></p>
+<p>List&lt;?&gt;与List<object>并不相同，无论A是什么类型，List<a> 是 List&lt;?&gt;的子类，但是，List<a> 不是 List<object> 的子类，想想上面的例子。</object></a></a></object></p>
 <p>通常在两种情况下会使用无限定通配符：</p>
 <ol>
 <li><p>如果正在编写一个方法，可以使用Object类中提供的功能来实现</p>
