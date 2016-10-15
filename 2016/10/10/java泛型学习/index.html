@@ -71,7 +71,7 @@
     </p>
   <p class="article-time">
     <time datetime="2016-10-10T12:05:03.000Z" itemprop="datePublished">2016-10-10</time>
-    更新日期:<time datetime="2016-10-11T01:51:13.572Z" itemprop="dateModified">2016-10-11</time>
+    更新日期:<time datetime="2016-10-15T13:06:38.437Z" itemprop="dateModified">2016-10-15</time>
     
   </p>
 </header>
@@ -99,7 +99,7 @@
 <p>1.使用泛型之后在编译时报错而非运行时，减少了出错的几率；</p>
 <p>2.使用泛型之后编译器不再要求强转</p>
 <h2 id="定义泛型"><a href="#定义泛型" class="headerlink" title="定义泛型"></a>定义泛型</h2><p>泛型的机制能够在定义类、接口、方法时把类型参数化，也就是类似于方法的形参一样，把类型当做参数使用。</p>
-<p>泛型参数部分使用&lt;&gt;包裹起来，比如<t>，T声明了一种类型，习惯上，这个类型参数使用单个大写字母来表示，指示所定义的参数类型。有如下惯例：</t></p>
+<p>泛型参数部分使用<code>&lt;&gt;</code>包裹起来，比如<code>&lt;T&gt;</code>，T声明了一种类型，习惯上，这个类型参数使用单个大写字母来表示，指示所定义的参数类型。有如下惯例：</p>
 <p>E：表示元素</p>
 <p>T：表示类型</p>
 <p>K：表示键</p>
@@ -123,17 +123,17 @@
 <p>1.有时候我们希望限定这个泛型参数的类型为某个类的子类或者超类；</p>
 <p>2.上面的例子中可以看到，我们定义了泛型参数，向方法中传入某种类型，这种类型是未知的，因此我们无法使用这种类型定义的变量，不能够调用它的方法。</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="keyword">static</span> &lt;T extends Number&gt; <span class="function">Integer <span class="title">getT</span><span class="params">(T t)</span> </span>&#123;</div><div class="line">	<span class="keyword">return</span>  <span class="keyword">new</span> Integer(t.intValue());</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>上面例子中，<t extends="" a="">表示T是A或A的子类，他限定了传入泛型方法参数的类型必须为A或A的子类，同时，在方法体中我们也可以使用t这个实参就像使用A的实例一样，调用Number具有的public方法。</t></p>
-<p>除了<t extends="" a="">限定T是A或A的子类外，还可以使用<t super="" ar=""> 这种方式来限定T是A或A的超类。</t></t></p>
+<p>上面例子中，<code>&lt;T extends A&gt;</code>表示T是A或A的子类，他限定了传入泛型方法参数的类型必须为A或A的子类，同时，在方法体中我们也可以使用t这个实参就像使用A的实例一样，调用Number具有的public方法。</p>
+<p>除了<code>&lt;T extends A&gt;</code>限定T是A或A的子类外，还可以使用<code>&lt;T super A&gt;</code>这种方式来限定T是A或A的超类。</p>
 <p>A可以是某个类或者接口。</p>
-<p>除此以外，还可以为泛型参数限定多个限制范围，如<t extends="" a="" &="" b="" c="">，限定范围中最多只能有一个类(某个类只能有一个父类~~)，并且他必须是限定列表中的第一个。</t></p>
+<p>除此以外，还可以为泛型参数限定多个限制范围，如<code>&lt;T extends A &amp; B &amp; C&gt;</code>，限定范围中最多只能有一个类(某个类只能有一个父类~~)，并且他必须是限定列表中的第一个。</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">Class A &#123; <span class="comment">// &#125;</span></div><div class="line"><span class="class"><span class="keyword">interface</span> <span class="title">B</span> </span>&#123; <span class="comment">// &#125;</span></div><div class="line"><span class="class"><span class="keyword">interface</span> <span class="title">C</span> </span>&#123; <span class="comment">// &#125;</span></div><div class="line"></div><div class="line"><span class="comment">//正确</span></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">D</span> &lt;<span class="title">T</span> <span class="keyword">extends</span> <span class="title">A</span> &amp; <span class="title">B</span> &amp; <span class="title">C</span>&gt; </span>&#123; <span class="comment">// &#125;</span></div><div class="line"><span class="comment">//编译时报错</span></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">D</span> &lt;<span class="title">T</span> <span class="keyword">extends</span> <span class="title">A</span> &amp; <span class="title">B</span> &amp; <span class="title">C</span>&gt; </span>&#123; <span class="comment">// &#125;</span></div></pre></td></tr></table></figure>
 <h3 id="泛型的继承"><a href="#泛型的继承" class="headerlink" title="泛型的继承"></a>泛型的继承</h3><p>看一下jdk中List的泛型继承例子：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">List</span>&lt;<span class="title">E</span>&gt; <span class="keyword">extends</span> <span class="title">Collection</span>&lt;<span class="title">E</span>&gt;</span>&#123;<span class="comment">//...&#125;</span></div></pre></td></tr></table></figure>
-<p>List<string> 就是 Collection<string> 的子类。</string></string></p>
+<p><code>List&lt;String&gt;</code> 就是 <code>Collection&lt;String&gt;</code> 的子类。</p>
 <p>假如定义自己的接口：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">interface</span> <span class="title">MyList</span>&lt;<span class="title">E</span>,<span class="title">P</span>&gt; <span class="keyword">extends</span> <span class="title">List</span>&lt;<span class="title">E</span>&gt; </span>&#123;</div><div class="line">  <span class="function"><span class="keyword">void</span> <span class="title">setPay</span><span class="params">(E e,P p)</span></span>;</div><div class="line">  <span class="comment">//...</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>MyList<string,string>、MyList<string,integer>、MyList<string,exception>都是List<string>的子类。</string></string,exception></string,integer></string,string></p>
+<p><code>MyList&lt;String,String&gt;</code>、<code>MyList&lt;String,Integer&gt;</code>、<code>MyList&lt;String,Exception&gt;</code>都是<code>List&lt;String&gt;</code>的子类。</p>
 <h2 id="使用泛型"><a href="#使用泛型" class="headerlink" title="使用泛型"></a>使用泛型</h2><p>上面的例子中已经列举了一些使用泛化类或者泛化函数的例子，但是还有一些问题需要指出：</p>
 <p>1.泛型参数只接受引用类型，不适用于基本类型</p>
 <p>比如：</p>
@@ -147,24 +147,26 @@
 <p>报错的原因很好理解，虽然Double是Number的子类，但Test<double>并不是Test<number>的子类，故类型检查无法通过。这一点一定要明白。</number></double></p>
 <p>那么如果我们确实想要传入一个Test<double>类型的形参呢？可以使用通配符：</double></p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Test</span>&lt;<span class="title">T</span>&gt; </span>&#123;&#125;</div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line">		Test&lt;Double&gt; test = <span class="keyword">new</span> Test();</div><div class="line">		<span class="comment">//正常运行</span></div><div class="line">		getT(test);</div><div class="line">&#125;</div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">getT</span><span class="params">(Test&lt;? extends Number&gt; t)</span> </span>&#123;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>Test&lt;? extends Number&gt;扩展了形参的类型，可以是Test<double>、Test<integer>等，尖括号中的类型必须是Number或继承于Number。同样的，通配符也适用于super，如Test&lt;? super A&gt;。</integer></double></p>
+<p><code>Test&lt;? extends Number&gt;</code>扩展了形参的类型，可以是<code>Test&lt;Double&gt;</code>、<code>Test&lt;Integer&gt;</code>等，尖括号中的类型必须是Number或继承于Number。同样的，通配符也适用于super，如<code>Test&lt;? super A&gt;</code>。</p>
 <p>如果类型参数中既没有extends 关键字，也没有super关键字，只有一个?，代表无限定通配符。</p>
-<p>Test&lt;?&gt;与Test<object>并不相同，无论T是什么类型，Test<t> 是 Test&lt;?&gt;的子类，但是，Test<t> 不是 Test<object> 的子类，想想上面的例子。</object></t></t></object></p>
+<p><code>Test&lt;?&gt;</code>与<code>Test&lt;Object&gt;</code>并不相同，无论T是什么类型，<code>Test&lt;T&gt;</code> 是 <code>Test&lt;?&gt;</code>的子类，但是，<code>Test&lt;T&gt;</code> 不是 <code>Test&lt;Object&gt;</code> 的子类，想想上面的例子。</p>
 <p>通常在两种情况下会使用无限定通配符：</p>
 <ol>
 <li><p>如果正在编写一个方法，可以使用Object类中提供的功能来实现</p>
 </li>
-<li><p>代码实现的功能与类型参数无关，比如List.clear()与List.size()方法，还有经常使用的Class&lt;?&gt;方法，其实现的功能都与类型参数无关。</p>
+<li><p>代码实现的功能与类型参数无关，比如List.clear()与List.size()方法，还有经常使用的<code>Class&lt;?&gt;</code>方法，其实现的功能都与类型参数无关。</p>
 </li>
 </ol>
-<p>一般情况下，通配符&lt;? extends Number&gt;只是出现在使用泛型的时候，而不是定义泛型的时候，就像上面的例子那样。而<t extends="" number="">这种形式出现在定义泛型的时候，而不是使用泛型的时候，不要搞混了。</t></p>
+<p>一般情况下，通配符<code>&lt;? extends Number&gt;</code>只是出现在使用泛型的时候，而不是定义泛型的时候，就像上面的例子那样。而<code>&lt;T extends Number&gt;</code>这种形式出现在定义泛型的时候，而不是使用泛型的时候，不要搞混了。</p>
 <p>结合泛型的继承和通配符的使用，理解一下泛型的类型系统，也就是泛型类的继承关系：</p>
 <p>以下内容来自：<a href="http://www.infoq.com/cn/articles/cf-java-generics" target="_blank" rel="external">Java深度历险（五）——Java泛型</a></p>
 <hr>
 <p>引入泛型之后的类型系统增加了两个维度：一个是类型参数自身的继承体系结构，另外一个是泛型类或接口自身的继承体系结构。第一个指的是对于 List<string>和List<object>这样的情况，类型参数String是继承自Object的。而第二种指的是 List接口继承自Collection接口。对于这个类型系统，有如下的一些规则：</object></string></p>
 <p>相同类型参数的泛型类的关系取决于泛型类自身的继承体系结构。即List<string>是Collection<string> 的子类型，List<string>可以替换Collection<string>。这种情况也适用于带有上下界的类型声明。<br>当泛型类的类型声明中使用了通配符的时候， 其子类型可以在两个维度上分别展开。如对Collection&lt;? extends Number&gt;来说，其子类型可以在Collection这个维度上展开，即List&lt;? extends Number&gt;和Set&lt;? extends Number&gt;等；也可以在Number这个层次上展开，即Collection<double>和 Collection<integer>等。如此循环下去，ArrayList<long>和 HashSet<double>等也都算是Collection&lt;? extends Number&gt;的子类型。<br>如果泛型类中包含多个类型参数，则对于每个类型参数分别应用上面的规则。</double></long></integer></double></string></string></string></string></p>
 <hr>
-<h2 id="类型擦除"><a href="#类型擦除" class="headerlink" title="类型擦除"></a>类型擦除</h2><h2 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h2><h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="http://peiquan.blog.51cto.com/7518552/1302898" target="_blank" rel="external">java 泛型编程（一）</a></p>
+<h2 id="类型擦除"><a href="#类型擦除" class="headerlink" title="类型擦除"></a>类型擦除</h2><p>类型擦除发生在编译阶段，对于运行期的JVM来说，List<int>与List<string>就是同一个类，因为在编译结束之后，生成的字节码文件中，他们都是List类型。</string></int></p>
+<p>1.java编译器会在编译时进行类型检查</p>
+<h2 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h2><h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="http://peiquan.blog.51cto.com/7518552/1302898" target="_blank" rel="external">java 泛型编程（一）</a></p>
 <p><a href="http://www.oracle.com/technetwork/cn/articles/java/juneau-generics-2255374-zhs.html" target="_blank" rel="external">泛型：工作原理及其重要性</a></p>
 <p><a href="http://www.infoq.com/cn/articles/cf-java-generics" target="_blank" rel="external">Java深度历险（五）——Java泛型</a></p>
 <p><a href="http://blog.csdn.net/u012152619/article/details/47253811" target="_blank" rel="external">java泛型详解</a></p>
