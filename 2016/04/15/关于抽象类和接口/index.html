@@ -79,7 +79,7 @@
     </p>
   <p class="article-time">
     <time datetime="2016-04-15T14:48:55.000Z" itemprop="datePublished">2016-04-15</time>
-    更新日期:<time datetime="2016-08-14T09:10:17.537Z" itemprop="dateModified">2016-08-14</time>
+    更新日期:<time datetime="2016-10-27T14:08:33.688Z" itemprop="dateModified">2016-10-27</time>
     
   </p>
 </header>
@@ -88,7 +88,7 @@
 		
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
-		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#抽象类："><span class="toc-number">1.</span> <span class="toc-text">抽象类：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#接口："><span class="toc-number">2.</span> <span class="toc-text">接口：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#区别与联系："><span class="toc-number">3.</span> <span class="toc-text">区别与联系：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#资料"><span class="toc-number">4.</span> <span class="toc-text">资料:</span></a></li></ol>
+		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#抽象类："><span class="toc-number">1.</span> <span class="toc-text">抽象类：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#接口："><span class="toc-number">2.</span> <span class="toc-text">接口：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#区别与联系："><span class="toc-number">3.</span> <span class="toc-text">区别与联系：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#对继承的思考"><span class="toc-number">4.</span> <span class="toc-text">对继承的思考</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#资料"><span class="toc-number">5.</span> <span class="toc-text">资料:</span></a></li></ol>
 		</div>
 		
 		<h2 id="抽象类："><a href="#抽象类：" class="headerlink" title="抽象类："></a>抽象类：</h2><blockquote>
@@ -167,6 +167,14 @@
 <p>2.将这三个功能都放在接口里面，需要用到报警功能的类就需要实现这个接口中的open()和close(),也许这个类根本就不具备open( )和close( )这两个功能，比如火灾报警器。</p>
 <p>从这里可以看出， Door的open() ,close()和alarm()根本就属于两个不同范畴内的行为，open()和close()    属于门本身固有的行为特性，而alarm()属于延伸的附加行为。因此最好的解决办法是单独将报警设计为一个接口，包含alarm()行为,Door设计为单独的一个抽象类，包含open和close两种行为。再设计一个报警门继承Door类和实现Alarm接口。</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">interface</span> <span class="title">Alram</span> </span>&#123;</div><div class="line">      <span class="function"><span class="keyword">void</span> <span class="title">alarm</span><span class="params">()</span></span>;</div><div class="line">&#125;</div><div class="line"><span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">Door</span> </span>&#123;</div><div class="line">      <span class="function"><span class="keyword">void</span> <span class="title">open</span><span class="params">()</span></span>;</div><div class="line">      <span class="function"><span class="keyword">void</span> <span class="title">close</span><span class="params">()</span></span>;</div><div class="line">&#125;</div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">AlarmDoor</span> <span class="keyword">extends</span> <span class="title">Door</span> <span class="keyword">implements</span> <span class="title">Alarm</span> </span>&#123;</div><div class="line">      <span class="function"><span class="keyword">void</span> <span class="title">oepn</span><span class="params">()</span> </span>&#123;</div><div class="line">           <span class="comment">//....</span></div><div class="line">      &#125;</div><div class="line">      <span class="function"><span class="keyword">void</span> <span class="title">close</span><span class="params">()</span> </span>&#123;</div><div class="line">           <span class="comment">//....</span></div><div class="line">      &#125;</div><div class="line">      <span class="function"><span class="keyword">void</span> <span class="title">alarm</span><span class="params">()</span> </span>&#123;</div><div class="line">           <span class="comment">//....</span></div><div class="line">      &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<hr>
+<h2 id="对继承的思考"><a href="#对继承的思考" class="headerlink" title="对继承的思考"></a><strong>对继承的思考</strong></h2><p>2016/10/27更新</p>
+<p>写代码的过程中发现java的继承经常被滥用。思考一下解决方法…</p>
+<p>1.当子类和父类属于同一个种类时使用继承，而不是拥有相同的功能。</p>
+<p>  比如：飞机能飞，鸟也能飞。但是这两种东西不应该归为一类。飞只是个功能，可以作为一个接口。<br>        鸟却可以是大雁的父类，他们从本质上是一种东西</p>
+<p>2.继承可用于模板方法模式。即能够从很多类中抽象出同一个流程，把这个流程作为一个模板写在父类当中。设置好钩子供子类实现。</p>
+<p>3.既不属于同一种类又没有抽象出模板，但是多个类之间有相同的代码冗余。考虑委托，写一个通用的Utility类，吧冗余的代码放到utility类当中去，把需要的参数传进去。避免滥用继承。比如：</p>
+<p>写web服务器时，有很多controller，如果这些controller关联不大，没必要继承同一个父类。但是都有一个验证身份的verify方法，考虑把这个verify方法写到一个Utility类中，所有的controller去调用它。</p>
 <h2 id="资料"><a href="#资料" class="headerlink" title="资料:"></a><strong>资料:</strong></h2><p>   <a href="https://www.zhihu.com/question/20111251" target="_blank" rel="external">Java 中的接口有什么作用？</a></p>
 <p>   <a href="http://blog.csdn.net/chenssy/article/details/12858267" target="_blank" rel="external">java提高篇（四）—–抽象类与接口</a></p>
   
@@ -228,7 +236,7 @@
 
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
-  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#抽象类："><span class="toc-number">1.</span> <span class="toc-text">抽象类：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#接口："><span class="toc-number">2.</span> <span class="toc-text">接口：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#区别与联系："><span class="toc-number">3.</span> <span class="toc-text">区别与联系：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#资料"><span class="toc-number">4.</span> <span class="toc-text">资料:</span></a></li></ol>
+  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#抽象类："><span class="toc-number">1.</span> <span class="toc-text">抽象类：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#接口："><span class="toc-number">2.</span> <span class="toc-text">接口：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#区别与联系："><span class="toc-number">3.</span> <span class="toc-text">区别与联系：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#对继承的思考"><span class="toc-number">4.</span> <span class="toc-text">对继承的思考</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#资料"><span class="toc-number">5.</span> <span class="toc-text">资料:</span></a></li></ol>
   </div>
 
 <div id="asidepart">
