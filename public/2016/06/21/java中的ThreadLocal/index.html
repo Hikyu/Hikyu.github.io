@@ -32,7 +32,7 @@
 		
 			<div id="textlogo">
 				<h1 class="site-name"><a href="/" title="YuKai&#39;s blog">YuKai&#39;s blog</a></h1>
-				<h2 class="blog-motto">平凡之中也有感动</h2>
+				<h2 class="blog-motto">好好学习，天天向上</h2>
 			</div>
 			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
 			</a></div>
@@ -73,7 +73,7 @@
     </p>
   <p class="article-time">
     <time datetime="2016-06-21T04:48:55.000Z" itemprop="datePublished">2016-06-21</time>
-    更新日期:<time datetime="2016-08-14T08:26:27.877Z" itemprop="dateModified">2016-08-14</time>
+    更新日期:<time datetime="2016-11-24T14:14:43.460Z" itemprop="dateModified">2016-11-24</time>
     
   </p>
 </header>
@@ -82,7 +82,7 @@
 		
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
-		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#问题背景："><span class="toc-number">1.</span> <span class="toc-text">问题背景：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ThreadLocal原理："><span class="toc-number">2.</span> <span class="toc-text">ThreadLocal原理：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#应用场景"><span class="toc-number">3.</span> <span class="toc-text">应用场景</span></a></li></ol>
+		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#问题背景："><span class="toc-number">1.</span> <span class="toc-text">问题背景：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ThreadLocal原理："><span class="toc-number">2.</span> <span class="toc-text">ThreadLocal原理：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#应用场景"><span class="toc-number">3.</span> <span class="toc-text">应用场景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2016-11-01更新"><span class="toc-number">4.</span> <span class="toc-text">2016/11/01更新</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#解决这个问题的方法就是当ThreadLocal不再使用时，一定要及时调用ThreadLocal的remove方法把已经存储的值清掉。"><span class="toc-number">5.</span> <span class="toc-text">解决这个问题的方法就是当ThreadLocal不再使用时，一定要及时调用ThreadLocal的remove方法把已经存储的值清掉。</span></a></li></ol>
 		</div>
 		
 		<blockquote>
@@ -117,6 +117,20 @@
 <p>PS:既然说这个变量是线程级别的变量，那为什么不在这个线程类中创建这样一个变量呢？注意，线程的创建有时是不可控的，在上面的场景中，创建线程的基本上是使用DispatchConnection的用户，我们不能要求用户去创建masterLsn，更何况，这个masterLsn是属于DispatchConnection这个类，而DispatchConnection有可能创建销毁多次。</p>
 <p>另外，网上提到使用ThreadLocal的一个好处：避免了参数的传递增加程序复杂性。</p>
 <p>我不太理解这个好处从哪里体现出来。如果说要避免参数传递，将这个参数设为类的成员变量也可以解决。应用ThreadLocal的情况是：把ThreadLocal设为了成员变量，把这个参数存入ThreadLocal中。这个虽然说是避免了参数的传递，但这与使用ThreadLocal的目的相去甚远。使用ThreadLocal最主要还是解决线程级别的变量的问题。</p>
+<h2 id="2016-11-01更新"><a href="#2016-11-01更新" class="headerlink" title="2016/11/01更新"></a><strong>2016/11/01更新</strong></h2><p>今天在地铁上看到了一篇不错的文章，介绍ThreadLocal内存泄漏的实例–ThreadLocal 内存泄露的实例分析.</p>
+<p>另外，该作者的另一篇blog，讲解ThreadLocal的原理，也很清晰深入分析 ThreadLocal 内存泄漏问题</p>
+<p>拜读完作者的文章后，回家又翻了一遍ThreadLocal的源码，认为和作者所要解释的一致，并且对ThreadLocal的理解更加深了。</p>
+<blockquote>
+<p>ThreadLocal instances are typically private static fields in classes that wish to associate state with a thread</p>
+</blockquote>
+<p>上面的话出自java doc</p>
+<p>oracle鼓励我们将ThreadLocal对象声明为一个private static类型的变量A。结合上述文章和源码来看，A的生命周期将变得和保存他的类对象一样长，这样ThreadLocalMap中设置的A的弱引用就失去了弱引用的作用，该键A对应的value也不会得到释放，直到此线程销毁。这样一来，如果是使用了线程池的话，当该线程复用时，很有可能会取得错误的值，造成业务逻辑混乱。</p>
+<h2 id="解决这个问题的方法就是当ThreadLocal不再使用时，一定要及时调用ThreadLocal的remove方法把已经存储的值清掉。"><a href="#解决这个问题的方法就是当ThreadLocal不再使用时，一定要及时调用ThreadLocal的remove方法把已经存储的值清掉。" class="headerlink" title="解决这个问题的方法就是当ThreadLocal不再使用时，一定要及时调用ThreadLocal的remove方法把已经存储的值清掉。"></a>解决这个问题的方法就是当ThreadLocal不再使用时，一定要及时调用ThreadLocal的remove方法把已经存储的值清掉。</h2><p>另外，有一个例子展示了ThreadLocal的应用场景，现在贴过来。同样来自java doc。例子虽然很简单，但是我觉得很生动的展示了Threadlocal的一个应用场景，让人豁然开朗。</p>
+<p>试想如果不采用ThreadLocal的话，我自己的做法应该会在创建的线程类里面增加一个字段，用来标明线程的id。但是这么做有两点问题：</p>
+<p>第一，增加了字段，挺low。</p>
+<p>第二，有很大的限制，你只能为自己实现的线程类里面加字段。但是往往有些线程不是我们自己定义的。</p>
+<p>这个例子很好的说明了怎么实现一个线程变量。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> java.util.concurrent.atomic.AtomicInteger;</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ThreadId</span> </span>&#123;</div><div class="line">     <span class="comment">// Atomic integer containing the next thread ID to be assigned</span></div><div class="line">     <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> AtomicInteger nextId = <span class="keyword">new</span> AtomicInteger(<span class="number">0</span>);</div><div class="line">     <span class="comment">// Thread local variable containing each thread's ID</span></div><div class="line">     <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> ThreadLocal&lt;Integer&gt; threadId =</div><div class="line">         <span class="keyword">new</span> ThreadLocal&lt;Integer&gt;() &#123;</div><div class="line">             <span class="meta">@Override</span> <span class="function"><span class="keyword">protected</span> Integer <span class="title">initialValue</span><span class="params">()</span> </span>&#123;</div><div class="line">                 <span class="keyword">return</span> nextId.getAndIncrement();</div><div class="line">         &#125;</div><div class="line">     &#125;;</div><div class="line">     <span class="comment">// Returns the current thread's unique ID, assigning it if necessary</span></div><div class="line">     <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">get</span><span class="params">()</span> </span>&#123;</div><div class="line">         <span class="keyword">return</span> threadId.get();</div><div class="line">     &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -157,9 +171,9 @@
 
 
 <div class="next">
-<a href="/2016/04/28/java中的equals与hashcode/"  title="通过HashMap认识equals与hashcode">
+<a href="/2016/04/28/java中的类型转换/"  title="java中的类型转换">
  <strong>NEXT:</strong><br/> 
- <span>通过HashMap认识equals与hashcode
+ <span>java中的类型转换
 </span>
 </a>
 </div>
@@ -176,7 +190,7 @@
 
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
-  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#问题背景："><span class="toc-number">1.</span> <span class="toc-text">问题背景：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ThreadLocal原理："><span class="toc-number">2.</span> <span class="toc-text">ThreadLocal原理：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#应用场景"><span class="toc-number">3.</span> <span class="toc-text">应用场景</span></a></li></ol>
+  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#问题背景："><span class="toc-number">1.</span> <span class="toc-text">问题背景：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ThreadLocal原理："><span class="toc-number">2.</span> <span class="toc-text">ThreadLocal原理：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#应用场景"><span class="toc-number">3.</span> <span class="toc-text">应用场景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2016-11-01更新"><span class="toc-number">4.</span> <span class="toc-text">2016/11/01更新</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#解决这个问题的方法就是当ThreadLocal不再使用时，一定要及时调用ThreadLocal的remove方法把已经存储的值清掉。"><span class="toc-number">5.</span> <span class="toc-text">解决这个问题的方法就是当ThreadLocal不再使用时，一定要及时调用ThreadLocal的remove方法把已经存储的值清掉。</span></a></li></ol>
   </div>
 
 <div id="asidepart">
@@ -194,7 +208,7 @@
 		
 			<li><a href="/categories/生活/" title="生活">生活<sup>3</sup></a></li>
 		
-			<li><a href="/categories/编程/" title="编程">编程<sup>15</sup></a></li>
+			<li><a href="/categories/编程/" title="编程">编程<sup>16</sup></a></li>
 		
 		</ul>
 </div>
@@ -211,7 +225,7 @@
 		
 			<li><a href="/tags/curl/" title="curl">curl<sup>1</sup></a></li>
 		
-			<li><a href="/tags/java/" title="java">java<sup>19</sup></a></li>
+			<li><a href="/tags/java/" title="java">java<sup>20</sup></a></li>
 		
 			<li><a href="/tags/junit/" title="junit">junit<sup>1</sup></a></li>
 		
@@ -251,7 +265,7 @@
   
   <div class="archiveslist">
     <p class="asidetitle"><a href="/archives">归档</a></p>
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">十月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">九月 2016</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">八月 2016</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">七月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">六月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">四月 2016</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">三月 2016</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">十二月 2015</a><span class="archive-list-count">2</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">十一月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">十月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">九月 2016</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">八月 2016</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">七月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">六月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">四月 2016</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">三月 2016</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">十二月 2015</a><span class="archive-list-count">2</span></li></ul>
   </div>
 
 
