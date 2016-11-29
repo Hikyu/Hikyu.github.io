@@ -30,7 +30,7 @@
 		
 			<div id="textlogo">
 				<h1 class="site-name"><a href="/" title="YuKai&#39;s blog">YuKai&#39;s blog</a></h1>
-				<h2 class="blog-motto">平凡之中也有感动</h2>
+				<h2 class="blog-motto">好好学习，天天向上</h2>
 			</div>
 			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
 			</a></div>
@@ -71,7 +71,7 @@
     </p>
   <p class="article-time">
     <time datetime="2016-10-10T12:05:03.000Z" itemprop="datePublished">2016-10-10</time>
-    更新日期:<time datetime="2016-10-30T12:13:28.269Z" itemprop="dateModified">2016-10-30</time>
+    更新日期:<time datetime="2016-11-27T15:04:26.712Z" itemprop="dateModified">2016-11-27</time>
     
   </p>
 </header>
@@ -145,8 +145,8 @@
 <p>2.通配符的使用</p>
 <p>考虑下面的情况：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Test</span>&lt;<span class="title">T</span>&gt; </span>&#123;&#125;</div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">getT</span><span class="params">(Test&lt;Number&gt; t)</span> </span>&#123;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line">	Test&lt;Double&gt; test = <span class="keyword">new</span> Test();</div><div class="line">	<span class="comment">//编译时报错</span></div><div class="line">	<span class="comment">//getT(test);</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>报错的原因很好理解，虽然Double是Number的子类，但<code>Test&lt;Double&gt;</code>并不是<code>Test&lt;Number&gt;</code>的子类，故类型检查无法通过。这一点一定要明白。</p>
-<p>那么如果我们确实想要传入一个<code>Test&lt;Double&gt;</code>类型的形参呢？可以使用通配符：</p>
+<p>报错的原因很好理解，虽然Double是Number的子类，但Test<double>并不是Test<number>的子类，故类型检查无法通过。这一点一定要明白。</number></double></p>
+<p>那么如果我们确实想要传入一个Test<double>类型的形参呢？可以使用通配符：</double></p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Test</span>&lt;<span class="title">T</span>&gt; </span>&#123;&#125;</div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line">		Test&lt;Double&gt; test = <span class="keyword">new</span> Test();</div><div class="line">		<span class="comment">//正常运行</span></div><div class="line">		getT(test);</div><div class="line">&#125;</div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">getT</span><span class="params">(Test&lt;? extends Number&gt; t)</span> </span>&#123;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p><code>Test&lt;? extends Number&gt;</code>扩展了形参的类型，可以是<code>Test&lt;Double&gt;</code>、<code>Test&lt;Integer&gt;</code>等，尖括号中的类型必须是Number或继承于Number。同样的，通配符也适用于super，如<code>Test&lt;? super A&gt;</code>。</p>
 <p>如果类型参数中既没有extends 关键字，也没有super关键字，只有一个?，代表无限定通配符。</p>
@@ -221,6 +221,14 @@
 	
 <nav class="article-nav clearfix">
  
+ <div class="prev" >
+ <a href="/2016/11/24/java中的int\byte互转/" title="java 中的int/byte转换">
+  <strong>PREVIOUS:</strong><br/>
+  <span>
+  java 中的int/byte转换</span>
+</a>
+</div>
+
 
 <div class="next">
 <a href="/2016/09/25/ssl总结/"  title="ssl使用总结">
@@ -260,7 +268,7 @@
 		
 			<li><a href="/categories/生活/" title="生活">生活<sup>3</sup></a></li>
 		
-			<li><a href="/categories/编程/" title="编程">编程<sup>15</sup></a></li>
+			<li><a href="/categories/编程/" title="编程">编程<sup>16</sup></a></li>
 		
 		</ul>
 </div>
@@ -277,7 +285,7 @@
 		
 			<li><a href="/tags/curl/" title="curl">curl<sup>1</sup></a></li>
 		
-			<li><a href="/tags/java/" title="java">java<sup>19</sup></a></li>
+			<li><a href="/tags/java/" title="java">java<sup>20</sup></a></li>
 		
 			<li><a href="/tags/junit/" title="junit">junit<sup>1</sup></a></li>
 		
@@ -317,7 +325,7 @@
   
   <div class="archiveslist">
     <p class="asidetitle"><a href="/archives">归档</a></p>
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">十月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">九月 2016</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">八月 2016</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">七月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">六月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">四月 2016</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">三月 2016</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">十二月 2015</a><span class="archive-list-count">2</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">十一月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">十月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">九月 2016</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">八月 2016</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">七月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">六月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">四月 2016</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">三月 2016</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">十二月 2015</a><span class="archive-list-count">2</span></li></ul>
   </div>
 
 

@@ -4,12 +4,12 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>理解notify notifyall sleep | YuKai&#39;s blog</title>
+    <title>java 中的int/byte转换 | YuKai&#39;s blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
     
     <meta name="author" content="于凯">
     
-    <meta name="description" content="今天下班时和同事偶尔谈起了锁的一些问题，发现自己对这些基本一无所知。只是会使用synchronized关键字来进行简单的同步。之前也想把java并发包的源码看一下，但是最近一直没有时间，阅读源码计划也搁置了一段时间了，等重构完JDBC就先把java IO部分理一下吧。晚上回来翻了一下操作系统的书，总">
+    <meta name="description" content="前言好久没有动博客了，看了下，将近两个月了吧。最近的两个月里面变懒了，没有了记录的动力。。。最近好像也没啥收获，惭愧。之前电脑中病毒之后(cryptolcker)，还好没有神马重要的东西，索性把硬盘重新格式化一遍，重做了系统。保留一套windows（实在受不了win10的自动更新了…）,又装了一套o">
     
     
     
@@ -63,15 +63,15 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2016/08/31/理解notify notifyall sleep/" title="理解notify notifyall sleep" itemprop="url">理解notify notifyall sleep</a>
+      <a href="/2016/11/24/java中的int\byte互转/" title="java 中的int/byte转换" itemprop="url">java 中的int/byte转换</a>
   </h1>
   <p class="article-author">By
     
       <a href="http://yukai.space" title="于凯">于凯</a>
     </p>
   <p class="article-time">
-    <time datetime="2016-08-31T13:27:09.000Z" itemprop="datePublished">2016-08-31</time>
-    更新日期:<time datetime="2016-11-27T15:04:26.724Z" itemprop="dateModified">2016-11-27</time>
+    <time datetime="2016-11-24T14:48:55.000Z" itemprop="datePublished">2016-11-24</time>
+    更新日期:<time datetime="2016-11-27T15:04:26.712Z" itemprop="dateModified">2016-11-27</time>
     
   </p>
 </header>
@@ -80,53 +80,66 @@
 		
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
-		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#从线程状态说起"><span class="toc-number">1.</span> <span class="toc-text">从线程状态说起</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#wait"><span class="toc-number">2.</span> <span class="toc-text">wait</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#notify"><span class="toc-number">3.</span> <span class="toc-text">notify</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#notifyAll"><span class="toc-number">4.</span> <span class="toc-text">notifyAll</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#sleep"><span class="toc-number">5.</span> <span class="toc-text">sleep</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#synchronized"><span class="toc-number">6.</span> <span class="toc-text">synchronized</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用场景"><span class="toc-number">7.</span> <span class="toc-text">使用场景</span></a></li></ol>
+		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#正文"><span class="toc-number">2.</span> <span class="toc-text">正文</span></a></li></ol>
 		</div>
 		
-		<p>今天下班时和同事偶尔谈起了锁的一些问题，发现自己对这些基本一无所知。只是会使用synchronized关键字来进行简单的同步。之前也想把java并发包的源码看一下，但是最近一直没有时间，阅读源码计划也搁置了一段时间了，等重构完JDBC就先把java IO部分理一下吧。晚上回来翻了一下操作系统的书，总结一下java中基础的notify、notifyall、sleep。网上关于这三个关键字的文章有很多，理解一下，记下来。</p>
-<h2 id="从线程状态说起"><a href="#从线程状态说起" class="headerlink" title="从线程状态说起"></a>从线程状态说起</h2><p>一般的操作系统中，线程的状态大概有这么几个：</p>
-<ol>
-<li><p>执行：线程获得cpu，程序正在执行</p>
-</li>
-<li><p>就绪：线程已经准备好运行，只要获得cpu，便立即执行</p>
-</li>
-<li><p>阻塞：线程等待某些资源，暂时无法执行。这时该线程放弃cpu，引起线程调度</p>
-</li>
-<li><p>挂起：由于某种原因，线程被挂起，线程处于静止状态。若此时线程正在执行，挂起后暂停执行，让出cpu;若原本处于就绪状态，则暂不接受调度。</p>
-</li>
-<li><p>激活：把一个挂起的线程激活</p>
-</li>
-</ol>
-<p>着重理解一下几个关键状态的转换：</p>
-<p>活动就绪–&gt;静止就绪：当线程处于未被挂起的就绪状态时，称为活动就绪，此时线程接收调度。当该线程被挂起后，转变为静止就绪，暂不接受调度。</p>
-<p>活动阻塞–&gt;静止阻塞：当线程处于未被挂起的阻塞状态时，称为活动阻塞。当该线程被挂起后，转变为静止阻塞。当线程等待的事件出现后，从静止阻塞转变为静止就绪。</p>
-<p>注意：挂起和阻塞均会使线程让出cpu，不同就在于阻塞一旦获得等待事件，就转变为就绪状态，接受调度；挂起需要激活操作后，转变为就绪状态，接收调度。</p>
-<p>画个图理解一下：</p>
-<img src="/2016/08/31/理解notify%20notifyall%20sleep/线程状态.png" alt="线程状态.png" title="">
-<p>线程创建和终止状态不再讨论。</p>
-<h2 id="wait"><a href="#wait" class="headerlink" title="wait"></a>wait</h2><p>wait、notify、notifyAll三个方法都是Object的方法。每个对象都拥有这三个方法。</p>
-<p>当在线程中调用某个对象A的wait方法时，释放该对象的锁，同时让出cpu的使用权。前提是需拥有该对象A的锁，故wait方法需要在synchronized(A)的作用域中使用。</p>
-<p>调用wait方法，相当于上图中<strong>执行-&gt;活动阻塞-&gt;静止阻塞</strong>的过程。同时，wait方法释放了对象的锁，然后阻塞，挂起，等待被唤醒。</p>
-<h2 id="notify"><a href="#notify" class="headerlink" title="notify"></a>notify</h2><p>当在线程Y中调用某个对象A的notify方法时，系统从众多等待被唤醒(挂起)的线程(调用了A的wait方法的线程)中选出一个线程X，将其唤醒(激活),这个过程相当于上图中<strong>静止阻塞-&gt;活动阻塞</strong>的过程。此时该线程X会重新开始对A对象锁的请求。跟wait一样，notify也需要在synchronized(A)的作用域中调用，当Y线程运行出synchronized(A)的作用域后，释放A对象的锁。</p>
-<p>此时，线程X会得到A对象的锁(只唤醒了他一个嘛)，这个过程相当于上图<strong>活动阻塞-&gt;活动就绪</strong>的过程。此时线程等待调度执行。</p>
-<p>需要注意的是，notify不恰当使用很有可能造成死锁问题。</p>
-<h2 id="notifyAll"><a href="#notifyAll" class="headerlink" title="notifyAll"></a>notifyAll</h2><p>当在线程Y中调用某个对象A的notifyAll方法时，系统将所有等待被唤醒(挂起)的线程(调用了A的wait方法的线程)唤醒(激活)。这些线程会开始竞争A对象的锁。(注意notify与notifyAll的区别就在于唤醒一个等待线程还是所有的等待线程。线程被唤醒后将参与对锁的竞争，未被唤醒的线程不参与锁的竞争。)之后就跟notify一样了，线程Y运行出synchronized(A)的作用域，释放A对象的锁。</p>
-<h2 id="sleep"><a href="#sleep" class="headerlink" title="sleep"></a>sleep</h2><p>与以上三个关键字不同的是，sleep方法是Thread中的方法。</p>
-<p>当调用某个线程Y的sleep(1000)方法时，线程Y挂起，放弃cpu的使用权。与wait不同的是，他不会释放对象的锁。故sleep方法可以在非synchronized作用域使用。调用sleep的目的是不让当前线程独自霸占该进程所获的CPU资源，以留一定时间给其他线程执行的机会;</p>
-<p>调用线程Y的sleep(1000)sleep方法，相当于上图中<strong>执行-&gt;静止就绪状态</strong>。当过1000毫秒之后，线程Y被激活，从静止就绪转为活动就绪状态。此时线程Y等待调度执行。</p>
-<h2 id="synchronized"><a href="#synchronized" class="headerlink" title="synchronized"></a>synchronized</h2><p>当程序执行遇到synchronized关键字的时候，若此时锁被占用，则线程被阻塞。相当于上图中<strong>执行-&gt;活动阻塞</strong>过程。</p>
-<p>PS：上述的几个状态跟java中描述的Thread.state并不尽相同。而且底层真正的运行情况(OS的线程状态)是否是跟以上描述相同也有待考究。但是我理解的这几个关键字对外的表现应该与上述描述是一样的。</p>
-<p>参考知乎上的一个提问：<a href="https://www.zhihu.com/question/23328075" target="_blank" rel="external">java sleep和wait的区别的疑惑?</a></p>
-<h2 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h2><p>Object.wait()方法需要在synchronized的作用域中使用。某线程中调用对象A的wait方法会释放该对象A的锁,线程让出cpu。什么时候会用到这个方法？获得对象的锁却又主动释放它？</p>
-<p>在一些生产者消费者的问题中可能会用到wait和notify方法。比如使用一个buffer，当消费者获得buffer的锁，检测到buffer为空时使用wait方法，释放锁，等待生产者填满buffer后调用buffer的notify方法通知消费者去使用buffer。</p>
-<p>例子自己写了一个，感觉挺low，网上很多优秀的例子，代码就不贴了。</p>
+		<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>好久没有动博客了，看了下，将近两个月了吧。最近的两个月里面变懒了，没有了记录的动力。。。最近好像也没啥收获，惭愧。之前电脑中病毒之后(cryptolcker)，还好没有神马重要的东西，索性把硬盘重新格式化一遍，重做了系统。保留一套windows（实在受不了win10的自动更新了…）,又装了一套opensuse的系统。希望可以坚持学点linux。</p>
+<p>这段时间没有怎么看书，说一下读书情况。《重构》这本还是没有看完，读了大半。《深入理解jvm虚拟机》这本算是大致上浏览了一遍，发现确实是一本挺好的java书籍，日后还需多加翻阅理解。《大话设计模式》也是浏览了一遍，其中比较常见的模式有时候也可以用到，需要的时候再看吧。双十一买了一本《java并发编程实战》，看了大半，似懂非懂，但也是有收获的。不得不吐槽一下该书的翻译，实在是不敢恭维，但是想想自己的英语水平，目前还是忍了。。</p>
+<p>必须要振作起精神来了，总觉得自己每天无所事事呢。接下来的计划…..还是把并发编程这块看完吧，虽然没有什么实战的机会，总比不看强。要多写总结了，不然看了跟不看差不多。异常、反射、动态代理、注解等等这些也要学习然后做一个记录。网络、io、并发这三块，并发还在看，也要做好记录，然后网络这部分把大学课本重读一遍，至于io不知道有什么好的书籍，放到最后规划学习把。</p>
+<p>嗯，又想起来最近还写了一个自动打卡的程序，增加了短信通知的功能。总觉得有些不诚信的感觉呢，但是没有迟到早退过呀，好玩罢了。读了webmagic的core部分的源码，感觉理解起来轻松许多。记得大学那会看这个的时候还是一头雾水，结果现在两个小时就把代码搞清楚了（主要是代码量也不大拉）。嗯，说明自己还是在进步的麻，哈哈哈。下载了junit的源码都没有看过，有空研究把。</p>
+<p>终于要进入正题了。这次的记录很短很简单，是关于java中int和byte之间的转换的。虽然简单，但是以前就是拿来即用，没有搞清楚其中的原理，在byte这块就很纠结（只能说基础比较差），今天来学习一下。</p>
+<hr>
+<h2 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h2><p>java中:</p>
+<p>byte: 1字节    int: 4字节</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">int</span> i = -<span class="number">123</span></div><div class="line"><span class="keyword">byte</span> x = (<span class="keyword">byte</span>)i; <span class="comment">//-123</span></div></pre></td></tr></table></figure>
+<p>ps：([]代表几进制，()代表前面的内容重复几次)</p>
+<p>ps:</p>
+<p>-123[2] = 11111111(3)10000101</p>
+<p>int 强转为 byte，直接截取低8位即10000101</p>
+<p>java把byte当做有符号处理，故此时x=-123</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">int</span> j = (<span class="keyword">int</span>)x; <span class="comment">//-123</span></div></pre></td></tr></table></figure>
+<p>ps:</p>
+<p>byte强转为int，高24位补1(自动扩展)</p>
+<p>此时，j[2]=11111111(3)11101010</p>
+<p>即，j=-123</p>
+<p>负数似乎没有问题…</p>
+<hr>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">int</span> i = <span class="number">234</span>;</div><div class="line"><span class="keyword">byte</span> x = (<span class="keyword">byte</span>)i; <span class="comment">//-22</span></div></pre></td></tr></table></figure>
+<p>ps:</p>
+<p>234[2] = 00000000(3)11101010</p>
+<p>int 强转为 byte，直接截取低8位即11101010</p>
+<p>java把byte当做有符号处理，故此时x=-22</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">int</span> j = (<span class="keyword">int</span>)x; <span class="comment">//-22</span></div></pre></td></tr></table></figure>
+<p>ps:</p>
+<p>byte强转为int，高24位补1（自动扩展）</p>
+<p>此时，j[2]=11111111(3)11101010</p>
+<p>即，j=-22</p>
+<p>可见，byte单纯的强转为int是行不通的。(注意，示例中int强转为一个byte,如果int值超过255,发生数据丢失，正确的int转为4字节byte方法见下文)</p>
+<hr>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">int</span> i = <span class="number">234</span>;</div><div class="line"><span class="keyword">byte</span> x = (<span class="keyword">byte</span>)i; <span class="comment">//-22</span></div><div class="line"><span class="keyword">int</span> j = x &amp; <span class="number">0xFF</span>; <span class="comment">//j=234</span></div></pre></td></tr></table></figure>
+<p>ps:</p>
+<p>x &amp; 0xFF = 00000000(3)11101010</p>
+<p>即，j=234</p>
+<p>可见0xFF的作用…</p>
+<hr>
+<ul>
+<li><a href="http://yukai.space/2016/04/28/java%E4%B8%AD%E7%9A%84%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2/">http://yukai.space/2016/04/28/java%E4%B8%AD%E7%9A%84%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2/</a></li>
+</ul>
+<p>byte short char 他们三者在计算时，首先会转换为int类型,故下面几个表达式进行|运算时，是int类型之间的|运算，存在自动扩展(移位操作也会出现这种情况,即int转byte的时候),不进行&amp; 0xFF的运算，则有可能造成第一种情况的出现。</p>
+<ul>
+<li>java字节序</li>
+</ul>
+<p>java为大端字节序（bigendian）：高字节数据存放在低地址处，低字节数据存放在高地址处。</p>
+<p>0x01020304</p>
+<p>故b[0]=0x01,b[1]=0x02,b[2]=0x03,b[3]=0x04</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//byte 数组与 int 的相互转换  </span></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">byteArrayToInt</span><span class="params">(<span class="keyword">byte</span>[] b)</span> </span>&#123;  </div><div class="line">    <span class="keyword">return</span>   b[<span class="number">3</span>] &amp; <span class="number">0xFF</span> |  </div><div class="line">            (b[<span class="number">2</span>] &amp; <span class="number">0xFF</span>) &lt;&lt; <span class="number">8</span> |  </div><div class="line">            (b[<span class="number">1</span>] &amp; <span class="number">0xFF</span>) &lt;&lt; <span class="number">16</span> |  </div><div class="line">            (b[<span class="number">0</span>] &amp; <span class="number">0xFF</span>) &lt;&lt; <span class="number">24</span>;  </div><div class="line">&#125;  </div><div class="line">  </div><div class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">byte</span>[] intToByteArray(<span class="keyword">int</span> a) &#123;  </div><div class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="keyword">byte</span>[] &#123;  </div><div class="line">        (<span class="keyword">byte</span>) ((a &gt;&gt; <span class="number">24</span>) &amp; <span class="number">0xFF</span>),  </div><div class="line">        (<span class="keyword">byte</span>) ((a &gt;&gt; <span class="number">16</span>) &amp; <span class="number">0xFF</span>),     </div><div class="line">        (<span class="keyword">byte</span>) ((a &gt;&gt; <span class="number">8</span>) &amp; <span class="number">0xFF</span>),     </div><div class="line">        (<span class="keyword">byte</span>) (a &amp; <span class="number">0xFF</span>)  </div><div class="line">    &#125;;  </div><div class="line">&#125;</div></pre></td></tr></table></figure>
   
 	</div>
 		<footer class="article-footer clearfix">
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/java/">java</a><a href="/tags/多线程/">多线程</a>
+  <span></span> <a href="/tags/java/">java</a>
   </div>
 
 
@@ -140,7 +153,7 @@
 <div class="article-share" id="share">
 
 <!--
-  <div data-url="http://yukai.space/2016/08/31/理解notify notifyall sleep/" data-title="理解notify notifyall sleep | YuKai&#39;s blog" data-tsina="5381447277" class="share clearfix">
+  <div data-url="http://yukai.space/2016/11/24/java中的int\byte互转/" data-title="java 中的int/byte转换 | YuKai&#39;s blog" data-tsina="5381447277" class="share clearfix">
   </div>
 -->
 
@@ -150,19 +163,11 @@
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2016/09/10/理解java内存模型/" title="理解java内存模型">
-  <strong>PREVIOUS:</strong><br/>
-  <span>
-  理解java内存模型</span>
-</a>
-</div>
-
 
 <div class="next">
-<a href="/2016/08/22/关于加密的一点总结/"  title="关于加密的一点总结">
+<a href="/2016/10/10/java泛型学习/"  title="java泛型学习">
  <strong>NEXT:</strong><br/> 
- <span>关于加密的一点总结
+ <span>java泛型学习
 </span>
 </a>
 </div>
@@ -179,7 +184,7 @@
 
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
-  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#从线程状态说起"><span class="toc-number">1.</span> <span class="toc-text">从线程状态说起</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#wait"><span class="toc-number">2.</span> <span class="toc-text">wait</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#notify"><span class="toc-number">3.</span> <span class="toc-text">notify</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#notifyAll"><span class="toc-number">4.</span> <span class="toc-text">notifyAll</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#sleep"><span class="toc-number">5.</span> <span class="toc-text">sleep</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#synchronized"><span class="toc-number">6.</span> <span class="toc-text">synchronized</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用场景"><span class="toc-number">7.</span> <span class="toc-text">使用场景</span></a></li></ol>
+  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#正文"><span class="toc-number">2.</span> <span class="toc-text">正文</span></a></li></ol>
   </div>
 
 <div id="asidepart">
