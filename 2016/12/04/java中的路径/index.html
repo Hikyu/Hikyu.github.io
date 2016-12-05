@@ -1,0 +1,418 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>java中的路径 | YuKai&#39;s blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
+    <meta name="author" content="于凯">
+    
+    <meta name="description" content="每次写java代码的时候，免不了需要加载一些外部资源，比如配置文件等等。每当需要读取这些文件时，都是去网上谷歌，写过就忘。于是今天来总结一些java中有关路径的一些用法。
+
+绝对路径无论是在linux还是windows中，路径都分为绝对路径和相对路径两种。
+绝对路径就是系统中唯一能够定位资源的某个U">
+    
+    
+    
+    
+    
+    <link rel="icon" href="/img/xiaoxin.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/xiaoxin.png">
+    <link rel="apple-touch-icon-precomposed" href="/img/xiaoxin.png">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="YuKai&#39;s blog">YuKai&#39;s blog</a></h1>
+				<h2 class="blog-motto">好好学习，天天向上</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					
+						<li><a href="/">首页</a></li>
+					
+						<li><a href="/archives">归档</a></li>
+					
+						<li><a href="/page">关于</a></li>
+					
+					<li>
+					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:yukai.space">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2016/12/04/java中的路径/" title="java中的路径" itemprop="url">java中的路径</a>
+  </h1>
+  <p class="article-author">By
+    
+      <a href="http://yukai.space" title="于凯">于凯</a>
+    </p>
+  <p class="article-time">
+    <time datetime="2016-12-04T11:03:00.000Z" itemprop="datePublished">2016-12-04</time>
+    更新日期:<time datetime="2016-12-05T01:59:22.601Z" itemprop="dateModified">2016-12-05</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#绝对路径"><span class="toc-number">1.</span> <span class="toc-text">绝对路径</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#相对路径"><span class="toc-number">2.</span> <span class="toc-text">相对路径</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#java-io定位文件资源"><span class="toc-number">3.</span> <span class="toc-text">java io定位文件资源</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#File-getPath-amp-File-getAbsolutePath-amp-File-getCanonicalPath"><span class="toc-number">4.</span> <span class="toc-text">File.getPath & File.getAbsolutePath & File.getCanonicalPath</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#读取classpath下的文件"><span class="toc-number">5.</span> <span class="toc-text">读取classpath下的文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Path-java"><span class="toc-number">6.</span> <span class="toc-text">Path.java</span></a></li></ol>
+		</div>
+		
+		<blockquote>
+<p>每次写java代码的时候，免不了需要加载一些外部资源，比如配置文件等等。每当需要读取这些文件时，都是去网上谷歌，写过就忘。于是今天来总结一些java中有关路径的一些用法。</p>
+</blockquote>
+<h2 id="绝对路径"><a href="#绝对路径" class="headerlink" title="绝对路径"></a>绝对路径</h2><p>无论是在linux还是windows中，路径都分为绝对路径和相对路径两种。</p>
+<p>绝对路径就是系统中唯一能够定位资源的某个URI，即完整的描述文件的路径就是绝对路径。比如：</p>
+<p>linux中的绝对路径：/home/yukai/test.txt</p>
+<p>windows中的绝对路径：E:\yukai\test.txt</p>
+<p>绝对路径都是以根目录起始的。</p>
+<h2 id="相对路径"><a href="#相对路径" class="headerlink" title="相对路径"></a>相对路径</h2><p>相对路径即目标文件相对与某个基准目录的路径。比如:</p>
+<p>存在文件： </p>
+<p>A: /home/yukai/test.txt </p>
+<p>B: /home/yukai/test1.txt </p>
+<p>C: /home/yukai/test/test.txt</p>
+<p>那么：</p>
+<p>若基准目录为A, B的路径表示为”test1.txt”</p>
+<p>若基准目录为B, C的路径表示为”test/test.txt”</p>
+<p>若基准目录为C, B的路径表示为”../test1.txt”</p>
+<p>另外，“./”表示当前目录，“../”表示上级目录</p>
+<h2 id="java-io定位文件资源"><a href="#java-io定位文件资源" class="headerlink" title="java io定位文件资源"></a>java io定位文件资源</h2><p>那么，我们在java中如何读取某个文件？上代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">// 目录结构</div><div class="line">src</div><div class="line"> |</div><div class="line"> |--test</div><div class="line"> |   |</div><div class="line"> |   |--PathTest.java </div><div class="line"> |</div><div class="line">resource</div><div class="line"> |</div><div class="line"> |--data.txt</div></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">PathTest</span> </span>&#123;</div><div class="line"></div><div class="line">	<span class="keyword">public</span> <span class="keyword">static</span> String  dataFilePath = <span class="string">"resource/data.txty"</span>;</div><div class="line">	</div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">getUserDir</span><span class="params">()</span> </span>&#123;</div><div class="line">		<span class="comment">//打印运行程序的目录，即启动java程序的目录</span></div><div class="line">		String userDir = System.getProperty(<span class="string">"user.dir"</span>);</div><div class="line">		System.out.println(<span class="string">"运行java的工作目录 System.getProperty(\"user.dir\")： "</span> + userDir);</div><div class="line">		<span class="keyword">return</span> userDir;</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">testDataPath1</span><span class="params">()</span> </span>&#123;</div><div class="line">		String msg = <span class="string">"&gt;&gt; Path = System.getProperty(\"user.dir\") + \"resource/data.txt\""</span>;</div><div class="line">		String userDir = getUserDir();</div><div class="line">		<span class="comment">//等同于 "resource/data.txt"</span></div><div class="line">		String filePath = userDir + System.getProperty(<span class="string">"file.separator"</span>) + dataFilePath;</div><div class="line">		printFileContent(filePath ,msg);</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">testDataPath2</span><span class="params">()</span> </span>&#123;</div><div class="line">		String msg = <span class="string">"Path = \"resource/data.txt\""</span>;</div><div class="line">		String filePath = dataFilePath;</div><div class="line">		printFileContent(filePath, msg);</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">testDataPath3</span><span class="params">()</span> </span>&#123;</div><div class="line">		String msg = <span class="string">"Path = \"./resource/data.txt\""</span>;</div><div class="line">		String filePath = <span class="string">"./resource/data.txt"</span>;</div><div class="line">		printFileContent(filePath, msg);</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	<span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">printFileContent</span><span class="params">(String filePath, String msg)</span> </span>&#123;</div><div class="line">		System.out.println(<span class="string">"****************************"</span>);</div><div class="line">		System.out.println(msg);</div><div class="line">		File file = <span class="keyword">new</span> File(filePath);</div><div class="line">		InputStream stream;</div><div class="line">		<span class="keyword">try</span> &#123;</div><div class="line">			stream = <span class="keyword">new</span> FileInputStream(file);</div><div class="line">			BufferedReader reader = <span class="keyword">new</span> BufferedReader(<span class="keyword">new</span> InputStreamReader(stream));</div><div class="line">			String line = <span class="keyword">null</span>;</div><div class="line">			<span class="keyword">while</span> ((line = reader.readLine()) != <span class="keyword">null</span>) &#123;</div><div class="line">				System.out.println(line);</div><div class="line">			&#125;</div><div class="line">		&#125; <span class="keyword">catch</span> (Exception e) &#123;</div><div class="line">			e.printStackTrace();</div><div class="line">		&#125; <span class="keyword">finally</span> &#123;</div><div class="line">			System.out.println(<span class="string">"****************************"</span>);</div><div class="line">		&#125; </div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line">		testDataPath1();</div><div class="line">		testDataPath2();</div><div class="line">		testDataPath3();</div><div class="line">	&#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>其中<code>testDataPath2</code>、<code>testDataPath1</code>、<code>testDataPath3</code>这三个方法的效果是一样的。</p>
+<p><code>System.getProperty(&quot;user.dir&quot;)</code>这个方法获取了当前的工作目录，也就是启动jvm的目录。例如：</p>
+<p>ps: 更多关于System.getProperty()的介绍：<a href="http://docs.oracle.com/javase/tutorial/essential/environment/sysprop.html" target="_blank" rel="external">System Properties</a></p>
+<p>你的java程序位于：/home/yukai/code/test.jar </p>
+<p>若你在目录/home/yukai下使用命令 <code>java -cp code/test.jar test.PathTest</code> 启动java程序时，目录/home/yukai就是你的工作目录。</p>
+<p>在<code>testDataPath2</code>当中，直接使用”resource/data.txty”来作为文件读取路径时，java会默认为基准目录为当前的工作目录，”resource/data.txty”此时就是相对于这个基准目录的路径。<br>也就是说，java会把工作目录与”resource/data.txty”拼接起来，作为一个绝对路径去读取文件，也就是<code>testDataPath1</code>中的例子。</p>
+<p>有Eclipse中启动你的java工程的目录就是工程根目录，工程根目录也就是工作目录，如果你读取文件的方式类似于<code>testDataPath2</code>的话，他会在工程根目录下找你的文件。<br>有时候我们会遇到，在Eclipse中读取文件没有问题，但是打成jar包之后运行(像上面运行jar包的例子)就会报找不到文件的错误。那么此时就要检查你的当前工作目录下(/home/yukai)是否有这些文件的存在了。</p>
+<h2 id="File-getPath-amp-File-getAbsolutePath-amp-File-getCanonicalPath"><a href="#File-getPath-amp-File-getAbsolutePath-amp-File-getCanonicalPath" class="headerlink" title="File.getPath &amp; File.getAbsolutePath &amp; File.getCanonicalPath"></a>File.getPath &amp; File.getAbsolutePath &amp; File.getCanonicalPath</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">testGetPath</span><span class="params">()</span> </span>&#123;</div><div class="line">		File file = <span class="keyword">new</span> File(<span class="string">"./resource/data.txt"</span>);</div><div class="line">		System.out.println(<span class="string">"File.getPath(): "</span> + file.getPath());</div><div class="line">		System.out.println(<span class="string">"File.getAbsolutePath(): "</span>+ file.getAbsolutePath());</div><div class="line">		<span class="keyword">try</span> &#123;</div><div class="line">			System.out.println(<span class="string">"File.getCanonicalPath(): "</span> + file.getCanonicalPath());</div><div class="line">		&#125; <span class="keyword">catch</span> (Exception e) &#123;</div><div class="line">			e.printStackTrace();</div><div class="line">		&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>上述代码运行结果：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">File.getPath(): ./resource/data.txt</div><div class="line">File.getAbsolutePath(): /home/yukai/workspace/test/./resource/data.txt</div><div class="line">File.getCanonicalPath(): /home/yukai/workspace/test/resource/data.txt</div></pre></td></tr></table></figure>
+<p>摘抄一段<a href="http://stackoverflow.com/questions/1099300/whats-the-difference-between-getpath-getabsolutepath-and-getcanonicalpath" target="_blank" rel="external">stackoverflow</a>上的答案:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">getPath() gets the path string that the File object was constructed with, and it may be relative current directory.</div><div class="line"></div><div class="line">getAbsolutePath() gets the path string after resolving it against the current directory if it&apos;s relative, resulting in a fully qualified path.</div><div class="line"></div><div class="line">getCanonicalPath() gets the path string after resolving any relative path against current directory, and removes any relative pathing (. and ..), and any file system links to return a path which the file system considers the canonical means to reference the file system object to which it points.</div></pre></td></tr></table></figure>
+<h2 id="读取classpath下的文件"><a href="#读取classpath下的文件" class="headerlink" title="读取classpath下的文件"></a>读取classpath下的文件</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">getClassPath</span><span class="params">()</span> </span>&#123;</div><div class="line">		System.out.println(<span class="string">"PathTest.class.getResource(\"/\"): "</span> + PathTest.class.getResource(<span class="string">"/"</span>));</div><div class="line">		System.out.println(<span class="string">"PathTest.class.getResource(\"\"): "</span> + PathTest.class.getResource(<span class="string">""</span>));</div><div class="line">		</div><div class="line">		System.out.println(<span class="string">"PathTest.class.getClassLoader().getResource(\"/\"): "</span> + PathTest.class.getClassLoader().getResource(<span class="string">"/"</span>));</div><div class="line">		System.out.println(<span class="string">"PathTest.class.getClassLoader().getResource(\"\"): "</span> + PathTest.class.getClassLoader().getResource(<span class="string">""</span>));</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>运行结果(Eclipse)：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">//以“/”开头，表示相对于package根目录</div><div class="line">PathTest.class.getResource(&quot;/&quot;): file:/home/yukai/workspace/test/bin/</div><div class="line">//不以“/”开头，表示相对于class文件所在目录</div><div class="line">PathTest.class.getResource(&quot;&quot;): file:/home/yukai/workspace/test/bin/test/</div><div class="line">//</div><div class="line">PathTest.class.getClassLoader().getResource(&quot;/&quot;): null</div><div class="line">//getClassLoader().getResource(&quot;&quot;)不以“/”开头，相对于package根目录</div><div class="line">PathTest.class.getClassLoader().getResource(&quot;&quot;): file:/home/yukai/workspace/test/bin/</div></pre></td></tr></table></figure>
+<h2 id="Path-java"><a href="#Path-java" class="headerlink" title="Path.java"></a>Path.java</h2><p>jdk1.7之后，新增了一个类File,位于java.nio.file下，该类提供了一些路径的操作。</p>
+<p>具体的使用不一一介绍，用到时可查找oracle的官方手册，已经写的很详细了：<a href="https://docs.oracle.com/javase/tutorial/essential/io/pathOps.html" target="_blank" rel="external">Path Operations</a></p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/java/">java</a>
+</div>
+
+
+
+<div class="article-share" id="share">
+
+<!--
+  <div data-url="http://yukai.space/2016/12/04/java中的路径/" data-title="java中的路径 | YuKai&#39;s blog" data-tsina="5381447277" class="share clearfix">
+  </div>
+-->
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2016/11/24/java中的int\byte互转/"  title="java 中的int/byte转换">
+ <strong>NEXT:</strong><br/> 
+ <span>java 中的int/byte转换
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section class="comment">
+	<div class="ds-thread"></div>
+</section>
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#绝对路径"><span class="toc-number">1.</span> <span class="toc-text">绝对路径</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#相对路径"><span class="toc-number">2.</span> <span class="toc-text">相对路径</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#java-io定位文件资源"><span class="toc-number">3.</span> <span class="toc-text">java io定位文件资源</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#File-getPath-amp-File-getAbsolutePath-amp-File-getCanonicalPath"><span class="toc-number">4.</span> <span class="toc-text">File.getPath & File.getAbsolutePath & File.getCanonicalPath</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#读取classpath下的文件"><span class="toc-number">5.</span> <span class="toc-text">读取classpath下的文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Path-java"><span class="toc-number">6.</span> <span class="toc-text">Path.java</span></a></li></ol>
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+			<li><a href="/categories/java/" title="java">java<sup>1</sup></a></li>
+		
+			<li><a href="/categories/工具/" title="工具">工具<sup>7</sup></a></li>
+		
+			<li><a href="/categories/技术/" title="技术">技术<sup>5</sup></a></li>
+		
+			<li><a href="/categories/生活/" title="生活">生活<sup>3</sup></a></li>
+		
+			<li><a href="/categories/编程/" title="编程">编程<sup>16</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			<li><a href="/tags/Eclipse/" title="Eclipse">Eclipse<sup>1</sup></a></li>
+		
+			<li><a href="/tags/ant/" title="ant">ant<sup>2</sup></a></li>
+		
+			<li><a href="/tags/curl/" title="curl">curl<sup>1</sup></a></li>
+		
+			<li><a href="/tags/java/" title="java">java<sup>20</sup></a></li>
+		
+			<li><a href="/tags/junit/" title="junit">junit<sup>1</sup></a></li>
+		
+			<li><a href="/tags/markdown/" title="markdown">markdown<sup>1</sup></a></li>
+		
+			<li><a href="/tags/python/" title="python">python<sup>1</sup></a></li>
+		
+			<li><a href="/tags/spring/" title="spring">spring<sup>2</sup></a></li>
+		
+			<li><a href="/tags/加密/" title="加密">加密<sup>2</sup></a></li>
+		
+			<li><a href="/tags/多线程/" title="多线程">多线程<sup>5</sup></a></li>
+		
+			<li><a href="/tags/快捷键/" title="快捷键">快捷键<sup>1</sup></a></li>
+		
+			<li><a href="/tags/服务器/" title="服务器">服务器<sup>1</sup></a></li>
+		
+			<li><a href="/tags/测试/" title="测试">测试<sup>1</sup></a></li>
+		
+			<li><a href="/tags/源码/" title="源码">源码<sup>1</sup></a></li>
+		
+			<li><a href="/tags/编码/" title="编码">编码<sup>2</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  
+  <div class="tagcloudlist">
+    <p class="asidetitle">标签云</p>
+    <div class="tagcloudlist clearfix">
+       <a href="/tags/Eclipse/" style="font-size: 10px;">Eclipse</a> <a href="/tags/ant/" style="font-size: 13.33px;">ant</a> <a href="/tags/curl/" style="font-size: 10px;">curl</a> <a href="/tags/java/" style="font-size: 20px;">java</a> <a href="/tags/junit/" style="font-size: 10px;">junit</a> <a href="/tags/markdown/" style="font-size: 10px;">markdown</a> <a href="/tags/python/" style="font-size: 10px;">python</a> <a href="/tags/spring/" style="font-size: 13.33px;">spring</a> <a href="/tags/加密/" style="font-size: 13.33px;">加密</a> <a href="/tags/多线程/" style="font-size: 16.67px;">多线程</a> <a href="/tags/快捷键/" style="font-size: 10px;">快捷键</a> <a href="/tags/服务器/" style="font-size: 10px;">服务器</a> <a href="/tags/测试/" style="font-size: 10px;">测试</a> <a href="/tags/源码/" style="font-size: 10px;">源码</a> <a href="/tags/编码/" style="font-size: 13.33px;">编码</a>
+    </div>
+  </div>
+
+
+  
+  <div class="archiveslist">
+    <p class="asidetitle"><a href="/archives">归档</a></p>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">十二月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">十一月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">十月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">九月 2016</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">八月 2016</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">七月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">六月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">四月 2016</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">三月 2016</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">十二月 2015</a><span class="archive-list-count">2</span></li></ul>
+  </div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> 既来之 <br/>
+			则安之</p>
+	</section>
+	 
+	<div class="social-font clearfix">
+		
+		<a href="http://weibo.com/5381447277" target="_blank" title="weibo"></a>
+		
+		
+		
+		<a href="https://github.com/Hikyu" target="_blank" title="github"></a>
+		
+		
+		
+	</div>
+	<!--
+		<p class="copyright">Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/A-limon/pacman" target="_blank" title="Pacman">Pacman</a> © 2016 
+		
+		<a href="http://yukai.space" target="_blank" title="于凯">于凯</a>
+		
+		</p>
+	-->
+	<p class="copyright">Copyright 2016 yukai.space AllRights Reserved.</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"null"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+  </body>
+</html>
