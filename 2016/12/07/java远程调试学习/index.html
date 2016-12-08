@@ -1,0 +1,457 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>java远程调试学习 | YuKai&#39;s blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
+    <meta name="author" content="于凯">
+    
+    <meta name="description" content="集群前后台协议需要做一些修改，我负责jdbc这边的修改。按照协议内容修改完代码之后却面临一个测试的问题：修改后的后台又部署在北京，但北京并不是所有的机器都对天津这边开放，只给提供一台机器A，就是集群的服务器。这样的话,就无法创建节点的连接，测试没有办法进行。
+一开始用了最简单的办法，把打好的jar包">
+    
+    
+    
+    
+    
+    <link rel="icon" href="/img/xiaoxin.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/xiaoxin.png">
+    <link rel="apple-touch-icon-precomposed" href="/img/xiaoxin.png">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="YuKai&#39;s blog">YuKai&#39;s blog</a></h1>
+				<h2 class="blog-motto">好好学习，天天向上</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					
+						<li><a href="/">首页</a></li>
+					
+						<li><a href="/archives">归档</a></li>
+					
+						<li><a href="/page">关于</a></li>
+					
+					<li>
+					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:yukai.space">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2016/12/07/java远程调试学习/" title="java远程调试学习" itemprop="url">java远程调试学习</a>
+  </h1>
+  <p class="article-author">By
+    
+      <a href="http://yukai.space" title="于凯">于凯</a>
+    </p>
+  <p class="article-time">
+    <time datetime="2016-12-07T13:55:48.000Z" itemprop="datePublished">2016-12-07</time>
+    更新日期:<time datetime="2016-12-08T11:25:51.169Z" itemprop="dateModified">2016-12-08</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#一些概念"><span class="toc-number">1.</span> <span class="toc-text">一些概念</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用JDB进行本地调试"><span class="toc-number">2.</span> <span class="toc-text">使用JDB进行本地调试</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用JDB进行远程调试"><span class="toc-number">3.</span> <span class="toc-text">使用JDB进行远程调试</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#启动要调试的程序"><span class="toc-number">3.1.</span> <span class="toc-text">启动要调试的程序</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#本机连接远程程序并启动调试"><span class="toc-number">3.2.</span> <span class="toc-text">本机连接远程程序并启动调试</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用Eclipse进行远程调试"><span class="toc-number">4.</span> <span class="toc-text">使用Eclipse进行远程调试</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#启动要调试的程序-1"><span class="toc-number">4.1.</span> <span class="toc-text">启动要调试的程序</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#本机启动Eclipse进行调试"><span class="toc-number">4.2.</span> <span class="toc-text">本机启动Eclipse进行调试</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">5.</span> <span class="toc-text">参考</span></a></li></ol>
+		</div>
+		
+		<blockquote>
+<p>集群前后台协议需要做一些修改，我负责jdbc这边的修改。按照协议内容修改完代码之后却面临一个测试的问题：修改后的后台又部署在北京，但北京并不是所有的机器都对天津这边开放，只给提供一台机器A，就是集群的服务器。<br>这样的话,就无法创建节点的连接，测试没有办法进行。</p>
+<p>一开始用了最简单的办法，把打好的jar包通过远程ssh放到A上面，再通过ssh去跑用例，打印结果看看正确与否。但是这样的效率真的太低了，每做一次修改都要打包、部署、运行、分析log。于是借这个机会学习一下java程序的远程调试。以下为总结。</p>
+</blockquote>
+<h2 id="一些概念"><a href="#一些概念" class="headerlink" title="一些概念"></a>一些概念</h2><p>JDPA: java平台调试架构</p>
+<p>JVMTI: JVM端调试接口</p>
+<p>JDI: java端调试接口</p>
+<p>JDWP: java调试网络协议</p>
+<img src="/2016/12/07/java远程调试学习/jdpa.png" alt="jdpa" title="jdpa">
+<p>JPDA 定义了一套如何开发调试工具的接口和规范。</p>
+<p>JPDA 由三个独立的模块 JVMTI、JDWP、JDI 组成。</p>
+<p>调试者通过 JDI 发送接受调试命令。</p>
+<p>JDWP 定义调试者和被调试者交流数据的格式。</p>
+<p>JVMTI 可以控制当前虚拟机运行状态。</p>
+<p>上图中的前端工具就是我们要用到的调试工具。如JDB、Eclipse等等。这些工具实现了JDI接口，通过这些工具我们可以达到在命令行或者图形界面下调试的目的。</p>
+<p>关于这部分，只是简单的了解一下概念，更多的关于JDPA的介绍：<a href="http://www.ibm.com/developerworks/cn/views/java/libraryview.jsp?search_by=%E6%B7%B1%E5%85%A5+Java+%E8%B0%83%E8%AF%95%E4%BD%93%E7%B3%BB" target="_blank" rel="external">JDPA体系</a></p>
+<h2 id="使用JDB进行本地调试"><a href="#使用JDB进行本地调试" class="headerlink" title="使用JDB进行本地调试"></a>使用JDB进行本地调试</h2><p>JDB 是jdk自带的一个调试工具，用于命令行下调试java程序</p>
+<p>jdb.exe就位于jdk安装目录的bin目录下，安装好jdk并设置好环境变量之后就可以愉快的使用jdb了。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line">C:\Users\kyu&gt;jdb -help</div><div class="line">用法: jdb &lt;options&gt; &lt;class&gt; &lt;arguments&gt;</div><div class="line"></div><div class="line">其中, 选项包括:</div><div class="line">    -help             输出此消息并退出</div><div class="line">    -sourcepath &lt;由 &quot;;&quot; 分隔的目录&gt;</div><div class="line">                      要在其中查找源文件的目录</div><div class="line">    -attach &lt;address&gt;</div><div class="line">                      使用标准连接器附加到指定地址处正在运行的 VM</div><div class="line">    -listen &lt;address&gt;</div><div class="line">                      等待正在运行的 VM 使用标准连接器在指定地址处连接</div><div class="line">    -listenany</div><div class="line">                      等待正在运行的 VM 使用标准连接器在任何可用地址处连接</div><div class="line">    -launch</div><div class="line">                      立即启动 VM 而不是等待 &apos;run&apos; 命令</div><div class="line">    -listconnectors   列出此 VM 中的可用连接器</div><div class="line">    -connect &lt;connector-name&gt;:&lt;name1&gt;=&lt;value1&gt;,...</div><div class="line">                      使用所列参数值通过指定的连接器连接到目标 VM</div><div class="line">    -dbgtrace [flags] 输出信息供调试jdb</div><div class="line">    -tclient          在 HotSpot(TM) 客户机编译器中运行应用程序</div><div class="line">    -tserver          在 HotSpot(TM) 服务器编译器中运行应用程序</div><div class="line"></div><div class="line">转发到被调试进程的选项:</div><div class="line">    -v -verbose[:class|gc|jni]</div><div class="line">                      启用详细模式</div><div class="line">    -D&lt;name&gt;=&lt;value&gt;  设置系统属性</div><div class="line">    -classpath &lt;由 &quot;;&quot; 分隔的目录&gt;</div><div class="line">                      列出要在其中查找类的目录</div><div class="line">    -X&lt;option&gt;        非标准目标 VM 选项</div><div class="line"></div><div class="line">&lt;class&gt; 是要开始调试的类的名称</div><div class="line">&lt;arguments&gt; 是传递到 &lt;class&gt; 的 main() 方法的参数</div><div class="line"></div><div class="line">要获得命令的帮助, 请在jdb提示下键入 &apos;help&apos;</div></pre></td></tr></table></figure>
+<p>上面是启动JDB的语法说明。</p>
+<p>现假设运行程序的工程目录如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">JDBTest</div><div class="line">  |----bin(编译生成的class文件)</div><div class="line">  |     |----*.class</div><div class="line">  |----src(源文件)</div><div class="line">  |     |----*.java</div><div class="line">  |----lib(依赖的第三方jar)</div><div class="line">  |     |----*.jar</div></pre></td></tr></table></figure>
+<p>开始启动JDB调试：</p>
+<p>Y:\project\JavaProject\JDBTest&gt;jdb -classpath ./bin/;./lib/* -sourcepath ./src/ test.JDBTest</p>
+<p><code>注意，如果有多个文件，windows下使用 &quot;;&quot; 分隔每个文件或目录，Linux下使用 &quot;:&quot; 分隔每个文件或目录</code></p>
+<p><code>-classpath</code> 指定了类路径，<code>-sourcepath</code> 指定了源文件的路径</p>
+<p>回车，出现如下信息：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Y:\project\JavaProject\JDBTest&gt;jdb -classpath ./bin/;./lib/* -sourcepath ./src/ test.JDBTest</div><div class="line">正在初始化jdb...</div><div class="line">&gt;</div></pre></td></tr></table></figure>
+<p>此时，JDB调试器等待用户的输入，输入<code>help</code>，出现如下信息：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div></pre></td><td class="code"><pre><div class="line">Y:\project\JavaProject\JDBTest&gt;jdb -classpath ./bin/;./lib/* -sourcepath ./src/ test.JDBTest</div><div class="line">正在初始化jdb...</div><div class="line">&gt; help</div><div class="line">** 命令列表 **</div><div class="line">connectors                -- 列出此 VM 中可用的连接器和传输</div><div class="line"></div><div class="line">run [class [args]]        -- 开始执行应用程序的主类</div><div class="line"></div><div class="line">threads [threadgroup]     -- 列出线程</div><div class="line">thread &lt;thread id&gt;        -- 设置默认线程</div><div class="line">suspend [thread id(s)]    -- 挂起线程 (默认值: all)</div><div class="line">resume [thread id(s)]     -- 恢复线程 (默认值: all)</div><div class="line">where [&lt;thread id&gt; | all] -- 转储线程的堆栈</div><div class="line">wherei [&lt;thread id&gt; | all]-- 转储线程的堆栈, 以及 pc 信息</div><div class="line">up [n frames]             -- 上移线程的堆栈</div><div class="line">down [n frames]           -- 下移线程的堆栈</div><div class="line">kill &lt;thread id&gt; &lt;expr&gt;   -- 终止具有给定的异常错误对象的线程</div><div class="line">interrupt &lt;thread id&gt;     -- 中断线程</div><div class="line"></div><div class="line">print &lt;expr&gt;              -- 输出表达式的值</div><div class="line">dump &lt;expr&gt;               -- 输出所有对象信息</div><div class="line">eval &lt;expr&gt;               -- 对表达式求值 (与 print 相同)</div><div class="line">set &lt;lvalue&gt; = &lt;expr&gt;     -- 向字段/变量/数组元素分配新值</div><div class="line">locals                    -- 输出当前堆栈帧中的所有本地变量</div><div class="line"></div><div class="line">classes                   -- 列出当前已知的类</div><div class="line">class &lt;class id&gt;          -- 显示已命名类的详细资料</div><div class="line">methods &lt;class id&gt;        -- 列出类的方法</div><div class="line">fields &lt;class id&gt;         -- 列出类的字段</div><div class="line"></div><div class="line">threadgroups              -- 列出线程组</div><div class="line">threadgroup &lt;name&gt;        -- 设置当前线程组</div><div class="line"></div><div class="line">stop in &lt;class id&gt;.&lt;method&gt;[(argument_type,...)]</div><div class="line">                          -- 在方法中设置断点</div><div class="line">stop at &lt;class id&gt;:&lt;line&gt; -- 在行中设置断点</div><div class="line">clear &lt;class id&gt;.&lt;method&gt;[(argument_type,...)]</div><div class="line">                          -- 清除方法中的断点</div><div class="line">clear &lt;class id&gt;:&lt;line&gt;   -- 清除行中的断点</div><div class="line">clear                     -- 列出断点</div><div class="line">catch [uncaught|caught|all] &lt;class id&gt;|&lt;class pattern&gt;</div><div class="line">                          -- 出现指定的异常错误时中断</div><div class="line">ignore [uncaught|caught|all] &lt;class id&gt;|&lt;class pattern&gt;</div><div class="line">                          -- 对于指定的异常错误, 取消 &apos;catch&apos;</div><div class="line">watch [access|all] &lt;class id&gt;.&lt;field name&gt;</div><div class="line">                          -- 监视对字段的访问/修改</div><div class="line">unwatch [access|all] &lt;class id&gt;.&lt;field name&gt;</div><div class="line">                          -- 停止监视对字段的访问/修改</div><div class="line">trace [go] methods [thread]</div><div class="line">                          -- 跟踪方法进入和退出。</div><div class="line">                          -- 除非指定 &apos;go&apos;, 否则挂起所有线程</div><div class="line">trace [go] method exit | exits [thread]</div><div class="line">                          -- 跟踪当前方法的退出, 或者所有方法的退出</div><div class="line">                          -- 除非指定 &apos;go&apos;, 否则挂起所有线程</div><div class="line">untrace [methods]         -- 停止跟踪方法进入和/或退出</div><div class="line">step                      -- 执行当前行</div><div class="line">step up                   -- 一直执行, 直到当前方法返回到其调用方</div><div class="line">stepi                     -- 执行当前指令</div><div class="line">next                      -- 步进一行 (步过调用)</div><div class="line">cont                      -- 从断点处继续执行</div><div class="line"></div><div class="line">list [line number|method] -- 输出源代码</div><div class="line">use (或 sourcepath) [source file path]</div><div class="line">                          -- 显示或更改源路径</div><div class="line">exclude [&lt;class pattern&gt;, ... | &quot;none&quot;]</div><div class="line">                          -- 对于指定的类, 不报告步骤或方法事件</div><div class="line">classpath                 -- 从目标 VM 输出类路径信息</div><div class="line"></div><div class="line">monitor &lt;command&gt;         -- 每次程序停止时执行命令</div><div class="line">monitor                   -- 列出监视器</div><div class="line">unmonitor &lt;monitor#&gt;      -- 删除监视器</div><div class="line">read &lt;filename&gt;           -- 读取并执行命令文件</div><div class="line"></div><div class="line">lock &lt;expr&gt;               -- 输出对象的锁信息</div><div class="line">threadlocks [thread id]   -- 输出线程的锁信息</div><div class="line"></div><div class="line">pop                       -- 通过当前帧出栈, 且包含当前帧</div><div class="line">reenter                   -- 与 pop 相同, 但重新进入当前帧</div><div class="line">redefine &lt;class id&gt; &lt;class file name&gt;</div><div class="line">                          -- 重新定义类的代码</div><div class="line"></div><div class="line">disablegc &lt;expr&gt;          -- 禁止对象的垃圾收集</div><div class="line">enablegc &lt;expr&gt;           -- 允许对象的垃圾收集</div><div class="line"></div><div class="line">!!                        -- 重复执行最后一个命令</div><div class="line">&lt;n&gt; &lt;command&gt;             -- 将命令重复执行 n 次</div><div class="line"># &lt;command&gt;               -- 放弃 (无操作)</div><div class="line">help (或 ?)               -- 列出命令</div><div class="line">version                   -- 输出版本信息</div><div class="line">exit (或 quit)            -- 退出调试器</div><div class="line"></div><div class="line">&lt;class id&gt;: 带有程序包限定符的完整类名</div><div class="line">&lt;class pattern&gt;: 带有前导或尾随通配符 (&apos;*&apos;) 的类名</div><div class="line">&lt;thread id&gt;: &apos;threads&apos; 命令中报告的线程编号</div><div class="line">&lt;expr&gt;: Java(TM) 编程语言表达式。</div><div class="line">支持大多数常见语法。</div><div class="line"></div><div class="line">可以将启动命令置于 &quot;jdb.ini&quot; 或 &quot;.jdbrc&quot; 中</div><div class="line">位于 user.home 或 user.dir 中</div><div class="line">&gt;</div></pre></td></tr></table></figure>
+<p>上面的帮助信息说明了如何进行JDB调试，解释一下其中的几个：</p>
+<p>step: – 执行当前行 相当于Eclipse中的F5</p>
+<p>step up: – 一直执行, 直到当前方法返回到其调用方 相当于Eclipse中的F7</p>
+<p>next: – 步进一行 (步过调用) 相当于Eclipse中的F6</p>
+<p>cont: – 从断点处继续执行 相当于Eclipse中的F8</p>
+<p>此时，继续输入：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">&gt; stop at test.JDBTest:7</div><div class="line">正在延迟断点test.JDBTest:7。</div><div class="line">将在加载类后设置。</div><div class="line">&gt; run</div><div class="line">运行test.JDBTest</div><div class="line">设置未捕获的java.lang.Throwable</div><div class="line">设置延迟的未捕获的java.lang.Throwable</div><div class="line">&gt;</div><div class="line">VM 已启动: 设置延迟的断点test.JDBTest:7</div><div class="line"></div><div class="line">断点命中: &quot;线程=main&quot;, test.JDBTest.main(), 行=7 bci=0</div><div class="line">7               JDBTest jdbTest = new JDBTest();</div><div class="line"></div><div class="line">main[1]</div></pre></td></tr></table></figure>
+<p>stop at test.JDBTest:7 表示在这个类文件的第7行处打一个断点</p>
+<p>接着，输入run，就开始进入调试步骤了。现在可以输入上面帮助中的语法来了解当前程序的执行情况了。一试便知</p>
+<p><code>注意, 若想要在调试时能够正常输出调试信息如变量值等等，需要在编译java文件时指定 -g 参数，否则无法获得其运行时的调试信息</code></p>
+<p>另外，使用list可以打印当前断点处的源代码，如果没有在启动JDB时指定源代码路径 -sourcepath ./src/ ，那么会提示没有源代码信息，无法输出。此时可以使用命令 use ./src/ 来指定源代码路径，再使用list命令时可以正常打印了。</p>
+<p>以上就是使用JDB调试本地程序的方法，具体的使用可根据实际情况参照语法说明去执行。</p>
+<h2 id="使用JDB进行远程调试"><a href="#使用JDB进行远程调试" class="headerlink" title="使用JDB进行远程调试"></a>使用JDB进行远程调试</h2><p>如果程序不是运行在本机，而是在其他机器或者现场的时候，可以使用java提供的远程调试功能。</p>
+<p>假设程序现运行在主机 192.168.101.72 这台机器上，该机器为linux环境，且只可以通过ssh作为一个普通用户连接。我们想要在自己的机器上调试运行在192.168.101.72这台机器上的程序。</p>
+<h3 id="启动要调试的程序"><a href="#启动要调试的程序" class="headerlink" title="启动要调试的程序"></a>启动要调试的程序</h3><p>在192.168.101.72这台主机上以下面的方式启动java程序：还是以JDBTest为例</p>
+<p><code>java -Xdebug -Xrunjdwp:transport=dt_socket,server=y,address=8899 -classpath ./bin/:./lib/*  test.JDBTest</code></p>
+<p>此时，命令行输出</p>
+<p><code>Listening for transport dt_socket at address: 8899</code></p>
+<p>并处于等待状态</p>
+<p>下面是几个参数的解释：</p>
+<p>-Xdebug 启用调试特性。 </p>
+<p>-Xrunjdwp:<sub-options> 在目标 VM 中加载 JDWP 实现。它通过传输和 JDWP 协议与独立的调试器应用程序通信。下面介绍一些特定的子选项。<br>从 Java V5 开始，您可以使用 -agentlib:jdwp 选项，而不是 -Xdebug 和 -Xrunjdwp。但如果连接到 V5 以前的 VM，只能选择 -Xdebug 和 -Xrunjdwp。下面简单描述 -Xrunjdwp 子选项。</sub-options></p>
+<p>transport 这里通常使用套接字传输。但是在 Windows 平台上也可以使用共享内存传输。</p>
+<p>server 如果值为 y，目标应用程序监听将要连接的调试器应用程序。否则，它将连接到特定地址上的调试器应用程序。</p>
+<p>address 这是连接的传输地址。如果服务器为 n，将尝试连接到该地址上的调试器应用程序。否则，将在这个端口监听连接。</p>
+<p>suspend 如果值为 y，目标 VM 将暂停，直到调试器应用程序进行连接。</p>
+<h3 id="本机连接远程程序并启动调试"><a href="#本机连接远程程序并启动调试" class="headerlink" title="本机连接远程程序并启动调试"></a>本机连接远程程序并启动调试</h3><p>在本机上命令行下输入：</p>
+<p><code>jdb -connect com.sun.jdi.SocketAttach:hostname=192.168.101.72,port=8899</code></p>
+<p>然后就进入了调试界面，你可以像调试本机程序那样使用JDB的一些命令来调试了。当退出调试程序时，远程主机上的程序也就退出了。</p>
+<h2 id="使用Eclipse进行远程调试"><a href="#使用Eclipse进行远程调试" class="headerlink" title="使用Eclipse进行远程调试"></a>使用Eclipse进行远程调试</h2><p>可以使用Eclipse进行远程调试，就上上面使用JDB一样。</p>
+<h3 id="启动要调试的程序-1"><a href="#启动要调试的程序-1" class="headerlink" title="启动要调试的程序"></a>启动要调试的程序</h3><p>与JDB远程调试一样，启动远程主机上的程序：</p>
+<p><code>java -Xdebug -Xrunjdwp:transport=dt_socket,server=y,address=8899 -classpath ./bin/:./lib/*  test.JDBTest</code></p>
+<h3 id="本机启动Eclipse进行调试"><a href="#本机启动Eclipse进行调试" class="headerlink" title="本机启动Eclipse进行调试"></a>本机启动Eclipse进行调试</h3><p>首先要右键工程-&gt;java compiler</p>
+<img src="/2016/12/07/java远程调试学习/setting.png" alt="jdpa" title="jdpa">
+<p>上图中的几个选项最好全部打勾，否则调试时会出现无法打断点或者获取不到行号等问题(关于这几个选项的含义在之前的总结中有提到)</p>
+<p>接着，右键工程-&gt;Debug As-&gt;Run Configurations, 在出现的对话框中选择Remote Java Application, 右键-&gt;New, 出现如下界面：</p>
+<img src="/2016/12/07/java远程调试学习/remote.png" alt="jdpa" title="jdpa">
+<p>在Connect页中，选择对应的java 工程，Connection Type选择 Socket Attach，然后填写远程主机的ip和端口，这里应该填写192.168.101.72和8899。<br>在Source页中可以添加源代码，如用到的第三方jar的源代码或者引用的工程，调试时就可以进入到这部分代码查看。在Common页可以设置编码的配置。</p>
+<p>接下来点击Debug按钮，就可以愉快的在本机调试远程程序了，就像调试本地程序那样。只不过可能有一点一点慢，不过比打Log的方式要好很多了。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://www.ibm.com/developerworks/cn/opensource/os-eclipse-javadebug/" target="_blank" rel="external">使用 Eclipse 远程调试 Java 应用程序</a></p>
+<p><a href="http://www.ibm.com/developerworks/cn/java/joy-jdb/" target="_blank" rel="external">JDB的简单使用</a></p>
+<p><a href="https://www.ibm.com/developerworks/cn/java/j-lo-jpda1/" target="_blank" rel="external">深入 Java 调试体系: 第 1 部分，JPDA 体系概览 </a></p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/java/">java</a><a href="/tags/调试/">调试</a>
+  </div>
+
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/java/">java</a>
+</div>
+
+
+
+<div class="article-share" id="share">
+
+<!--
+  <div data-url="http://yukai.space/2016/12/07/java远程调试学习/" data-title="java远程调试学习 | YuKai&#39;s blog" data-tsina="5381447277" class="share clearfix">
+  </div>
+-->
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2016/12/04/java中的路径/"  title="java中的路径">
+ <strong>NEXT:</strong><br/> 
+ <span>java中的路径
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section class="comment">
+	<div class="ds-thread"></div>
+</section>
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#一些概念"><span class="toc-number">1.</span> <span class="toc-text">一些概念</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用JDB进行本地调试"><span class="toc-number">2.</span> <span class="toc-text">使用JDB进行本地调试</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用JDB进行远程调试"><span class="toc-number">3.</span> <span class="toc-text">使用JDB进行远程调试</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#启动要调试的程序"><span class="toc-number">3.1.</span> <span class="toc-text">启动要调试的程序</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#本机连接远程程序并启动调试"><span class="toc-number">3.2.</span> <span class="toc-text">本机连接远程程序并启动调试</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用Eclipse进行远程调试"><span class="toc-number">4.</span> <span class="toc-text">使用Eclipse进行远程调试</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#启动要调试的程序-1"><span class="toc-number">4.1.</span> <span class="toc-text">启动要调试的程序</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#本机启动Eclipse进行调试"><span class="toc-number">4.2.</span> <span class="toc-text">本机启动Eclipse进行调试</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">5.</span> <span class="toc-text">参考</span></a></li></ol>
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+			<li><a href="/categories/java/" title="java">java<sup>2</sup></a></li>
+		
+			<li><a href="/categories/工具/" title="工具">工具<sup>7</sup></a></li>
+		
+			<li><a href="/categories/技术/" title="技术">技术<sup>5</sup></a></li>
+		
+			<li><a href="/categories/生活/" title="生活">生活<sup>3</sup></a></li>
+		
+			<li><a href="/categories/编程/" title="编程">编程<sup>16</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			<li><a href="/tags/Eclipse/" title="Eclipse">Eclipse<sup>1</sup></a></li>
+		
+			<li><a href="/tags/ant/" title="ant">ant<sup>2</sup></a></li>
+		
+			<li><a href="/tags/curl/" title="curl">curl<sup>1</sup></a></li>
+		
+			<li><a href="/tags/java/" title="java">java<sup>21</sup></a></li>
+		
+			<li><a href="/tags/junit/" title="junit">junit<sup>1</sup></a></li>
+		
+			<li><a href="/tags/markdown/" title="markdown">markdown<sup>1</sup></a></li>
+		
+			<li><a href="/tags/python/" title="python">python<sup>1</sup></a></li>
+		
+			<li><a href="/tags/spring/" title="spring">spring<sup>2</sup></a></li>
+		
+			<li><a href="/tags/加密/" title="加密">加密<sup>2</sup></a></li>
+		
+			<li><a href="/tags/多线程/" title="多线程">多线程<sup>5</sup></a></li>
+		
+			<li><a href="/tags/快捷键/" title="快捷键">快捷键<sup>1</sup></a></li>
+		
+			<li><a href="/tags/服务器/" title="服务器">服务器<sup>1</sup></a></li>
+		
+			<li><a href="/tags/测试/" title="测试">测试<sup>1</sup></a></li>
+		
+			<li><a href="/tags/源码/" title="源码">源码<sup>1</sup></a></li>
+		
+			<li><a href="/tags/编码/" title="编码">编码<sup>2</sup></a></li>
+		
+			<li><a href="/tags/调试/" title="调试">调试<sup>1</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  
+  <div class="tagcloudlist">
+    <p class="asidetitle">标签云</p>
+    <div class="tagcloudlist clearfix">
+       <a href="/tags/Eclipse/" style="font-size: 10px;">Eclipse</a> <a href="/tags/ant/" style="font-size: 13.33px;">ant</a> <a href="/tags/curl/" style="font-size: 10px;">curl</a> <a href="/tags/java/" style="font-size: 20px;">java</a> <a href="/tags/junit/" style="font-size: 10px;">junit</a> <a href="/tags/markdown/" style="font-size: 10px;">markdown</a> <a href="/tags/python/" style="font-size: 10px;">python</a> <a href="/tags/spring/" style="font-size: 13.33px;">spring</a> <a href="/tags/加密/" style="font-size: 13.33px;">加密</a> <a href="/tags/多线程/" style="font-size: 16.67px;">多线程</a> <a href="/tags/快捷键/" style="font-size: 10px;">快捷键</a> <a href="/tags/服务器/" style="font-size: 10px;">服务器</a> <a href="/tags/测试/" style="font-size: 10px;">测试</a> <a href="/tags/源码/" style="font-size: 10px;">源码</a> <a href="/tags/编码/" style="font-size: 13.33px;">编码</a> <a href="/tags/调试/" style="font-size: 10px;">调试</a>
+    </div>
+  </div>
+
+
+  
+  <div class="archiveslist">
+    <p class="asidetitle"><a href="/archives">归档</a></p>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">十二月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">十一月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">十月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">九月 2016</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">八月 2016</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">七月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">六月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">四月 2016</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">三月 2016</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">十二月 2015</a><span class="archive-list-count">2</span></li></ul>
+  </div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> 既来之 <br/>
+			则安之</p>
+	</section>
+	 
+	<div class="social-font clearfix">
+		
+		<a href="http://weibo.com/5381447277" target="_blank" title="weibo"></a>
+		
+		
+		
+		<a href="https://github.com/Hikyu" target="_blank" title="github"></a>
+		
+		
+		
+	</div>
+	<!--
+		<p class="copyright">Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/A-limon/pacman" target="_blank" title="Pacman">Pacman</a> © 2016 
+		
+		<a href="http://yukai.space" target="_blank" title="于凯">于凯</a>
+		
+		</p>
+	-->
+	<p class="copyright">Copyright 2016 yukai.space AllRights Reserved.</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"null"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+  </body>
+</html>
