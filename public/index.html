@@ -62,6 +62,21 @@
 
   <section class="post" itemscope itemprop="blogPost">
   
+    <a href="/2016/12/07/java远程调试学习/" title="java远程调试学习" itemprop="url">
+  
+    <h1 itemprop="name">java远程调试学习</h1>
+    
+     
+           <p itemprop="description" >集群前后台协议需要做一些修改，我负责jdbc这边的修改。按照协议内容修改完代码之后却面临一个测试的问题：修改后的后台又部署在北京，但北京并不是所有的机器都对天津这边开放，只给提供一台机器A，就是集群的服务器。这样的话,就无法创建节点的连接，测试没有办法进行。
+一开始用了最简单的办</p>
+        
+    
+    <time datetime="2016-12-07T13:55:48.000Z" itemprop="datePublished">2016-12-07</time>
+  </a>
+</section>
+
+  <section class="post" itemscope itemprop="blogPost">
+  
     <a href="/2016/12/04/java中的路径/" title="java中的路径" itemprop="url">
   
     <h1 itemprop="name">java中的路径</h1>
@@ -194,22 +209,6 @@ SSL(Secure S</p>
   </a>
 </section>
 
-  <section class="post" itemscope itemprop="blogPost">
-  
-    <a href="/2016/08/22/关于加密的一点总结/" title="关于加密的一点总结" itemprop="url">
-  
-    <h1 itemprop="name">关于加密的一点总结</h1>
-    
-     
-           <p itemprop="description" >前两天了解了一下数据库JDBC创建Connection的过程，其中验证用户密码的过程使用了加密算法，研究之。
-信息摘要算法简介验证用户名密码的整个过程主要使用了MD5算法。严格来说，MD5不是一种加密算法，而是一种信息摘要算法。
-所谓的信息摘要算法，其实就是一种特殊的散列算法。关</p>
-        
-    
-    <time datetime="2016-08-22T12:59:00.000Z" itemprop="datePublished">2016-08-22</time>
-  </a>
-</section>
-
 
   <nav id="page-nav" class="clearfix">
     <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
@@ -227,7 +226,7 @@ SSL(Secure S</p>
 	<p class="asidetitle">分类</p>
 		<ul>
 		
-			<li><a href="/categories/java/" title="java">java<sup>1</sup></a></li>
+			<li><a href="/categories/java/" title="java">java<sup>2</sup></a></li>
 		
 			<li><a href="/categories/工具/" title="工具">工具<sup>7</sup></a></li>
 		
@@ -252,7 +251,7 @@ SSL(Secure S</p>
 		
 			<li><a href="/tags/curl/" title="curl">curl<sup>1</sup></a></li>
 		
-			<li><a href="/tags/java/" title="java">java<sup>20</sup></a></li>
+			<li><a href="/tags/java/" title="java">java<sup>21</sup></a></li>
 		
 			<li><a href="/tags/junit/" title="junit">junit<sup>1</sup></a></li>
 		
@@ -276,6 +275,8 @@ SSL(Secure S</p>
 		
 			<li><a href="/tags/编码/" title="编码">编码<sup>2</sup></a></li>
 		
+			<li><a href="/tags/调试/" title="调试">调试<sup>1</sup></a></li>
+		
 		</ul>
 </div>
 
@@ -284,7 +285,7 @@ SSL(Secure S</p>
   <div class="tagcloudlist">
     <p class="asidetitle">标签云</p>
     <div class="tagcloudlist clearfix">
-       <a href="/tags/Eclipse/" style="font-size: 10px;">Eclipse</a> <a href="/tags/ant/" style="font-size: 13.33px;">ant</a> <a href="/tags/curl/" style="font-size: 10px;">curl</a> <a href="/tags/java/" style="font-size: 20px;">java</a> <a href="/tags/junit/" style="font-size: 10px;">junit</a> <a href="/tags/markdown/" style="font-size: 10px;">markdown</a> <a href="/tags/python/" style="font-size: 10px;">python</a> <a href="/tags/spring/" style="font-size: 13.33px;">spring</a> <a href="/tags/加密/" style="font-size: 13.33px;">加密</a> <a href="/tags/多线程/" style="font-size: 16.67px;">多线程</a> <a href="/tags/快捷键/" style="font-size: 10px;">快捷键</a> <a href="/tags/服务器/" style="font-size: 10px;">服务器</a> <a href="/tags/测试/" style="font-size: 10px;">测试</a> <a href="/tags/源码/" style="font-size: 10px;">源码</a> <a href="/tags/编码/" style="font-size: 13.33px;">编码</a>
+       <a href="/tags/Eclipse/" style="font-size: 10px;">Eclipse</a> <a href="/tags/ant/" style="font-size: 13.33px;">ant</a> <a href="/tags/curl/" style="font-size: 10px;">curl</a> <a href="/tags/java/" style="font-size: 20px;">java</a> <a href="/tags/junit/" style="font-size: 10px;">junit</a> <a href="/tags/markdown/" style="font-size: 10px;">markdown</a> <a href="/tags/python/" style="font-size: 10px;">python</a> <a href="/tags/spring/" style="font-size: 13.33px;">spring</a> <a href="/tags/加密/" style="font-size: 13.33px;">加密</a> <a href="/tags/多线程/" style="font-size: 16.67px;">多线程</a> <a href="/tags/快捷键/" style="font-size: 10px;">快捷键</a> <a href="/tags/服务器/" style="font-size: 10px;">服务器</a> <a href="/tags/测试/" style="font-size: 10px;">测试</a> <a href="/tags/源码/" style="font-size: 10px;">源码</a> <a href="/tags/编码/" style="font-size: 13.33px;">编码</a> <a href="/tags/调试/" style="font-size: 10px;">调试</a>
     </div>
   </div>
 
@@ -292,7 +293,7 @@ SSL(Secure S</p>
   
   <div class="archiveslist">
     <p class="asidetitle"><a href="/archives">归档</a></p>
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">十二月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">十一月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">十月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">九月 2016</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">八月 2016</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">七月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">六月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">四月 2016</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">三月 2016</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">十二月 2015</a><span class="archive-list-count">2</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">十二月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">十一月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">十月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">九月 2016</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">八月 2016</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">七月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">六月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">四月 2016</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">三月 2016</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">十二月 2015</a><span class="archive-list-count">2</span></li></ul>
   </div>
 
 
