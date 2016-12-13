@@ -4,17 +4,14 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>java中的类型转换 | YuKai&#39;s blog</title>
+    <title>java异常的学习 | YuKai&#39;s blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
     
     <meta name="author" content="于凯">
     
-    <meta name="description" content="以前一直对java中的类型转换了解的不是很清楚，因为平时写代码有IDE的帮助，所以往往忽略这一块的内容，但往往就是这样的小知识点不清楚，很有可能造成很大的错误。所以在闲暇时间总结一下这些可能被遗忘的知识点。网上已经有很多相关的介绍文章了，现在来梳理一番：
+    <meta name="description" content="最近的写代码的过程中，遇到很多异常的处理，以前上大学的时候写代码，遇到异常直接给个try catch了事，只是停留在看懂异常能够找出异常抛出点的水平。真正写代码的时候，不了解java的异常机制给自己编程带来很多不便，基础知识很重要！学习之～～
 
-基本类型
-基本类型优先级
-
-首先来看jav">
+异常分类runnable中的异常处理">
     
     
     
@@ -68,15 +65,15 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2016/04/28/java中的类型转换/" title="java中的类型转换" itemprop="url">java中的类型转换</a>
+      <a href="/2016/12/13/java异常的学习/" title="java异常的学习" itemprop="url">java异常的学习</a>
   </h1>
   <p class="article-author">By
     
       <a href="http://yukai.space" title="于凯">于凯</a>
     </p>
   <p class="article-time">
-    <time datetime="2016-04-28T04:48:55.000Z" itemprop="datePublished">2016-04-28</time>
-    更新日期:<time datetime="2016-11-30T14:32:49.909Z" itemprop="dateModified">2016-11-30</time>
+    <time datetime="2016-12-13T13:46:52.000Z" itemprop="datePublished">2016-12-13</time>
+    更新日期:<time datetime="2016-12-13T14:00:35.512Z" itemprop="dateModified">2016-12-13</time>
     
   </p>
 </header>
@@ -85,45 +82,13 @@
 		
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
-		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#基本类型"><span class="toc-number">1.</span> <span class="toc-text">基本类型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#类类型"><span class="toc-number">2.</span> <span class="toc-text">类类型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">3.</span> <span class="toc-text">参考</span></a></li></ol>
+		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#异常分类"><span class="toc-number">1.</span> <span class="toc-text">异常分类</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#runnable中的异常处理"><span class="toc-number">2.</span> <span class="toc-text">runnable中的异常处理</span></a></li></ol>
 		</div>
 		
 		<blockquote>
-<p>以前一直对java中的类型转换了解的不是很清楚，因为平时写代码有IDE的帮助，所以往往忽略这一块的内容，但往往就是这样的小知识点不清楚，很有可能造成很大的错误。所以在闲暇时间总结一下这些可能被遗忘的知识点。网上已经有很多相关的介绍文章了，现在来梳理一番：</p>
+<p>最近的写代码的过程中，遇到很多异常的处理，以前上大学的时候写代码，遇到异常直接给个try catch了事，只是停留在看懂异常能够找出异常抛出点的水平。真正写代码的时候，不了解java的异常机制给自己编程带来很多不便，基础知识很重要！学习之～～</p>
 </blockquote>
-<h2 id="基本类型"><a href="#基本类型" class="headerlink" title="基本类型"></a><strong>基本类型</strong></h2><ul>
-<li><strong>基本类型优先级</strong></li>
-</ul>
-<p>首先来看java中的基本类型有哪些：</p>
-<p>byte：byte数据类型是一个8位有符号二进制补码整数。</p>
-<p>short：short数据类型为16位有符号二进制补码整数。</p>
-<p>int：int数据类型是一个32位有符号二进制补码整数</p>
-<p>long: long数据类型是一个64位二进制补码整数</p>
-<p>float: float数据类型是单精度、32位、符合IEEE 754标准的浮点数</p>
-<p>boolean: boolean数据类型只有两个可能的值：true和false</p>
-<p>double: double数据类型是双精度、64位、符合IEEE 754标准的浮点数；</p>
-<p>char: char数据类型是一个16位的Unicode字符</p>
-<p>基本类型优先级由低到高排序：</p>
-<p>(byte short char) int long float double</p>
-<p>其中，byte short char 平级</p>
-<ul>
-<li><strong>转换规则</strong></li>
-</ul>
-<p>1.有多种数据类型混合计算的时候，低优先级类型自动提升为优先级最大的那个类型再来继续计算</p>
-<p>3.高优先级类型转换为低优先级类型时，需要强制类型转换，并且有可能丢失精度或溢出。</p>
-<p>2.byte short char 他们三者在计算时，首先会转换为int类型</p>
-<p>3.由于byte short char三者平级，他们之间互相转换时需进行强制类型转换。</p>
-<p>4.boolean不能与其他类型转换</p>
-<h2 id="类类型"><a href="#类类型" class="headerlink" title="类类型"></a><strong>类类型</strong></h2><p>类类型之间的转换有以下几个规则：</p>
-<p>1.当源类型与目标类型不存在父子关系时，转换无法进行，编译时会出现错误。包括两个类为继承同一个父类这种情况，也是不可以进行转换的。</p>
-<p>2.源类型是子类，目标类型是父类时，不必强制转换。只是屏蔽了一些子类才有的功能。</p>
-<p>3.源类型是父类，目标类型是子类时，要分两种情况：第一，源类型指向的对象就是父类类型。此时不能进行强制转换，编译器可以通过，但运行时会报类型转换错误。第二，源类型指向的对象是子类类型。此时可以进行强制转换，还原子类。</p>
-<p>说的比较拗口，用代码来解释吧。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="class"><span class="keyword">class</span> <span class="title">Father</span> </span>&#123;&#125;</div><div class="line">	</div><div class="line">    <span class="class"><span class="keyword">class</span> <span class="title">Son</span> <span class="keyword">extends</span> <span class="title">Father</span></span>&#123;&#125;</div><div class="line">	</div><div class="line">    <span class="class"><span class="keyword">class</span> <span class="title">Daughter</span> <span class="keyword">extends</span> <span class="title">Father</span> </span>&#123;&#125;</div><div class="line"></div><div class="line">    <span class="meta">@org</span>.junit.<span class="function">Test</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test</span><span class="params">()</span>&#123;</div><div class="line">        Father fatherApp;</div><div class="line">        Son sonApp;</div><div class="line">        Daughter daughterApp;</div><div class="line">        Father fatherIns=<span class="keyword">new</span> Father();</div><div class="line">        Son sonIns=<span class="keyword">new</span> Son();</div><div class="line">        Daughter daughterIns=<span class="keyword">new</span> Daughter();</div><div class="line">		</div><div class="line">        <span class="comment">//目标类型为父类，源类型为子类，自动转换</span></div><div class="line">        fatherApp=sonIns;   </div><div class="line">        <span class="comment">//源类型为父类，目标类型为子类，且源类型指向父类对象,运行时报错。</span></div><div class="line">        sonApp=(Son) fatherIns;</div><div class="line">        <span class="comment">//源类型为父类，目标类型为子类，且源类型指向子类对象，还原子类        </span></div><div class="line">        sonApp=(Son) fatherApp;</div><div class="line">        <span class="comment">//目标类型与源类型不存在父子关系，编译无法通过</span></div><div class="line">        daughterApp=sonIns;  </div><div class="line">		</div><div class="line">    &#125;	</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a><strong>参考</strong></h2><p><a href="http://blog.csdn.net/mazhimazh/article/details/16799925" target="_blank" rel="external">Java 7之基础类型第1篇 - Java数据类型</a></p>
-<p><a href="https://docs.oracle.com/javase/tutorial/java/nutsandbolts/datatypes.html" target="_blank" rel="external">The Java™ Tutorials</a></p>
-<p><a href="http://blog.csdn.net/darxin/article/details/5163043" target="_blank" rel="external"> Java中的类型转换</a></p>
-  
+<h2 id="异常分类"><a href="#异常分类" class="headerlink" title="异常分类"></a>异常分类</h2><h2 id="runnable中的异常处理"><a href="#runnable中的异常处理" class="headerlink" title="runnable中的异常处理"></a>runnable中的异常处理</h2>  
 	</div>
 		<footer class="article-footer clearfix">
 
@@ -133,17 +98,12 @@
   </div>
 
 
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/编程/">编程</a>
-</div>
-
 
 
 <div class="article-share" id="share">
 
 <!--
-  <div data-url="http://yukai.space/2016/04/28/java中的类型转换/" data-title="java中的类型转换 | YuKai&#39;s blog" data-tsina="5381447277" class="share clearfix">
+  <div data-url="http://yukai.space/2016/12/13/java异常的学习/" data-title="java异常的学习 | YuKai&#39;s blog" data-tsina="5381447277" class="share clearfix">
   </div>
 -->
 
@@ -153,19 +113,11 @@
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2016/04/28/java中的equals与hashcode/" title="通过HashMap认识equals与hashcode">
-  <strong>PREVIOUS:</strong><br/>
-  <span>
-  通过HashMap认识equals与hashcode</span>
-</a>
-</div>
-
 
 <div class="next">
-<a href="/2016/04/25/ant编译java工程jdk路径的设置/"  title="ANT编译java工程经jdk路径的设置">
+<a href="/2016/12/07/java远程调试学习/"  title="java远程调试学习">
  <strong>NEXT:</strong><br/> 
- <span>ANT编译java工程经jdk路径的设置
+ <span>java远程调试学习
 </span>
 </a>
 </div>
@@ -182,7 +134,7 @@
 
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
-  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#基本类型"><span class="toc-number">1.</span> <span class="toc-text">基本类型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#类类型"><span class="toc-number">2.</span> <span class="toc-text">类类型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">3.</span> <span class="toc-text">参考</span></a></li></ol>
+  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#异常分类"><span class="toc-number">1.</span> <span class="toc-text">异常分类</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#runnable中的异常处理"><span class="toc-number">2.</span> <span class="toc-text">runnable中的异常处理</span></a></li></ol>
   </div>
 
 <div id="asidepart">
