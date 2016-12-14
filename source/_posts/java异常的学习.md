@@ -9,7 +9,7 @@ tags: java
 
 ## 异常分类
 
-图：
+{% asset_img java.png java异常体系 %}
 
 java异常中的异常大体上可分为两类：Error 与 Exception，他们都继承自Throwable
 
@@ -266,13 +266,13 @@ private class SaferPoolWorker extends Thread {
 对于submit方法提交的任务，异常处理是通过返回的Future对象进行的。
 ```
 
-### 其他
+## 其他
 
 还发现了一个比较有趣的异常处理情况，虽然可能很少碰到，但是碰到了可以参考作者的思路。
 
 [技巧：当不能抛出异常时](https://www.ibm.com/developerworks/cn/java/j-ce/)这篇文章介绍了一种不是很常见的情况：即不能处理，也不能抛出异常(包括非检测型异常)时怎么办？
 
-### 参考
+## 参考
 
 [Java 异常处理的误区和经验总结](http://www.ibm.com/developerworks/cn/java/j-lo-exception-misdirection/)
 
