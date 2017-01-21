@@ -189,6 +189,29 @@ PathTest.class.getClassLoader().getResource("/"): null
 //getClassLoader().getResource("")不以“/”开头，相对于package根目录
 PathTest.class.getClassLoader().getResource(""): file:/home/yukai/workspace/test/bin/
 ```
+## 获取jar包路径
+
+java开发中常常需要取得程序生成的jar包所在的路径，比如生成一些log文件的时候，需要把该程序生成的log放到jar包的的同级目录下。
+此时，我们需要知道jar包所在的位置，注意，不是启动jvm实例的位置。
+
+```
+URL url = Config.class.getProtectionDomain().getCodeSource().getLocation();
+String path = new URI(url.getProtocol(), url.getHost(), url.getPath(), url.getQuery(), null).getPath(); 
+if (path != null) {   
+   if (path.endsWith("/") || path.endsWith("\\")) {      
+          path = path.substring(0, path.length() - 1);    
+   }    
+   if (path.endsWith(".jar")) {        
+          int index = path.lastIndexOf("/");
+          if (index != -1) {           
+                path = path.substring(0, index);
+          }
+          defultLogPath = path + File.separator + "log";
+   } else { 
+       defultLogPath = path + File.separator + ".." + File.separator + "log" ;
+   }
+}
+```
 
 ## Path.java
 
