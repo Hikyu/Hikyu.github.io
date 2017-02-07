@@ -1,0 +1,495 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>Vps使用笔记 | YuKai&#39;s blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
+    <meta name="author" content="于凯">
+    
+    <meta name="description" content="今天折腾了一天，总算是把翻墙的梯子搭起来了，租了国外的vps，然后在上面搭建了shadowsocks服务，手机和电脑就可以使用shadowsocks客户端的方式科学上网了。Shadowsocks 是一个由很多人参与的开源项目，感谢shadowsocks作者@clowwindy.关于shadowsso">
+    
+    
+    
+    
+    
+    <link rel="icon" href="/img/xiaoxin.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/xiaoxin.png">
+    <link rel="apple-touch-icon-precomposed" href="/img/xiaoxin.png">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="YuKai&#39;s blog">YuKai&#39;s blog</a></h1>
+				<h2 class="blog-motto">好好学习，天天向上</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					
+						<li><a href="/">首页</a></li>
+					
+						<li><a href="/archives">归档</a></li>
+					
+						<li><a href="/page">关于</a></li>
+					
+					<li>
+					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:yukai.space">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/02/07/Vps使用笔记/" title="Vps使用笔记" itemprop="url">Vps使用笔记</a>
+  </h1>
+  <p class="article-author">By
+    
+      <a href="http://yukai.space" title="于凯">于凯</a>
+    </p>
+  <p class="article-time">
+    <time datetime="2017-02-07T13:34:16.000Z" itemprop="datePublished">2017-02-07</time>
+    更新日期:<time datetime="2017-02-07T14:26:10.540Z" itemprop="dateModified">2017-02-07</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#购买VPS"><span class="toc-number">1.</span> <span class="toc-text">购买VPS</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#搭建shadowsocks服务"><span class="toc-number">2.</span> <span class="toc-text">搭建shadowsocks服务</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#升级内核"><span class="toc-number">2.1.</span> <span class="toc-text">升级内核</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#搭建服务"><span class="toc-number">2.2.</span> <span class="toc-text">搭建服务</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#使用现成脚本"><span class="toc-number">2.2.1.</span> <span class="toc-text">使用现成脚本</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#自行搭建"><span class="toc-number">2.2.2.</span> <span class="toc-text">自行搭建</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#端口问题"><span class="toc-number">2.2.3.</span> <span class="toc-text">端口问题</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#锐速加速"><span class="toc-number">3.</span> <span class="toc-text">锐速加速</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#vps使用ssh密钥登录"><span class="toc-number">4.</span> <span class="toc-text">vps使用ssh密钥登录</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#修改root密码"><span class="toc-number">4.1.</span> <span class="toc-text">修改root密码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#创建用户"><span class="toc-number">4.2.</span> <span class="toc-text">创建用户</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#创建密钥"><span class="toc-number">4.3.</span> <span class="toc-text">创建密钥</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#使用密钥认证登录"><span class="toc-number">4.4.</span> <span class="toc-text">使用密钥认证登录</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#禁用root用户登录和密码登录"><span class="toc-number">4.5.</span> <span class="toc-text">禁用root用户登录和密码登录</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#多台主机管理"><span class="toc-number">4.6.</span> <span class="toc-text">多台主机管理</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ss多用户管理"><span class="toc-number">5.</span> <span class="toc-text">ss多用户管理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#在Linux上使用shadowsocks服务翻墙"><span class="toc-number">6.</span> <span class="toc-text">在Linux上使用shadowsocks服务翻墙</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#开启shadowsocks客户端"><span class="toc-number">6.1.</span> <span class="toc-text">开启shadowsocks客户端</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#使用chrome代理"><span class="toc-number">6.2.</span> <span class="toc-text">使用chrome代理</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#附录"><span class="toc-number">7.</span> <span class="toc-text">附录</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#安装vim"><span class="toc-number">7.1.</span> <span class="toc-text">安装vim</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#安装net-tools"><span class="toc-number">7.2.</span> <span class="toc-text">安装net-tools</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#更改文件所有者"><span class="toc-number">7.3.</span> <span class="toc-text">更改文件所有者</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">8.</span> <span class="toc-text">参考</span></a></li></ol>
+		</div>
+		
+		<blockquote>
+<p>今天折腾了一天，总算是把翻墙的梯子搭起来了，租了国外的vps，然后在上面搭建了shadowsocks服务，手机和电脑就可以使用shadowsocks客户端的方式科学上网了。<br>Shadowsocks 是一个由很多人参与的开源项目，感谢shadowsocks作者<a href="https://github.com/clowwindy/shadowsocks" target="_blank" rel="external">@clowwindy</a>.关于shadowssocks和vpn等等翻墙方式的区别,不再一一赘述，本文只是记录梯子搭建的过程</p>
+</blockquote>
+<h2 id="购买VPS"><a href="#购买VPS" class="headerlink" title="购买VPS"></a>购买VPS</h2><p>VPS的概念我也不是特别清楚，就把他当成主机好了，类似于阿里云等等。</p>
+<p>购买之后，会分配给你root账户密码，你就拥有了一台国外机房的主机。</p>
+<p>VPS 可以参考 <a href="https://www.zhihu.com/question/20800554" target="_blank" rel="external">有哪些便宜稳定，速度也不错的Linux VPS 推荐？</a>,我买了Vultr 日本机房的vps,充了5美刀先试试。具体的购买方法自行谷歌</p>
+<h2 id="搭建shadowsocks服务"><a href="#搭建shadowsocks服务" class="headerlink" title="搭建shadowsocks服务"></a>搭建shadowsocks服务</h2><h3 id="升级内核"><a href="#升级内核" class="headerlink" title="升级内核"></a>升级内核</h3><p>我选择了Centos7的Linux发型版本作为操作系统。</p>
+<p>使用MobaXterm(或者是其他ssh工具)连接到分配给你的主机(root密码购买成功时会给出),</p>
+<p>首先升级一下内核：wget -O- <a href="https://zhujiwiki.com/usr/uploads/2016/12/install_bbr_centos.sh" target="_blank" rel="external">https://zhujiwiki.com/usr/uploads/2016/12/install_bbr_centos.sh</a> | bash</p>
+<p>完成之后，重启：</p>
+<p>reboot</p>
+<p>重新登录，查看内核版本：</p>
+<p>uname -r</p>
+<p>不出意外已经更新到了最新版本。接着执行：</p>
+<p>sysctl -a|grep congestion_control</p>
+<p>如果输出选项包含：net.ipv4.tcp_congestion_control = bbr 表示安装成功，否则需要手动开启bbr模式：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">echo &quot;net.core.default_qdisc=fq&quot; &gt;&gt; /etc/sysctl.conf</div><div class="line">echo &quot;net.ipv4.tcp_congestion_control=bbr&quot; &gt;&gt; /etc/sysctl.conf</div><div class="line">sysctl -p</div><div class="line">sysctl</div><div class="line">net.ipv4.tcp_available_congestion_control</div></pre></td></tr></table></figure>
+<p>再次查看：</p>
+<p>sysctl -a|grep congestion_control</p>
+<h3 id="搭建服务"><a href="#搭建服务" class="headerlink" title="搭建服务"></a>搭建服务</h3><p>搭建服务可以选择使用别人写好的现成的脚本，也可以自己搭建，下面介绍这两种方法：</p>
+<h4 id="使用现成脚本"><a href="#使用现成脚本" class="headerlink" title="使用现成脚本"></a>使用现成脚本</h4><p>执行以下命令：</p>
+<figure class="highlight plain"><figcaption><span>--no-check-certificate</span><a href="https://raw.githubusercontent.com/teddysun/shadowsocks_install/master/shadowsocks.sh" target="_blank" rel="external">link</a></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">chmod +x shadowsocks.sh</div><div class="line">./shadowsocks.sh 2&gt;&amp;1 | tee shadowsocks.log</div></pre></td></tr></table></figure>
+<p>首先会提示你输入密码和端口，然后开始安装。安装完成后代表shadowsocks服务已经开启了。此时可以使用shadowsocks客户端去连接这个服务器了。</p>
+<p>脚本可用的命令：</p>
+<p>启动：/etc/init.d/shadowsocks start</p>
+<p>停止：/etc/init.d/shadowsocks stop</p>
+<p>重启：/etc/init.d/shadowsocks restart</p>
+<p>状态：/etc/init.d/shadowsocks status</p>
+<p>卸载：./shadowsocks.sh uninstall</p>
+<p>支持多用户的方法：修改配置文件:/etc/shadowsocks.json</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">&#123;    </div><div class="line">    &quot;server&quot;:&quot;0.0.0.0&quot;,</div><div class="line">    &quot;local_address&quot;:&quot;127.0.0.1&quot;,</div><div class="line">    &quot;local_port&quot;:1080,</div><div class="line">    &quot;port_password&quot;:&#123;</div><div class="line">         &quot;8989&quot;:&quot;password0&quot;,</div><div class="line">         &quot;9001&quot;:&quot;password1&quot;,</div><div class="line">         &quot;9002&quot;:&quot;password2&quot;,</div><div class="line">         &quot;9003&quot;:&quot;password3&quot;,</div><div class="line">         &quot;9004&quot;:&quot;password4&quot;</div><div class="line">    &#125;,</div><div class="line">    &quot;timeout&quot;:300,</div><div class="line">    &quot;method&quot;:&quot;aes-256-cfb&quot;,</div><div class="line">    &quot;fast_open&quot;: false</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="自行搭建"><a href="#自行搭建" class="headerlink" title="自行搭建"></a>自行搭建</h4><p>首先安装shadowsocks服务：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">yum install python-setuptools &amp;&amp; easy_install pip</div><div class="line">pip install shadowsocks</div></pre></td></tr></table></figure>
+<p>显示 “Successfully installed shadowsocks-2.6.10″。意味着Shadowsocks已经成功安装。</p>
+<p>接着，创建一个Shadowsocks配置文件。输入以下命令：</p>
+<p>vi /etc/shadowsocks.json</p>
+<p>然后在该文件中输入：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">    &quot;server&quot;:&quot;your_server_ip&quot;,</div><div class="line">    &quot;server_port&quot;:8388,</div><div class="line">    &quot;local_address&quot;: &quot;127.0.0.1&quot;,</div><div class="line">    &quot;local_port&quot;:1080,</div><div class="line">    &quot;password&quot;:&quot;auooo.com&quot;,</div><div class="line">    &quot;timeout&quot;:300,</div><div class="line">    &quot;method&quot;:&quot;aes-256-cfb&quot;,</div><div class="line">    &quot;fast_open&quot;: false</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>上面各项配置的含义已经很明显了，除了server(vps的ip)、server_port和password之外，其他默认即可。保存该文件。执行：</p>
+<p>ssserver -c /etc/shadowsocks.json -d start</p>
+<p>服务就启动了，如果想要关闭，执行：</p>
+<p>ssserver -c /etc/shadowsocks.json -d stop</p>
+<p>支持多用户的方法与上面的类似</p>
+<h4 id="端口问题"><a href="#端口问题" class="headerlink" title="端口问题"></a>端口问题</h4><p>有时候服务正常启动了，但是发现客户端还是没有办法翻墙。这时要注意检查vps开放的端口：</p>
+<p>Centos升级到7之后，使用firewalld代替了原来的iptables作为防火墙。</p>
+<p>启动：systemctl start  firewalld</p>
+<p>重启：firewall-cmd –reload</p>
+<p>查看状态：systemctl status firewalld 或者 firewall-cmd –state  </p>
+<p>查看开放的端口：firewall-cmd –list-ports</p>
+<p>增加开放端口：firewall-cmd –add-port=9001/tcp –permanent   (重启生效)</p>
+<p>9001：要开放的端口</p>
+<p>tcp：协议</p>
+<p>–permanent：永久生效，没有此参数重启后失效其他命令自行查找</p>
+<h2 id="锐速加速"><a href="#锐速加速" class="headerlink" title="锐速加速"></a>锐速加速</h2><p><a href="https://www.91yun.org/archives/683" target="_blank" rel="external">锐速破解版linux一键自动安装包（8月7日更新）</a></p>
+<p>文章开头的更新内核使用bbr加速或者锐速加速都可以，没试过哪种方式效果更好一些</p>
+<h2 id="vps使用ssh密钥登录"><a href="#vps使用ssh密钥登录" class="headerlink" title="vps使用ssh密钥登录"></a>vps使用ssh密钥登录</h2><p>使用ssh root账户和密码登录的方式是vps一开始会给出的登录主机的方式，这种方式比较简单，但是容易被别人暴力破解登录密码，控制我们的主机。</p>
+<p>所以，应该使用ssh密钥登录的方式来增强安全性。</p>
+<h3 id="修改root密码"><a href="#修改root密码" class="headerlink" title="修改root密码"></a>修改root密码</h3><p>第一步应该先把默认的root密码修改为自己的密码，最好复杂一点。</p>
+<p>确保自己记住了这个密码。</p>
+<p>passwd</p>
+<h3 id="创建用户"><a href="#创建用户" class="headerlink" title="创建用户"></a>创建用户</h3><p>可以先创建一个非root用户：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">useradd yukai</div></pre></td></tr></table></figure>
+<p>创建账户密码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">passwd yukai</div></pre></td></tr></table></figure>
+<p>给予账户sudo权限：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">visudo</div></pre></td></tr></table></figure>
+<p>在 root ALL=(ALL)  ALL 下新增一行：</p>
+<p>yukai ALL=(ALL)  ALL</p>
+<p>切换到yukai这个账户：</p>
+<p>su - yukai </p>
+<h3 id="创建密钥"><a href="#创建密钥" class="headerlink" title="创建密钥"></a>创建密钥</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ssh-keygen -t rsa</div></pre></td></tr></table></figure>
+<p>在 /home/yukai 下生成了一个隐藏目录：.ssh, 执行：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">cd ~/.sshcat id_rsa.pub &gt;&gt; authorized_keys</div><div class="line">chmod 600 authorized_keys</div></pre></td></tr></table></figure>
+<p>将 id_rsa文件下载下来保存到本地(使用MobaXterm等工具)</p>
+<h3 id="使用密钥认证登录"><a href="#使用密钥认证登录" class="headerlink" title="使用密钥认证登录"></a>使用密钥认证登录</h3><p>打开MobaXterm工具，新建一个session，选择ssh，在Advanced SSH settings选项中选择 use private keygen复选框，并把上一步下载好的id_rsa选择进来。</p>
+<p>以用户yukai登录，提示输入密钥文件的密码，输入生成密钥时所填的密码，如果能够登录，则设置正确了</p>
+<h3 id="禁用root用户登录和密码登录"><a href="#禁用root用户登录和密码登录" class="headerlink" title="禁用root用户登录和密码登录"></a>禁用root用户登录和密码登录</h3><p>确保自己记住了root密码，并且上一步密钥认证方式登录成功。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo vi /etc/ssh/sshd_config</div></pre></td></tr></table></figure>
+<p>找到以下几项，进行如下设置：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">RSAAuthentication yes</div><div class="line">PubkeyAuthentication yes</div><div class="line">PermitRootLogin no</div><div class="line">PasswordAuthentication no</div></pre></td></tr></table></figure>
+<p>重启ssh服务：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">service sshd restart</div></pre></td></tr></table></figure>
+<h3 id="多台主机管理"><a href="#多台主机管理" class="headerlink" title="多台主机管理"></a>多台主机管理</h3><p>可以将生成的密钥文件authorized_keys保存到多个主机的相同位置：~/.ssh</p>
+<p>然后进行上面的配置。此时就可以使用一份私钥文件id_rsa登录多个主机了。</p>
+<h2 id="ss多用户管理"><a href="#ss多用户管理" class="headerlink" title="ss多用户管理"></a>ss多用户管理</h2><p>前端使用ss-panel，后台使用shadowsocks-manyuser</p>
+<p>教程参见：</p>
+<p><a href="https://blessing.studio/build-shadowsocks-sharing-site-with-ss-panel/" target="_blank" rel="external">可能是最好的 ss-panel 部署教程</a></p>
+<p><a href="https://blog.linuxeye.com/426.html" target="_blank" rel="external">ShadowSocks多用户管理系统搭建（moeSS+manyuser）</a></p>
+<h2 id="在Linux上使用shadowsocks服务翻墙"><a href="#在Linux上使用shadowsocks服务翻墙" class="headerlink" title="在Linux上使用shadowsocks服务翻墙"></a>在Linux上使用shadowsocks服务翻墙</h2><h3 id="开启shadowsocks客户端"><a href="#开启shadowsocks客户端" class="headerlink" title="开启shadowsocks客户端"></a>开启shadowsocks客户端</h3><p>确认安装了shadowsocks服务并从配置好的shadowsocks服务器端获得配置文件: /etc/shadowsocks/config.json</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">        &quot;server&quot;:&quot;remote-shadowsocks-server-ip-addr&quot;,</div><div class="line">        &quot;server_port&quot;:443,</div><div class="line">        &quot;local_address&quot;:&quot;127.0.0.1&quot;,</div><div class="line">        &quot;local_port&quot;:1080,</div><div class="line">        &quot;password&quot;:&quot;your-passwd&quot;,</div><div class="line">        &quot;timeout&quot;:300,</div><div class="line">        &quot;method&quot;:&quot;aes-256-cfb&quot;,</div><div class="line">        &quot;fast_open&quot;:false,</div><div class="line">        &quot;workers&quot;:1</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>在config.json所在目录下运行sslocal即可：</p>
+<p>sslocal -c /etc/shadowsocks/config.json</p>
+<p>也可以手动指定参数运行：</p>
+<p>sslocal -s 服务器地址 -p 服务器端口 -l 本地端端口 -k 密码 -m 加密方法</p>
+<h3 id="使用chrome代理"><a href="#使用chrome代理" class="headerlink" title="使用chrome代理"></a>使用chrome代理</h3><p>在chrome应用商店中查找 Proxy SwitchyOmega,并安装该扩展</p>
+<p>新建情景模式，代理协议选择SOCKS5，代理服务器选择 127.0.0.1， 代理端口选择上一步中的local_port,即1080</p>
+<p>启用该扩展程序，此时可顺利使用google了 </p>
+<h2 id="附录"><a href="#附录" class="headerlink" title="附录"></a>附录</h2><h3 id="安装vim"><a href="#安装vim" class="headerlink" title="安装vim"></a>安装vim</h3><p>vim编辑器需要安装三个包：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">vim-enhanced-7.0.109-7.el5</div><div class="line">vim-minimal-7.0.109-7.el5</div><div class="line">vim-common-7.0.109-7.el5</div></pre></td></tr></table></figure>
+<p>输入  <code>rpm -qa|grep vim</code> 这个命令，如何vim已经正确安装，则会显示上面三个包的名称</p>
+<p>如果缺少了其中某个，比如说： vim-enhanced这个包少了，执行：<code>yum -y install vim-enhanced</code> 命令，它会自动下载安装</p>
+<p>如果上面三个包一个都没有显示，则直接输入命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">yum -y install vim*</div></pre></td></tr></table></figure>
+<h3 id="安装net-tools"><a href="#安装net-tools" class="headerlink" title="安装net-tools"></a>安装net-tools</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">yum install net-tools</div></pre></td></tr></table></figure>
+<h3 id="更改文件所有者"><a href="#更改文件所有者" class="headerlink" title="更改文件所有者"></a>更改文件所有者</h3><p>chown -R www.www ./    将本路径下所有文件所有者改为www组的www</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://teddysun.com/342.html" target="_blank" rel="external">Shadowsocks Python版一键安装脚本</a></p>
+<p><a href="https://www.loyalsoldier.me/fuck-the-gfw-with-my-own-shadowsocks-server/" target="_blank" rel="external">使用 Shadowsocks 自建翻墙服务器，实现全平台 100% 翻墙无障碍</a></p>
+<p><a href="http://shadowsocks.org/en/download/clients.html" target="_blank" rel="external">http://shadowsocks.org/</a></p>
+<p><a href="http://www.auooo.com/2015/06/26/shadowsocks%EF%BC%88%E5%BD%B1%E6%A2%AD%EF%BC%89%E4%B8%8D%E5%AE%8C%E5%85%A8%E6%8C%87%E5%8D%97/" target="_blank" rel="external">shadowsocks（影梭）不完全指南</a></p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/linux/">linux</a>
+  </div>
+
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/工具/">工具</a>
+</div>
+
+
+
+<div class="article-share" id="share">
+
+<!--
+  <div data-url="http://yukai.space/2017/02/07/Vps使用笔记/" data-title="Vps使用笔记 | YuKai&#39;s blog" data-tsina="5381447277" class="share clearfix">
+  </div>
+-->
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2016/12/13/java异常的学习/"  title="java异常的学习">
+ <strong>NEXT:</strong><br/> 
+ <span>java异常的学习
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section class="comment">
+	<div class="ds-thread"></div>
+</section>
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#购买VPS"><span class="toc-number">1.</span> <span class="toc-text">购买VPS</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#搭建shadowsocks服务"><span class="toc-number">2.</span> <span class="toc-text">搭建shadowsocks服务</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#升级内核"><span class="toc-number">2.1.</span> <span class="toc-text">升级内核</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#搭建服务"><span class="toc-number">2.2.</span> <span class="toc-text">搭建服务</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#使用现成脚本"><span class="toc-number">2.2.1.</span> <span class="toc-text">使用现成脚本</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#自行搭建"><span class="toc-number">2.2.2.</span> <span class="toc-text">自行搭建</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#端口问题"><span class="toc-number">2.2.3.</span> <span class="toc-text">端口问题</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#锐速加速"><span class="toc-number">3.</span> <span class="toc-text">锐速加速</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#vps使用ssh密钥登录"><span class="toc-number">4.</span> <span class="toc-text">vps使用ssh密钥登录</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#修改root密码"><span class="toc-number">4.1.</span> <span class="toc-text">修改root密码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#创建用户"><span class="toc-number">4.2.</span> <span class="toc-text">创建用户</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#创建密钥"><span class="toc-number">4.3.</span> <span class="toc-text">创建密钥</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#使用密钥认证登录"><span class="toc-number">4.4.</span> <span class="toc-text">使用密钥认证登录</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#禁用root用户登录和密码登录"><span class="toc-number">4.5.</span> <span class="toc-text">禁用root用户登录和密码登录</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#多台主机管理"><span class="toc-number">4.6.</span> <span class="toc-text">多台主机管理</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ss多用户管理"><span class="toc-number">5.</span> <span class="toc-text">ss多用户管理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#在Linux上使用shadowsocks服务翻墙"><span class="toc-number">6.</span> <span class="toc-text">在Linux上使用shadowsocks服务翻墙</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#开启shadowsocks客户端"><span class="toc-number">6.1.</span> <span class="toc-text">开启shadowsocks客户端</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#使用chrome代理"><span class="toc-number">6.2.</span> <span class="toc-text">使用chrome代理</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#附录"><span class="toc-number">7.</span> <span class="toc-text">附录</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#安装vim"><span class="toc-number">7.1.</span> <span class="toc-text">安装vim</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#安装net-tools"><span class="toc-number">7.2.</span> <span class="toc-text">安装net-tools</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#更改文件所有者"><span class="toc-number">7.3.</span> <span class="toc-text">更改文件所有者</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">8.</span> <span class="toc-text">参考</span></a></li></ol>
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+			<li><a href="/categories/java/" title="java">java<sup>2</sup></a></li>
+		
+			<li><a href="/categories/工具/" title="工具">工具<sup>8</sup></a></li>
+		
+			<li><a href="/categories/技术/" title="技术">技术<sup>5</sup></a></li>
+		
+			<li><a href="/categories/生活/" title="生活">生活<sup>3</sup></a></li>
+		
+			<li><a href="/categories/编程/" title="编程">编程<sup>16</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			<li><a href="/tags/Eclipse/" title="Eclipse">Eclipse<sup>1</sup></a></li>
+		
+			<li><a href="/tags/ant/" title="ant">ant<sup>2</sup></a></li>
+		
+			<li><a href="/tags/curl/" title="curl">curl<sup>1</sup></a></li>
+		
+			<li><a href="/tags/java/" title="java">java<sup>22</sup></a></li>
+		
+			<li><a href="/tags/junit/" title="junit">junit<sup>1</sup></a></li>
+		
+			<li><a href="/tags/linux/" title="linux">linux<sup>1</sup></a></li>
+		
+			<li><a href="/tags/markdown/" title="markdown">markdown<sup>1</sup></a></li>
+		
+			<li><a href="/tags/python/" title="python">python<sup>1</sup></a></li>
+		
+			<li><a href="/tags/spring/" title="spring">spring<sup>2</sup></a></li>
+		
+			<li><a href="/tags/加密/" title="加密">加密<sup>2</sup></a></li>
+		
+			<li><a href="/tags/多线程/" title="多线程">多线程<sup>5</sup></a></li>
+		
+			<li><a href="/tags/快捷键/" title="快捷键">快捷键<sup>1</sup></a></li>
+		
+			<li><a href="/tags/服务器/" title="服务器">服务器<sup>1</sup></a></li>
+		
+			<li><a href="/tags/测试/" title="测试">测试<sup>1</sup></a></li>
+		
+			<li><a href="/tags/源码/" title="源码">源码<sup>1</sup></a></li>
+		
+			<li><a href="/tags/编码/" title="编码">编码<sup>2</sup></a></li>
+		
+			<li><a href="/tags/调试/" title="调试">调试<sup>1</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  
+  <div class="tagcloudlist">
+    <p class="asidetitle">标签云</p>
+    <div class="tagcloudlist clearfix">
+       <a href="/tags/Eclipse/" style="font-size: 10px;">Eclipse</a> <a href="/tags/ant/" style="font-size: 13.33px;">ant</a> <a href="/tags/curl/" style="font-size: 10px;">curl</a> <a href="/tags/java/" style="font-size: 20px;">java</a> <a href="/tags/junit/" style="font-size: 10px;">junit</a> <a href="/tags/linux/" style="font-size: 10px;">linux</a> <a href="/tags/markdown/" style="font-size: 10px;">markdown</a> <a href="/tags/python/" style="font-size: 10px;">python</a> <a href="/tags/spring/" style="font-size: 13.33px;">spring</a> <a href="/tags/加密/" style="font-size: 13.33px;">加密</a> <a href="/tags/多线程/" style="font-size: 16.67px;">多线程</a> <a href="/tags/快捷键/" style="font-size: 10px;">快捷键</a> <a href="/tags/服务器/" style="font-size: 10px;">服务器</a> <a href="/tags/测试/" style="font-size: 10px;">测试</a> <a href="/tags/源码/" style="font-size: 10px;">源码</a> <a href="/tags/编码/" style="font-size: 13.33px;">编码</a> <a href="/tags/调试/" style="font-size: 10px;">调试</a>
+    </div>
+  </div>
+
+
+  
+  <div class="archiveslist">
+    <p class="asidetitle"><a href="/archives">归档</a></p>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">十二月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">十一月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">十月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">九月 2016</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">八月 2016</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">七月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">六月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">四月 2016</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">三月 2016</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">十二月 2015</a><span class="archive-list-count">2</span></li></ul>
+  </div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> 既来之 <br/>
+			则安之</p>
+	</section>
+	 
+	<div class="social-font clearfix">
+		
+		<a href="http://weibo.com/5381447277" target="_blank" title="weibo"></a>
+		
+		
+		
+		<a href="https://github.com/Hikyu" target="_blank" title="github"></a>
+		
+		
+		
+	</div>
+	<!--
+		<p class="copyright">Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/A-limon/pacman" target="_blank" title="Pacman">Pacman</a> © 2017 
+		
+		<a href="http://yukai.space" target="_blank" title="于凯">于凯</a>
+		
+		</p>
+	-->
+	<p class="copyright">Copyright 2016 yukai.space AllRights Reserved.</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"null"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+  </body>
+</html>
