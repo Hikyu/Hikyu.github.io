@@ -4,18 +4,15 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>代码规范 | YuKai&#39;s blog</title>
+    <title>win7与centos7双系统安装 | YuKai&#39;s blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
     
     <meta name="author" content="于凯">
     
-    <meta name="description" content="最近写的代码提上去让领导评审，回来给我的建议都是逻辑虽然正确，但代码十分凌乱，命名不规范，看着很不舒服。 所以决定总结一些规范，以后写代码要注意了~
+    <meta name="description" content="之前会有同学让帮忙重装操作系统，正好计划重新装一下自己电脑的系统，折腾了win7与linux双系统，在此记录。以后就可以给他们看这篇笔记自己去装啦~
+ps: 由于是双系统的安装操作，而不是虚拟机，所以并未截图，是纯文字说明。如果不清楚，可以参考最下面的参考链接
 
-
-命名
-变量，方法，类命名要表义，严格禁止使用 name1, name2 等命名
-
-避免使用数字，但可用 2 代替 to，用 4 代替 for 等，">
+安装win7下载win7镜像文件：系">
     
     
     
@@ -69,15 +66,15 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2016/03/29/代码格式/" title="代码规范" itemprop="url">代码规范</a>
+      <a href="/2017/02/18/win7与centos7双系统安装/" title="win7与centos7双系统安装" itemprop="url">win7与centos7双系统安装</a>
   </h1>
   <p class="article-author">By
     
       <a href="http://yukai.space" title="于凯">于凯</a>
     </p>
   <p class="article-time">
-    <time datetime="2016-03-29T08:31:55.000Z" itemprop="datePublished">2016-03-29</time>
-    更新日期:<time datetime="2016-11-30T14:32:49.913Z" itemprop="dateModified">2016-11-30</time>
+    <time datetime="2017-02-18T13:10:00.000Z" itemprop="datePublished">2017-02-18</time>
+    更新日期:<time datetime="2017-02-18T13:11:26.771Z" itemprop="dateModified">2017-02-18</time>
     
   </p>
 </header>
@@ -86,85 +83,80 @@
 		
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
-		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#命名"><span class="toc-number">1.</span> <span class="toc-text">命名</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#注释"><span class="toc-number">2.</span> <span class="toc-text">注释</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#换行、空格"><span class="toc-number">3.</span> <span class="toc-text">换行、空格</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">4.</span> <span class="toc-text">参考</span></a></li></ol>
+		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#安装win7"><span class="toc-number">1.</span> <span class="toc-text">安装win7</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#下载win7镜像文件："><span class="toc-number">1.1.</span> <span class="toc-text">下载win7镜像文件：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#制作U盘启动工具"><span class="toc-number">1.2.</span> <span class="toc-text">制作U盘启动工具</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#安装win7-1"><span class="toc-number">1.3.</span> <span class="toc-text">安装win7</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#安装centos7"><span class="toc-number">2.</span> <span class="toc-text">安装centos7</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#查看磁盘分区情况"><span class="toc-number">2.1.</span> <span class="toc-text">查看磁盘分区情况</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#制作U盘启动工具-1"><span class="toc-number">2.2.</span> <span class="toc-text">制作U盘启动工具</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#安装centos7-1"><span class="toc-number">2.3.</span> <span class="toc-text">安装centos7</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#配置引导程序"><span class="toc-number">2.4.</span> <span class="toc-text">配置引导程序</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">3.</span> <span class="toc-text">参考</span></a></li></ol>
 		</div>
 		
 		<blockquote>
-<p>最近写的代码提上去让领导评审，回来给我的建议都是逻辑虽然正确，但代码十分凌乱，命名不规范，看着很不舒服。<br> 所以决定总结一些规范，以后写代码要注意了~</p>
+<p>之前会有同学让帮忙重装操作系统，正好计划重新装一下自己电脑的系统，折腾了win7与linux双系统，在此记录。以后就可以给他们看这篇笔记自己去装啦~</p>
+<p>ps: 由于是双系统的安装操作，而不是虚拟机，所以并未截图，是纯文字说明。如果不清楚，可以参考最下面的参考链接</p>
 </blockquote>
-<ul>
-<li><h2 id="命名"><a href="#命名" class="headerlink" title="命名"></a><strong>命名</strong></h2><ul>
-<li><p>变量，方法，类命名要表义，严格禁止使用 name1, name2 等命名</p>
-</li>
-<li><p>避免使用数字，但可用 2 代替 to，用 4 代替 for 等，如 go2Clean</p>
-</li>
-</ul>
+<h2 id="安装win7"><a href="#安装win7" class="headerlink" title="安装win7"></a>安装win7</h2><h3 id="下载win7镜像文件："><a href="#下载win7镜像文件：" class="headerlink" title="下载win7镜像文件："></a>下载win7镜像文件：</h3><p><a href="http://www.xitongzhijia.net/win7/" target="_blank" rel="external">系统之家win7下载</a></p>
+<p>选择一款进行下载，我选择了<code>雨林木风 GHOST WIN7 SP1 X64 装机旗舰版 V2017.02（64位）</code></p>
+<h3 id="制作U盘启动工具"><a href="#制作U盘启动工具" class="headerlink" title="制作U盘启动工具"></a>制作U盘启动工具</h3><p>下载启动盘制作工具：</p>
+<p><a href="http://www.laomaotao.org/lmtxz/933.html" target="_blank" rel="external">老毛桃u盘启动盘制作工具</a></p>
+<p>下载装机版，进行安装</p>
+<p>启动盘制作工具安装完成，且镜像下载完毕之后，启动老毛桃，选择U盘启动-&gt;默认模式</p>
+<p>插入一个可用的U盘，在选择设备这项中，选择插入的U盘设备，注意不要选错</p>
+<p>其他选项默认，点击 开始制作 进行启动盘的制作。</p>
+<p>启动盘制作完毕之后，将下载好的iso文件拷入U盘</p>
+<h3 id="安装win7-1"><a href="#安装win7-1" class="headerlink" title="安装win7"></a>安装win7</h3><p>插入制作好的启动盘，重启电脑</p>
+<p>开机画面出现时，按下F12，boot options(我的电脑是DELL的，其他品牌电脑自行查找)</p>
+<p>选择USB启动</p>
+<p>老毛桃启动盘正常启动，此时选择第二项，win8pe,点击进入win8pe</p>
 <ol>
-<li><p>方法</p>
-<p>方法名第一个单词小写，以后每个单词首字母大写。</p>
-</li>
-<li><p>类、接口</p>
-<p>所有单词首字母都大写。使用能确切反应该类、接口含义、功能等的词。一般采用名词</p>
-</li>
-<li><p>字段、常量</p>
-<p>成员变量、局部变量第一个单词小写，如 userName, instance。</p>
-<p>常量全部大写，在词与词之前用下划线连接，如 MAX_NUMBER。</p>
-<p>代码中禁止使用硬编码，把一些数字或字符串定义成常用量。</p>
-</li>
+<li>首先进行分区，选择分区工具，可以自由设置分区数目和分区大小(我分了3个区，一个用来装win7(C)，一个用来做Windows的资料盘(D)，另外一个用来安装Linux(E))</li>
 </ol>
-</li>
-<li><h2 id="注释"><a href="#注释" class="headerlink" title="注释"></a><strong>注释</strong></h2><ol>
-<li><p>成员变量注释</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/** 成员变量注释 */</span></div><div class="line"><span class="keyword">protected</span> Object mObject0;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> * 对于注释多于一行的，采用这种方式来</div><div class="line"> * 定义该变量</div><div class="line"> */</div><div class="line"><span class="keyword">private</span> Object mObject4;</div></pre></td></tr></table></figure>
-</li>
-<li><p>方法描述</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line">  * 方法描述...</div><div class="line">  * </div><div class="line">  * <span class="doctag">@param</span> param1  参数1描述...</div><div class="line">  * <span class="doctag">@param</span> param2  参数2描述...</div><div class="line">  * <span class="doctag">@param</span> paramXX 参数XX描述... （注意：请将参数、描述都对齐）</div><div class="line">  */</div><div class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doSomething</span><span class="params">(<span class="keyword">int</span> param1, <span class="keyword">float</span> param2, String paramXX)</span> </span>&#123;&#125;</div></pre></td></tr></table></figure>
-</li>
-</ol>
-<p>3.方法内部注释</p>
-<p>  可以使用 /<em>注释</em>/ 进行注释，也可以使用 //注释  进行注释，最好所有代码保持一致。但多行连续注释不应该使用后者。</p>
-  <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span> (a == <span class="number">2</span>) &#123;</div><div class="line">    <span class="keyword">return</span> TRUE;            <span class="comment">/* special case */</span></div><div class="line">&#125; <span class="keyword">else</span> &#123;    </div><div class="line">    <span class="keyword">return</span> isprime(a);      <span class="comment">/* works only for odd a */</span>&#125;</div></pre></td></tr></table></figure>
-</li>
-<li><h2 id="换行、空格"><a href="#换行、空格" class="headerlink" title="换行、空格"></a><strong>换行、空格</strong></h2><ul>
-<li><p><strong>换行</strong></p>
-<p>当代码过长造成阅读困难的时候，就应该考虑代码换行。</p>
-<p>有这么几个原则：</p>
-<p>1.在逗号之后换行</p>
-<p>2.在操作符之前换行</p>
-<p>3.考虑在表达式的外层就换行，而不是内层</p>
-<p>4.新一行的开头应该与前一行的同一级代码对齐</p>
-<p>5.如果以上几个原则使得换行后的表达式过于靠右，那么直接在新行之前插入8个空格代替上面的规则。</p>
-<p><strong>示例</strong></p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">function(longExpression1, longExpression2, longExpression3,         </div><div class="line">         longExpression4, longExpression5);</div><div class="line"></div><div class="line">var = function1(longExpression1,                </div><div class="line">               function2(longExpression2,</div><div class="line">                         longExpression3));</div></pre></td></tr></table></figure>
-<p>在表达式外层换行：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">longName1 = longName2 * (longName3 + longName4 - longName5)</div><div class="line">            + <span class="number">4</span> * longname6; <span class="comment">// PREFER</span></div><div class="line"></div><div class="line">longName1 = longName2 * (longName3 + longName4</div><div class="line">                         - longName5) + <span class="number">4</span> * longname6; <span class="comment">// AVOID</span></div></pre></td></tr></table></figure>
-<p>插入8个空格的情况</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//INDENT 8 SPACES TO AVOID VERY DEEP INDENTS</span></div><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">synchronized</span> <span class="title">horkingLongMethodName</span><span class="params">(<span class="keyword">int</span> anArg,</span></span></div><div class="line">        Object anotherArg, String yetAnotherArg,</div><div class="line">        Object andStillAnother) &#123;    </div><div class="line">     ...</div><div class="line">&#125; </div><div class="line"></div><div class="line"><span class="comment">//条件表达式8空格原则</span></div><div class="line"><span class="keyword">if</span> ((condition1 &amp;&amp; condition2)</div><div class="line">        || (condition3 &amp;&amp; condition4)</div><div class="line">        ||!(condition5 &amp;&amp; condition6)) &#123;</div><div class="line">    doSomethingAboutIt();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-</li>
-<li><p><strong>空格</strong></p>
-<p>1.<code>{</code>内的语句，之前插入4个空格。包括函数，if语句，for循环，while循环等。</p>
+<p>双击win8pe桌面上的“diskgenius分区工具”图标，在弹出的窗口中点击“快速分区”，即可启动分区工具，具体的分区方法参考官网介绍：<a href="http://www.laomaotao.org/lmtjc/245.html" target="_blank" rel="external">老毛桃分区工具的使用</a></p>
 <ol>
-<li>操作符左右，大括号<code>{}</code>左右，等于号左右都要有一个空格的间距。<br>f</li>
+<li><p>设置好分区后，鼠标左键双击打开桌面上的“老毛桃PE装机工具”，选择“还原分区”，映像文件路径选择上一步拷入U盘的镜像，然后选择要装入的分区(C盘)，点击确认开始自动装机。</p>
+</li>
+<li><p>系统自动重启几次之后，就安装好了，可以卸载一些不必要的系统自带软件，此时的操作系统已经是激活的版本了（我下载的镜像是），各种需要的驱动也都安装完毕，简单省事。</p>
+</li>
 </ol>
-</li>
-</ul>
-</li>
-<li><h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a><strong>参考</strong></h2><p><a href="http://www.oracle.com/technetwork/java/codeconventions-150003.pdf" target="_blank" rel="external">JavaCode Conventions</a></p>
-</li>
-</ul>
+<h2 id="安装centos7"><a href="#安装centos7" class="headerlink" title="安装centos7"></a>安装centos7</h2><h3 id="查看磁盘分区情况"><a href="#查看磁盘分区情况" class="headerlink" title="查看磁盘分区情况"></a>查看磁盘分区情况</h3><p>右键计算机-&gt;管理，打开计算机管理程序。选择磁盘管理，查看分区情况。</p>
+<p>选择之前分好的E盘，右键“删除卷”，使之状态变为“可用空间”，以便centos安装程序识别。</p>
+<h3 id="制作U盘启动工具-1"><a href="#制作U盘启动工具-1" class="headerlink" title="制作U盘启动工具"></a>制作U盘启动工具</h3><p>下载centos7镜像文件（DVD版本即可）</p>
+<p><a href="http://101.96.8.151/mirror.centos.org/centos/7/isos/x86_64/CentOS-7-x86_64-DVD-1611.iso" target="_blank" rel="external">CentOS-7-x86_64-DVD-1611.iso</a></p>
+<p>下载烧录U盘工具</p>
+<p><a href="http://www.osforensics.com/tools/write-usb-images.html" target="_blank" rel="external">ImageUsb</a></p>
+<p>插入一个可用的U盘</p>
+<p>启动 imageusb.exe，</p>
+<p>step1 选择要写入的U盘;</p>
+<p>step2 选择 write image to USB driver;</p>
+<p>step3 选择下载好的centos7镜像文件</p>
+<p>step4 点击 write ，开始烧录启动盘</p>
+<p>启动盘烧录完毕后，可以开始安装centos</p>
+<h3 id="安装centos7-1"><a href="#安装centos7-1" class="headerlink" title="安装centos7"></a>安装centos7</h3><p>插入制作好的启动盘，重启电脑</p>
+<p>开机画面出现时，按下F12 (我的电脑是DELL的，其他品牌电脑自行查找)</p>
+<p>选择USB启动</p>
+<p>选择第一项，Install CentOs 7 ，回车，开始安装CentOS 7</p>
+<p>之后就进入了简单的可视化安装界面，有几点需要注意：</p>
+<p>1.分区选择</p>
+<p>如果是像上面一样分了3个区，两个被Windows使用，还剩一个分区未被使用，<br>那么可以选择自动选择分区，centos安装程序会自动选择好这块未被使用的分区（将“/”目录挂载到这个分区上面）</p>
+<p>也可以自定义分区，建议分四个区：/   /boot  /home swap（如果有这么些分区的话）</p>
+<p>2.在之后的安装信息摘要中，注意“软件”-“软件选择”，默认是最小安装，即不安装桌面环境，若选择此项，则只有命令行界面，应该选择带有UI界面的选项。</p>
+<p>之后就是很简单的安装了</p>
+<h3 id="配置引导程序"><a href="#配置引导程序" class="headerlink" title="配置引导程序"></a>配置引导程序</h3><p>再次启动电脑之后，会发现自动进入Linux，没有win7系统的选项，此时需要配置引导程序</p>
+<p>首先添加ntfs支持</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">wget -O /etc/yum.repos.d/epel.repo http://mirrors.aliyun.com/repo/epel-7.repo</div><div class="line"></div><div class="line">yum update;yum install ntfs-3g</div></pre></td></tr></table></figure>
+<p>安装完毕后打开终端，运行<code>grub2-mkconfig -o /boot/grub2/grub.cfg</code></p>
+<p>就会重新生成引导项，重启电脑即可</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="http://www.laomaotao.org/jiaocheng/upzybwin7.html" target="_blank" rel="external">老毛桃u盘安装原版win7系统详细教程</a></p>
+<p><a href="http://www.laomaotao.org/lmtjc/245.html" target="_blank" rel="external">老毛桃分区工具的使用</a></p>
+<p><a href="http://www.osyunwei.com/archives/7829.html" target="_blank" rel="external">CentOS 7.0系统安装配置图解教程</a></p>
   
 	</div>
 		<footer class="article-footer clearfix">
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/java/">java</a>
+  <span></span> <a href="/tags/linux/">linux</a>
   </div>
 
 
 <div class="article-categories">
   <span></span>
-  <a class="article-category-link" href="/categories/编程/">编程</a>
+  <a class="article-category-link" href="/categories/技术/">技术</a>
 </div>
 
 
@@ -172,7 +164,7 @@
 <div class="article-share" id="share">
 
 <!--
-  <div data-url="http://yukai.space/2016/03/29/代码格式/" data-title="代码规范 | YuKai&#39;s blog" data-tsina="5381447277" class="share clearfix">
+  <div data-url="http://yukai.space/2017/02/18/win7与centos7双系统安装/" data-title="win7与centos7双系统安装 | YuKai&#39;s blog" data-tsina="5381447277" class="share clearfix">
   </div>
 -->
 
@@ -182,19 +174,11 @@
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2016/03/30/sphinx安装问题/" title="sphinx安装问题">
-  <strong>PREVIOUS:</strong><br/>
-  <span>
-  sphinx安装问题</span>
-</a>
-</div>
-
 
 <div class="next">
-<a href="/2016/03/22/常用快捷键总结/"  title="常用快捷键总结">
+<a href="/2017/02/07/Vps使用笔记/"  title="Vps使用笔记">
  <strong>NEXT:</strong><br/> 
- <span>常用快捷键总结
+ <span>Vps使用笔记
 </span>
 </a>
 </div>
@@ -211,7 +195,7 @@
 
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
-  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#命名"><span class="toc-number">1.</span> <span class="toc-text">命名</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#注释"><span class="toc-number">2.</span> <span class="toc-text">注释</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#换行、空格"><span class="toc-number">3.</span> <span class="toc-text">换行、空格</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">4.</span> <span class="toc-text">参考</span></a></li></ol>
+  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#安装win7"><span class="toc-number">1.</span> <span class="toc-text">安装win7</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#下载win7镜像文件："><span class="toc-number">1.1.</span> <span class="toc-text">下载win7镜像文件：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#制作U盘启动工具"><span class="toc-number">1.2.</span> <span class="toc-text">制作U盘启动工具</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#安装win7-1"><span class="toc-number">1.3.</span> <span class="toc-text">安装win7</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#安装centos7"><span class="toc-number">2.</span> <span class="toc-text">安装centos7</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#查看磁盘分区情况"><span class="toc-number">2.1.</span> <span class="toc-text">查看磁盘分区情况</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#制作U盘启动工具-1"><span class="toc-number">2.2.</span> <span class="toc-text">制作U盘启动工具</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#安装centos7-1"><span class="toc-number">2.3.</span> <span class="toc-text">安装centos7</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#配置引导程序"><span class="toc-number">2.4.</span> <span class="toc-text">配置引导程序</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">3.</span> <span class="toc-text">参考</span></a></li></ol>
   </div>
 
 <div id="asidepart">
