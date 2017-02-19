@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 理解java内存模型
+title: java国际化
 date: 2017-02-19 19:32:40
 categories: 技术
 tags: java
