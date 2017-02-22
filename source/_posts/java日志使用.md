@@ -337,6 +337,8 @@ public static Logger logger = LoggerFactory.getLogger("yukai.child");
 
 我们指定：`log4j.logger.space.kyu=DEBUG,stdout`,就表示space.kyu包下面的所有logger(以LoggerFactory.getLogger(Test.calss);这种方式获取的)都继承该logger的设定。这在分层的应用或功能性应用中有可以用到。
 
+可以通过配置log4j.additivity.XXX=ture/false来打开或关闭继承功能；若为 false,表示Logger 的 appender 不继承它的父Logger； 若为true，则继承，这样就兼有自身的设定和父Logger的设定。
+
 ### MDC的使用
 
 > 在一个高访问量的 Web 应用中，经常要在同一时刻处理大量的用户请求。Web 服务器会为每一个请求分配一个线程，每一个线程都会向日志系统输入一些信息，通常日志系统都是按照时间顺序而不是用户顺序排列这些信息的，这些线程的交替运行会让所有用户的处理信息交错在一起，让人很难分辨出那些记录是同一个用户产生的。另外，高可用性的网站经常会使用负载均衡系统平衡网络流量，这样一个用户的操作记录很可能会分布在多个 Web 服务器上，如果我们没有一种方法来标示一条记录是哪个用户产生的，从这众多的日志信息中筛选出对我们有用的东西将是一项艰巨的工作。
@@ -367,6 +369,8 @@ public class App {
 	}
 }
 ```
+
+设置appender: `log4j.appender.stdout.layout.ConversionPattern=%X{username} %d{yyyy-MM-dd HH:mm:ss} [%p] %c - %m%n`
 
 输出
 
