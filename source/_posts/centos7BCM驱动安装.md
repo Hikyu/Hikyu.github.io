@@ -24,6 +24,20 @@ sudo yum install wireless-tools
 
 没有安装无线驱动，进行下面的操作。
 
+## 查看网卡型号
+
+```
+lspci |grep -i network 
+```
+
+显示：
+
+```
+07:00.0 Network controller: Broadcom Limited BCM43142 802.11b/g/n (rev 01)
+```
+
+表示是BCM的网卡
+
 ## 查看内核信息
 
 ```
