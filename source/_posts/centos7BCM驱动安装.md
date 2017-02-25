@@ -39,7 +39,7 @@ uname -r
 
 下面只针对el7 64的情况，其他配置的系统参考：[wl-kmod](http://elrepo.org/tiki/wl-kmod)
 
-1. 安装工具
+1.安装工具
 ```
 yum group install 'Development Tools'
 
@@ -48,29 +48,29 @@ yum install redhat-lsb kernel-abi-whitelists
 yum install kernel-devel-$(uname -r)
 ```
 
-2. 切换到普通用户，配置构建树
+2.切换到普通用户，配置构建树
 ```
 mkdir -p ~/rpmbuild/{BUILD,RPMS,SPECS,SOURCES,SRPMS}
 
 echo -e "%_topdir $(echo $HOME)/rpmbuild\n%dist .el$(lsb_release -s -r|cut -d"." -f1).local" >> ~/.rpmmacros
 ```
 
-3. 下载 wl-kmod*nosrc.rpm 到任意目录，比如 ～/package
+3.下载 wl-kmod*nosrc.rpm 到任意目录，比如 ～/package
 [http://elrepo.org/linux/elrepo/el7/SRPMS/wl-kmod-6_30_223_271-3.el7.elrepo.nosrc.rpm](http://elrepo.org/linux/elrepo/el7/SRPMS/wl-kmod-6_30_223_271-3.el7.elrepo.nosrc.rpm)
 
-4. 下载合适的驱动
+4.下载合适的驱动
 [http://www.broadcom.com/support/802.11]( http://www.broadcom.com/support/802.11)
 
 选择64位的驱动，下载到~/rpmbuild/SOURCES/目录
 
-5. 构建kmod-wl
+5.构建kmod-wl
 ```
  rpmbuild --rebuild --target=`uname -m` --define 'packager yukai' ~/package/wl-kmod*nosrc.rpm
 ```
 
 其中，yukai是当前登陆用户，~/package/是第三步下载的rpm文件位置
 
-6. 安装kmod-wl
+6.安装kmod-wl
 
 ```
 rpm -Uvh /home/yukai/rpmbuild/RPMS/x86_64/kmod-wl*rpm
@@ -78,7 +78,7 @@ rpm -Uvh /home/yukai/rpmbuild/RPMS/x86_64/kmod-wl*rpm
 
 第五步构建完成之后,在～/rpmbuild/RPMS/x86_64目录会有kmod-wl*rpm文件生成，安装它即可
 
-7. 删除不用的文件
+7.删除不用的文件
 
 保存/home/yukai/rpmbuild/RPMS/x86_64/kmod-wl*rpm文件，然后删除～/rpmbuild/
 
@@ -86,6 +86,6 @@ rpm -Uvh /home/yukai/rpmbuild/RPMS/x86_64/kmod-wl*rpm
 rm -rf ～/rpmbuild/
 ```
 
-8. 重启即可
+8.重启即可
 
 {% asset_img demo.png demo %}
