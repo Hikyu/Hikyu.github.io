@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "java中的路径"
-categories: java
+categories: 编程
 date: 2016-12-04 19:03:00
 ---
 

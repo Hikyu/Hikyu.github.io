@@ -2,7 +2,7 @@ layout: post
 title: java I/O总结
 date: 2017-03-19 17:09:19
 categories: 编程
-tags: java
+tags: java io
 ---
 > 在平时维护JDBC驱动的过程中，经常会接触到IO相关的代码。总结梳理一下java中的IO~
 
@@ -167,14 +167,83 @@ DataInputStream din = new DataInputStream(bin);
 
 对于OutputStream，实现原理与InputStream是一样的，不再赘述。
 
+记录几个常用的stream：
+
+DataOutputStream: 将基本类型的数据以二进制流的形式写出
+
+DataInputStream: 将二进制流读入为基本类型数据
+
+ObjectInputStream: 将Java对象以二进制流的形式写出 （序列化使用）
+
+ObjectOutputStream: 将二进制流读入为java对象 （序列化时使用）
+
+PipedOutputStream和PipedInputStream分别是管道输出流和管道输入流，让多线程可以通过管道进行线程间的通讯
+
+ZipOutputStream和ZipInputStream: 文件压缩与解压缩
+
+PushBackInputStream：回退流
+
 ## 字符接口
 
 {% asset_img javaio2.bmp 字符流 %}
 
+在保存数据时，可以选择二进制格式保存或者文本格式保存。比如，整数12234可以存储成二进制，是由00 00 04 D2构成的字节序列。而存储成文本格式，则存储成为字符串“1234”。二进制格式的存储高效且节省空间，但是文本格式的存储方式更适宜人类阅读，应用也很广泛。
 
+与字节接口类似，字符接口族也是采用了装饰者模式的架构。
+
+在存储或读取文本字符串时，可以选择编码。比如：
+
+InputStreamReader reader = new InputStreamReader(new FileInputStream("test.dat"),"UTF-8");
+
+reader将使用GBK编码读取文本test.dat的内容。如果构造器没有显示指定编码，将使用主机系统所使用的默认文字编码方式。
+
+与DataOutputStream对应，PrintWriter用来以文本的格式打印字符串和数字。
+
+与DataInputStream对应，可以使用Scanner类来读取文本格式的数据。
 
 ## 字符集
 
+字符集规定了某个字符对应的二进制数字存放方式（编码）和某串二进制数值代表了哪个字符（解码）的映射关系。
+
+JavaSE-1.4的java.nio包中引入了类Charset统一了对字符集的转换。
+
+{% asset_img decoder.jpg 字符集 %}
+
+{% asset_img encoder.jpg 字符集 %}
+
+通过观察InputStreamReader的源码（1.7），InputStreamReader 将字符的读取与解码委托给了类StreamDecoder实现。而在StreamDecoder中，又是通过传入的InputStream与指定的Charset配合完成了字节序列的读取和解码工作。
+
+可以通过调用静态的forName方法获取一个Charset：
+```
+Charset charset = Charset.forName("UTF-8");
+```
+其中，传入的参数是某个字符集的官方名或者别名。
+
+Set<String> alias = charset.aliases(); //获取某个Charset的所有可用别名
+Map<String, Charset> charsets = Charset.availableCharsets(); //获取所用可用字符集的名字
+
+有了字符集Charset，就可以通过他将字节序列解码为字符序列或者将字符序列编码为字节序列：
+
+```
+//编码
+String str = "hello";
+ByteBuffer bb = charset.encode(str);
+byte[] bytes = bb.array();
+
+//解码
+byte[] bytes = ....
+ByteBuffer bb = ByteBuffer.wrap(bytes, 0, bytes.length);
+CharBuffer cb = Charset.decode(bb);
+String str = cb.toString();
+```
+实际上，通过观察源码，得知InputStreamReader也是这么做的（还有String）。
+
 ## 文件操作
 
+Stream关心的是文件的内容，File类关心的是文件的存储。
 
+关于File的使用，网上有很多介绍，可以参考官网[Class File](https://docs.oracle.com/javase/7/docs/api/java/io/File.html)，不再赘述。
+
+要注意一个类RandomAccessFile，可以在文件的任何位置查找或者写入数据，RandomAccessFile同时实现了DataInput和DataOutput接口。
+
+我们可以使用RandomAccessFile随机读写的特性来完成大文件的上传或者下载。把文件分为n份，开启n个线程同时对这n个部分进行读写操作，提高了读写的效率。（让我想起了ConcurrentHashMap，分段锁的原理）同时，还具有了断点续传的功能。
