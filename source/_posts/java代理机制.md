@@ -23,7 +23,7 @@ tags: java
 
 {% asset_img Proxy.jpg Proxy %}
 
-{% asset_img seq_Proxy.jpg.png seq_Proxy %}
+{% asset_img seq_Proxy.jpg seq_Proxy %}
 
 ```
 public class ProxyTest {
