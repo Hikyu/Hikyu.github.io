@@ -145,7 +145,7 @@ class DynamicProxy implements InvocationHandler {
 
 这部分代码截取自getProxyClass，先从缓存中查询是否已经生成过对应的class，若有，则直接返回该对象，没有，则继续下一步生成class
 
-{ % asset_img 3.png Proxy % }
+{% asset_img 3.png Proxy %}
 
 这部分代码是代理类class对象的生成过程。其中：
 
