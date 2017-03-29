@@ -321,3 +321,53 @@ public class SingleTest implements Serializable{
 
 ## 序列化版本
 
+代码是在不断的演化的。1.1版本的类可以读取1.0版本的序列化文件吗？这就涉及到序列化的版本管理。
+
+每个序列化版本都有其唯一的ID，他是数据域类型和方法签名的指纹。当类的定义产生变化时，他的指纹也会跟着产生变化，对象流将拒绝读入具有不同指纹的对象。
+如果想保持早期版本的兼容，首先要获取这个类早期版本的指纹。
+
+我们可以使用 jdk自带的工具 serialver 获得这个指纹：serialver Test
+```
+staic final long serialVersionUID = -1423859403827594712L
+```
+然后将1.1版本中Test类的serialVersionUID常量定义为上面的值，即可序列化老版本的代码。
+
+如果一个类具有名为serialVersionUID的常量，那么java就不会再主动计算这个值，而是直接将其作为这个版本类的指纹。没有特殊要求的话，一般都显示的声明serialVersionUID：`private static final long serialVersionUID = 1L;`来保证兼容性
+
+如果对象流中的对象具有在当前版本中没有的数据域，那么对象流会忽略这些数据；如果当前版本具有对象流中所没有的数据域，那么这些新加的域将被设为默认值。
+
+## 序列化与克隆
+
+反序列化重新构建对象的机制提供了一种克隆对象的简便途径，只要对应的类可序列化即可。
+
+做法很简单：直接将对象序列化到输出流当中，然后将其读回。这样产生的对象是对现有对象的一个深拷贝。
+
+```
+public class CloneTest implements Serializable, Cloneable {
+	public String str;
+	public CloneTest(String str) {
+		this.str =str;
+	}
+	@Override
+	protected Object clone() throws CloneNotSupportedException {
+		SeriaUtil util = new SeriaUtil();
+		try {
+			util.seria(this);
+			CloneTest reSeria = (CloneTest) util.reSeria();
+			return reSeria;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		} 
+		
+	}
+	public static void main(String[] args) throws CloneNotSupportedException {
+		CloneTest test = new CloneTest("hi");
+		CloneTest clone = (CloneTest) test.clone();
+		System.out.println(clone.str);//hi
+		System.out.println(clone == test);//false
+	}
+}
+
+```
+这样克隆对象的优点是简单，缺点是比普通的克隆实现要慢的多。

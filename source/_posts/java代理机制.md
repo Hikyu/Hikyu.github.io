@@ -133,7 +133,7 @@ class DynamicProxy implements InvocationHandler {
 
 ## 动态代理原理
 
-我们通过观察java.lang.reflect.Proxy的源码来了解动态代理的原理。下面的代码截取自openjdk1.7
+我们通过观察java.lang.reflect.Proxy的源码来了解动态代理的原理。下面的代码截取自openjdk7-b147 (安利一个不错的搜索java源码的网站:http://grepcode.com)
 
 {% asset_img 1.png Proxy %}
 
@@ -145,18 +145,18 @@ class DynamicProxy implements InvocationHandler {
 
 这部分代码截取自getProxyClass，先从缓存中查询是否已经生成过对应的class，若有，则直接返回该对象，没有，则继续下一步生成class
 
-{% asset_img 3.png Proxy %}
+{ % asset_img 3.png Proxy % }
 
 这部分代码是代理类class对象的生成过程。其中：
 
 `byte[] proxyClassFile = ProxyGenerator.generateProxyClass(proxyName, interfaces);`这行代码调用ProxyGenerator.generateProxyClass返回了代理类class对象的字节码byte序列，
 `proxyClass = defineClass0(loader, proxyName,proxyClassFile, 0, proxyClassFile.length);`这一行则进行了类加载的工作，最终生成了代理类class对象。
 
-{asset_img 4.png Proxy}
+{% asset_img 4.png Proxy %}
 
 generateProxyClass，其中的gen.generateClassFile()方法实现了字节码的生成。
 
-{asset_img 5.png Proxy}
+{% asset_img 5.png Proxy %}
 
 generateClassFile方法的实现。开头调用的三个addProxyMethod方法将object类中的hashcode、equals、toString方法重写，故对这三个方法的调用会传递到InvocationHandler.invoke方法当中。
 注意，除了上述三个方法之外，调用代理类中Object定义的其他方法不会传递到invoke方法当中，也就是说，调用这些方法会执行Object中的默认实现。
@@ -166,3 +166,125 @@ generateClassFile方法的实现。开头调用的三个addProxyMethod方法将o
 ```
 System.getProperties().put("sun.misc.ProxyGenerator.saveGeneratedFiles", "true");
 ```
+
+运行时会将生成的class文件保存到硬盘当中：$Proxy0.class
+
+```
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
+import java.lang.reflect.UndeclaredThrowableException;
+
+public final class $Proxy0
+  extends Proxy
+  implements Subject
+{
+  private static Method m1;
+  private static Method m3;
+  private static Method m0;
+  private static Method m2;
+  
+  public $Proxy0(InvocationHandler paramInvocationHandler)
+  {
+    super(paramInvocationHandler);
+  }
+  
+  public final boolean equals(Object paramObject)
+  {
+    try
+    {
+      return ((Boolean)this.h.invoke(this, m1, new Object[] { paramObject })).booleanValue();
+    }
+    catch (Error|RuntimeException localError)
+    {
+      throw localError;
+    }
+    catch (Throwable localThrowable)
+    {
+      throw new UndeclaredThrowableException(localThrowable);
+    }
+  }
+  
+  public final void request()
+  {
+    try
+    {
+      this.h.invoke(this, m3, null);
+      return;
+    }
+    catch (Error|RuntimeException localError)
+    {
+      throw localError;
+    }
+    catch (Throwable localThrowable)
+    {
+      throw new UndeclaredThrowableException(localThrowable);
+    }
+  }
+  
+  public final int hashCode()
+  {
+    try
+    {
+      return ((Integer)this.h.invoke(this, m0, null)).intValue();
+    }
+    catch (Error|RuntimeException localError)
+    {
+      throw localError;
+    }
+    catch (Throwable localThrowable)
+    {
+      throw new UndeclaredThrowableException(localThrowable);
+    }
+  }
+  
+  public final String toString()
+  {
+    try
+    {
+      return (String)this.h.invoke(this, m2, null);
+    }
+    catch (Error|RuntimeException localError)
+    {
+      throw localError;
+    }
+    catch (Throwable localThrowable)
+    {
+      throw new UndeclaredThrowableException(localThrowable);
+    }
+  }
+  
+  static
+  {
+    try
+    {
+      m1 = Class.forName("java.lang.Object").getMethod("equals", new Class[] { Class.forName("java.lang.Object") });
+      m3 = Class.forName("Subject").getMethod("request", new Class[0]);
+      m0 = Class.forName("java.lang.Object").getMethod("hashCode", new Class[0]);
+      m2 = Class.forName("java.lang.Object").getMethod("toString", new Class[0]);
+      return;
+    }
+    catch (NoSuchMethodException localNoSuchMethodException)
+    {
+      throw new NoSuchMethodError(localNoSuchMethodException.getMessage());
+    }
+    catch (ClassNotFoundException localClassNotFoundException)
+    {
+      throw new NoClassDefFoundError(localClassNotFoundException.getMessage());
+    }
+  }
+}
+```
+上面的代码很好理解。可以看到equals、hashCode、toString以及我们Subject接口request方法的实现中都是调用了InvocationHandler.invoke方法，而这个InvocationHandler实例就是我们在Proxy.newProxyInstance中传入的对象。
+
+综上，可以看到实现动态代理的几个步骤：
+
+1.实现InvocationHandler
+
+2.获得动态代理类，这一步又涉及到运行时代理类字节码的生成和类加载
+
+3.通过反射机制（getConstructor(InvocationHandler.class)）获取代理类的实例并返回该对象
+
+4.调用代理对象的目标方法（也就是request方法，代理类也实现了Subject这个接口），调用转发到InvocationHandler.invoke方法当中，执行invoke的逻辑（我们自己的InvocationHandler实现）
+
+至此，我们就了解了动态代理的运行原理。动态代理的机制也有一些缺陷，比如他代理的必须是接口方法。看一下我们上面生成的$Proxy0.class，可知这个代理类已经默认继承了类Proxy，所以，他只能通过实现我们提供的接口来代理我们的方法。在invoke方法中，我们可以通过对传入的代理类、方法和参数来进行判断，对不同的方法实现不同的业务逻辑。
