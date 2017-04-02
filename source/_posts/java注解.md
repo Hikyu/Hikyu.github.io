@@ -11,7 +11,9 @@ tags: java
 注解其实很常见。比如@override、Deprecated等。在使用Junit或Spring boot等一些框架的时候，注解更是无处不在了。那么，到底什么是注解呢？
 
 ```
-Annotations, a form of metadata, provide data about a program that is not part of the program itself. Annotations have no direct effect on the operation of the code they annotate.   >>[https://docs.oracle.com/javase/tutorial/java/annotations/]
+Annotations, a form of metadata, provide data about a program that is not part of the program itself. 
+Annotations have no direct effect on the operation of the code they annotate.   
+>>[https://docs.oracle.com/javase/tutorial/java/annotations/]
 ```
 注解是元数据的一种，提供了关于程序的一些描述信息，但这些信息并不属于这个程序本身的一部分。注解并不会直接影响到代码的执行。
 
@@ -258,7 +260,6 @@ public interface Annotation {
 
 既然可以为注解元素赋值，那么必定有方法去获得这些值。也就是注解的解析。
 
------
 ## 注解的解析
 
 我们定义了注解并且应用了注解，但是仅仅这样的话注解并不会起到什么作用。需要我们提供一种工具去解析声明的注解，然后实现一些自动配置或者生成报告的功能。这就是注解的解析。
@@ -267,9 +268,185 @@ public interface Annotation {
 
 注解的用处之一就是自动生成一些包含程序额外信息的文件。比如，根据注解生成代码进度报告，或者bug修复报告等。生成的文件可以是属性文件、xml文件、html文档或者shell脚本。也可以生成java源文件。
 
+注解处理器通常通过集成AbstractProcessor类实现了Processor接口，通过process方法实现处理源码中注解的逻辑。通过声明具体的注解类型来指定该处理器处理哪些注解。
 
+```
+@SupportedAnnotationTypes("space.yukai.annotations.BUG")
+class AnnotationProcessor extends AbstractProcessor {
+
+	@Override
+	public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	
+}
+```
+process的两个参数：annotations代表了要处理的注解集，roundEnv是包含有关当前处理循环信息的RoundEnv引用。
+
+[Java注解处理器](http://www.race604.com/annotation-processing/)这篇文章以通过注解自动生成工厂类文件为例，详细介绍了如何处理源码级别的注解。（英文原文在这：http://hannesdorfmann.com/annotation-processing/annotationprocessing101）
+
+注意，我们虽然可以通过源码级别的注解处理器生成新的文件，却很难编辑源文件，比如，通过处理注解自动生成get、set方法。字节码级别的处理器是可以的。
 
 - 字节码中的注解
 
+字节码级别的注解，即存在于class文件中的注解。我们还可以通过BCEL这样的字节码工程类库修改或插入字节码来改变类文件。比如在声明了@LogEntity的方法开始部分插入打印日志信息的字节码。
+
+涉及的不多，不再赘述。
+
 - 运行时的注解
 
+在运行时处理注解是比较常见的注解处理手段。一般是通过反射API获取到我们的注解信息，从而实现一些功能。
+
+下面是自己写的一个例子，通过解析BugReport注解得到一些测试信息，然后通过动态代理的方式生成代理测试类，最后运行测试自动生成测试报告。（不要在意代码有什么缺陷或者其他问题，仅仅是一个例子而已～）
+
+```
+package space.kyu.proxy;
+
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
+import java.util.ArrayList;
+import java.util.List;
+
+public class AnnotationsTest {
+	public static void main(String[] args) {
+		TestBug testBug = new TestBug(true);
+		TestBug testBug1 = new TestBug(false);
+		TestExecutor executor = new TestExecutor();
+		executor.addTest(testBug);
+		executor.addTest(testBug1);
+		executor.executeTest();
+	}
+}
+
+class TestExecutor {
+	private List<Test>  testCases;
+	public TestExecutor() {
+		testCases = new ArrayList<Test>();
+	}
+	
+	public <T extends Test> void  addTest(T testCase) {
+		Class<? extends Object> cl = testCase.getClass();
+		Method[] declaredMethods = cl.getDeclaredMethods();
+		try {
+			for (Method method : declaredMethods) {
+				if (method.isAnnotationPresent(BugReport.class)) {
+					BugReport annotation = method.getAnnotation(BugReport.class);
+					if (annotation != null) {
+						System.out.println(annotation.toString());
+						System.out.println(annotation.annotationType().getName());
+						System.out.println(annotation.getClass().getName());
+						String bugId = annotation.id();
+						String bugMsg = annotation.msg();
+						Test obj = (Test) createBugReportHandler(testCase,bugId,bugMsg);
+						testCases.add(obj);
+					}
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new IllegalStateException(e);
+		}
+	}
+	public void executeTest() {
+		for (Test test : testCases) {
+			test.test();
+		}
+	}
+	private Object createBugReportHandler(Test testCase, final String bugId, final String bugMsg) {
+		return Proxy.newProxyInstance(testCase.getClass().getClassLoader(), testCase.getClass().getInterfaces(), new InvocationHandler() {
+			
+			@Override
+			public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+				boolean res = (boolean) method.invoke(testCase, args);
+				//也可以输出到文件中形成测试报告
+				System.out.println("******************************");
+				System.out.println("bug: " + bugId + "测试结果：");
+				if (res) {//测试通过
+					System.out.println("已通过");
+				} else {//测试不通过
+					System.out.println("未通过");
+				}
+				System.out.println("备注信息：" + bugMsg);
+				return res;
+			}
+		});
+	}
+}
+
+interface Test {
+	/**
+	 * 测试方法 2017年4月1日
+	 * @return 
+	 * true 通过测试 
+	 * false 未通过测试
+	 */
+	boolean test();
+}
+
+class TestBug implements Test {
+	boolean fixed;
+	public TestBug(boolean fixed) {
+		//控制测试成功或失败
+		this.fixed = fixed;
+	}
+	@BugReport(id = "bug001", msg = "bug注释：这是一条测试bug")
+	@Override
+	public boolean test() {
+		System.out.println("执行测试...");
+		//假装测试成功或者失败了
+		return fixed;
+	}
+
+}
+
+@Target(ElementType.METHOD)
+@Retention(RetentionPolicy.RUNTIME)
+@interface BugReport {
+	String id();
+
+	String msg();
+}
+
+```
+
+运行结果：
+
+```
+@space.kyu.proxy.BugReport(id=bug001, msg=bug注释：这是一条测试bug)
+space.kyu.proxy.BugReport
+space.kyu.proxy.$Proxy1
+@space.kyu.proxy.BugReport(id=bug001, msg=bug注释：这是一条测试bug)
+space.kyu.proxy.BugReport
+space.kyu.proxy.$Proxy1
+执行测试...
+******************************
+bug: bug001测试结果：
+已通过
+备注信息：bug注释：这是一条测试bug
+执行测试...
+******************************
+bug: bug001测试结果：
+未通过
+备注信息：bug注释：这是一条测试bug
+```
+上面的代码很简单，我们要注意的有几点：
+
+1.`method.isAnnotationPresent(BugReport.class)`和 `method.getAnnotation(BugReport.class)`
+
+这两个方法来自于接口AnnotatedElement，Method、Field、Package、Constructor、Class这些类都实现了这个接口，使得这些类拥有了提供所声明的注解的功能。
+
+通过method.getAnnotation(BugReport.class)得到了声明在方法上的BugReport注解，获得这个注解的实例之后，我们就可以调用以该注解声明的元素为名称的方法来获取对应的元素值了。
+
+2.`annotation.annotationType().getName()`和`annotation.getClass().getName()`
+
+annotation.annotationType()方法上面已经提到过了，是Annotation的一个方法，用于描述该注解对象的注解接口。这个方法返回的内容为：space.kyu.proxy.BugReport
+
+annotation.getClass()获得了实现了Annotation接口的代理类，通过调用getName()方法可以打印这个代理类的名称：space.kyu.proxy.$Proxy1。从而印证了我们上面所说，确实自动生成了代理类。
+
+上面的例子很简单，说白了，注解就是给代码加了一些额外的信息，这些信息对代码里面的逻辑是没有任何影响的。但是我们可以通过其他手段获得我们在代码中的注解，从而实现一些重复性的工作。这就是注解的作用。
