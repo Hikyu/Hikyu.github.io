@@ -379,7 +379,7 @@ hello
 ```
 一般来说，我们自己开发的类加载器只要继承ClassLoader并覆盖findClass方法即可。这样的话就会自动使用双亲委派机制，我们可以在findClass方法中填写我们自己的加载逻辑：从网络上或者是硬盘上加载一个类的字节码。
 
-上面的例子中并没有使用这个套路，MyClassLoader1直接复写loadClass方法，MyClassLoader1添加了方法loadDirectly，如果不这样做的话，我们在加载space.kyu.TestClass这个类的时候，因为这个类在classpath上，由于双亲委派机制，这个类会被应用程序类加载器先进行加载，达不到测试的效果。
+上面的例子中并没有使用这个套路，MyClassLoader1直接复写loadClass方法，MyClassLoader2添加了方法loadDirectly，如果不这样做的话，我们在加载space.kyu.TestClass这个类的时候，因为这个类在classpath上，由于双亲委派机制，这个类会被应用程序类加载器先进行加载，达不到测试的效果。
 
 - 观察上面printClassLoader部分，通过getParent方法打印了类加载器的层次结构。可见虽然我们并未显示指定这两个自定义加载器的父类加载器，但是他们的父类加载器已经被默认设置为sun.misc.Launcher$AppClassLoader，也就是加载这两个个自定义类加载器所使用的加载器。印证上面的结论：`对于开发人员编写的类加载器来说，其父类加载器是加载此类加载器 Java 类的类加载器。`
 
@@ -389,7 +389,7 @@ hello
 
   `space.kyu.TestClass testClass = (TestClass)getMyClassLoader1();`
 
-  编译并没有问题，但是在运行时就会报错：java.lang.ClassCastException缓存
+  编译并没有问题，但是在运行时就会报错：java.lang.ClassCastException
 
   为什么会出现这样的结果呢？其实从这篇文章的一开始就已经演示过了。`space.kyu.TestClass testClass`这个类是通过应用程序类加载器加载的，而`getMyClassLoader1()`方法得到的是我们自定义类加载器加载的类，这两个类是不相等的(虽然名字相同)，所以强转失败。
 
