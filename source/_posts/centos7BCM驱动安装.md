@@ -24,6 +24,8 @@ sudo yum install wireless-tools
 
 没有安装无线驱动，进行下面的操作。
 
+<!-- more -->
+
 ## 查看网卡型号
 
 ```

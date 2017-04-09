@@ -23,6 +23,8 @@ jar包打好了。把依赖什么的都放到jar所在的同一个目录，紧�
 
 {% asset_img 2.png 404 %}
 
+<!-- more -->
+
 what? 404?赶紧看看服务器打印的日志，发现dispatcherServlet初始化完之后就没有其他动作了，也没有报错信息。跟在eclipse中正常执行的情况对比了一下，eclipse在打印完这几句Log之后就开始进入controller方法了。
 
 {% asset_img 3.png log %}

@@ -40,6 +40,8 @@ JVMTI 可以控制当前虚拟机运行状态。
 
 关于这部分，只是简单的了解一下概念，更多的关于JDPA的介绍：[JDPA体系](http://www.ibm.com/developerworks/cn/views/java/libraryview.jsp?search_by=%E6%B7%B1%E5%85%A5+Java+%E8%B0%83%E8%AF%95%E4%BD%93%E7%B3%BB)
 
+<!-- more -->
+
 ## 使用JDB进行本地调试
 
 JDB 是jdk自带的一个调试工具，用于命令行下调试java程序

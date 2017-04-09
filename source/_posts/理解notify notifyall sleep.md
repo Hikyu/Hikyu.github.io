@@ -37,6 +37,8 @@ tags:
 
 线程创建和终止状态不再讨论。
 
+<!-- more -->
+
 ## wait
 
 wait、notify、notifyAll三个方法都是Object的方法。每个对象都拥有这三个方法。

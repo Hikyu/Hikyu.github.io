@@ -26,6 +26,8 @@ LsnVo lv = ((LsnVo)DispatchConnection.threadLocalLsn.get());
 LsnVo lv = ((DispatchConnection) conn).getLsnVo();
 ```
 
+<!-- more -->
+
 将threadLocalLsn的get方法的执行提前到DispatchConnection的构造函数中去，之后的每次读取都是直接读取在DispatchConnection保存的成员变量。避免了频繁的get方法调用。
 
 曾经在这里还有个疑问，那就是我认为不可以将这个get方法提前到DispatchConnection初始化当中，理由是如果有多个线程操作同一个DispatchConnection对象的时候，他们其实读取的是同一个lsn,造成共享变量的问题，而实际上lsn是一个线程级变量，不应该被多个线程共享。

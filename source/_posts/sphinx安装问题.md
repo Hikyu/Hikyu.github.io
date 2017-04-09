@@ -43,6 +43,8 @@ sys.setdefaultencoding('utf-8')
 
 ```
 
+<!-- more -->
+
 写完这个文件放哪里呢？
 
 windows :存放在你python的安装的目录Lib\site-packages(比如C:\Python27\Lib\site-packages)里。 

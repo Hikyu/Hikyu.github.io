@@ -43,6 +43,8 @@ public class Outer {
 }
 ```
 
+<!-- more -->
+
 可以看到，paramVal，localVal，localVal1都是final的,去掉final关键字，编译就会报错。
 
 后来在网上看到说，匿名内部类编译之后会形成一个新的.class文件，与他的外围类之间是相互独立的，java会帮助匿名内部类自动创建一个构造函数，构造函数参数即为匿名内部类用到的局部变量或形参。

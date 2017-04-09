@@ -15,6 +15,7 @@ ssh是每台linux机器的标准配置。ssh是一种协议，SSH在计算机之
 ssh有多种实现，我们一般使用的是openssh，这是一款免费开源的ssh工具。一般在我们使用的linux发行版中，已经预设了这个软件了，所以可以直接使用它。如果是在windows中使用ssh客户端连接远程linux ssh服务，
 我使用一款名为MobaXterm的工具。
 
+<!-- more -->
 ## 密码登录
 
 这是我们使用远程linux机器时最一般的登录方式。使用user这个用户登录到主机host:

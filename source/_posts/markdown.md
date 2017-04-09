@@ -29,7 +29,7 @@ Use the \`printf()` function.
 
 ---
 
-
+<!-- more -->
 ## 标题
 
 \# 标题1

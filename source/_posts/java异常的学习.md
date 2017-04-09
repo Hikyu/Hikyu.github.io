@@ -13,6 +13,8 @@ tags: java
 
 java异常中的异常大体上可分为两类：Error 与 Exception，他们都继承自Throwable
 
+<!-- more -->
+
 ### Error：
 
 Error表示一些无法恢复的错误，会导致应用程序中断。比如我们喜闻乐见的OutOfMemoryError(内存溢出)， StackOverflowError(堆栈溢出)等，就是一种Error类型的异常。面对这种类型的异常在我们的应用程序中一般是无法挽救的，将直接导致程序错误退出。因此我们在代码中一般不必去特别关心这种类型的异常。

@@ -27,6 +27,8 @@ tags:
 
 上图来自slf4j官网
 
+<!-- more -->
+
 slf4j-api.jar包含了slf4j的抽象层API，我们在代码中调用这个jar包中的接口。API层
 
 slf4j-log412.jar、slf4j-jdk14.jar等是slf4j通向具体日志实现框架的桥梁。中间层

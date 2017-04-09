@@ -1,98 +1,385 @@
+<!doctype html>
 
- <!DOCTYPE HTML>
-<html lang="zh-CN">
-<head>
-  <meta charset="UTF-8">
+
+
   
-    <title>java中的枚举 | YuKai&#39;s blog</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
     
-    <meta name="author" content="于凯">
     
-    <meta name="description" content="已经好久没有动博客了，毕业之后的第一篇。下班了单开一篇，把毕业照补上。
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="java," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="已经好久没有动博客了，毕业之后的第一篇。下班了单开一篇，把毕业照补上。
 
 Java中的枚举是在JDK1.5以后出现的。之前的开发过程中并没有用过，但是有碰到过关于枚举的代码。貌似是一种更为简单有效的常量定义方式。学习之，希望以后的写代码过程中可以熟悉并掌握枚举的用法。
-使用场景：每当需要一组固定的常">
-    
-    
-    
-    
-    
-    <link rel="icon" href="/img/xiaoxin.ico">
-    
-    
-    <link rel="apple-touch-icon" href="/img/xiaoxin.png">
-    <link rel="apple-touch-icon-precomposed" href="/img/xiaoxin.png">
-    
-    <link rel="stylesheet" href="/css/style.css">
+使用场景：每当需要一组固定的常量的时候，如一周的天数、一年四季等。或者是在我们编译前就知道其包含的所有值的集合，比如定义了一些状">
+<meta property="og:type" content="article">
+<meta property="og:title" content="java中的枚举">
+<meta property="og:url" content="http://yukai.space/2016/06/30/java中的枚举/index.html">
+<meta property="og:site_name" content="YuKai's blog">
+<meta property="og:description" content="已经好久没有动博客了，毕业之后的第一篇。下班了单开一篇，把毕业照补上。
+
+Java中的枚举是在JDK1.5以后出现的。之前的开发过程中并没有用过，但是有碰到过关于枚举的代码。貌似是一种更为简单有效的常量定义方式。学习之，希望以后的写代码过程中可以熟悉并掌握枚举的用法。
+使用场景：每当需要一组固定的常量的时候，如一周的天数、一年四季等。或者是在我们编译前就知道其包含的所有值的集合，比如定义了一些状">
+<meta property="og:updated_time" content="2017-04-09T10:04:38.312Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="java中的枚举">
+<meta name="twitter:description" content="已经好久没有动博客了，毕业之后的第一篇。下班了单开一篇，把毕业照补上。
+
+Java中的枚举是在JDK1.5以后出现的。之前的开发过程中并没有用过，但是有碰到过关于枚举的代码。貌似是一种更为简单有效的常量定义方式。学习之，希望以后的写代码过程中可以熟悉并掌握枚举的用法。
+使用场景：每当需要一组固定的常量的时候，如一周的天数、一年四季等。或者是在我们编译前就知道其包含的所有值的集合，比如定义了一些状">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yukai.space/2016/06/30/java中的枚举/"/>
+
+
+
+
+
+  <title> java中的枚举 | YuKai's blog </title>
 </head>
 
-  <body>
-    <header>
-      <div>
-		
-			<div id="textlogo">
-				<h1 class="site-name"><a href="/" title="YuKai&#39;s blog">YuKai&#39;s blog</a></h1>
-				<h2 class="blog-motto">好好学习，天天向上</h2>
-			</div>
-			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
-			</a></div>
-			<nav class="animated">
-				<ul>
-					
-						<li><a href="/">首页</a></li>
-					
-						<li><a href="/archives">归档</a></li>
-					
-						<li><a href="/page">关于</a></li>
-					
-					<li>
-					
-					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
-						<label>Search</label>
-						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
-						<input type="hidden" name="q" value="site:yukai.space">
-					</form>
-					
-					</li>
-				</ul>
-			</nav>			
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">YuKai's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">好好学习，天天向上</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
 </div>
 
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/page" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
     </header>
-    <div id="container">
-      <div id="main" class="post" itemscope itemprop="blogPost">
-	<article itemprop="articleBody"> 
-		<header class="article-info clearfix">
-  <h1 itemprop="name">
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
     
-      <a href="/2016/06/30/java中的枚举/" title="java中的枚举" itemprop="url">java中的枚举</a>
-  </h1>
-  <p class="article-author">By
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yukai.space/2016/06/30/java中的枚举/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="于凯">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="YuKai's blog">
+    </span>
+
     
-      <a href="http://yukai.space" title="于凯">于凯</a>
-    </p>
-  <p class="article-time">
-    <time datetime="2016-06-30T04:48:55.000Z" itemprop="datePublished">2016-06-30</time>
-    更新日期:<time datetime="2017-02-19T13:08:11.033Z" itemprop="dateModified">2017-02-19</time>
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                java中的枚举
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-06-30T12:48:55+08:00">
+                2016-06-30
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/编程/" itemprop="url" rel="index">
+                    <span itemprop="name">编程</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
     
-  </p>
-</header>
-	<div class="article-content">
-		
-		
-		<div id="toc" class="toc-article">
-			<strong class="toc-title">文章目录</strong>
-		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#使用场景："><span class="toc-number">1.</span> <span class="toc-text">使用场景：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#与-public-static-final-的常量定义方式进行比较："><span class="toc-number">2.</span> <span class="toc-text">与 public static final 的常量定义方式进行比较：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#枚举类型的使用"><span class="toc-number">3.</span> <span class="toc-text">枚举类型的使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">4.</span> <span class="toc-text">参考</span></a></li></ol>
-		</div>
-		
-		<blockquote>
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
 <p>已经好久没有动博客了，毕业之后的第一篇。下班了单开一篇，把毕业照补上。</p>
 </blockquote>
 <p>Java中的枚举是在JDK1.5以后出现的。之前的开发过程中并没有用过，但是有碰到过关于枚举的代码。貌似是一种更为简单有效的常量定义方式。学习之，希望以后的写代码过程中可以熟悉并掌握枚举的用法。</p>
 <h2 id="使用场景："><a href="#使用场景：" class="headerlink" title="使用场景："></a>使用场景：</h2><p>每当需要一组固定的常量的时候，如一周的天数、一年四季等。或者是在我们编译前就知道其包含的所有值的集合，比如定义了一些状态等等。这个时候就有可能需要使用枚举了。</p>
 <h2 id="与-public-static-final-的常量定义方式进行比较："><a href="#与-public-static-final-的常量定义方式进行比较：" class="headerlink" title="与 public static final 的常量定义方式进行比较："></a>与 public static final 的常量定义方式进行比较：</h2><p>在以上的场景中，回顾以往的做法，比如我们定义这样一些状态：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">State</span> </span>&#123;</div><div class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> Normal = <span class="number">0</span>;<span class="comment">//正常</span></div><div class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> Update = <span class="number">1</span>;<span class="comment">//已更新</span></div><div class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> Delete = <span class="number">2</span>;<span class="comment">//已删除</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<a id="more"></a>
 <p>使用的时候，在程序中直接使用 类名.常量名 就可以了。但是这样还存在一些问题。比如：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doSomething</span><span class="params">(<span class="keyword">int</span> state)</span></span>&#123;</div><div class="line">	<span class="keyword">switch</span>(state)&#123;</div><div class="line">		<span class="keyword">case</span> State.Normal:</div><div class="line">		  ...</div><div class="line">		  <span class="keyword">break</span>;</div><div class="line">		<span class="keyword">case</span> State.Update:</div><div class="line">		  ...</div><div class="line">		  <span class="keyword">break</span>;</div><div class="line">		<span class="keyword">case</span> State.Delete:</div><div class="line">		  ...</div><div class="line">		  <span class="keyword">break</span>;</div><div class="line">		<span class="keyword">default</span>:</div><div class="line">		  ...</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <ol>
@@ -132,314 +419,392 @@ Java中的枚举是在JDK1.5以后出现的。之前的开发过程中并没有�
 <p>JDK5.0 中在增加 Enum 类的同时，也增加了两个工具类 EnumSet 和 EnumMap，这两个类都放在 java.util 包中。具体的使用就查看官方文档吧，这里不再赘述。</p>
 <h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://hacpai.com/article/1437056657634" target="_blank" rel="external">java enum的用法详解[转]</a></p>
 <p><a href="https://www.ibm.com/developerworks/cn/java/j-lo-enum/" target="_blank" rel="external">Java 语言中Enum类型的使用介绍</a></p>
-  
-	</div>
-		<footer class="article-footer clearfix">
 
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/java/">java</a>
-  </div>
-
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/编程/">编程</a>
-</div>
-
-
-
-<div class="article-share" id="share">
-
-<!--
-  <div data-url="http://yukai.space/2016/06/30/java中的枚举/" data-title="java中的枚举 | YuKai&#39;s blog" data-tsina="5381447277" class="share clearfix">
-  </div>
--->
-
-</div>
-</footer>   	       
-	</article>
-	
-<nav class="article-nav clearfix">
- 
- <div class="prev" >
- <a href="/2016/06/30/毕业了/" title="毕业了">
-  <strong>PREVIOUS:</strong><br/>
-  <span>
-  毕业了</span>
-</a>
-</div>
-
-
-<div class="next">
-<a href="/2016/06/21/java中的ThreadLocal/"  title="java中的ThreadLocal">
- <strong>NEXT:</strong><br/> 
- <span>java中的ThreadLocal
-</span>
-</a>
-</div>
-
-</nav>
-
-	
-<section class="comment">
-	<div class="ds-thread"></div>
-</section>
-
-</div>  
-      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
-
-  <div id="toc" class="toc-aside">
-  <strong class="toc-title">文章目录</strong>
-  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#使用场景："><span class="toc-number">1.</span> <span class="toc-text">使用场景：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#与-public-static-final-的常量定义方式进行比较："><span class="toc-number">2.</span> <span class="toc-text">与 public static final 的常量定义方式进行比较：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#枚举类型的使用"><span class="toc-number">3.</span> <span class="toc-text">枚举类型的使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">4.</span> <span class="toc-text">参考</span></a></li></ol>
-  </div>
-
-<div id="asidepart">
-<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
-<aside class="clearfix">
-
-  
-<div class="categorieslist">
-	<p class="asidetitle">分类</p>
-		<ul>
-		
-			<li><a href="/categories/工具/" title="工具">工具<sup>11</sup></a></li>
-		
-			<li><a href="/categories/技术/" title="技术">技术<sup>9</sup></a></li>
-		
-			<li><a href="/categories/生活/" title="生活">生活<sup>3</sup></a></li>
-		
-			<li><a href="/categories/编程/" title="编程">编程<sup>24</sup></a></li>
-		
-		</ul>
-</div>
-
-
-  
-<div class="tagslist">
-	<p class="asidetitle">标签</p>
-		<ul class="clearfix">
-		
-			<li><a href="/tags/Eclipse/" title="Eclipse">Eclipse<sup>1</sup></a></li>
-		
-			<li><a href="/tags/ant/" title="ant">ant<sup>2</sup></a></li>
-		
-			<li><a href="/tags/curl/" title="curl">curl<sup>1</sup></a></li>
-		
-			<li><a href="/tags/java/" title="java">java<sup>28</sup></a></li>
-		
-			<li><a href="/tags/java-io/" title="java io">java io<sup>1</sup></a></li>
-		
-			<li><a href="/tags/junit/" title="junit">junit<sup>1</sup></a></li>
-		
-			<li><a href="/tags/linux/" title="linux">linux<sup>6</sup></a></li>
-		
-			<li><a href="/tags/markdown/" title="markdown">markdown<sup>1</sup></a></li>
-		
-			<li><a href="/tags/python/" title="python">python<sup>1</sup></a></li>
-		
-			<li><a href="/tags/spring/" title="spring">spring<sup>2</sup></a></li>
-		
-			<li><a href="/tags/web/" title="web">web<sup>1</sup></a></li>
-		
-			<li><a href="/tags/加密/" title="加密">加密<sup>2</sup></a></li>
-		
-			<li><a href="/tags/多线程/" title="多线程">多线程<sup>5</sup></a></li>
-		
-			<li><a href="/tags/快捷键/" title="快捷键">快捷键<sup>1</sup></a></li>
-		
-			<li><a href="/tags/服务器/" title="服务器">服务器<sup>1</sup></a></li>
-		
-			<li><a href="/tags/测试/" title="测试">测试<sup>1</sup></a></li>
-		
-			<li><a href="/tags/源码/" title="源码">源码<sup>1</sup></a></li>
-		
-			<li><a href="/tags/编码/" title="编码">编码<sup>2</sup></a></li>
-		
-			<li><a href="/tags/调试/" title="调试">调试<sup>1</sup></a></li>
-		
-		</ul>
-</div>
-
-
-  
-  <div class="tagcloudlist">
-    <p class="asidetitle">标签云</p>
-    <div class="tagcloudlist clearfix">
-       <a href="/tags/Eclipse/" style="font-size: 10px;">Eclipse</a> <a href="/tags/ant/" style="font-size: 12.5px;">ant</a> <a href="/tags/curl/" style="font-size: 10px;">curl</a> <a href="/tags/java/" style="font-size: 20px;">java</a> <a href="/tags/java-io/" style="font-size: 10px;">java io</a> <a href="/tags/junit/" style="font-size: 10px;">junit</a> <a href="/tags/linux/" style="font-size: 17.5px;">linux</a> <a href="/tags/markdown/" style="font-size: 10px;">markdown</a> <a href="/tags/python/" style="font-size: 10px;">python</a> <a href="/tags/spring/" style="font-size: 12.5px;">spring</a> <a href="/tags/web/" style="font-size: 10px;">web</a> <a href="/tags/加密/" style="font-size: 12.5px;">加密</a> <a href="/tags/多线程/" style="font-size: 15px;">多线程</a> <a href="/tags/快捷键/" style="font-size: 10px;">快捷键</a> <a href="/tags/服务器/" style="font-size: 10px;">服务器</a> <a href="/tags/测试/" style="font-size: 10px;">测试</a> <a href="/tags/源码/" style="font-size: 10px;">源码</a> <a href="/tags/编码/" style="font-size: 12.5px;">编码</a> <a href="/tags/调试/" style="font-size: 10px;">调试</a>
-    </div>
-  </div>
-
-
-  
-  <div class="archiveslist">
-    <p class="asidetitle"><a href="/archives">归档</a></p>
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">四月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">三月 2017</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">十二月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">十一月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">十月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">九月 2016</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">八月 2016</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">七月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">六月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">四月 2016</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">三月 2016</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">十二月 2015</a><span class="archive-list-count">2</span></li></ul>
-  </div>
-
-
-</aside>
-</div>
-    </div>
-    <footer><div id="footer" >
-	
-	<div class="line">
-		<span></span>
-		<div class="author"></div>
-	</div>
-	
-	
-	<section class="info">
-		<p> 既来之 <br/>
-			则安之</p>
-	</section>
-	 
-	<div class="social-font clearfix">
-		
-		<a href="http://weibo.com/5381447277" target="_blank" title="weibo"></a>
-		
-		
-		
-		<a href="https://github.com/Hikyu" target="_blank" title="github"></a>
-		
-		
-		
-	</div>
-	<!--
-		<p class="copyright">Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/A-limon/pacman" target="_blank" title="Pacman">Pacman</a> © 2017 
-		
-		<a href="http://yukai.space" target="_blank" title="于凯">于凯</a>
-		
-		</p>
-	-->
-	<p class="copyright">Copyright 2016 yukai.space AllRights Reserved.</p>
-</div>
-</footer>
-    <script src="/js/jquery-2.1.0.min.js"></script>
-<script type="text/javascript">
-$(document).ready(function(){ 
-  $('.navbar').click(function(){
-    $('header nav').toggleClass('shownav');
-  });
-  var myWidth = 0;
-  function getSize(){
-    if( typeof( window.innerWidth ) == 'number' ) {
-      myWidth = window.innerWidth;
-    } else if( document.documentElement && document.documentElement.clientWidth) {
-      myWidth = document.documentElement.clientWidth;
-    };
-  };
-  var m = $('#main'),
-      a = $('#asidepart'),
-      c = $('.closeaside'),
-      o = $('.openaside');
-  $(window).resize(function(){
-    getSize(); 
-    if (myWidth >= 1024) {
-      $('header nav').removeClass('shownav');
-    }else
-    {
-      m.removeClass('moveMain');
-      a.css('display', 'block').removeClass('fadeOut');
-      o.css('display', 'none');
       
-      $('#toc.toc-aside').css('display', 'none');
+    </div>
+
+    <div>
+      
         
-    }
-  });
-  c.click(function(){
-    a.addClass('fadeOut').css('display', 'none');
-    o.css('display', 'block').addClass('fadeIn');
-    m.addClass('moveMain');
-  });
-  o.click(function(){
-    o.css('display', 'none').removeClass('beforeFadeIn');
-    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
-    m.removeClass('moveMain');
-  });
-  $(window).scroll(function(){
-    o.css("top",Math.max(80,260-$(this).scrollTop()));
-  });
-});
-</script>
+<div id="wechat_subscriber" style="display: block; padding: 10px 0; margin: 20px auto; width: 100%; text-align: center">
+    <img id="wechat_subscriber_qcode" src="/images/wechat-qcode.jpg" alt="于凯 wechat" style="width: 200px; max-width: 100%;"/>
+    <div>欢迎您扫一扫上面的微信公众号，订阅我的博客！</div>
+</div>
+
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/java/" rel="tag"># java</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/06/21/java中的ThreadLocal/" rel="next" title="java中的ThreadLocal">
+                <i class="fa fa-chevron-left"></i> java中的ThreadLocal
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/06/30/毕业了/" rel="prev" title="毕业了">
+                毕业了 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="于凯" />
+          <p class="site-author-name" itemprop="name">于凯</p>
+           
+              <p class="site-description motion-element" itemprop="description">学习总结，生活总结。</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">49</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-name">分类</span>
+              
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">19</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/5381447277" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  微博
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/Hikyu" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#使用场景："><span class="nav-number">1.</span> <span class="nav-text">使用场景：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#与-public-static-final-的常量定义方式进行比较："><span class="nav-number">2.</span> <span class="nav-text">与 public static final 的常量定义方式进行比较：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#枚举类型的使用"><span class="nav-number">3.</span> <span class="nav-text">枚举类型的使用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">4.</span> <span class="nav-text">参考</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">于凯</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
 
 <script type="text/javascript">
-$(document).ready(function(){ 
-  var ai = $('.article-content>iframe'),
-      ae = $('.article-content>embed'),
-      t  = $('#toc'),
-      h  = $('article h2')
-      ah = $('article h2'),
-      ta = $('#toc.toc-aside'),
-      o  = $('.openaside'),
-      c  = $('.closeaside');
-  if(ai.length>0){
-    ai.wrap('<div class="video-container" />');
-  };
-  if(ae.length>0){
-   ae.wrap('<div class="video-container" />');
-  };
-  if(ah.length==0){
-    t.css('display','none');
-  }else{
-    c.click(function(){
-      ta.css('display', 'block').addClass('fadeIn');
-    });
-    o.click(function(){
-      ta.css('display', 'none');
-    });
-    $(window).scroll(function(){
-      ta.css("top",Math.max(140,320-$(this).scrollTop()));
-    });
-  };
-});
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
 </script>
 
 
-<script type="text/javascript">
-$(document).ready(function(){ 
-  var $this = $('.share'),
-      url = $this.attr('data-url'),
-      encodedUrl = encodeURIComponent(url),
-      title = $this.attr('data-title'),
-      tsina = $this.attr('data-tsina');
-  var html = [
-  '<a href="#" class="overlay" id="qrcode"></a>',
-  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
-  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
-  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
-  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
-  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
-  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
-  '<span title="Share to"></span>'
-  ].join('');
-  $this.append(html);
-  $('.article-share-qrcode').click(function(){
-    var imgSrc = $('#qrcode-pic').attr('data-src');
-    $('#qrcode-pic').attr('src', imgSrc);
-    $('#qrcode-pic').load(function(){
-        $('.qrcode strong').text(' ');
-    });
-  });
-});     
-</script>
-
-
-<script type="text/javascript">
-  var duoshuoQuery = {short_name:"null"};
-  (function() {
-    var ds = document.createElement('script');
-    ds.type = 'text/javascript';ds.async = true;
-    ds.src = '//static.duoshuo.com/embed.js';
-    ds.charset = 'UTF-8';
-    (document.getElementsByTagName('head')[0] 
-    || document.getElementsByTagName('body')[0]).appendChild(ds);
-  })();
-</script> 
 
 
 
 
 
-  </body>
+
+
+  
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+</body>
 </html>

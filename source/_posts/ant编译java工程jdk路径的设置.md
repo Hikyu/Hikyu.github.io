@@ -39,6 +39,7 @@ date:   2016-04-25 12:48:55
 executable="C:\Program Files\Java\jdk1.5.0_22/bin/javac"
 fork="yes"
 ```
+<!-- more -->
 
 Build Successfull.
 

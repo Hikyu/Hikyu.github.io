@@ -7,7 +7,7 @@ title: YuKai's blog
 subtitle: 好好学习，天天向上
 description: 学习总结，生活总结。
 author: 于凯
-language: zh-CN
+language: zh-Hans
 timezone:
 
 # URL
@@ -64,7 +64,7 @@ pagination_dir: page
 # Extensions
 ## Plugins: https://hexo.io/plugins/
 ## Themes: https://hexo.io/themes/
-theme: pacman
+theme: next
 
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html

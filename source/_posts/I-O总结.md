@@ -20,6 +20,8 @@ java中的IO基本可以分为两大类：
 不管是磁盘还是网络传输，最小的存储单元都是字节，而不是字符，所以 I/O 操作的都是字节而不是字符。但是我们的程序通常操作的数据都是以字符的形式存在，比如处理网页中的内容或者磁盘文件中的文本。
 为了操作方便，提供了直接操作字符的接口。操作字符的接口底层还是基于字节的，只不过封装了一些例如编码和解码等操作。
 
+<!-- more -->
+
 下面是java.io包中的内容：[Package java.io](https://docs.oracle.com/javase/7/docs/api/java/io/package-summary.html)
 
 {% asset_img io.png java.io %}

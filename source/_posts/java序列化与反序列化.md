@@ -36,6 +36,8 @@ public class SerializeTest implements Serializable{
 ```
 上面的代码演示了类SerializeTest实现序列化和反序列化的过程。
 
+<!-- more -->
+
 所有的序列化和反序列化过程都是java默认实现的，你只需要实现接口Serializable，就能得到一个实现了序列化的类。
 通过ObjectOutputStream和ObjectInputStream分别将序列化对象输出或者写入到某个流当中。流的目的地可以是内存字节数组(上例)、文件、或者网络。
 

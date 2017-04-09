@@ -26,7 +26,7 @@ public class State {
 	public static final int Delete = 2;//已删除
 }
 ```
-
+<!-- more -->
 使用的时候，在程序中直接使用 类名.常量名 就可以了。但是这样还存在一些问题。比如：
 
 ```java

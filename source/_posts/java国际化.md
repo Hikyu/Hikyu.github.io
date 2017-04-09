@@ -51,6 +51,8 @@ TestResourceBundle
         
 ```
 
+<!-- more -->
+
 ### PropertyResourceBundle
 
 1. 首先需要建立若干语言的properties文件： 自定义名_语言代码_国别代码.properties

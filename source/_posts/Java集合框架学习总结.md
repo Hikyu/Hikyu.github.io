@@ -17,6 +17,8 @@ tags:
 
 通过上图可以看出，java集合框架主要分为两棵树，一棵继承自Collection，一棵继承自Map。接下来分四个部分总结一下。
 
+<!-- more -->
+
 ## List
 
 ### Iterator

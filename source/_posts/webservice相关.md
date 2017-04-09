@@ -29,6 +29,8 @@ REST：面向资源
 
 [Web Service tutorial](http://www.java2blog.com/2013/03/web-service-tutorial.html)
 
+<!-- more -->
+
 ## [RPC](https://zh.wikipedia.org/wiki/%E9%81%A0%E7%A8%8B%E9%81%8E%E7%A8%8B%E8%AA%BF%E7%94%A8)
 
 ### 概念

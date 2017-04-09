@@ -37,7 +37,7 @@ public int hashCode() {
         return h;
 }
 ```
-
+<!-- more -->
 ## 什么是equals(Object obj)方法
 
 equals(Object obj)方法同样来自Object类。在Object类中，他是这样实现的：

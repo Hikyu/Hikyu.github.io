@@ -31,6 +31,8 @@ Annotations have no direct effect on the operation of the code they annotate.
 
 注解Annotation是在jdk1.5之后引进的，jdk1.8之后又增加了一些新的特性。接下来的讨论基于jdk1.7。
 
+<!-- more -->
+
 ## 注解的使用
 
 在java中，注解是当做一个修饰符(比如public或static之类的关键词)来使用的。注解可以存在于：

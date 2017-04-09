@@ -37,6 +37,8 @@ tags:
 
 注意上图中圈起来的部分：这部分表示了Default采用哪种编码是如何决定的。
 
+<!-- more -->
+
 可能会出现三种情况：
 
 1.determined from content: xxx 

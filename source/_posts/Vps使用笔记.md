@@ -16,6 +16,8 @@ VPS的概念我也不是特别清楚，就把他当成主机好了，类似于�
 
 VPS 可以参考 [有哪些便宜稳定，速度也不错的Linux VPS 推荐？](https://www.zhihu.com/question/20800554),我买了Vultr 日本机房的vps,充了5美刀先试试。具体的购买方法自行谷歌
 
+<!-- more -->
+
 ## 搭建shadowsocks服务
 
 ### 升级内核
