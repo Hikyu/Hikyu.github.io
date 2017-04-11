@@ -71,7 +71,7 @@
 <link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="java,多线程," />
+  <meta name="keywords" content="hexo," />
 
 
 
@@ -87,16 +87,18 @@
 
 
 
-<meta name="description" content="在今天的苦逼遍代码的过程中，有这样一个问题困扰了我半天：情景是这样的：有N个线程ThreadTest，在类A中被创建。构造ThreadTest，向其传入A中的成员变量 Integer i;ThreadTest中的成员变量 j 被赋值为 i在 ThreadTest 的 run 方法中，我 加入了 synchronized块，对象锁正是 j ;在synchronized块中，我改变了这个 j 的值。代">
+<meta name="description" content="周末的时候给博客换了一个主题，现在的博客看起来比之前的要清爽多了。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="java同步锁锁什么">
-<meta property="og:url" content="http://yukai.space/2015/12/17/java同步锁锁什么/index.html">
+<meta property="og:title" content="hexo博客备份方案">
+<meta property="og:url" content="http://yukai.space/2017/04/11/hexo博客备份方案/index.html">
 <meta property="og:site_name" content="YuKai's blog">
-<meta property="og:description" content="在今天的苦逼遍代码的过程中，有这样一个问题困扰了我半天：情景是这样的：有N个线程ThreadTest，在类A中被创建。构造ThreadTest，向其传入A中的成员变量 Integer i;ThreadTest中的成员变量 j 被赋值为 i在 ThreadTest 的 run 方法中，我 加入了 synchronized块，对象锁正是 j ;在synchronized块中，我改变了这个 j 的值。代">
-<meta property="og:updated_time" content="2017-04-09T10:03:50.134Z">
+<meta property="og:description" content="周末的时候给博客换了一个主题，现在的博客看起来比之前的要清爽多了。">
+<meta property="og:image" content="http://yukai.space/2017/04/11/hexo博客备份方案/blog.png">
+<meta property="og:updated_time" content="2017-04-11T14:14:54.245Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="java同步锁锁什么">
-<meta name="twitter:description" content="在今天的苦逼遍代码的过程中，有这样一个问题困扰了我半天：情景是这样的：有N个线程ThreadTest，在类A中被创建。构造ThreadTest，向其传入A中的成员变量 Integer i;ThreadTest中的成员变量 j 被赋值为 i在 ThreadTest 的 run 方法中，我 加入了 synchronized块，对象锁正是 j ;在synchronized块中，我改变了这个 j 的值。代">
+<meta name="twitter:title" content="hexo博客备份方案">
+<meta name="twitter:description" content="周末的时候给博客换了一个主题，现在的博客看起来比之前的要清爽多了。">
+<meta name="twitter:image" content="http://yukai.space/2017/04/11/hexo博客备份方案/blog.png">
 
 
 
@@ -124,13 +126,13 @@
 
 
 
-  <link rel="canonical" href="http://yukai.space/2015/12/17/java同步锁锁什么/"/>
+  <link rel="canonical" href="http://yukai.space/2017/04/11/hexo博客备份方案/"/>
 
 
 
 
 
-  <title> java同步锁锁什么 | YuKai's blog </title>
+  <title> hexo博客备份方案 | YuKai's blog </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -249,7 +251,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yukai.space/2015/12/17/java同步锁锁什么/">
+    <link itemprop="mainEntityOfPage" href="http://yukai.space/2017/04/11/hexo博客备份方案/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="于凯">
@@ -270,7 +272,7 @@
             
             
               
-                java同步锁锁什么
+                hexo博客备份方案
               
             
           </h1>
@@ -285,8 +287,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2015-12-17T14:10:55+08:00">
-                2015-12-17
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-11T21:40:40+08:00">
+                2017-04-11
               </time>
             
 
@@ -308,8 +310,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/编程/" itemprop="url" rel="index">
-                    <span itemprop="name">编程</span>
+                  <a href="/categories/工具/" itemprop="url" rel="index">
+                    <span itemprop="name">工具</span>
                   </a>
                 </span>
 
@@ -343,23 +345,30 @@
       
 
       
-        <p>在今天的苦逼遍代码的过程中，有这样一个问题困扰了我半天：<br>情景是这样的：有N个线程ThreadTest，在类A中被创建。构造ThreadTest，向其传入A中的成员变量 Integer i;<br>ThreadTest中的成员变量 j 被赋值为 i<br>在 ThreadTest 的 run 方法中，我 加入了 synchronized块，对象锁正是 j ;<br>在synchronized块中，我改变了这个 j 的值。代码大概是这样的：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">Integer j;</div><div class="line">ThreadTest(Integer i)&#123;</div><div class="line">		j=i;</div><div class="line">&#125;</div><div class="line">public void run() &#123;</div><div class="line">		synchronized(j)&#123;</div><div class="line">		  j++;</div><div class="line">		&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+        <p>周末的时候给博客换了一个<a href="https://github.com/iissnan/hexo-theme-next" target="_blank" rel="external">主题</a>，现在的博客看起来比之前的要清爽多了。</p>
+<img src="/2017/04/11/hexo博客备份方案/blog.png" alt="blog" title="blog">
 <a id="more"></a>
-<ol>
-<li><p>一方面 我希望这N个线程操作的是同一个 Integer （引用），我需要多个线程改变这个 Integer 的值 来更新进度条。</p>
+<p>hexo是把生成的一套html发布到服务器上面的，我使用了github来托管自己的博客，每次发布时只把生成的html等文件发布到github，源代码并不会一同发到上面。</p>
+<p>如果是换电脑的话就很不方便了，再加上之前使用hexo generate -d发布博客的时候出了点问题，所以抽空写了一个专门用来发布博客和保存源代码的脚本，在此记录。</p>
+<h2 id="脚本"><a href="#脚本" class="headerlink" title="脚本"></a>脚本</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line"># hexo generate -d 命令失效，将hexo分支推送到了master分支。使用此脚本进行部署</div><div class="line"># 将此脚步置于与blog同级目录下。</div><div class="line"># 部署</div><div class="line">root=&quot;/home/yukai/project/blog&quot;</div><div class="line">folder=&quot;$root/blogdeploy&quot;</div><div class="line">blog=&quot;$root/Hikyu.github.io&quot;</div><div class="line">if [ ! -d &quot;$folder&quot; ]; then</div><div class="line">  echo &quot;初始化...&quot;</div><div class="line">  mkdir &quot;$folder&quot;</div><div class="line">  cp -R &quot;$blog/.git/&quot; &quot;$folder/.git/&quot;</div><div class="line">  cd &quot;$folder&quot;</div><div class="line">  git checkout master</div><div class="line">fi</div><div class="line">echo &quot;博客生成...&quot;</div><div class="line">cd &quot;$blog&quot;</div><div class="line">git checkout hexo</div><div class="line">hexo generate</div><div class="line">cp -R &quot;$blog&quot;/public/* &quot;$folder&quot;</div><div class="line">echo &quot;博客发布...&quot;</div><div class="line">cd &quot;$folder&quot;</div><div class="line">git add --all .</div><div class="line">git commit -m &apos;update&apos;</div><div class="line">git push origin master</div><div class="line">echo &quot;备份博客源码到hexo分支...&quot;</div><div class="line">cd &quot;$blog&quot;</div><div class="line">git add --all .</div><div class="line">git commit -m &apos;update&apos;</div><div class="line">git push origin hexo</div></pre></td></tr></table></figure>
+<p>将上述脚本保存为deploy.sh。</p>
+<p>使用时需要将变量<code>root</code>设为博客目录的父目录。</p>
+<p>如果博客目录还不存在(换电脑)，需要使用<code>git clone</code>命令把博客源代码下载下来。</p>
+<p>修改博客源码后，执行 <code>sudo ./deploy.sh</code>进行博客发布与备份。</p>
+<h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><ul>
+<li><p>发布博客</p>
+<p><code>hexo generate -d</code> 可以将博客编译后发布到服务器。其原理就是将源代码中<code>public</code>目录下的内容推送到远程分支上面。</p>
+<p>我们使用<code>master</code>分支保存发布的博客(github也规定了要发布的博客必须为master分支)。</p>
+<p>首先建立推送博客的目录<code>$folder</code>，并且将博客目录<code>$blog</code>下<code>.git</code>文件夹拷贝到<code>$folder</code>；</p>
+<p>切换到博客目录<code>$blog</code>，然后生成博客，将生成的<code>public</code>目录的内容拷贝到<code>$folder</code>；</p>
+<p>将<code>$folder</code>中的内容推送到远程分支master，完成发布。</p>
 </li>
-<li><p>另一方面，各个线程之间还要互斥地访问这个变量。于是有了上面的写法。</p>
+<li><p>源码备份</p>
+<p>使用新的分支<code>hexo</code>来保存我们的博客源代码。</p>
+<p>切换到博客目录<code>$blog</code>，并切换分支到hexo；</p>
+<p>将博客目录<code>$blog</code>中的源代码内容推动到远程分支<code>hexo</code>，完成备份。</p>
 </li>
-</ol>
-<p>苦逼了。结果不对<br>后来想了想，发现了这样一个问题：当调用 Java 中的一个函数的时候传入实参对象引用，在这个函数内部会将这个引用复制一份，<br>即 void test(Object  i){<br>        i.dosomething()……<br>   }<br>函数体中的i 与 传入的实参 i 实际上是两个不同的引用 指向了同一份内存。<br>这样就解释了出错的 原因：<br>Integer 是不可变类 当对 Integer 进行加减操作时，会 重新new 一份出来赋给 原来的引用变量。<br>所以 </p>
-<p>对于 1. </p>
-<p>当执行j++ 的时候，j已经指向了另一个内存 此时 这个 j 与其他线程中的 j 都不是同一个对象了 无法实现操作同一个对象的愿望</p>
-<p>对于 2. </p>
-<p>使用 synchronized块，对象锁为 j ,这个时候各个线程中的j 已经不是同一个对象了 所以就无法同步</p>
-<p>上面的情况也证明了，<strong>synchronized 锁的是内存 ，而不是指向内存的引用</strong>。</p>
-<p>这样的情况也说明了另外一种情况的问题，那就是<strong>在函数中给实参分配内存,实际在函数体外是得不到这个对象的</strong>。</p>
-<p>解决的办法：<br>放弃使用 Integer（当初使用Integer而不是int的原因就在于各个线程希望操作同一个对象），用一个类将int 封装起来，将这个类对象作为同步关键字，<br>各个线程操作这个对象中的 int 。这样，所有的线程都在修改同一份内存里的东西。</p>
+</ul>
 
       
     </div>
@@ -394,9 +403,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/java/" rel="tag"># java</a>
-          
-            <a href="/tags/多线程/" rel="tag"># 多线程</a>
+            <a href="/tags/hexo/" rel="tag"># hexo</a>
           
         </div>
       
@@ -409,15 +416,15 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
+              <a href="/2017/04/09/糖醋里脊/" rel="next" title="糖醋里脊">
+                <i class="fa fa-chevron-left"></i> 糖醋里脊
+              </a>
+            
           </div>
 
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2015/12/21/notify问题/" rel="prev" title="notify 问题">
-                notify 问题 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -464,8 +471,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel sidebar-panel-active">
+      <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/images/avatar.jpg"
@@ -547,6 +563,22 @@
 
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#脚本"><span class="nav-number">1.</span> <span class="nav-text">脚本</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#原理"><span class="nav-number">2.</span> <span class="nav-text">原理</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
