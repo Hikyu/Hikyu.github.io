@@ -1,0 +1,854 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="java," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="之前在web项目中用到了日志，日志在web应用中很重要，特别是对于程序员追查bug而言。但是由于对混乱的日志框架体系不是十分清楚，导致各种jar包冲突和日志不正常输出。今天来总结一下日志框架的使用主要介绍日志门面slf4j结合日志实现log4j。关于其他的日志框架介绍和使用，参考链接里列出了前辈总结的很好的资料，相信读完之后一定会有收获。
+
+日志门面和实际日志框架日志框架有：jdk自带的logg">
+<meta property="og:type" content="article">
+<meta property="og:title" content="java日志框架的使用">
+<meta property="og:url" content="http://yukai.space/2017/02/21/java日志使用/index.html">
+<meta property="og:site_name" content="YuKai's blog">
+<meta property="og:description" content="之前在web项目中用到了日志，日志在web应用中很重要，特别是对于程序员追查bug而言。但是由于对混乱的日志框架体系不是十分清楚，导致各种jar包冲突和日志不正常输出。今天来总结一下日志框架的使用主要介绍日志门面slf4j结合日志实现log4j。关于其他的日志框架介绍和使用，参考链接里列出了前辈总结的很好的资料，相信读完之后一定会有收获。
+
+日志门面和实际日志框架日志框架有：jdk自带的logg">
+<meta property="og:image" content="https://www.slf4j.org/images/concrete-bindings.png">
+<meta property="og:updated_time" content="2017-04-09T10:03:44.478Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="java日志框架的使用">
+<meta name="twitter:description" content="之前在web项目中用到了日志，日志在web应用中很重要，特别是对于程序员追查bug而言。但是由于对混乱的日志框架体系不是十分清楚，导致各种jar包冲突和日志不正常输出。今天来总结一下日志框架的使用主要介绍日志门面slf4j结合日志实现log4j。关于其他的日志框架介绍和使用，参考链接里列出了前辈总结的很好的资料，相信读完之后一定会有收获。
+
+日志门面和实际日志框架日志框架有：jdk自带的logg">
+<meta name="twitter:image" content="https://www.slf4j.org/images/concrete-bindings.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yukai.space/2017/02/21/java日志使用/"/>
+
+
+
+
+
+  <title> java日志框架的使用 | YuKai's blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">YuKai's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">好好学习，天天向上</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/page" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yukai.space/2017/02/21/java日志使用/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="于凯">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="YuKai's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                java日志框架的使用
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-02-21T12:48:55+08:00">
+                2017-02-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/工具/" itemprop="url" rel="index">
+                    <span itemprop="name">工具</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>之前在web项目中用到了日志，日志在web应用中很重要，特别是对于程序员追查bug而言。但是由于对混乱的日志框架体系不是十分清楚，导致各种jar包冲突和日志不正常输出。今天来总结一下日志框架的使用<br>主要介绍日志门面slf4j结合日志实现log4j。关于其他的日志框架介绍和使用，参考链接里列出了前辈总结的很好的资料，相信读完之后一定会有收获。</p>
+</blockquote>
+<h2 id="日志门面和实际日志框架"><a href="#日志门面和实际日志框架" class="headerlink" title="日志门面和实际日志框架"></a>日志门面和实际日志框架</h2><p>日志框架有：jdk自带的logging(jul)，log4j1、log4j2、logback<br>日志门面有：apache commons-logging、slf4j</p>
+<p>日志框架很好理解，就是提供日志api，使我们可以很轻易的，有组织有规范的输出日志。日志门面的作用是在日志记录实现的基础上提供一个封装的 API 层次，<br>对日志记录 API 的使用者提供一个统一的接口，使得可以自由切换不同的日志记录实现。日志门面就好比java中的jdbc规范接口，各个数据库厂家实现的jdbc驱动程序就是实际的日志框架，<br>他们遵循了这个规范，使得我们在编写java程序时不用考虑底层驱动的不同，只需调用jdbc规范接口即可。这是典型的面向对象思想。</p>
+<h2 id="slf4j的使用"><a href="#slf4j的使用" class="headerlink" title="slf4j的使用"></a>slf4j的使用</h2><h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><p><img src="https://www.slf4j.org/images/concrete-bindings.png" alt="slf4j使用"></p>
+<p>上图来自slf4j官网</p>
+<a id="more"></a>
+<p>slf4j-api.jar包含了slf4j的抽象层API，我们在代码中调用这个jar包中的接口。API层</p>
+<p>slf4j-log412.jar、slf4j-jdk14.jar等是slf4j通向具体日志实现框架的桥梁。中间层</p>
+<p>log4j.jar等则是具体的日志实现框架。实现层</p>
+<blockquote>
+<p>SLF4J does not rely on any special class loader machinery. In fact, each SLF4J binding is hardwired at compile time to use one and only one specific logging framework. For example, the slf4j-log4j12-1.7.23.jar binding is bound at compile time to use log4j. In your code, in addition to slf4j-api-1.7.23.jar, you simply drop one and only one binding of your choice onto the appropriate class path location. Do not place more than one binding on your class path. Here is a graphical illustration of the general idea.</p>
+</blockquote>
+<p>上面这段话的意思大概是，我们不应该在classpath中绑定多于一个的中间层，否则会导致jar包冲突或者输出混乱。</p>
+<blockquote>
+<p>To switch logging frameworks, just replace slf4j bindings on your class path. For example, to switch from java.util.logging to log4j, just replace slf4j-jdk14-1.7.23.jar with slf4j-log4j12-1.7.23.jar.</p>
+</blockquote>
+<p>当我们需要将日志实现由jul切换到log4j时，仅仅把中间层替换，同时切换实现层即可，并不需要修改代码。这就是日志门面的好处。不过实际应用中，需要切换日志实现的场景貌似不是很多。</p>
+<h3 id="slf4j结合log4j"><a href="#slf4j结合log4j" class="headerlink" title="slf4j结合log4j"></a>slf4j结合log4j</h3><h4 id="依赖"><a href="#依赖" class="headerlink" title="依赖"></a>依赖</h4><p>需要的jar包：slf4j-api.jar、slf4j-log4j12.jar、log4j.jar</p>
+<p>对应的maven依赖：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">&lt;dependency&gt;</div><div class="line">    &lt;groupId&gt;org.slf4j&lt;/groupId&gt;</div><div class="line">    &lt;artifactId&gt;slf4j-api&lt;/artifactId&gt;</div><div class="line">    &lt;version&gt;1.7.23&lt;/version&gt;</div><div class="line">&lt;/dependency&gt;</div><div class="line">&lt;dependency&gt; </div><div class="line">  &lt;groupId&gt;org.slf4j&lt;/groupId&gt;</div><div class="line">  &lt;artifactId&gt;slf4j-log4j12&lt;/artifactId&gt;</div><div class="line">  &lt;version&gt;1.7.23&lt;/version&gt;</div><div class="line">&lt;/dependency&gt;</div><div class="line">&lt;dependency&gt;</div><div class="line">    &lt;groupId&gt;log4j&lt;/groupId&gt;</div><div class="line">    &lt;artifactId&gt;log4j&lt;/artifactId&gt;</div><div class="line">    &lt;version&gt;1.2.17&lt;/version&gt;</div><div class="line">&lt;/dependency&gt;</div></pre></td></tr></table></figure>
+<h4 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h4><p>编写log4j.properties配置文件，放到类路径下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">log4j.rootLogger=INFO,stdout</div><div class="line"></div><div class="line">log4j.appender.stdout=org.apache.log4j.ConsoleAppender</div><div class="line">log4j.appender.stdout.Target=System.out</div><div class="line">log4j.appender.stdout.layout=org.apache.log4j.PatternLayout</div><div class="line">log4j.appender.stdout.layout.ConversionPattern=[%-5p] %d&#123;yyyy-MM-dd HH:mm:ss,SSS&#125; method:%l%n%m%n</div></pre></td></tr></table></figure>
+<p>java代码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">package space.kyu.LogTest.log4j;</div><div class="line"></div><div class="line">import org.slf4j.Logger;</div><div class="line">import org.slf4j.LoggerFactory;</div><div class="line"></div><div class="line">public class Test &#123;</div><div class="line">	public static Logger logger = LoggerFactory.getLogger(Test.class);</div><div class="line">	</div><div class="line">	public void test() &#123;</div><div class="line">		logger.info(&quot;info&quot;);</div><div class="line">		logger.debug(&quot;debug&quot;);</div><div class="line">		logger.warn(&quot;warn&quot;);</div><div class="line">		logger.error(&quot;error&quot;);</div><div class="line">	&#125;</div><div class="line">	public static void main(String[] args) &#123;</div><div class="line">		new Test().test();</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>输出</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">[INFO ] 2017-02-21 14:52:28,083 method:space.kyu.LogTest.log4j.Test.test(Test.java:10)</div><div class="line">info</div><div class="line">[WARN ] 2017-02-21 14:52:28,085 method:space.kyu.LogTest.log4j.Test.test(Test.java:12)</div><div class="line">warn</div><div class="line">[ERROR] 2017-02-21 14:52:28,085 method:space.kyu.LogTest.log4j.Test.test(Test.java:13)</div><div class="line">error</div></pre></td></tr></table></figure>
+<h4 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h4><p>slf4j-api.jar: org.slf4j.LoggerFactory<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">public static Logger getLogger(String name) &#123;</div><div class="line">   ILoggerFactory iLoggerFactory = getILoggerFactory();</div><div class="line">    return iLoggerFactory.getLogger(name);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>可以看到，主要分为两部分，获取ILoggerFactory，使用ILoggerFactory获取logger.</p>
+<p>slf4j-api.jar: org.slf4j.LoggerFactory<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">public static ILoggerFactory getILoggerFactory() &#123;</div><div class="line">        if (INITIALIZATION_STATE == UNINITIALIZED) &#123;</div><div class="line">            synchronized (LoggerFactory.class) &#123;</div><div class="line">                if (INITIALIZATION_STATE == UNINITIALIZED) &#123;</div><div class="line">                    INITIALIZATION_STATE = ONGOING_INITIALIZATION;</div><div class="line">                    performInitialization();</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        switch (INITIALIZATION_STATE) &#123;</div><div class="line">        case SUCCESSFUL_INITIALIZATION:</div><div class="line">            return StaticLoggerBinder.getSingleton().getLoggerFactory();</div><div class="line">        case NOP_FALLBACK_INITIALIZATION:</div><div class="line">            return NOP_FALLBACK_FACTORY;</div><div class="line">        case FAILED_INITIALIZATION:</div><div class="line">            throw new IllegalStateException(UNSUCCESSFUL_INIT_MSG);</div><div class="line">        case ONGOING_INITIALIZATION:</div><div class="line">            // support re-entrant behavior.</div><div class="line">            // See also http://jira.qos.ch/browse/SLF4J-97</div><div class="line">            return SUBST_FACTORY;</div><div class="line">        &#125;</div><div class="line">        throw new IllegalStateException(&quot;Unreachable code&quot;);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>注意<code>return StaticLoggerBinder.getSingleton().getLoggerFactory();</code>这行，StaticLoggerBinder是slf4j-log4j12.jar中的类</p>
+<p>slf4j-log4j12.jar: org.slf4j.impl.StaticLoggerBinder<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">private StaticLoggerBinder() &#123;</div><div class="line">        loggerFactory = new Log4jLoggerFactory();</div><div class="line">        try &#123;</div><div class="line">            @SuppressWarnings(&quot;unused&quot;)</div><div class="line">            Level level = Level.TRACE;</div><div class="line">        &#125; catch (NoSuchFieldError nsfe) &#123;</div><div class="line">            Util.report(&quot;This version of SLF4J requires log4j version 1.2.12 or later. See also http://www.slf4j.org/codes.html#log4j_version&quot;);</div><div class="line">        &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>slf4j-log4j12.jar: org.slf4j.impl.Log4jLoggerFactory<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">public Log4jLoggerFactory() &#123;</div><div class="line">        loggerMap = new ConcurrentHashMap&lt;String, Logger&gt;();</div><div class="line">        // force log4j to initialize</div><div class="line">        org.apache.log4j.LogManager.getRootLogger();</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>注意<code>org.apache.log4j.LogManager.getRootLogger();</code>初始化了log4j为具体的日志实现</p>
+<p>追踪源代码还可以发现，我们在代码中调用的<code>LoggerFactory.getLogger(Test.class);</code>最终返回的是org.apache.log4j.Logger实例，也就是说，日志实现最终托付给了log4j</p>
+<h2 id="log4j的使用"><a href="#log4j的使用" class="headerlink" title="log4j的使用"></a>log4j的使用</h2><h3 id="日志组件"><a href="#日志组件" class="headerlink" title="日志组件"></a>日志组件</h3><p>Loggers：Logger负责捕捉事件并将其发送给合适的Appender。</p>
+<p>Appenders：也被称为Handlers，负责将日志事件记录到目标位置。在将日志事件输出之前，Appenders使用Layouts来对事件进行格式化处理。</p>
+<p>Layouts：也被称为Formatters，它负责对日志事件中的数据进行转换和格式化。Layouts决定了数据在一条日志记录中的最终形式。</p>
+<p>当Logger记录一个事件时，它将事件转发给适当的Appender。然后Appender使用Layout来对日志记录进行格式化，并将其发送给控制台、文件或者其它目标位置。</p>
+<h3 id="日志级别"><a href="#日志级别" class="headerlink" title="日志级别"></a>日志级别</h3><p>每个Logger都被了一个日志级别（log level），用来控制日志信息的输出。日志级别从高到低分为：</p>
+<p>org.apache.log4j.Level<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">public final static int OFF_INT = Integer.MAX_VALUE;</div><div class="line">public final static int FATAL_INT = 50000;</div><div class="line">public final static int ERROR_INT = 40000;</div><div class="line">public final static int WARN_INT  = 30000;</div><div class="line">public final static int INFO_INT  = 20000;</div><div class="line">public final static int DEBUG_INT = 10000;</div><div class="line">  //public final static int FINE_INT = DEBUG_INT;</div><div class="line">public final static int ALL_INT = Integer.MIN_VALUE;</div></pre></td></tr></table></figure></p>
+<p>A：off 最高等级，用于关闭所有日志记录。</p>
+<p>B：fatal 指出每个严重的错误事件将会导致应用程序的退出。</p>
+<p>C：error 指出虽然发生错误事件，但仍然不影响系统的继续运行。</p>
+<p>D：warm 表明会出现潜在的错误情形。</p>
+<p>E：info 一般和在粗粒度级别上，强调应用程序的运行全程。</p>
+<p>F：debug 一般用于细粒度级别上，对调试应用程序非常有帮助。</p>
+<p>G：all 最低等级，用于打开所有日志记录。</p>
+<p>我们一般只是用error,warn,info和debug就够了。</p>
+<h3 id="配置文件编写"><a href="#配置文件编写" class="headerlink" title="配置文件编写"></a>配置文件编写</h3><p>了解了组件和日志级别，我们可以编写自己的配置文件，log4j.properties放到类路径下，如果缺少了配置文件，log4j会报错。我们也可以使用<code>PropertyConfigurator.configure ( String configFilename)</code>来指定配置文件</p>
+<h4 id="配置logger"><a href="#配置logger" class="headerlink" title="配置logger"></a>配置logger</h4><p>配置根logger：<code>log4j.rootLogger = [ level ] , appenderName, appenderName, …</code></p>
+<p>比如：<code>log4j.rootLogger=INFO,stdout</code></p>
+<p>level为日志级别，表示这个logger只打印级别大于等于level的日志。</p>
+<p>appenderName定义了如何处理日志，即把日志输出到哪个地方，如何输出。</p>
+<p>可以看出，一个logger可以根据appender同时输出到多个地方，logger与appender是一对多的关系。</p>
+<p>我们也可以定义自己的logger：<code>log4j.logger.yukai=DEBUG,stdout</code></p>
+<h4 id="配置appender"><a href="#配置appender" class="headerlink" title="配置appender"></a>配置appender</h4><p>appender定义了日志输出的目的地：<code>log4j.appender.appenderName = fully.qualified.name.of.appender.class</code></p>
+<p>其中，Log4j提供的常用的appender：</p>
+<p>org.apache.log4j.ConsoleAppender（控制台），</p>
+<p>org.apache.log4j.FileAppender（文件），</p>
+<p>org.apache.log4j.DailyRollingFileAppender（每天产生一个日志文件），</p>
+<p>org.apache.log4j.RollingFileAppender（文件大小到达指定尺寸的时候产生一个新的文件），</p>
+<p>org.apache.log4j.WriterAppender（将日志信息以流格式发送到任意指定的地方）</p>
+<p>我们还可以设置appender的属性，比如针对ConsoleAppender</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">属性	                  描述</div><div class="line">layout	    Appender 使用 Layout 对象和与之关联的模式来格式化日志信息。</div><div class="line">target	    目的地可以是控制台、文件，或依赖于 appender 的对象。</div><div class="line">level	    级别用来控制过滤日志信息。</div><div class="line">threshold	Appender 可脱离于日志级别定义一个阀值级别，Appender 对象会忽略所有级别低于阀值级别的日志。</div><div class="line">filter	    Filter 对象可在级别基础之上分析日志信息，来决定 Appender 对象是否处理或忽略一条日志记录。</div></pre></td></tr></table></figure>
+<h4 id="配置layout"><a href="#配置layout" class="headerlink" title="配置layout"></a>配置layout</h4><p>一个appender可以关联某一个layout，用来格式化日志的输出。可用的layout有以下几种：</p>
+<p>org.apache.log4j.HTMLLayout（以HTML表格形式布局）， </p>
+<p>org.apache.log4j.PatternLayout（可以灵活地指定布局模式）， </p>
+<p>org.apache.log4j.SimpleLayout（包含日志信息的级别和信息字符串）， </p>
+<p>org.apache.log4j.TTCCLayout（包含日志产生的时间、线程、类别等等信息）</p>
+<p>可用的格式：</p>
+<p>%m 输出代码中指定的消息 </p>
+<p>%p 输出优先级，即DEBUG，INFO，WARN，ERROR，FATAL </p>
+<p>%r 输出自应用启动到输出该log信息耗费的毫秒数 </p>
+<p>%c 输出所属的类目，通常就是所在类的全名 </p>
+<p>%t 输出产生该日志事件的线程名 </p>
+<p>%n 输出一个回车换行符，Windows平台为”rn”，Unix平台为”n” </p>
+<p>%d 输出日志时间点的日期或时间，默认格式为ISO8601，也可以在其后指定格式，比如：%d{yyy MMM dd HH:mm:ss,SSS}，输出类似：2002年10月18日 22：10：28，921 </p>
+<p>%l 输出日志事件的发生位置，包括类目名、发生的线程，以及在代码中的行数。举例：Testlog4.main(Test Log4.java:10)</p>
+<p>比如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">log4j.appender.stdout.layout=org.apache.log4j.PatternLayout</div><div class="line">log4j.appender.stdout.layout.ConversionPattern=[%-5p] %d&#123;yyyy-MM-dd HH:mm:ss,SSS&#125; method:%l%n%m%n</div></pre></td></tr></table></figure>
+<p>打印的信息：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[ERROR] 2017-02-21 16:41:25,563 method:space.kyu.LogTest.log4j.Test.test(Test.java:13)</div><div class="line">info</div></pre></td></tr></table></figure>
+<h4 id="logger的继承关系"><a href="#logger的继承关系" class="headerlink" title="logger的继承关系"></a>logger的继承关系</h4><p>我们可以定义自己的logger：<code>log4j.logger.yukai=DEBUG,stdout</code></p>
+<p>其中，yukai指定了这个logger的名字，可以在代码中使用它：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">public static Logger logger = LoggerFactory.getLogger(&quot;yukai&quot;);</div></pre></td></tr></table></figure>
+<p>假如我们同时定义这样一个logger：<code>log4j.logger.yukai.child=DEBUG,stdout</code></p>
+<p>就表示yukai.child这个logger继承了yukai这个logger，更java中的包有些类似</p>
+<p>在代码中使用：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">public static Logger logger = LoggerFactory.getLogger(&quot;yukai.child&quot;);</div></pre></td></tr></table></figure>
+<p>使用了该logger会默认实现自身的设定和父Logger的设定。比如使用该logger打印了一条debug信息，同样的打印动作会执行两次，因为父logger的打印动作也会实现。</p>
+<p>上面提到的rootlogger就是所有looger的根logger。</p>
+<p>我们经常在代码中使用 <code>public static Logger logger = LoggerFactory.getLogger(Test.calss);</code>这样的方式，因此我们可以通过指定包名的logger来控制某个包下面所有的logger输出。比如：</p>
+<p>我们指定：<code>log4j.logger.space.kyu=DEBUG,stdout</code>,就表示space.kyu包下面的所有logger(以LoggerFactory.getLogger(Test.calss);这种方式获取的)都继承该logger的设定。这在分层的应用或功能性应用中有可以用到。</p>
+<p>可以通过配置log4j.additivity.XXX=ture/false来打开或关闭继承功能；若为 false,表示Logger 的 appender 不继承它的父Logger； 若为true，则继承，这样就兼有自身的设定和父Logger的设定。</p>
+<h3 id="MDC的使用"><a href="#MDC的使用" class="headerlink" title="MDC的使用"></a>MDC的使用</h3><blockquote>
+<p>在一个高访问量的 Web 应用中，经常要在同一时刻处理大量的用户请求。Web 服务器会为每一个请求分配一个线程，每一个线程都会向日志系统输入一些信息，通常日志系统都是按照时间顺序而不是用户顺序排列这些信息的，这些线程的交替运行会让所有用户的处理信息交错在一起，让人很难分辨出那些记录是同一个用户产生的。另外，高可用性的网站经常会使用负载均衡系统平衡网络流量，这样一个用户的操作记录很可能会分布在多个 Web 服务器上，如果我们没有一种方法来标示一条记录是哪个用户产生的，从这众多的日志信息中筛选出对我们有用的东西将是一项艰巨的工作。</p>
+</blockquote>
+<p>NDC或MDC就是用来解决这个问题的。</p>
+<p>MDC 可以看成是一个与当前线程绑定的哈希表，可以往其中添加键值对。<br>MDC 中包含的内容可以被同一线程中执行的代码所访问。当前线程的子线程会继承其父线程中的 MDC 的内容。<br>当需要记录日志时，只需要从 MDC 中获取所需的信息即可。MDC 的内容则由程序在适当的时候保存进去。<br>对于一个 Web 应用来说，通常是在请求被处理的最开始保存这些数据。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">public class App &#123;</div><div class="line">	private static final Logger logger = LoggerFactory.getLogger(App.class);</div><div class="line"></div><div class="line">	public static void main(String[] args) &#123;</div><div class="line">		new App().log(&quot;main thread&quot;);</div><div class="line">		new Thread()&#123;</div><div class="line">			public void run() &#123;</div><div class="line">				new App().log(&quot;sub thread&quot;);</div><div class="line">			&#125;;</div><div class="line">		&#125;.start();</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	public void log(String arg) &#123;</div><div class="line">		MDC.put(&quot;username&quot;, &quot;Yukai&quot;);</div><div class="line">		logger.info(&quot;This message from : &#123;&#125;&quot;, arg);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>设置appender: <code>log4j.appender.stdout.layout.ConversionPattern=%X{username} %d{yyyy-MM-dd HH:mm:ss} [%p] %c - %m%n</code></p>
+<p>输出</p>
+<p>Yukai 2017-02-21 22:10:54 [INFO] space.kyu.log_test.App - This message from : main thread<br>Yukai 2017-02-21 22:10:54 [INFO] space.kyu.log_test.App - This message from : sub thread</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://www.slf4j.org/manual.html" target="_blank" rel="external">SLF4J user manual</a></p>
+<p><a href="http://blog.csdn.net/qingkangxu/article/details/7514770" target="_blank" rel="external">JDK Logging深入分析</a></p>
+<p><a href="http://my.oschina.net/pingpangkuangmo/blog/406618" target="_blank" rel="external">jdk-logging、log4j、logback日志介绍及原理</a></p>
+<p><a href="http://my.oschina.net/pingpangkuangmo/blog/407895" target="_blank" rel="external">commons-logging与jdk-logging、log4j1、log4j2、logback的集成原理</a></p>
+<p><a href="http://my.oschina.net/pingpangkuangmo/blog/408382" target="_blank" rel="external">slf4j与jdk-logging、log4j1、log4j2、logback的集成原理</a></p>
+<p><a href="http://my.oschina.net/pingpangkuangmo/blog/410224" target="_blank" rel="external">slf4j、jcl、jul、log4j1、log4j2、logback大总结</a></p>
+<p><a href="https://www.ibm.com/developerworks/cn/java/j-lo-practicelog/" target="_blank" rel="external">Java 日志管理最佳实践</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+<div id="wechat_subscriber" style="display: block; padding: 10px 0; margin: 20px auto; width: 100%; text-align: center">
+    <img id="wechat_subscriber_qcode" src="/images/wechat-qcode.jpg" alt="于凯 wechat" style="width: 200px; max-width: 100%;"/>
+    <div>欢迎您扫一扫上面的微信公众号，订阅我的博客！</div>
+</div>
+
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/java/" rel="tag"># java</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/02/19/java国际化/" rel="next" title="java国际化">
+                <i class="fa fa-chevron-left"></i> java国际化
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/02/23/ssh的两种用法/" rel="prev" title="ssh的两种用法">
+                ssh的两种用法 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="于凯" />
+          <p class="site-author-name" itemprop="name">于凯</p>
+           
+              <p class="site-description motion-element" itemprop="description">学习总结，生活总结。</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">49</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-name">分类</span>
+              
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">19</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/5381447277" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  微博
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/Hikyu" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#日志门面和实际日志框架"><span class="nav-number">1.</span> <span class="nav-text">日志门面和实际日志框架</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#slf4j的使用"><span class="nav-number">2.</span> <span class="nav-text">slf4j的使用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#简介"><span class="nav-number">2.1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#slf4j结合log4j"><span class="nav-number">2.2.</span> <span class="nav-text">slf4j结合log4j</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#依赖"><span class="nav-number">2.2.1.</span> <span class="nav-text">依赖</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#使用"><span class="nav-number">2.2.2.</span> <span class="nav-text">使用</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#原理"><span class="nav-number">2.2.3.</span> <span class="nav-text">原理</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#log4j的使用"><span class="nav-number">3.</span> <span class="nav-text">log4j的使用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#日志组件"><span class="nav-number">3.1.</span> <span class="nav-text">日志组件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#日志级别"><span class="nav-number">3.2.</span> <span class="nav-text">日志级别</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#配置文件编写"><span class="nav-number">3.3.</span> <span class="nav-text">配置文件编写</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#配置logger"><span class="nav-number">3.3.1.</span> <span class="nav-text">配置logger</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#配置appender"><span class="nav-number">3.3.2.</span> <span class="nav-text">配置appender</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#配置layout"><span class="nav-number">3.3.3.</span> <span class="nav-text">配置layout</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#logger的继承关系"><span class="nav-number">3.3.4.</span> <span class="nav-text">logger的继承关系</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MDC的使用"><span class="nav-number">3.4.</span> <span class="nav-text">MDC的使用</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">4.</span> <span class="nav-text">参考</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">于凯</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

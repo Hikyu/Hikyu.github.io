@@ -1,0 +1,796 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="linux," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="工作中在远程主机上进行一些操作时，经常使用ssh进行远程登录。后来使用github时，也会用到ssh。其中涉及到了ssh的两种用法，记录一下~
+本文主要参考自阮一峰老师的博客：SSH原理与运用（一）：远程登录
+
+ssh是每台linux机器的标准配置。ssh是一种协议，SSH在计算机之间构建网络连接，确保连接双方身份的真实性，同时，它还保证在此连接上传送的数据到达时不会被人更改，不会被他人窃听。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ssh的两种用法">
+<meta property="og:url" content="http://yukai.space/2017/02/23/ssh的两种用法/index.html">
+<meta property="og:site_name" content="YuKai's blog">
+<meta property="og:description" content="工作中在远程主机上进行一些操作时，经常使用ssh进行远程登录。后来使用github时，也会用到ssh。其中涉及到了ssh的两种用法，记录一下~
+本文主要参考自阮一峰老师的博客：SSH原理与运用（一）：远程登录
+
+ssh是每台linux机器的标准配置。ssh是一种协议，SSH在计算机之间构建网络连接，确保连接双方身份的真实性，同时，它还保证在此连接上传送的数据到达时不会被人更改，不会被他人窃听。">
+<meta property="og:updated_time" content="2017-04-09T10:05:46.314Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ssh的两种用法">
+<meta name="twitter:description" content="工作中在远程主机上进行一些操作时，经常使用ssh进行远程登录。后来使用github时，也会用到ssh。其中涉及到了ssh的两种用法，记录一下~
+本文主要参考自阮一峰老师的博客：SSH原理与运用（一）：远程登录
+
+ssh是每台linux机器的标准配置。ssh是一种协议，SSH在计算机之间构建网络连接，确保连接双方身份的真实性，同时，它还保证在此连接上传送的数据到达时不会被人更改，不会被他人窃听。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yukai.space/2017/02/23/ssh的两种用法/"/>
+
+
+
+
+
+  <title> ssh的两种用法 | YuKai's blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">YuKai's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">好好学习，天天向上</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/page" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yukai.space/2017/02/23/ssh的两种用法/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="于凯">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="YuKai's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                ssh的两种用法
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-02-23T20:05:03+08:00">
+                2017-02-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/编程/" itemprop="url" rel="index">
+                    <span itemprop="name">编程</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>工作中在远程主机上进行一些操作时，经常使用ssh进行远程登录。后来使用github时，也会用到ssh。其中涉及到了ssh的两种用法，记录一下~</p>
+<p>本文主要参考自阮一峰老师的博客：<a href="http://www.ruanyifeng.com/blog/2011/12/ssh_remote_login.html" target="_blank" rel="external">SSH原理与运用（一）：远程登录</a></p>
+</blockquote>
+<p>ssh是每台linux机器的标准配置。ssh是一种协议，SSH在计算机之间构建网络连接，确保连接双方身份的真实性，同时，它还保证在此连接上传送的数据到达时不会被人更改，不会被他人窃听。</p>
+<p>ssh有多种实现，我们一般使用的是openssh，这是一款免费开源的ssh工具。一般在我们使用的linux发行版中，已经预设了这个软件了，所以可以直接使用它。如果是在windows中使用ssh客户端连接远程linux ssh服务，<br>我使用一款名为MobaXterm的工具。</p>
+<a id="more"></a>
+<h2 id="密码登录"><a href="#密码登录" class="headerlink" title="密码登录"></a>密码登录</h2><p>这是我们使用远程linux机器时最一般的登录方式。使用user这个用户登录到主机host:</p>
+<p>ssh user@host</p>
+<p>ssh默认端口是22，如果远程主机ssh服务端口不是22的话，可以通过-p参数修改连接端口：</p>
+<p>ssh -p 8899 user@host</p>
+<p>整个的登录过程：</p>
+<p>1.远程主机收到客户端的登录请求，把自己的公钥发给用户。</p>
+<p>2.客户端使用这个公钥，将登录密码加密后，发送回来。</p>
+<p>3.远程主机用自己的私钥，解密登录密码，如果密码正确，就同意客户端登录。</p>
+<p>这样的登录方式有一个问题，那就是如果有人截获了客户端的登录请求（比如使用公共WiFi），然后将自己的公钥发给了客户端，就可以冒充远程主机获取客户端的密码了。<br>Https协议是有CA证书中心作公证的，ssh协议并不存在这样的机构，所以就有中间人攻击的风险。</p>
+<p>为了应对这种风险，当客户端第一次登陆远程主机时，会有类似的提示：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">The authenticity of host &apos;test.linux.org (192.168.1.100)&apos; can&apos;t be established. </div><div class="line">RSA key fingerprint is 46:cf:06:6a:ad:ba:e2:85:cc:d9:c4:8d:15:bb:f3:ec. </div><div class="line">Are you sure you want to continue connecting (yes/no)?</div></pre></td></tr></table></figure>
+<p>意思就是要你核对远程主机的公钥指纹，从而证明他的身份。那么我们如何判断这个公钥指纹是不是远程主机的公钥产生的指纹呢？答案是没有好办法，只能由用户自己想办法核对，比如远程主机在网站上贴出了自己的公钥指纹。</p>
+<p>当我们输入yes之后，会出现：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Warning: Permanently added &apos;test.linux.org,192.168.1.100&apos; (RSA) to the list of known</div></pre></td></tr></table></figure>
+<p>表示我们已经认可了该主机。</p>
+<p>此时要求我们输入登录用户的密码，密码正确则登录。</p>
+<p>当远程主机的公钥被接受以后，它就会被保存在文件$HOME/.ssh/known_hosts之中。下次再连接这台主机，系统就会认出它的公钥已经保存在本地了，从而跳过警告部分，直接提示输入密码。</p>
+<p>每个SSH用户都有自己的known_hosts文件，此外系统也有一个这样的文件，通常是/etc/ssh/ssh_known_hosts，保存一些对所有用户都可信赖的远程主机的公钥。</p>
+<h2 id="公钥登录"><a href="#公钥登录" class="headerlink" title="公钥登录"></a>公钥登录</h2><h3 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h3><p>ssh还提供了另一种登录方式，就是公钥登录，避免了输入密码的麻烦。</p>
+<p>所谓”公钥登录”，原理很简单，就是用户将自己的公钥储存在远程主机上。登录的时候，远程主机会向用户发送一段随机字符串，用户用自己的私钥加密后，再发回来。远程主机用事先储存的公钥进行解密，如果成功，就证明用户是可信的，直接允许登录shell，不再要求密码。</p>
+<p>这种方法要求用户必须提供自己的公钥。如果没有现成的，可以直接用ssh-keygen生成一个：</p>
+<p>ssh-keygen</p>
+<p>运行结束以后，在$HOME/.ssh/目录下，会新生成两个文件：id_rsa.pub和id_rsa。前者是你的公钥，后者是你的私钥。</p>
+<p>这时再输入下面的命令，将公钥传送到远程主机host上面：</p>
+<p>ssh-copy-id user@host</p>
+<p>然后，打开远程主机/etc/ssh/sshd_config这个文件，检查以下几项：</p>
+<p>RSAAuthentication yes<br>PubkeyAuthentication yes<br>AuthorizedKeysFile .ssh/authorized_keys</p>
+<p>然后重启ssh服务就可以了：</p>
+<p>service sshd restart</p>
+<h3 id="authorized-keys"><a href="#authorized-keys" class="headerlink" title="authorized_keys"></a>authorized_keys</h3><p>远程主机将用户的公钥，保存在登录后的用户主目录的$HOME/.ssh/authorized_keys文件中。公钥就是一段字符串，只要把它追加在authorized_keys文件的末尾就行了。</p>
+<p>这里不使用上面的ssh-copy-id命令，改用下面的命令，解释公钥的保存过程：</p>
+<p>ssh user@host ‘mkdir -p .ssh &amp;&amp; cat &gt;&gt; .ssh/authorized_keys’ &lt; ~/.ssh/id_rsa.pub</p>
+<p>这条命令由多个语句组成，依次分解开来看：</p>
+<ol>
+<li><p>“ssh user@host”，表示登录远程主机；</p>
+</li>
+<li><p>单引号中的mkdir .ssh &amp;&amp; cat &gt;&gt; .ssh/authorized_keys，表示登录后在远程shell上执行的命令：</p>
+</li>
+<li><p>“mkdir -p .ssh”的作用是，如果用户主目录中的.ssh目录不存在，就创建一个；</p>
+</li>
+<li><p>‘cat &gt;&gt; .ssh/authorized_keys’ &lt; ~/.ssh/id_rsa.pub的作用是，将本地的公钥文件~/.ssh/id_rsa.pub，重定向追加到远程文件authorized_keys的末尾。</p>
+</li>
+</ol>
+<p>写入authorized_keys文件后，公钥登录的设置就完成了。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="http://linux.vbird.org/linux_server/0310telnetssh/0310telnetssh.php" target="_blank" rel="external">簡易 Telnet 與 SSH 主機設定</a></p>
+<p><a href="http://www.ruanyifeng.com/blog/2011/12/ssh_remote_login.html" target="_blank" rel="external">SSH原理与运用（一）：远程登录</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+<div id="wechat_subscriber" style="display: block; padding: 10px 0; margin: 20px auto; width: 100%; text-align: center">
+    <img id="wechat_subscriber_qcode" src="/images/wechat-qcode.jpg" alt="于凯 wechat" style="width: 200px; max-width: 100%;"/>
+    <div>欢迎您扫一扫上面的微信公众号，订阅我的博客！</div>
+</div>
+
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/linux/" rel="tag"># linux</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/02/21/java日志使用/" rel="next" title="java日志框架的使用">
+                <i class="fa fa-chevron-left"></i> java日志框架的使用
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/02/25/centos7BCM驱动安装/" rel="prev" title="centos7BCM驱动安装">
+                centos7BCM驱动安装 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="于凯" />
+          <p class="site-author-name" itemprop="name">于凯</p>
+           
+              <p class="site-description motion-element" itemprop="description">学习总结，生活总结。</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">49</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-name">分类</span>
+              
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">19</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/5381447277" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  微博
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/Hikyu" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#密码登录"><span class="nav-number">1.</span> <span class="nav-text">密码登录</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#公钥登录"><span class="nav-number">2.</span> <span class="nav-text">公钥登录</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#步骤"><span class="nav-number">2.1.</span> <span class="nav-text">步骤</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#authorized-keys"><span class="nav-number">2.2.</span> <span class="nav-text">authorized_keys</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">3.</span> <span class="nav-text">参考</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">于凯</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

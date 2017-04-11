@@ -1,0 +1,789 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="java," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="什么是序列化所谓的序列化，即把java对象以二进制形式保存到内存、文件或者进行网络传输。从二进制的形式恢复成为java对象，即反序列化。
+通过序列化可以将对象持久化，或者从一个地方传输到另一个地方。这方面的应用有RMI，远程方法调用。
+java中实现序列化有两种方式，实现Serializable接口或者Externalizable接口。这篇总结只讨论Serializable的情况。
+1234567">
+<meta property="og:type" content="article">
+<meta property="og:title" content="java序列化与反序列化">
+<meta property="og:url" content="http://yukai.space/2017/03/22/java序列化与反序列化/index.html">
+<meta property="og:site_name" content="YuKai's blog">
+<meta property="og:description" content="什么是序列化所谓的序列化，即把java对象以二进制形式保存到内存、文件或者进行网络传输。从二进制的形式恢复成为java对象，即反序列化。
+通过序列化可以将对象持久化，或者从一个地方传输到另一个地方。这方面的应用有RMI，远程方法调用。
+java中实现序列化有两种方式，实现Serializable接口或者Externalizable接口。这篇总结只讨论Serializable的情况。
+1234567">
+<meta property="og:updated_time" content="2017-04-09T10:03:59.194Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="java序列化与反序列化">
+<meta name="twitter:description" content="什么是序列化所谓的序列化，即把java对象以二进制形式保存到内存、文件或者进行网络传输。从二进制的形式恢复成为java对象，即反序列化。
+通过序列化可以将对象持久化，或者从一个地方传输到另一个地方。这方面的应用有RMI，远程方法调用。
+java中实现序列化有两种方式，实现Serializable接口或者Externalizable接口。这篇总结只讨论Serializable的情况。
+1234567">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yukai.space/2017/03/22/java序列化与反序列化/"/>
+
+
+
+
+
+  <title> java序列化与反序列化 | YuKai's blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">YuKai's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">好好学习，天天向上</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/page" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yukai.space/2017/03/22/java序列化与反序列化/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="于凯">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="YuKai's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                java序列化与反序列化
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-03-22T20:14:46+08:00">
+                2017-03-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/编程/" itemprop="url" rel="index">
+                    <span itemprop="name">编程</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="什么是序列化"><a href="#什么是序列化" class="headerlink" title="什么是序列化"></a>什么是序列化</h2><p>所谓的序列化，即把java对象以二进制形式保存到内存、文件或者进行网络传输。从二进制的形式恢复成为java对象，即反序列化。</p>
+<p>通过序列化可以将对象持久化，或者从一个地方传输到另一个地方。这方面的应用有RMI，远程方法调用。</p>
+<p>java中实现序列化有两种方式，实现Serializable接口或者Externalizable接口。这篇总结只讨论Serializable的情况。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">public class SerializeTest implements Serializable&#123;</div><div class="line">	    private static final long serialVersionUID = 1L;</div><div class="line">		public String str;</div><div class="line">		public SerializeTest(String str) &#123;</div><div class="line">			   this.str = str;</div><div class="line">		&#125;</div><div class="line">		</div><div class="line">		public static void main(String[] args) throws IOException, ClassNotFoundException &#123;</div><div class="line">			   SerializeTest test = new SerializeTest(&quot;hello&quot;);</div><div class="line">			   ByteArrayOutputStream oStream = new ByteArrayOutputStream();</div><div class="line">			   ObjectOutputStream objectOutputStream = new ObjectOutputStream(oStream);</div><div class="line">			   objectOutputStream.writeObject(test);//序列化</div><div class="line">			   </div><div class="line">			   ObjectInputStream inputStream = new ObjectInputStream(new ByteArrayInputStream(oStream.toByteArray()));</div><div class="line">			   SerializeTest obj = (SerializeTest) inputStream.readObject();//反序列化</div><div class="line">			   System.out.println(obj.str);</div><div class="line">		&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>上面的代码演示了类SerializeTest实现序列化和反序列化的过程。</p>
+<a id="more"></a>
+<p>所有的序列化和反序列化过程都是java默认实现的，你只需要实现接口Serializable，就能得到一个实现了序列化的类。<br>通过ObjectOutputStream和ObjectInputStream分别将序列化对象输出或者写入到某个流当中。流的目的地可以是内存字节数组(上例)、文件、或者网络。</p>
+<p>下面研究一下序列化过程中的几个问题：</p>
+<h2 id="静态变量如何序列化"><a href="#静态变量如何序列化" class="headerlink" title="静态变量如何序列化"></a>静态变量如何序列化</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div></pre></td><td class="code"><pre><div class="line">public class SeriaUtil &#123;</div><div class="line">	    ByteArrayInputStream bInputStream;</div><div class="line">	    ByteArrayOutputStream byOutputStream;</div><div class="line">	    ObjectOutputStream outputStream ;</div><div class="line">	    ObjectInputStream inputStream;</div><div class="line">	    </div><div class="line">        public void seria(Object test) throws IOException &#123;</div><div class="line">        	if (byOutputStream == null) &#123;</div><div class="line">        		byOutputStream = new ByteArrayOutputStream();</div><div class="line">			&#125;</div><div class="line">        	if (outputStream == null) &#123;</div><div class="line">        		outputStream = new ObjectOutputStream(byOutputStream);</div><div class="line">			&#125;</div><div class="line">		    outputStream.writeObject(test);</div><div class="line">//		   System.out.println(byOutputStream.toByteArray().length); </div><div class="line">        &#125;</div><div class="line">        </div><div class="line">        public Object  reSeria() throws IOException, ClassNotFoundException &#123;</div><div class="line">	        	if (bInputStream == null) &#123;</div><div class="line">					  bInputStream = new ByteArrayInputStream(byOutputStream.toByteArray());</div><div class="line">				&#125;</div><div class="line">	        	if (inputStream == null) &#123;</div><div class="line">	        		inputStream = new ObjectInputStream(bInputStream);</div><div class="line">				&#125;</div><div class="line">			    Object obj =  inputStream.readObject();</div><div class="line">			    return obj;</div><div class="line">        &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">public class StaticTest implements Serializable&#123;</div><div class="line">	private static final long serialVersionUID = 1L;</div><div class="line">	public static int A = 0;</div><div class="line">	public static String B = &quot;hello&quot;;</div><div class="line">	</div><div class="line">	public static void main(String[] args) throws IOException, ClassNotFoundException &#123;</div><div class="line">		    //先序列化类，此时 A=0 B = hello</div><div class="line">		    SeriaUtil seriaUtil = new SeriaUtil();</div><div class="line">		    StaticTest test = new StaticTest();</div><div class="line">		    seriaUtil.seria(test);</div><div class="line">		    //修改 静态变量的值</div><div class="line">		    StaticTest.A = 1;</div><div class="line">		    StaticTest.B = &quot;world&quot;;</div><div class="line">		    </div><div class="line">		    StaticTest obj = (StaticTest) seriaUtil.reSeria();</div><div class="line">		    //输出 A = 1 B = world</div><div class="line">		    System.out.println(obj.A);</div><div class="line">		    System.out.println(obj.B);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>上面的代码说明了，静态变量不会被序列化。</p>
+<p>序列化StaticTest实例test时，静态变量 A=0 B=”hello”，序列化之后，修改StaticTest类的静态变量值，A=1 B=”world”，<br>此时反序列化得到之前序列化的实例对象赋给obj，发现obj的静态变量变为A=1 B=”world”，说明静态变量并未序列化成功。</p>
+<p>事实上，在序列化对象时，会忽略对象中的静态变量。很好理解，静态变量是属于类的，而不是某个对象的状态。我们序列化面向的是对象，是想要将对象的状态保存下来，所以<br>静态变量不会被序列化。反序列化得到的对象中的静态变量的值是当前jvm中静态变量的值。静态变量对于同一个jvm中同一个类加载器加载的类来说，是一样的。对于同一个静态变量，不会存在同一个类的不同实例拥有不同的值。</p>
+<h2 id="同一对象序列化两次，反序列化后得到的两个对象是否相等"><a href="#同一对象序列化两次，反序列化后得到的两个对象是否相等" class="headerlink" title="同一对象序列化两次，反序列化后得到的两个对象是否相等"></a>同一对象序列化两次，反序列化后得到的两个对象是否相等</h2><p>这个问题提到的相等，是指是否为同一对象，即==关系</p>
+<p>在某些情况下，确保这种关系是很重要的。比如王经理和李经理拥有同一个办公室，即存在引用关系：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">public class Manager&#123;</div><div class="line">    Room room;</div><div class="line">    public Manager(Room r)&#123;</div><div class="line">        room = r;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">public class Room&#123;&#125;</div><div class="line"></div><div class="line">public class APP&#123;</div><div class="line">    public void main(String args[])&#123;</div><div class="line">        Room room = new Room();</div><div class="line">        Manager wang = new Manager(room);</div><div class="line">        Manager li = new Manager(room);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>反序列化之后，wang，li，room的这种引用关系不应该发生变化。通过代码验证一下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">public class ReferenceTest implements Serializable&#123;</div><div class="line">		public String a;</div><div class="line">		public ReferenceTest() &#123;</div><div class="line">			a = &quot;hah&quot;;</div><div class="line">		&#125;</div><div class="line">		public static void main(String[] args) throws Exception &#123;</div><div class="line">			  System.out.println(&quot;构造对象********************&quot;);</div><div class="line">			  ReferenceTest test = new ReferenceTest();</div><div class="line">			  System.out.println(&quot;序列化**********************&quot;);</div><div class="line">			  SeriaUtil util = new SeriaUtil();</div><div class="line">			  util.seria(test);</div><div class="line">			  util.seria(test);//第二次序列化该对象</div><div class="line">			  System.out.println(&quot;反序列化**********************&quot;);</div><div class="line">			  ReferenceTest obj = (ReferenceTest) util.reSeria();</div><div class="line">			  ReferenceTest obj1 = (ReferenceTest) util.reSeria();</div><div class="line">			  System.out.println(obj == obj1);//true</div><div class="line">			  System.out.println(obj == test);//false</div><div class="line">		&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>上面的例子证明（System.out.println(obj == obj1);//true），同一对象序列化多次之后，反序列化得到的多个对象相等，即内存地址一致。</p>
+<p>使用同一个ObjectOutputStream对象序列化某个实例时，如果该实例还没有被序列化过，则序列化，若之前已经序列化过，则不再进行序列化，只是做一个标记而已。<br>所以在反序列化时，可以保持原有的引用关系。</p>
+<p>System.out.println(obj == test);//false   也可以理解，反序列化之后重建了该对象，内存地址必然是新分配的，故obj != test</p>
+<h2 id="父类没有实现Serializable，父类中的变量如何序列化"><a href="#父类没有实现Serializable，父类中的变量如何序列化" class="headerlink" title="父类没有实现Serializable，父类中的变量如何序列化"></a>父类没有实现Serializable，父类中的变量如何序列化</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line">public class SuperTest&#123;</div><div class="line">       public String superB;</div><div class="line">       public SuperTest() &#123;</div><div class="line">    	   superB = &quot;hehe&quot;;</div><div class="line">    	   System.out.println(&quot;super 无参构造函数&quot;);</div><div class="line">       &#125;</div><div class="line">       </div><div class="line">       public SuperTest(String b)&#123;</div><div class="line">    	   System.out.println(&quot;super 有参构造函数&quot;);</div><div class="line">    	   superB = b;</div><div class="line">       &#125;</div><div class="line">		public static void main(String[] args) throws IOException, ClassNotFoundException &#123;</div><div class="line">			  System.out.println(&quot;构造对象*******************&quot;);</div><div class="line">			  SonTest sonTest = new SonTest(&quot;son&quot;, &quot;super&quot;);</div><div class="line">			  System.out.println(&quot;序列化*********************&quot;);</div><div class="line">			  SeriaUtil  seriaUtil = new SeriaUtil();</div><div class="line">			  seriaUtil.seria(sonTest);</div><div class="line">			  System.out.println(&quot;反序列化******************&quot;);</div><div class="line">			  SonTest obj = (SonTest) seriaUtil.reSeria();</div><div class="line">			  System.out.println(obj.sonA);</div><div class="line">			  System.out.println(obj.superB);</div><div class="line">		&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">class SonTest extends SuperTest  implements Serializable&#123;</div><div class="line">	 private static final long serialVersionUID = 1L;</div><div class="line">	 public String sonA;</div><div class="line">	 public SonTest() &#123;</div><div class="line">		 System.out.println(&quot;son 无参构造函数&quot;);</div><div class="line">	 &#125;</div><div class="line">	 </div><div class="line">	 public SonTest(String a, String b) &#123;</div><div class="line">		 super(b);</div><div class="line">		 System.out.println(&quot;son 有参构造函数&quot;);</div><div class="line">		 sonA = a;</div><div class="line">	 &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>输出：</p>
+<p>构造对象<strong><strong><strong><strong><em>*</em></strong></strong></strong></strong><br>super 有参构造函数<br>son 有参构造函数<br>序列化<strong><strong><strong><strong><strong>*</strong></strong></strong></strong></strong><br>反序列化<strong><strong><strong><strong>**</strong></strong></strong></strong><br>super 无参构造函数<br>son<br>hehe</p>
+<p>通过上面的代码可以看出，父类如果没有实现serializable，反序列化时会调用父类的无参构造函数初始化父类当中的变量。</p>
+<p>所以，我们可以通过显示声明父类的无参构造函数，并在其中初始化变量值来控制反序列化后父类变量的值。</p>
+<h2 id="transient使用"><a href="#transient使用" class="headerlink" title="transient使用"></a>transient使用</h2><p>实现了serializable接口的类在序列化时默认会将所有的非静态变量进行序列化。我们可以控制某些字段不被默认的序列化机制序列化。</p>
+<p>比如，有些字段是跟当前系统环境相关的或者涉及到隐私的，需要保密的。这些字段是不可以被序列化到文件中或者通过网络传输的。我们可以通过为这些字段声明<br>transient关键字，保证其不被序列化。</p>
+<p>被关键字transient声明的变量不会被序列化，反序列化时该变量会被自动填充为null（int 为0）。我们也可以为这些字段实现自己的序列化机制。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line">public class TransientTest implements Serializable&#123;</div><div class="line">	   private static final long serialVersionUID = 1L;</div><div class="line">		public transient String  str;</div><div class="line">	    public TransientTest() &#123;</div><div class="line">	    	str = &quot;hello&quot;;</div><div class="line">	    &#125;</div><div class="line">	    </div><div class="line">	    private void writeObject(ObjectOutputStream out) throws IOException &#123;</div><div class="line">	        out.defaultWriteObject();</div><div class="line">	        String encryption = &quot;key&quot; + str;</div><div class="line">	        out.writeObject(encryption);</div><div class="line">	    &#125;</div><div class="line"></div><div class="line">	    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException &#123;</div><div class="line">	        in.defaultReadObject();</div><div class="line">	       String encryption =  (String) in.readObject();</div><div class="line">	       str = encryption.substring(&quot;key&quot;.length(), encryption.length());</div><div class="line">	    &#125;</div><div class="line">	    </div><div class="line">		public static void main(String[] args) throws IOException, ClassNotFoundException &#123;</div><div class="line">			  TransientTest test = new TransientTest();</div><div class="line">			  SeriaUtil util = new SeriaUtil();</div><div class="line">			  util.seria(test);</div><div class="line">			  TransientTest reSeria = (TransientTest) util.reSeria();</div><div class="line">			  System.out.println(reSeria.str);//hello</div><div class="line">		&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>通过实现writeObject和readObject实现自己的序列化机制。上面的代码模拟了一个加密的序列化过程。</p>
+<h2 id="成员变量没有实现序列化"><a href="#成员变量没有实现序列化" class="headerlink" title="成员变量没有实现序列化"></a>成员变量没有实现序列化</h2><p>序列化某个实例时，如果这个实例含有对象类型的成员变量，那么同时会触发该变量的序列化机制。这时就要求这个成员变量也实现Serializable接口，如果没有实现该接口，抛出异常。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">public class VariableTest implements Serializable&#123;</div><div class="line">	Variable variable ;</div><div class="line">	public VariableTest() &#123;</div><div class="line">		variable = new Variable();</div><div class="line">	&#125;</div><div class="line">	public static void main(String[] args) throws IOException, ClassNotFoundException &#123;</div><div class="line">		    System.out.println(&quot;构造对象*************&quot;);</div><div class="line">		    VariableTest variableTest = new VariableTest();</div><div class="line">		    System.out.println(&quot;序列化**************&quot;);</div><div class="line">		    SeriaUtil util = new SeriaUtil();</div><div class="line">		    //抛出异常：java.io.NotSerializableException</div><div class="line">		    util.seria(variableTest);</div><div class="line">		    System.out.println(&quot;反序列化****************&quot;);</div><div class="line">		    VariableTest obj = (VariableTest) util.reSeria();</div><div class="line">		    System.out.println(obj.variable.a);//抛出异常：Exception in thread &quot;main&quot; java.io.NotSerializableException: space.kyu.Variable</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line">class Variable &#123;</div><div class="line">	public String a;</div><div class="line">	public Variable()&#123;</div><div class="line">		a = &quot;hehe&quot;;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="单例模式下的序列化"><a href="#单例模式下的序列化" class="headerlink" title="单例模式下的序列化"></a>单例模式下的序列化</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">public class SingleTest implements Serializable&#123;</div><div class="line">	public static SingleTest instance = new SingleTest();</div><div class="line">	private SingleTest()&#123;&#125;</div><div class="line">	public static void main(String[] args) throws IOException, ClassNotFoundException &#123;</div><div class="line">		SingleTest test = SingleTest.instance;</div><div class="line">		SeriaUtil util = new SeriaUtil();</div><div class="line">		util.seria(test);</div><div class="line">		SingleTest reSeria = (SingleTest) util.reSeria();</div><div class="line">		System.out.println(reSeria == SingleTest.instance);//false</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>由上面的代码可以看出，有两个SingleTest实例同时存在，通过反序列化破坏了单例模式。反序列化时会开辟新的内存空间重新实例化对象，所以单例模式被破坏。</p>
+<p>为了解决这种问题，可以实现readResolve()方法。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">public class SingleTest implements Serializable&#123;</div><div class="line">	public static SingleTest instance = new SingleTest();</div><div class="line">	private SingleTest()&#123;&#125;</div><div class="line">	private Object readResolve() &#123;</div><div class="line">        return SingleTest.instance;</div><div class="line">    &#125;</div><div class="line">	public static void main(String[] args) throws IOException, ClassNotFoundException &#123;</div><div class="line">		SingleTest test = SingleTest.instance;</div><div class="line">		SeriaUtil util = new SeriaUtil();</div><div class="line">		util.seria(test);</div><div class="line">		SingleTest reSeria = (SingleTest) util.reSeria();</div><div class="line">		System.out.println(reSeria == SingleTest.instance);//true</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="序列化版本"><a href="#序列化版本" class="headerlink" title="序列化版本"></a>序列化版本</h2><p>代码是在不断的演化的。1.1版本的类可以读取1.0版本的序列化文件吗？这就涉及到序列化的版本管理。</p>
+<p>每个序列化版本都有其唯一的ID，他是数据域类型和方法签名的指纹。当类的定义产生变化时，他的指纹也会跟着产生变化，对象流将拒绝读入具有不同指纹的对象。<br>如果想保持早期版本的兼容，首先要获取这个类早期版本的指纹。</p>
+<p>我们可以使用 jdk自带的工具 serialver 获得这个指纹：serialver Test<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">staic final long serialVersionUID = -1423859403827594712L</div></pre></td></tr></table></figure></p>
+<p>然后将1.1版本中Test类的serialVersionUID常量定义为上面的值，即可序列化老版本的代码。</p>
+<p>如果一个类具有名为serialVersionUID的常量，那么java就不会再主动计算这个值，而是直接将其作为这个版本类的指纹。没有特殊要求的话，一般都显示的声明serialVersionUID：<code>private static final long serialVersionUID = 1L;</code>来保证兼容性</p>
+<p>如果对象流中的对象具有在当前版本中没有的数据域，那么对象流会忽略这些数据；如果当前版本具有对象流中所没有的数据域，那么这些新加的域将被设为默认值。</p>
+<h2 id="序列化与克隆"><a href="#序列化与克隆" class="headerlink" title="序列化与克隆"></a>序列化与克隆</h2><p>反序列化重新构建对象的机制提供了一种克隆对象的简便途径，只要对应的类可序列化即可。</p>
+<p>做法很简单：直接将对象序列化到输出流当中，然后将其读回。这样产生的对象是对现有对象的一个深拷贝。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">public class CloneTest implements Serializable, Cloneable &#123;</div><div class="line">	public String str;</div><div class="line">	public CloneTest(String str) &#123;</div><div class="line">		this.str =str;</div><div class="line">	&#125;</div><div class="line">	@Override</div><div class="line">	protected Object clone() throws CloneNotSupportedException &#123;</div><div class="line">		SeriaUtil util = new SeriaUtil();</div><div class="line">		try &#123;</div><div class="line">			util.seria(this);</div><div class="line">			CloneTest reSeria = (CloneTest) util.reSeria();</div><div class="line">			return reSeria;</div><div class="line">		&#125; catch (Exception e) &#123;</div><div class="line">			e.printStackTrace();</div><div class="line">			return null;</div><div class="line">		&#125; </div><div class="line">		</div><div class="line">	&#125;</div><div class="line">	public static void main(String[] args) throws CloneNotSupportedException &#123;</div><div class="line">		CloneTest test = new CloneTest(&quot;hi&quot;);</div><div class="line">		CloneTest clone = (CloneTest) test.clone();</div><div class="line">		System.out.println(clone.str);//hi</div><div class="line">		System.out.println(clone == test);//false</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这样克隆对象的优点是简单，缺点是比普通的克隆实现要慢的多。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+<div id="wechat_subscriber" style="display: block; padding: 10px 0; margin: 20px auto; width: 100%; text-align: center">
+    <img id="wechat_subscriber_qcode" src="/images/wechat-qcode.jpg" alt="于凯 wechat" style="width: 200px; max-width: 100%;"/>
+    <div>欢迎您扫一扫上面的微信公众号，订阅我的博客！</div>
+</div>
+
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/java/" rel="tag"># java</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/03/19/I-O总结/" rel="next" title="java I/O总结">
+                <i class="fa fa-chevron-left"></i> java I/O总结
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/03/28/java代理机制/" rel="prev" title="java代理机制">
+                java代理机制 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="于凯" />
+          <p class="site-author-name" itemprop="name">于凯</p>
+           
+              <p class="site-description motion-element" itemprop="description">学习总结，生活总结。</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">49</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-name">分类</span>
+              
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">19</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/5381447277" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  微博
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/Hikyu" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是序列化"><span class="nav-number">1.</span> <span class="nav-text">什么是序列化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#静态变量如何序列化"><span class="nav-number">2.</span> <span class="nav-text">静态变量如何序列化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#同一对象序列化两次，反序列化后得到的两个对象是否相等"><span class="nav-number">3.</span> <span class="nav-text">同一对象序列化两次，反序列化后得到的两个对象是否相等</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#父类没有实现Serializable，父类中的变量如何序列化"><span class="nav-number">4.</span> <span class="nav-text">父类没有实现Serializable，父类中的变量如何序列化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#transient使用"><span class="nav-number">5.</span> <span class="nav-text">transient使用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#成员变量没有实现序列化"><span class="nav-number">6.</span> <span class="nav-text">成员变量没有实现序列化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#单例模式下的序列化"><span class="nav-number">7.</span> <span class="nav-text">单例模式下的序列化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#序列化版本"><span class="nav-number">8.</span> <span class="nav-text">序列化版本</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#序列化与克隆"><span class="nav-number">9.</span> <span class="nav-text">序列化与克隆</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">于凯</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

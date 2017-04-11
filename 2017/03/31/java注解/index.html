@@ -1,0 +1,863 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="java," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="在写java代码的过程中，经常会遇到注解，但是没有去理解注解背后的原理，也没有实现过注解。网上关于java注解的文章已经有很多了，参考了一些资料，整理一下注解这方面的知识~
+
+什么是注解注解其实很常见。比如@override、Deprecated等。在使用Junit或Spring boot等一些框架的时候，注解更是无处不在了。那么，到底什么是注解呢？
+123Annotations, a form">
+<meta property="og:type" content="article">
+<meta property="og:title" content="java注解">
+<meta property="og:url" content="http://yukai.space/2017/03/31/java注解/index.html">
+<meta property="og:site_name" content="YuKai's blog">
+<meta property="og:description" content="在写java代码的过程中，经常会遇到注解，但是没有去理解注解背后的原理，也没有实现过注解。网上关于java注解的文章已经有很多了，参考了一些资料，整理一下注解这方面的知识~
+
+什么是注解注解其实很常见。比如@override、Deprecated等。在使用Junit或Spring boot等一些框架的时候，注解更是无处不在了。那么，到底什么是注解呢？
+123Annotations, a form">
+<meta property="og:image" content="http://yukai.space/2017/03/31/java注解/decode.jpg">
+<meta property="og:image" content="http://yukai.space/2017/03/31/java注解/doc.jpg">
+<meta property="og:updated_time" content="2017-04-09T10:04:55.576Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="java注解">
+<meta name="twitter:description" content="在写java代码的过程中，经常会遇到注解，但是没有去理解注解背后的原理，也没有实现过注解。网上关于java注解的文章已经有很多了，参考了一些资料，整理一下注解这方面的知识~
+
+什么是注解注解其实很常见。比如@override、Deprecated等。在使用Junit或Spring boot等一些框架的时候，注解更是无处不在了。那么，到底什么是注解呢？
+123Annotations, a form">
+<meta name="twitter:image" content="http://yukai.space/2017/03/31/java注解/decode.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yukai.space/2017/03/31/java注解/"/>
+
+
+
+
+
+  <title> java注解 | YuKai's blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">YuKai's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">好好学习，天天向上</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/page" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yukai.space/2017/03/31/java注解/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="于凯">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="YuKai's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                java注解
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-03-31T21:07:33+08:00">
+                2017-03-31
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/编程/" itemprop="url" rel="index">
+                    <span itemprop="name">编程</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>在写java代码的过程中，经常会遇到注解，但是没有去理解注解背后的原理，也没有实现过注解。网上关于java注解的文章已经有很多了，参考了一些资料，整理一下注解这方面的知识~</p>
+</blockquote>
+<h2 id="什么是注解"><a href="#什么是注解" class="headerlink" title="什么是注解"></a>什么是注解</h2><p>注解其实很常见。比如@override、Deprecated等。在使用Junit或Spring boot等一些框架的时候，注解更是无处不在了。那么，到底什么是注解呢？</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Annotations, a form of metadata, provide data about a program that is not part of the program itself. </div><div class="line">Annotations have no direct effect on the operation of the code they annotate.   </div><div class="line">&gt;&gt;[https://docs.oracle.com/javase/tutorial/java/annotations/]</div></pre></td></tr></table></figure>
+<p>注解是元数据的一种，提供了关于程序的一些描述信息，但这些信息并不属于这个程序本身的一部分。注解并不会直接影响到代码的执行。</p>
+<p>翻译起来有点拗口。实际上，注解是那些插入到源代码中用于某种工具进行处理的标签。注解不会改变对编写的程序的编译方式，对于包含和不包含注解的代码，java编译器都会生成相同的虚拟机指令。</p>
+<p>一句话来说，注解只是描述代码的标签。注解本身不会做什么事情，为了使注解起到作用来实现一些黑科技，我们还需要用于处理注解的工具(编写代码处理这些注解)。</p>
+<p>我们使用注解可以：</p>
+<ul>
+<li><p>生成文档</p>
+</li>
+<li><p>在编译时进行检查。比如@override</p>
+</li>
+<li><p>替代配置文件，实现自动配置。比如 Springboot</p>
+</li>
+</ul>
+<p>注解Annotation是在jdk1.5之后引进的，jdk1.8之后又增加了一些新的特性。接下来的讨论基于jdk1.7。</p>
+<a id="more"></a>
+<h2 id="注解的使用"><a href="#注解的使用" class="headerlink" title="注解的使用"></a>注解的使用</h2><p>在java中，注解是当做一个修饰符(比如public或static之类的关键词)来使用的。注解可以存在于：</p>
+<p>包 | 类(包括enum) | 接口(包括注解接口) | 方法 | 构造器 | 成员变量 | 本地变量 | 方法参数</p>
+<p>注意：</p>
+<p>1.对于包的注解，需要在<a href="http://strong-life-126-com.iteye.com/blog/806246" target="_blank" rel="external">package-info.java</a>中声明。</p>
+<p>2.对于本地变量的注解，只能在源码级别上进行处理。所有的本地变量注解在类编译完之后会被遗弃掉。</p>
+<p>假如有这样一个注解：(注解的定义见下文)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">@interface Result &#123;</div><div class="line">	String name() default &quot;&quot;;</div><div class="line">	int value() default -1;</div><div class="line">    String res() default &quot;&quot;;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>我们可以这样使用它：</p>
+<p><code>@Result(name=&quot;res1&quot;,value=1)</code></p>
+<p>括号中元素的顺序无关紧要</p>
+<p><code>@Result(value=1,name=&quot;res1&quot;)等价于@Result(name=&quot;res1&quot;,value=1)</code></p>
+<p>如果元素值没有指定，则使用默认值：(没有声明默认值时必须指定元素值)</p>
+<p><code>@Result等价于@Result(name=&quot;&quot;,value=-1,&quot;&quot;)</code></p>
+<p>如果元素的名字为特殊值value，那么可以忽略这个元素名和等号：</p>
+<p><code>@Result(1)等价于@Result(name=&quot;&quot;,value=1,&quot;&quot;)</code></p>
+<p>如果元素是数组，那么他的值要用括号括起来：</p>
+<p><code>@Result(res={&quot;a&quot;,&quot;b&quot;})</code></p>
+<p>如果数组是单值，可以忽略这些括号：</p>
+<p><code>@Result(res=&quot;a&quot;)</code></p>
+<h2 id="注解分类"><a href="#注解分类" class="headerlink" title="注解分类"></a>注解分类</h2><p>根据注解的用途和使用方式，注解可以分为以下几类：</p>
+<p>元注解：注解注解的注解。也就是用来描述注解定义的注解</p>
+<p>预定义注解：jdk内置的一些注解</p>
+<p>自定义注解：我们自己定义的注解</p>
+<ul>
+<li>元注解</li>
+</ul>
+<p>元注解包含下面几个：</p>
+<p><strong>@Target: 指定这个注解可以应用于哪些项</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">public enum ElementType &#123;</div><div class="line">    /** Class, interface (including annotation type), or enum declaration */</div><div class="line">    TYPE,</div><div class="line"></div><div class="line">    /** Field declaration (includes enum constants) */</div><div class="line">    FIELD,</div><div class="line"></div><div class="line">    /** Method declaration */</div><div class="line">    METHOD,</div><div class="line"></div><div class="line">    /** Parameter declaration */</div><div class="line">    PARAMETER,</div><div class="line"></div><div class="line">    /** Constructor declaration */</div><div class="line">    CONSTRUCTOR,</div><div class="line"></div><div class="line">    /** Local variable declaration */</div><div class="line">    LOCAL_VARIABLE,</div><div class="line"></div><div class="line">    /** Annotation type declaration */</div><div class="line">    ANNOTATION_TYPE,</div><div class="line"></div><div class="line">    /** Package declaration */</div><div class="line">    PACKAGE</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>比如，我们定义了一个注解Bug，该注解只能应用于方法或成员变量：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">@Target(&#123;ElementType.METHOD,ElementType.FIELD&#125;)</div><div class="line">@interface Bug&#123;</div><div class="line">	int value() default -1;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>注解Bug则只能用于类方法或成员变量，如果注解了其他项比如类或者包，编译则不会通过。</p>
+<p>对于一个没有声明@Target的注解，可以应用到任何项上。</p>
+<p><strong>@Retention: 指定这个注解可以保留多久</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">public enum RetentionPolicy &#123;</div><div class="line">    /**</div><div class="line">     * Annotations are to be discarded by the compiler.</div><div class="line">     */</div><div class="line">    SOURCE,</div><div class="line"></div><div class="line">    /**</div><div class="line">     * Annotations are to be recorded in the class file by the compiler</div><div class="line">     * but need not be retained by the VM at run time.  This is the default</div><div class="line">     * behavior.</div><div class="line">     */</div><div class="line">    CLASS,</div><div class="line"></div><div class="line">    /**</div><div class="line">     * Annotations are to be recorded in the class file by the compiler and</div><div class="line">     * retained by the VM at run time, so they may be read reflectively.</div><div class="line">     *</div><div class="line">     * @see java.lang.reflect.AnnotatedElement</div><div class="line">     */</div><div class="line">    RUNTIME</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>SOURCE：只存在于源代码，编译成.class之后就没了</p>
+<p>CLASS: 保留到类文件中，但是虚拟机不会载入</p>
+<p>RUNTIME：保留到类文件中，并且虚拟机会载入。这意味着通过反射可以获取到这些注解和注解元素值</p>
+<p>默认情况下(没有声明@Retention)，注解保留级别为CLASS</p>
+<p><strong>@Document：指定这个注解应该包含在文档中</strong></p>
+<p>文档化的注解意味着像javadoc这样的工具生成的文档中会包含这些注解。比如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">@Documented</div><div class="line">@Retention(RetentionPolicy.RUNTIME)</div><div class="line">@Target(value=&#123;CONSTRUCTOR, FIELD, LOCAL_VARIABLE, METHOD, PACKAGE, PARAMETER, TYPE&#125;)</div><div class="line">public @interface Deprecated &#123;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>@Deprecated是文档化的注解，URLDecoder.decode(String s)方法应用了这个注解：</p>
+<img src="/2017/03/31/java注解/decode.jpg" alt="decode" title="decode">
+<img src="/2017/03/31/java注解/doc.jpg" alt="doc" title="doc">
+<p>可以在文档中看到Deprecated的出现。</p>
+<p><strong>@Inherited: 指定一个注解，当他应用于一个类的时候，能够自动被其子类继承</strong></p>
+<p>@Inherited只能应用于对类的注解。如果一个类具有继承注解，那么他的所有子类都自动具有同样的注解。</p>
+<p>比如，定义了一个继承注解@Secret表示一个类是隐私的不可被序列化传输的，那么该类的子类会被自动注解为不可序列化传输的。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">@Inherited</div><div class="line">@interface Secret&#123;</div><div class="line">&#125;</div><div class="line"></div><div class="line">@Secret class A&#123;&#125;</div><div class="line"></div><div class="line">class B extends A&#123;&#125; //同样是@Secret的</div></pre></td></tr></table></figure>
+<p>当注解工具去获取声明了@Secret的对象时，他能够获取到A的对象和B的对象。</p>
+<ul>
+<li>预定义注解</li>
+</ul>
+<p>常用的有三个：@override、@Deprecated、@SuppressWarnings，具体的作用可以查文档或者源码，不再赘述。</p>
+<h2 id="注解的定义"><a href="#注解的定义" class="headerlink" title="注解的定义"></a>注解的定义</h2><p>上面的讨论中已经涉及到了注解的定义。一个注解是由一个注解接口来定义的：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">@interface Result &#123;</div><div class="line">	String name();</div><div class="line">	int value() default -1;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>每个元素的声明有两种形式，有默认值和没有默认值的，就像上面那样。注解的元素可以是下面之一：</p>
+<p>基本类型|String|Class类型|enum|注解类型|由前面所述类型构成的数组</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">@interface BugReport&#123;</div><div class="line">	enum Status&#123;FIXED,OPEN,NEW,CLOSE&#125;;</div><div class="line">	boolean isIgnore() default false;</div><div class="line">	String id();</div><div class="line">	Class&lt;?&gt; testCase() default Void.class;</div><div class="line">	Status status() default Status.NEW;</div><div class="line">	Author author() default @Author;</div><div class="line">	String[] reportMsg() default &quot;&quot;;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>注意，虽然注解元素可以是另一个注解，但是不能在注解中引入循环依赖，比如@BugReport依赖@Author，而@Author又依赖@BugReport。同时，注解元素也不可以为null，元素的值必须是编译期常量。</p>
+<p>我们可以通过在注解的定义前声明之前提到的元注解来定制我们的注解，比如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">@Target(&#123; ElementType.METHOD, ElementType.FIELD &#125;)</div><div class="line">@Inherited</div><div class="line">@Documented</div><div class="line">@Retention(RetentionPolicy.RUNTIME)</div><div class="line">@interface Result &#123;</div><div class="line">	String name() default &quot;&quot;;</div><div class="line">	int value() default -1;</div><div class="line">	String[] reportMsg() default &quot;&quot;;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>所有的注解接口隐式的继承自java.lang.annotation.Annotation接口。这是一个正常的接口，而不是注解接口。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">public interface Annotation &#123;</div><div class="line">    boolean equals(Object obj);</div><div class="line">    int hashCode();</div><div class="line">    String toString();</div><div class="line">    Class&lt;? extends Annotation&gt; annotationType();</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>也就是说，注解接口也是普通接口的一种。注解接口中的元素实际上也是方法的声明，这些方法类似于bean的get、set，我们使用@Result(name=”A”)的形式实际上是调用了set方法给某个变量赋值。</p>
+<p>既然是接口，那么就应该有实现(不然怎么用呢？)。我们不需要主动提供实现了注解接口的类，虚拟机会在需要的时候产生一些代理类和对象。下文会提到。</p>
+<p>既然可以为注解元素赋值，那么必定有方法去获得这些值。也就是注解的解析。</p>
+<h2 id="注解的解析"><a href="#注解的解析" class="headerlink" title="注解的解析"></a>注解的解析</h2><p>我们定义了注解并且应用了注解，但是仅仅这样的话注解并不会起到什么作用。需要我们提供一种工具去解析声明的注解，然后实现一些自动配置或者生成报告的功能。这就是注解的解析。</p>
+<ul>
+<li>源代码中的注解</li>
+</ul>
+<p>注解的用处之一就是自动生成一些包含程序额外信息的文件。比如，根据注解生成代码进度报告，或者bug修复报告等。生成的文件可以是属性文件、xml文件、html文档或者shell脚本。也可以生成java源文件。</p>
+<p>注解处理器通常通过集成AbstractProcessor类实现了Processor接口，通过process方法实现处理源码中注解的逻辑。通过声明具体的注解类型来指定该处理器处理哪些注解。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">@SupportedAnnotationTypes(&quot;space.yukai.annotations.BUG&quot;)</div><div class="line">class AnnotationProcessor extends AbstractProcessor &#123;</div><div class="line"></div><div class="line">	@Override</div><div class="line">	public boolean process(Set&lt;? extends TypeElement&gt; annotations, RoundEnvironment roundEnv) &#123;</div><div class="line">		// TODO Auto-generated method stub</div><div class="line">		return false;</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>process的两个参数：annotations代表了要处理的注解集，roundEnv是包含有关当前处理循环信息的RoundEnv引用。</p>
+<p><a href="http://www.race604.com/annotation-processing/" target="_blank" rel="external">Java注解处理器</a>这篇文章以通过注解自动生成工厂类文件为例，详细介绍了如何处理源码级别的注解。（英文原文在这：<a href="http://hannesdorfmann.com/annotation-processing/annotationprocessing101）" target="_blank" rel="external">http://hannesdorfmann.com/annotation-processing/annotationprocessing101）</a></p>
+<p>注意，我们虽然可以通过源码级别的注解处理器生成新的文件，却很难编辑源文件，比如，通过处理注解自动生成get、set方法。字节码级别的处理器是可以的。</p>
+<ul>
+<li>字节码中的注解</li>
+</ul>
+<p>字节码级别的注解，即存在于class文件中的注解。我们还可以通过BCEL这样的字节码工程类库修改或插入字节码来改变类文件。比如在声明了@LogEntity的方法开始部分插入打印日志信息的字节码。</p>
+<p>涉及的不多，不再赘述。</p>
+<ul>
+<li>运行时的注解</li>
+</ul>
+<p>在运行时处理注解是比较常见的注解处理手段。一般是通过反射API获取到我们的注解信息，从而实现一些功能。</p>
+<p>下面是自己写的一个例子，通过解析BugReport注解得到一些测试信息，然后通过动态代理的方式生成代理测试类，最后运行测试自动生成测试报告。（不要在意代码有什么缺陷或者其他问题，仅仅是一个例子而已～）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div></pre></td><td class="code"><pre><div class="line">package space.kyu.proxy;</div><div class="line"></div><div class="line">import java.lang.annotation.ElementType;</div><div class="line">import java.lang.annotation.Retention;</div><div class="line">import java.lang.annotation.RetentionPolicy;</div><div class="line">import java.lang.annotation.Target;</div><div class="line">import java.lang.reflect.InvocationHandler;</div><div class="line">import java.lang.reflect.Method;</div><div class="line">import java.lang.reflect.Proxy;</div><div class="line">import java.util.ArrayList;</div><div class="line">import java.util.List;</div><div class="line"></div><div class="line">public class AnnotationsTest &#123;</div><div class="line">	public static void main(String[] args) &#123;</div><div class="line">		TestBug testBug = new TestBug(true);</div><div class="line">		TestBug testBug1 = new TestBug(false);</div><div class="line">		TestExecutor executor = new TestExecutor();</div><div class="line">		executor.addTest(testBug);</div><div class="line">		executor.addTest(testBug1);</div><div class="line">		executor.executeTest();</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">class TestExecutor &#123;</div><div class="line">	private List&lt;Test&gt;  testCases;</div><div class="line">	public TestExecutor() &#123;</div><div class="line">		testCases = new ArrayList&lt;Test&gt;();</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	public &lt;T extends Test&gt; void  addTest(T testCase) &#123;</div><div class="line">		Class&lt;? extends Object&gt; cl = testCase.getClass();</div><div class="line">		Method[] declaredMethods = cl.getDeclaredMethods();</div><div class="line">		try &#123;</div><div class="line">			for (Method method : declaredMethods) &#123;</div><div class="line">				if (method.isAnnotationPresent(BugReport.class)) &#123;</div><div class="line">					BugReport annotation = method.getAnnotation(BugReport.class);</div><div class="line">					if (annotation != null) &#123;</div><div class="line">						System.out.println(annotation.toString());</div><div class="line">						System.out.println(annotation.annotationType().getName());</div><div class="line">						System.out.println(annotation.getClass().getName());</div><div class="line">						String bugId = annotation.id();</div><div class="line">						String bugMsg = annotation.msg();</div><div class="line">						Test obj = (Test) createBugReportHandler(testCase,bugId,bugMsg);</div><div class="line">						testCases.add(obj);</div><div class="line">					&#125;</div><div class="line">				&#125;</div><div class="line">			&#125;</div><div class="line">		&#125; catch (Exception e) &#123;</div><div class="line">			e.printStackTrace();</div><div class="line">			throw new IllegalStateException(e);</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">	public void executeTest() &#123;</div><div class="line">		for (Test test : testCases) &#123;</div><div class="line">			test.test();</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">	private Object createBugReportHandler(Test testCase, final String bugId, final String bugMsg) &#123;</div><div class="line">		return Proxy.newProxyInstance(testCase.getClass().getClassLoader(), testCase.getClass().getInterfaces(), new InvocationHandler() &#123;</div><div class="line">			</div><div class="line">			@Override</div><div class="line">			public Object invoke(Object proxy, Method method, Object[] args) throws Throwable &#123;</div><div class="line">				boolean res = (boolean) method.invoke(testCase, args);</div><div class="line">				//也可以输出到文件中形成测试报告</div><div class="line">				System.out.println(&quot;******************************&quot;);</div><div class="line">				System.out.println(&quot;bug: &quot; + bugId + &quot;测试结果：&quot;);</div><div class="line">				if (res) &#123;//测试通过</div><div class="line">					System.out.println(&quot;已通过&quot;);</div><div class="line">				&#125; else &#123;//测试不通过</div><div class="line">					System.out.println(&quot;未通过&quot;);</div><div class="line">				&#125;</div><div class="line">				System.out.println(&quot;备注信息：&quot; + bugMsg);</div><div class="line">				return res;</div><div class="line">			&#125;</div><div class="line">		&#125;);</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">interface Test &#123;</div><div class="line">	/**</div><div class="line">	 * 测试方法 2017年4月1日</div><div class="line">	 * @return </div><div class="line">	 * true 通过测试 </div><div class="line">	 * false 未通过测试</div><div class="line">	 */</div><div class="line">	boolean test();</div><div class="line">&#125;</div><div class="line"></div><div class="line">class TestBug implements Test &#123;</div><div class="line">	boolean fixed;</div><div class="line">	public TestBug(boolean fixed) &#123;</div><div class="line">		//控制测试成功或失败</div><div class="line">		this.fixed = fixed;</div><div class="line">	&#125;</div><div class="line">	@BugReport(id = &quot;bug001&quot;, msg = &quot;bug注释：这是一条测试bug&quot;)</div><div class="line">	@Override</div><div class="line">	public boolean test() &#123;</div><div class="line">		System.out.println(&quot;执行测试...&quot;);</div><div class="line">		//假装测试成功或者失败了</div><div class="line">		return fixed;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">&#125;</div><div class="line"></div><div class="line">@Target(ElementType.METHOD)</div><div class="line">@Retention(RetentionPolicy.RUNTIME)</div><div class="line">@interface BugReport &#123;</div><div class="line">	String id();</div><div class="line"></div><div class="line">	String msg();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>运行结果：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">@space.kyu.proxy.BugReport(id=bug001, msg=bug注释：这是一条测试bug)</div><div class="line">space.kyu.proxy.BugReport</div><div class="line">space.kyu.proxy.$Proxy1</div><div class="line">@space.kyu.proxy.BugReport(id=bug001, msg=bug注释：这是一条测试bug)</div><div class="line">space.kyu.proxy.BugReport</div><div class="line">space.kyu.proxy.$Proxy1</div><div class="line">执行测试...</div><div class="line">******************************</div><div class="line">bug: bug001测试结果：</div><div class="line">已通过</div><div class="line">备注信息：bug注释：这是一条测试bug</div><div class="line">执行测试...</div><div class="line">******************************</div><div class="line">bug: bug001测试结果：</div><div class="line">未通过</div><div class="line">备注信息：bug注释：这是一条测试bug</div></pre></td></tr></table></figure>
+<p>上面的代码很简单，我们要注意的有几点：</p>
+<p>1.<code>method.isAnnotationPresent(BugReport.class)</code>和 <code>method.getAnnotation(BugReport.class)</code></p>
+<p>这两个方法来自于接口AnnotatedElement，Method、Field、Package、Constructor、Class这些类都实现了这个接口，使得这些类拥有了提供所声明的注解的功能。</p>
+<p>通过method.getAnnotation(BugReport.class)得到了声明在方法上的BugReport注解，获得这个注解的实例之后，我们就可以调用以该注解声明的元素为名称的方法来获取对应的元素值了。</p>
+<p>2.<code>annotation.annotationType().getName()</code>和<code>annotation.getClass().getName()</code></p>
+<p>annotation.annotationType()方法上面已经提到过了，是Annotation的一个方法，用于描述该注解对象的注解接口。这个方法返回的内容为：space.kyu.proxy.BugReport</p>
+<p>annotation.getClass()获得了实现了Annotation接口的代理类，通过调用getName()方法可以打印这个代理类的名称：space.kyu.proxy.$Proxy1。从而印证了我们上面所说，确实自动生成了代理类。</p>
+<p>上面的例子很简单，说白了，注解就是给代码加了一些额外的信息，这些信息对代码里面的逻辑是没有任何影响的。但是我们可以通过其他手段获得我们在代码中的注解，从而实现一些重复性的工作。这就是注解的作用。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+<div id="wechat_subscriber" style="display: block; padding: 10px 0; margin: 20px auto; width: 100%; text-align: center">
+    <img id="wechat_subscriber_qcode" src="/images/wechat-qcode.jpg" alt="于凯 wechat" style="width: 200px; max-width: 100%;"/>
+    <div>欢迎您扫一扫上面的微信公众号，订阅我的博客！</div>
+</div>
+
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/java/" rel="tag"># java</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/03/28/java代理机制/" rel="next" title="java代理机制">
+                <i class="fa fa-chevron-left"></i> java代理机制
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/04/06/java类加载/" rel="prev" title="java类加载">
+                java类加载 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="于凯" />
+          <p class="site-author-name" itemprop="name">于凯</p>
+           
+              <p class="site-description motion-element" itemprop="description">学习总结，生活总结。</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">49</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-name">分类</span>
+              
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">19</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/5381447277" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  微博
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/Hikyu" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是注解"><span class="nav-number">1.</span> <span class="nav-text">什么是注解</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#注解的使用"><span class="nav-number">2.</span> <span class="nav-text">注解的使用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#注解分类"><span class="nav-number">3.</span> <span class="nav-text">注解分类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#注解的定义"><span class="nav-number">4.</span> <span class="nav-text">注解的定义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#注解的解析"><span class="nav-number">5.</span> <span class="nav-text">注解的解析</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">于凯</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

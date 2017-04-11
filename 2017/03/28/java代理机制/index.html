@@ -1,0 +1,788 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="java," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="代理模式代理模式，顾名思义，即一个客户不想或者不能直接访问一个对象，需要通过一个称为代理的第三方对象来实现间接引用。代理对象的作用就是客户端和目标对象之间的一个中介，通过代理对象可以隐藏不让用户看到的内容或实现额外的服务。
+代理机制应用的场景有很多：比如在代理对象中实现缓存，验证，权限控制等功能，真正的业务逻辑封装在真实对象中。RMI远程方法调用也用到了代理。当你调用一个远程方法的时候，相当于调用">
+<meta property="og:type" content="article">
+<meta property="og:title" content="java代理机制">
+<meta property="og:url" content="http://yukai.space/2017/03/28/java代理机制/index.html">
+<meta property="og:site_name" content="YuKai's blog">
+<meta property="og:description" content="代理模式代理模式，顾名思义，即一个客户不想或者不能直接访问一个对象，需要通过一个称为代理的第三方对象来实现间接引用。代理对象的作用就是客户端和目标对象之间的一个中介，通过代理对象可以隐藏不让用户看到的内容或实现额外的服务。
+代理机制应用的场景有很多：比如在代理对象中实现缓存，验证，权限控制等功能，真正的业务逻辑封装在真实对象中。RMI远程方法调用也用到了代理。当你调用一个远程方法的时候，相当于调用">
+<meta property="og:image" content="http://yukai.space/2017/03/28/java代理机制/Proxy.jpg">
+<meta property="og:image" content="http://yukai.space/2017/03/28/java代理机制/seq_Proxy.jpg">
+<meta property="og:image" content="http://yukai.space/2017/03/28/java代理机制/1.png">
+<meta property="og:image" content="http://yukai.space/2017/03/28/java代理机制/2.png">
+<meta property="og:image" content="http://yukai.space/2017/03/28/java代理机制/3.png">
+<meta property="og:image" content="http://yukai.space/2017/03/28/java代理机制/4.png">
+<meta property="og:image" content="http://yukai.space/2017/03/28/java代理机制/5.png">
+<meta property="og:updated_time" content="2017-04-09T10:03:13.545Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="java代理机制">
+<meta name="twitter:description" content="代理模式代理模式，顾名思义，即一个客户不想或者不能直接访问一个对象，需要通过一个称为代理的第三方对象来实现间接引用。代理对象的作用就是客户端和目标对象之间的一个中介，通过代理对象可以隐藏不让用户看到的内容或实现额外的服务。
+代理机制应用的场景有很多：比如在代理对象中实现缓存，验证，权限控制等功能，真正的业务逻辑封装在真实对象中。RMI远程方法调用也用到了代理。当你调用一个远程方法的时候，相当于调用">
+<meta name="twitter:image" content="http://yukai.space/2017/03/28/java代理机制/Proxy.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yukai.space/2017/03/28/java代理机制/"/>
+
+
+
+
+
+  <title> java代理机制 | YuKai's blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">YuKai's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">好好学习，天天向上</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/page" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yukai.space/2017/03/28/java代理机制/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="于凯">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="YuKai's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                java代理机制
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-03-28T16:15:35+08:00">
+                2017-03-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/编程/" itemprop="url" rel="index">
+                    <span itemprop="name">编程</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="代理模式"><a href="#代理模式" class="headerlink" title="代理模式"></a>代理模式</h2><p>代理模式，顾名思义，即一个客户不想或者不能直接访问一个对象，需要通过一个称为代理的第三方对象来实现间接引用。代理对象的作用就是客户端和目标对象<br>之间的一个中介，通过代理对象可以隐藏不让用户看到的内容或实现额外的服务。</p>
+<p>代理机制应用的场景有很多：比如在代理对象中实现缓存，验证，权限控制等功能，真正的业务逻辑封装在真实对象中。RMI远程方法调用也用到了代理。当你调用一个远程方法的时候，相当于调用这个方法的代理对象，<br>在代理对象中封装了网络请求等部分，真实对象存在于另一个进程上。重构老旧代码的时候也常常会用到代理模式。</p>
+<p>代理分两种：静态代理和动态代理</p>
+<h2 id="静态代理"><a href="#静态代理" class="headerlink" title="静态代理"></a>静态代理</h2><p>静态代理即在代码中手动实现代理模式。代理模式涉及到三个角色：</p>
+<p>真实对象RealSubject、抽象主题Subject、代理对象Proxy</p>
+<img src="/2017/03/28/java代理机制/Proxy.jpg" alt="Proxy" title="Proxy">
+<img src="/2017/03/28/java代理机制/seq_Proxy.jpg" alt="seq_Proxy" title="seq_Proxy">
+<a id="more"></a>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line">public class ProxyTest &#123;</div><div class="line">	public static void main(String[] args) &#123;</div><div class="line">		new Proxy(&quot;hello&quot;).request();</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line">interface Subject &#123;</div><div class="line">	void request();</div><div class="line">&#125;</div><div class="line">class Proxy implements Subject&#123;</div><div class="line">	String str;</div><div class="line">	RealSubject subject;</div><div class="line">	public Proxy(String string) &#123;</div><div class="line">		str = string;</div><div class="line">		subject = new RealSubject(str);</div><div class="line">	&#125;</div><div class="line">	@Override</div><div class="line">	public void request() &#123;</div><div class="line">		System.out.println(&quot;代理对象验证机制....&quot;);</div><div class="line">		subject.request();</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">&#125;</div><div class="line"></div><div class="line">class RealSubject implements Subject&#123;</div><div class="line">	String str;</div><div class="line">	public RealSubject(String string) &#123;</div><div class="line">		str = string;</div><div class="line">	&#125;</div><div class="line">	@Override</div><div class="line">	public void request() &#123;</div><div class="line">		System.out.println(&quot;真实对象打印str: &quot; + str);</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>输出：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">代理对象验证机制....</div><div class="line">真实对象打印str: hello</div></pre></td></tr></table></figure></p>
+<p>上面的代码模拟了一个代理对象实现验证机制的过程。可以看到，代码很简单，代理模式也很好理解。<br>（我们在真实生活中不也有代理么,,比如黄牛，帮你买到你买不到的火车票）</p>
+<h2 id="JDK动态代理实现"><a href="#JDK动态代理实现" class="headerlink" title="JDK动态代理实现"></a>JDK动态代理实现</h2><p>动态代理时较为高级的一种代理模式。典型的应用有Spring AOP，RMI。</p>
+<p>在上面的静态代理模式中，真实对象是事先存在的，并且作为代理对象的内部成员属性。一个真实的对象必须对应一个代理对象，如果真实对象很多的话会导致类膨胀。</p>
+<p>另外，如何在事先不知道真实对象的情况下使用代理代理对象，这都是动态代理需要解决的问题。</p>
+<p>比如有n个类需要在执行前打印几行日志，而这n个类是无法通过源代码修改的(从jar包中引入的)。通过静态代理实现的话将会有n个新的代理类产生，而使用动态代理的话，只需一个类即可。</p>
+<p>动态代理的实现方式有很多，我们只讨论JDK中的动态代理实现。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div></pre></td><td class="code"><pre><div class="line">import java.lang.reflect.InvocationHandler;</div><div class="line">import java.lang.reflect.Method;</div><div class="line">import java.lang.reflect.Proxy;</div><div class="line"></div><div class="line">public class DynamicProxyTest &#123;</div><div class="line">	public static void main(String[] args) &#123;</div><div class="line">		Subject subject = (Subject) new DynamicProxy().bind(new RealSubject(&quot;hello&quot;));</div><div class="line">		subject.request();</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">interface Subject &#123;</div><div class="line">	void request();</div><div class="line">&#125;</div><div class="line"></div><div class="line">class RealSubject implements Subject&#123;</div><div class="line">	String str;</div><div class="line">	public RealSubject(String string) &#123;</div><div class="line">		str = string;</div><div class="line">	&#125;</div><div class="line">	@Override</div><div class="line">	public void request() &#123;</div><div class="line">		System.out.println(&quot;真实对象打印str: &quot; + str);</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">class DynamicProxy implements InvocationHandler &#123;</div><div class="line">	Object object;</div><div class="line">	public Object bind(Object object) &#123;</div><div class="line">		this.object = object;</div><div class="line">		return Proxy.newProxyInstance(object.getClass().getClassLoader(), </div><div class="line">				object.getClass().getInterfaces(), this);</div><div class="line">	&#125;</div><div class="line">	@Override</div><div class="line">	public Object invoke(Object proxy, Method method, Object[] args)</div><div class="line">			throws Throwable &#123;</div><div class="line">		System.out.println(&quot;代理对象验证...&quot;);</div><div class="line">		return method.invoke(object, args);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>输出：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">代理对象验证...</div><div class="line">真实对象打印str: hello</div></pre></td></tr></table></figure></p>
+<p>可以看到，动态代理实现了与静态代理一样的功能，但他的优点在于代理的真实对象不是确定的，可以在运行时指定，增大了灵活性。如果我们有很多的真实对象需要代理访问，并且他们代理对象中的内容<br>都实现了相同的功能，那么我们只需要一个动态代理类即可。</p>
+<h2 id="动态代理原理"><a href="#动态代理原理" class="headerlink" title="动态代理原理"></a>动态代理原理</h2><p>我们通过观察java.lang.reflect.Proxy的源码来了解动态代理的原理。下面的代码截取自openjdk7-b147 (安利一个不错的搜索java源码的网站:<a href="http://grepcode.com" target="_blank" rel="external">http://grepcode.com</a>)</p>
+<img src="/2017/03/28/java代理机制/1.png" alt="Proxy" title="Proxy">
+<p>上面的方法截取自Proxy.newProxyInstance，可以看到，调用getProxyClass方法获取到一个代理类class对象，然后使用该class对象通过反射方法实例化一个对象返回。</p>
+<p>接下来观察getProxyClass方法。</p>
+<img src="/2017/03/28/java代理机制/2.png" alt="Proxy" title="Proxy">
+<p>这部分代码截取自getProxyClass，先从缓存中查询是否已经生成过对应的class，若有，则直接返回该对象，没有，则继续下一步生成class</p>
+<img src="/2017/03/28/java代理机制/3.png" alt="Proxy" title="Proxy">
+<p>这部分代码是代理类class对象的生成过程。其中：</p>
+<p><code>byte[] proxyClassFile = ProxyGenerator.generateProxyClass(proxyName, interfaces);</code>这行代码调用ProxyGenerator.generateProxyClass返回了代理类class对象的字节码byte序列，<br><code>proxyClass = defineClass0(loader, proxyName,proxyClassFile, 0, proxyClassFile.length);</code>这一行则进行了类加载的工作，最终生成了代理类class对象。</p>
+<img src="/2017/03/28/java代理机制/4.png" alt="Proxy" title="Proxy">
+<p>generateProxyClass，其中的gen.generateClassFile()方法实现了字节码的生成。</p>
+<img src="/2017/03/28/java代理机制/5.png" alt="Proxy" title="Proxy">
+<p>generateClassFile方法的实现。开头调用的三个addProxyMethod方法将object类中的hashcode、equals、toString方法重写，故对这三个方法的调用会传递到InvocationHandler.invoke方法当中。<br>注意，除了上述三个方法之外，调用代理类中Object定义的其他方法不会传递到invoke方法当中，也就是说，调用这些方法会执行Object中的默认实现。</p>
+<p>如果想要查看ProxyGenerator.generateProxyClass这个方法在运行时产生的代理类中写了些什么，可以在main方法中加入：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">System.getProperties().put(&quot;sun.misc.ProxyGenerator.saveGeneratedFiles&quot;, &quot;true&quot;);</div></pre></td></tr></table></figure>
+<p>运行时会将生成的class文件保存到硬盘当中：$Proxy0.class</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div></pre></td><td class="code"><pre><div class="line">import java.lang.reflect.InvocationHandler;</div><div class="line">import java.lang.reflect.Method;</div><div class="line">import java.lang.reflect.Proxy;</div><div class="line">import java.lang.reflect.UndeclaredThrowableException;</div><div class="line"></div><div class="line">public final class $Proxy0</div><div class="line">  extends Proxy</div><div class="line">  implements Subject</div><div class="line">&#123;</div><div class="line">  private static Method m1;</div><div class="line">  private static Method m3;</div><div class="line">  private static Method m0;</div><div class="line">  private static Method m2;</div><div class="line">  </div><div class="line">  public $Proxy0(InvocationHandler paramInvocationHandler)</div><div class="line">  &#123;</div><div class="line">    super(paramInvocationHandler);</div><div class="line">  &#125;</div><div class="line">  </div><div class="line">  public final boolean equals(Object paramObject)</div><div class="line">  &#123;</div><div class="line">    try</div><div class="line">    &#123;</div><div class="line">      return ((Boolean)this.h.invoke(this, m1, new Object[] &#123; paramObject &#125;)).booleanValue();</div><div class="line">    &#125;</div><div class="line">    catch (Error|RuntimeException localError)</div><div class="line">    &#123;</div><div class="line">      throw localError;</div><div class="line">    &#125;</div><div class="line">    catch (Throwable localThrowable)</div><div class="line">    &#123;</div><div class="line">      throw new UndeclaredThrowableException(localThrowable);</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">  </div><div class="line">  public final void request()</div><div class="line">  &#123;</div><div class="line">    try</div><div class="line">    &#123;</div><div class="line">      this.h.invoke(this, m3, null);</div><div class="line">      return;</div><div class="line">    &#125;</div><div class="line">    catch (Error|RuntimeException localError)</div><div class="line">    &#123;</div><div class="line">      throw localError;</div><div class="line">    &#125;</div><div class="line">    catch (Throwable localThrowable)</div><div class="line">    &#123;</div><div class="line">      throw new UndeclaredThrowableException(localThrowable);</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">  </div><div class="line">  public final int hashCode()</div><div class="line">  &#123;</div><div class="line">    try</div><div class="line">    &#123;</div><div class="line">      return ((Integer)this.h.invoke(this, m0, null)).intValue();</div><div class="line">    &#125;</div><div class="line">    catch (Error|RuntimeException localError)</div><div class="line">    &#123;</div><div class="line">      throw localError;</div><div class="line">    &#125;</div><div class="line">    catch (Throwable localThrowable)</div><div class="line">    &#123;</div><div class="line">      throw new UndeclaredThrowableException(localThrowable);</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">  </div><div class="line">  public final String toString()</div><div class="line">  &#123;</div><div class="line">    try</div><div class="line">    &#123;</div><div class="line">      return (String)this.h.invoke(this, m2, null);</div><div class="line">    &#125;</div><div class="line">    catch (Error|RuntimeException localError)</div><div class="line">    &#123;</div><div class="line">      throw localError;</div><div class="line">    &#125;</div><div class="line">    catch (Throwable localThrowable)</div><div class="line">    &#123;</div><div class="line">      throw new UndeclaredThrowableException(localThrowable);</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">  </div><div class="line">  static</div><div class="line">  &#123;</div><div class="line">    try</div><div class="line">    &#123;</div><div class="line">      m1 = Class.forName(&quot;java.lang.Object&quot;).getMethod(&quot;equals&quot;, new Class[] &#123; Class.forName(&quot;java.lang.Object&quot;) &#125;);</div><div class="line">      m3 = Class.forName(&quot;Subject&quot;).getMethod(&quot;request&quot;, new Class[0]);</div><div class="line">      m0 = Class.forName(&quot;java.lang.Object&quot;).getMethod(&quot;hashCode&quot;, new Class[0]);</div><div class="line">      m2 = Class.forName(&quot;java.lang.Object&quot;).getMethod(&quot;toString&quot;, new Class[0]);</div><div class="line">      return;</div><div class="line">    &#125;</div><div class="line">    catch (NoSuchMethodException localNoSuchMethodException)</div><div class="line">    &#123;</div><div class="line">      throw new NoSuchMethodError(localNoSuchMethodException.getMessage());</div><div class="line">    &#125;</div><div class="line">    catch (ClassNotFoundException localClassNotFoundException)</div><div class="line">    &#123;</div><div class="line">      throw new NoClassDefFoundError(localClassNotFoundException.getMessage());</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>上面的代码很好理解。可以看到equals、hashCode、toString以及我们Subject接口request方法的实现中都是调用了InvocationHandler.invoke方法，而这个InvocationHandler实例就是我们在Proxy.newProxyInstance中传入的对象。</p>
+<p>综上，可以看到实现动态代理的几个步骤：</p>
+<p>1.实现InvocationHandler</p>
+<p>2.获得动态代理类，这一步又涉及到运行时代理类字节码的生成和类加载</p>
+<p>3.通过反射机制（getConstructor(InvocationHandler.class)）获取代理类的实例并返回该对象</p>
+<p>4.调用代理对象的目标方法（也就是request方法，代理类也实现了Subject这个接口），调用转发到InvocationHandler.invoke方法当中，执行invoke的逻辑（我们自己的InvocationHandler实现）</p>
+<p>至此，我们就了解了动态代理的运行原理。动态代理的机制也有一些缺陷，比如他代理的必须是接口方法。看一下我们上面生成的$Proxy0.class，可知这个代理类已经默认继承了类Proxy，所以，他只能通过实现我们提供的接口来代理我们的方法。在invoke方法中，我们可以通过对传入的代理类、方法和参数来进行判断，对不同的方法实现不同的业务逻辑。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+<div id="wechat_subscriber" style="display: block; padding: 10px 0; margin: 20px auto; width: 100%; text-align: center">
+    <img id="wechat_subscriber_qcode" src="/images/wechat-qcode.jpg" alt="于凯 wechat" style="width: 200px; max-width: 100%;"/>
+    <div>欢迎您扫一扫上面的微信公众号，订阅我的博客！</div>
+</div>
+
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/java/" rel="tag"># java</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/03/22/java序列化与反序列化/" rel="next" title="java序列化与反序列化">
+                <i class="fa fa-chevron-left"></i> java序列化与反序列化
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/03/31/java注解/" rel="prev" title="java注解">
+                java注解 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="于凯" />
+          <p class="site-author-name" itemprop="name">于凯</p>
+           
+              <p class="site-description motion-element" itemprop="description">学习总结，生活总结。</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">49</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-name">分类</span>
+              
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">19</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/5381447277" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  微博
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/Hikyu" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#代理模式"><span class="nav-number">1.</span> <span class="nav-text">代理模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#静态代理"><span class="nav-number">2.</span> <span class="nav-text">静态代理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JDK动态代理实现"><span class="nav-number">3.</span> <span class="nav-text">JDK动态代理实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#动态代理原理"><span class="nav-number">4.</span> <span class="nav-text">动态代理原理</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">于凯</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
