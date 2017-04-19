@@ -93,7 +93,7 @@
 <meta property="og:url" content="http://yukai.space/2015/12/17/java同步锁锁什么/index.html">
 <meta property="og:site_name" content="YuKai's blog">
 <meta property="og:description" content="在今天的苦逼遍代码的过程中，有这样一个问题困扰了我半天：情景是这样的：有N个线程ThreadTest，在类A中被创建。构造ThreadTest，向其传入A中的成员变量 Integer i;ThreadTest中的成员变量 j 被赋值为 i在 ThreadTest 的 run 方法中，我 加入了 synchronized块，对象锁正是 j ;在synchronized块中，我改变了这个 j 的值。代">
-<meta property="og:updated_time" content="2017-04-09T10:03:50.134Z">
+<meta property="og:updated_time" content="2017-04-11T13:08:38.842Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="java同步锁锁什么">
 <meta name="twitter:description" content="在今天的苦逼遍代码的过程中，有这样一个问题困扰了我半天：情景是这样的：有N个线程ThreadTest，在类A中被创建。构造ThreadTest，向其传入A中的成员变量 Integer i;ThreadTest中的成员变量 j 被赋值为 i在 ThreadTest 的 run 方法中，我 加入了 synchronized块，对象锁正是 j ;在synchronized块中，我改变了这个 j 的值。代">
@@ -201,12 +201,32 @@
         </li>
       
         
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
         <li class="menu-item menu-item-archives">
           <a href="/archives" rel="section">
             
               <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
             
             归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
           </a>
         </li>
       
@@ -490,10 +510,10 @@
             
             
             <div class="site-state-item site-state-categories">
-              
+              <a href="/categories/index.html">
                 <span class="site-state-item-count">4</span>
                 <span class="site-state-item-name">分类</span>
-              
+              </a>
             </div>
           
 
@@ -501,10 +521,10 @@
             
             
             <div class="site-state-item site-state-tags">
-              
+              <a href="/tags/index.html">
                 <span class="site-state-item-count">22</span>
                 <span class="site-state-item-name">标签</span>
-              
+              </a>
             </div>
           
 
