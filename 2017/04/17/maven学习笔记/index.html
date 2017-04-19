@@ -71,7 +71,7 @@
 <link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="java," />
+  <meta name="keywords" content="java,maven," />
 
 
 
@@ -92,7 +92,7 @@
 Maven基础有关Maven如何安装和设置，不在这里啰嗦了，可以到官网下载最新版本然后安装。
 Maven是一个异常强大的构建工具，能够帮助我们自动化构建过程，从清理、编译、测试到生成报告，打包和部署。我们要做的只是使用Mave">
 <meta property="og:type" content="article">
-<meta property="og:title" content="maven学习笔记">
+<meta property="og:title" content="maven学习笔记(一)">
 <meta property="og:url" content="http://yukai.space/2017/04/17/maven学习笔记/index.html">
 <meta property="og:site_name" content="YuKai's blog">
 <meta property="og:description" content="上周末两天时间基本上将《Maven实战》这本书看完了。《Maven实战》是很棒的一本介绍maven相关知识的书籍。读完之后，对学到的maven相关的内容做一个梳理总结。
@@ -100,9 +100,9 @@ Maven是一个异常强大的构建工具，能够帮助我们自动化构建过
 Maven基础有关Maven如何安装和设置，不在这里啰嗦了，可以到官网下载最新版本然后安装。
 Maven是一个异常强大的构建工具，能够帮助我们自动化构建过程，从清理、编译、测试到生成报告，打包和部署。我们要做的只是使用Mave">
 <meta property="og:image" content="http://yukai.space/2017/04/17/maven学习笔记/mvn.png">
-<meta property="og:updated_time" content="2017-04-17T13:16:40.290Z">
+<meta property="og:updated_time" content="2017-04-19T04:00:12.882Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="maven学习笔记">
+<meta name="twitter:title" content="maven学习笔记(一)">
 <meta name="twitter:description" content="上周末两天时间基本上将《Maven实战》这本书看完了。《Maven实战》是很棒的一本介绍maven相关知识的书籍。读完之后，对学到的maven相关的内容做一个梳理总结。
 
 Maven基础有关Maven如何安装和设置，不在这里啰嗦了，可以到官网下载最新版本然后安装。
@@ -141,7 +141,7 @@ Maven是一个异常强大的构建工具，能够帮助我们自动化构建过
 
 
 
-  <title> maven学习笔记 | YuKai's blog </title>
+  <title> maven学习笔记(一) | YuKai's blog </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -281,7 +281,7 @@ Maven是一个异常强大的构建工具，能够帮助我们自动化构建过
             
             
               
-                maven学习笔记
+                maven学习笔记(一)
               
             
           </h1>
@@ -359,7 +359,7 @@ Maven是一个异常强大的构建工具，能够帮助我们自动化构建过
 </blockquote>
 <h2 id="Maven基础"><a href="#Maven基础" class="headerlink" title="Maven基础"></a>Maven基础</h2><p>有关<a href="http://maven.apache.org/" target="_blank" rel="external">Maven</a>如何安装和设置，不在这里啰嗦了，可以到<a href="http://maven.apache.org/" target="_blank" rel="external">官网</a>下载最新版本然后安装。</p>
 <p>Maven是一个异常强大的构建工具，能够帮助我们自动化构建过程，从清理、编译、测试到生成报告，打包和部署。我们要做的只是使用Maven配置好项目，然后输入简单的命令，Maven会帮我们处理这些任务。</p>
-<p>Maven项目的核心是pom.xml。Pom定义了项目的基本信息，用于描述项目如何构建，声明项目依赖等。下面是一个例子：<br><a id="more"></a><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div></pre></td><td class="code"><pre><div class="line">&lt;project xmlns=&quot;http://maven.apache.org/POM/4.0.0&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</div><div class="line">	xsi:schemaLocation=&quot;http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd&quot;&gt;</div><div class="line">	&lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;</div><div class="line"></div><div class="line">	&lt;groupId&gt;space.yukai.mergetool&lt;/groupId&gt;</div><div class="line">	&lt;artifactId&gt;mergetool-core&lt;/artifactId&gt;</div><div class="line">	&lt;version&gt;0.0.1-SNAPSHOT&lt;/version&gt;</div><div class="line">	&lt;packaging&gt;jar&lt;/packaging&gt;</div><div class="line">    &lt;name&gt;MergeTool&lt;/name&gt;</div><div class="line"></div><div class="line">	&lt;name&gt;space.yukai&lt;/name&gt;</div><div class="line">	&lt;url&gt;http://maven.apache.org&lt;/url&gt;</div><div class="line"></div><div class="line">	&lt;properties&gt;</div><div class="line">		&lt;project.build.sourceEncoding&gt;UTF-8&lt;/project.build.sourceEncoding&gt;</div><div class="line">	&lt;/properties&gt;</div><div class="line"></div><div class="line">	&lt;build&gt;</div><div class="line">		&lt;plugins&gt;</div><div class="line">			&lt;plugin&gt;</div><div class="line">				&lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;</div><div class="line">				&lt;artifactId&gt;maven-compiler-plugin&lt;/artifactId&gt;</div><div class="line">				&lt;configuration&gt;</div><div class="line">					&lt;source&gt;1.8&lt;/source&gt;</div><div class="line">					&lt;target&gt;1.8&lt;/target&gt;</div><div class="line">				&lt;/configuration&gt;</div><div class="line">			&lt;/plugin&gt;</div><div class="line">		&lt;/plugins&gt;</div><div class="line">	&lt;/build&gt;</div><div class="line">	&lt;dependencies&gt;</div><div class="line">		&lt;dependency&gt;</div><div class="line">			&lt;groupId&gt;junit&lt;/groupId&gt;</div><div class="line">			&lt;artifactId&gt;junit&lt;/artifactId&gt;</div><div class="line">			&lt;version&gt;4.4&lt;/version&gt;</div><div class="line">			&lt;scope&gt;test&lt;/scope&gt;</div><div class="line">		&lt;/dependency&gt;</div><div class="line"></div><div class="line">		&lt;!-- https://mvnrepository.com/artifact/commons-io/commons-io --&gt;</div><div class="line">		&lt;dependency&gt;</div><div class="line">			&lt;groupId&gt;commons-io&lt;/groupId&gt;</div><div class="line">			&lt;artifactId&gt;commons-io&lt;/artifactId&gt;</div><div class="line">			&lt;version&gt;2.5&lt;/version&gt;</div><div class="line">		&lt;/dependency&gt;</div><div class="line">	&lt;/dependencies&gt;</div><div class="line">&lt;/project&gt;</div></pre></td></tr></table></figure></p>
+<p>Maven项目的核心是pom.xml。Pom定义了项目的基本信息，用于描述项目如何构建，声明项目依赖等。下面是一个例子：<br><a id="more"></a><br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">project</span> <span class="attr">xmlns</span>=<span class="string">"http://maven.apache.org/POM/4.0.0"</span> <span class="attr">xmlns:xsi</span>=<span class="string">"http://www.w3.org/2001/XMLSchema-instance"</span></span></div><div class="line">	<span class="attr">xsi:schemaLocation</span>=<span class="string">"http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"</span>&gt;</div><div class="line">	<span class="tag">&lt;<span class="name">modelVersion</span>&gt;</span>4.0.0<span class="tag">&lt;/<span class="name">modelVersion</span>&gt;</span></div><div class="line"></div><div class="line">	<span class="tag">&lt;<span class="name">groupId</span>&gt;</span>space.yukai.mergetool<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></div><div class="line">	<span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>mergetool-core<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></div><div class="line">	<span class="tag">&lt;<span class="name">version</span>&gt;</span>0.0.1-SNAPSHOT<span class="tag">&lt;/<span class="name">version</span>&gt;</span></div><div class="line">	<span class="tag">&lt;<span class="name">packaging</span>&gt;</span>jar<span class="tag">&lt;/<span class="name">packaging</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">name</span>&gt;</span>MergeTool<span class="tag">&lt;/<span class="name">name</span>&gt;</span></div><div class="line"></div><div class="line">	<span class="tag">&lt;<span class="name">name</span>&gt;</span>space.yukai<span class="tag">&lt;/<span class="name">name</span>&gt;</span></div><div class="line">	<span class="tag">&lt;<span class="name">url</span>&gt;</span>http://maven.apache.org<span class="tag">&lt;/<span class="name">url</span>&gt;</span></div><div class="line"></div><div class="line">	<span class="tag">&lt;<span class="name">properties</span>&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">project.build.sourceEncoding</span>&gt;</span>UTF-8<span class="tag">&lt;/<span class="name">project.build.sourceEncoding</span>&gt;</span></div><div class="line">	<span class="tag">&lt;/<span class="name">properties</span>&gt;</span></div><div class="line"></div><div class="line">	<span class="tag">&lt;<span class="name">build</span>&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">plugins</span>&gt;</span></div><div class="line">			<span class="tag">&lt;<span class="name">plugin</span>&gt;</span></div><div class="line">				<span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.maven.plugins<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></div><div class="line">				<span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>maven-compiler-plugin<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></div><div class="line">				<span class="tag">&lt;<span class="name">configuration</span>&gt;</span></div><div class="line">					<span class="tag">&lt;<span class="name">source</span>&gt;</span>1.8<span class="tag">&lt;/<span class="name">source</span>&gt;</span></div><div class="line">					<span class="tag">&lt;<span class="name">target</span>&gt;</span>1.8<span class="tag">&lt;/<span class="name">target</span>&gt;</span></div><div class="line">				<span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></div><div class="line">			<span class="tag">&lt;/<span class="name">plugin</span>&gt;</span></div><div class="line">		<span class="tag">&lt;/<span class="name">plugins</span>&gt;</span></div><div class="line">	<span class="tag">&lt;/<span class="name">build</span>&gt;</span></div><div class="line">	<span class="tag">&lt;<span class="name">dependencies</span>&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">dependency</span>&gt;</span></div><div class="line">			<span class="tag">&lt;<span class="name">groupId</span>&gt;</span>junit<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></div><div class="line">			<span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>junit<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></div><div class="line">			<span class="tag">&lt;<span class="name">version</span>&gt;</span>4.4<span class="tag">&lt;/<span class="name">version</span>&gt;</span></div><div class="line">			<span class="tag">&lt;<span class="name">scope</span>&gt;</span>test<span class="tag">&lt;/<span class="name">scope</span>&gt;</span></div><div class="line">		<span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></div><div class="line"></div><div class="line">		<span class="comment">&lt;!-- https://mvnrepository.com/artifact/commons-io/commons-io --&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">dependency</span>&gt;</span></div><div class="line">			<span class="tag">&lt;<span class="name">groupId</span>&gt;</span>commons-io<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></div><div class="line">			<span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>commons-io<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></div><div class="line">			<span class="tag">&lt;<span class="name">version</span>&gt;</span>2.5<span class="tag">&lt;/<span class="name">version</span>&gt;</span></div><div class="line">		<span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></div><div class="line">	<span class="tag">&lt;/<span class="name">dependencies</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">project</span>&gt;</span></div></pre></td></tr></table></figure></p>
 <p>Maven不仅是一个构建工具，还是一个依赖管理工具和项目信息管理工具。我们的java项目或多或少都会依赖一些第三方的类库，而maven提供了中央仓库，能够帮助我们自动下载构件。</p>
 <p>Maven通过一个坐标系统准确的定位每一个构件(artifact)，也就是通过一组坐标Maven能够找到任何一个java类库(如jar包)。</p>
 <p>在Maven的世界中，任何的jar、pom、或war都是通过这些坐标进行区分的。上面代码中开头的groupId、artifactId、version定义了这个项目的基本坐标。</p>
@@ -445,7 +445,7 @@ Maven是一个异常强大的构建工具，能够帮助我们自动化构建过
 <li><p>自定义绑定</p>
 <p>除了内置绑定之外，用户可以自己选择将某个插件目标绑定到生命周期的某个阶段。</p>
 <p>比如，我们可以自行配置创建项目的源码jar包。maven-source-plugin的jar-no-fork目标可以将项目的主代码打包成jar文件。我们将其绑定到clean生命周期的post-clean阶段测试一下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">&lt;plugin&gt;</div><div class="line">&lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;</div><div class="line">&lt;artifactId&gt;maven-source-plugin&lt;/artifactId&gt;</div><div class="line">&lt;executions&gt;</div><div class="line">	    &lt;execution&gt;</div><div class="line">		    &lt;id&gt;attach-source&lt;/id&gt;</div><div class="line">		    &lt;phase&gt;post-clean&lt;/phase&gt;</div><div class="line">		        goals&gt;</div><div class="line">		        &lt;goal&gt;jar-no-fork&lt;/goal&gt;</div><div class="line">		    &lt;/goals&gt;</div><div class="line">	 &lt;/execution&gt;</div><div class="line">&lt;/executions&gt;</div><div class="line">&lt;/plugin&gt;</div></pre></td></tr></table></figure>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">plugin</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.maven.plugins<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>maven-source-plugin<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">executions</span>&gt;</span></div><div class="line">	    <span class="tag">&lt;<span class="name">execution</span>&gt;</span></div><div class="line">		    <span class="tag">&lt;<span class="name">id</span>&gt;</span>attach-source<span class="tag">&lt;/<span class="name">id</span>&gt;</span></div><div class="line">		    <span class="tag">&lt;<span class="name">phase</span>&gt;</span>post-clean<span class="tag">&lt;/<span class="name">phase</span>&gt;</span></div><div class="line">		        goals&gt;</div><div class="line">		        <span class="tag">&lt;<span class="name">goal</span>&gt;</span>jar-no-fork<span class="tag">&lt;/<span class="name">goal</span>&gt;</span></div><div class="line">		    <span class="tag">&lt;/<span class="name">goals</span>&gt;</span></div><div class="line">	 <span class="tag">&lt;/<span class="name">execution</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">executions</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">plugin</span>&gt;</span></div></pre></td></tr></table></figure>
 <p>运行<code>mvn post-clean</code>，输出：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">[INFO] ------------------------------------------------------------------------</div><div class="line">[INFO] Building space.yukai 0.0.1-SNAPSHOT</div><div class="line">[INFO] ------------------------------------------------------------------------</div><div class="line">[INFO] </div><div class="line">[INFO] --- maven-clean-plugin:2.5:clean (default-clean) @ space.yukai ---</div><div class="line">[INFO] Deleting Y:\code\versionmergetool\VersionMergeTool\target</div><div class="line">[INFO] </div><div class="line">[INFO] --- maven-source-plugin:3.0.1:jar-no-fork (attach-source) @ space.yukai ---</div><div class="line">[INFO] Building jar: Y:\code\versionmergetool\VersionMergeTool\target\space.yukai-0.0.1-SNAPSHOT-sources.jar</div><div class="line">[INFO] ------------------------------------------------------------------------</div><div class="line">[INFO] BUILD SUCCESS</div><div class="line">[INFO] ------------------------------------------------------------------------</div><div class="line">[INFO] Total time: 1.082 s</div><div class="line">[INFO] Finished at: 2017-04-17T16:55:32+08:00</div><div class="line">[INFO] Final Memory: 7M/111M</div><div class="line">[INFO] ------------------------------------------------------------------------</div></pre></td></tr></table></figure>
 <p>可以看到，当执行post-clean阶段的时候，maven-source-plugin:jar-no-fork 创建了一个以-sources.jar结尾的源码包。</p>
@@ -461,24 +461,7 @@ Maven是一个异常强大的构建工具，能够帮助我们自动化构建过
 <p>其实<code>mvn help:describe -Dplugin=compiler</code>就等效于<code>mvn org.apache.maven.plugins:maven-help-plugin:2.2:describe -Dplugin=compiler</code>。help就是maven-help-plugin的前缀，maven能够根据这个前缀找到对应的artifactId，从而解析得到groupId和version，所有能够精确的定位某个插件。compiler也是前缀。</p>
 </li>
 </ul>
-<h2 id="依赖"><a href="#依赖" class="headerlink" title="依赖"></a>依赖</h2><p>dependency标签可以声明以下一些元素：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">&lt;dependency&gt;</div><div class="line">	&lt;groupId&gt;...&lt;/groupId&gt;</div><div class="line">	&lt;artifactId&gt;...&lt;/artifactId&gt;</div><div class="line">	&lt;version&gt;...&lt;/version&gt;</div><div class="line">	&lt;scope&gt;...&lt;/scope&gt;</div><div class="line">    &lt;type&gt;...&lt;/type&gt;</div><div class="line">	&lt;optional&gt;...&lt;/optional&gt;</div><div class="line">	&lt;exclusions&gt;</div><div class="line">		 &lt;exclusion&gt;...&lt;/exclusion&gt;</div><div class="line">	&lt;/exclusions&gt;</div><div class="line">&lt;/dependency&gt;</div></pre></td></tr></table></figure>
-<p>groupId、artifactId、version：声明了依赖的基本坐标</p>
-<p>type: 依赖的类型，对应于项目坐标定义中的packaging，比如说jar</p>
-<p>scope：依赖的范围</p>
-<p>optional：是否是可选依赖</p>
-<p>exclusions: 排除传递性依赖</p>
-<ul>
-<li><p>依赖范围(scope)</p>
-<p>Maven有三套classpath，编译项目主代码、编译测试代码、实际运行。依赖范围就是用来控制依赖与这三种classpath的关系.有以下几个选项：</p>
-<p>依赖范围 | 对主代码classpath有效 | 对测试classpath有效 | 对运行时classpath有效<br>——–|———————-|——————–|———————-<br>compile |         Y            |         Y          |           Y<br>test    |         N            |         Y          |           N<br>provided|         Y            |         Y          |           N<br>runtime |         N            |         Y          |           Y<br>system  |         Y            |         Y          |           N</p>
-</li>
-<li><p>传递性依赖</p>
-<p>我们在项目的pom.xml文件中声明了直接依赖，如果声明的这些依赖还依赖于其他第三方组件，在maven中，我们不用考虑这些间接依赖，也不用担心引入多余的依赖。Maven会解析各个直接依赖的pom，将那些必要的间接依赖以传递性依赖的方式引入到当前项目的classpath中。</p>
-<p>依赖范围不仅能够控制依赖与三种classpath的关系，还会对传递性依赖产生影响。比如设A依赖于B，B依赖于C，A对于B是第一直接依赖，B对于C是第二直接依赖，A对与C是传递性依赖。第一直接依赖与第二直接依赖的依赖范围决定了传递性依赖的依赖范围。</p>
-</li>
-</ul>
-<h2 id="仓库"><a href="#仓库" class="headerlink" title="仓库"></a>仓库</h2><h2 id="构建"><a href="#构建" class="headerlink" title="构建"></a>构建</h2><h2 id="聚合与继承"><a href="#聚合与继承" class="headerlink" title="聚合与继承"></a>聚合与继承</h2><h2 id="属性与Profile"><a href="#属性与Profile" class="headerlink" title="属性与Profile"></a>属性与Profile</h2>
+
       
     </div>
 
@@ -514,6 +497,8 @@ Maven是一个异常强大的构建工具，能够帮助我们自动化构建过
           
             <a href="/tags/java/" rel="tag"># java</a>
           
+            <a href="/tags/maven/" rel="tag"># maven</a>
+          
         </div>
       
 
@@ -534,6 +519,10 @@ Maven是一个异常强大的构建工具，能够帮助我们自动化构建过
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/04/19/maven学习笔记2/" rel="prev" title="maven学习笔记(二)">
+                maven学习笔记(二) <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -605,7 +594,7 @@ Maven是一个异常强大的构建工具，能够帮助我们自动化构建过
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">52</span>
+                <span class="site-state-item-count">54</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -627,7 +616,7 @@ Maven是一个异常强大的构建工具，能够帮助我们自动化构建过
             
             <div class="site-state-item site-state-tags">
               
-                <span class="site-state-item-count">21</span>
+                <span class="site-state-item-count">22</span>
                 <span class="site-state-item-name">标签</span>
               
             </div>
@@ -682,7 +671,7 @@ Maven是一个异常强大的构建工具，能够帮助我们自动化构建过
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Maven基础"><span class="nav-number">1.</span> <span class="nav-text">Maven基础</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Archetype"><span class="nav-number">2.</span> <span class="nav-text">Archetype</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#生命周期"><span class="nav-number">3.</span> <span class="nav-text">生命周期</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#插件目标"><span class="nav-number">4.</span> <span class="nav-text">插件目标</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#依赖"><span class="nav-number">5.</span> <span class="nav-text">依赖</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#仓库"><span class="nav-number">6.</span> <span class="nav-text">仓库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#构建"><span class="nav-number">7.</span> <span class="nav-text">构建</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#聚合与继承"><span class="nav-number">8.</span> <span class="nav-text">聚合与继承</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#属性与Profile"><span class="nav-number">9.</span> <span class="nav-text">属性与Profile</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Maven基础"><span class="nav-number">1.</span> <span class="nav-text">Maven基础</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Archetype"><span class="nav-number">2.</span> <span class="nav-text">Archetype</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#生命周期"><span class="nav-number">3.</span> <span class="nav-text">生命周期</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#插件目标"><span class="nav-number">4.</span> <span class="nav-text">插件目标</span></a></li></ol></div>
             
 
           </div>
