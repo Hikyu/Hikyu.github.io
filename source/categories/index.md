@@ -1,4 +1,5 @@
 ---
 title: categories
-date: 2017-04-09 18:43:13
+date: 2017-04-19 12:22:33
+type: "categories"
 ---
