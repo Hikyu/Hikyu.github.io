@@ -1,9 +1,11 @@
 ---
 layout: post
-title: maven学习笔记
+title: maven学习笔记(一)
 date: 2017-04-17 20:51:25
 categories: 工具
-tags: java
+tags: 
+- java
+- maven 
 ---
 
 > 上周末两天时间基本上将《Maven实战》这本书看完了。《Maven实战》是很棒的一本介绍maven相关知识的书籍。读完之后，对学到的maven相关的内容做一个梳理总结。
@@ -16,7 +18,7 @@ Maven是一个异常强大的构建工具，能够帮助我们自动化构建过
 
 Maven项目的核心是pom.xml。Pom定义了项目的基本信息，用于描述项目如何构建，声明项目依赖等。下面是一个例子：
 <!-- more -->
-```
+```xml
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
@@ -262,7 +264,7 @@ Maven的核心仅仅定义了抽象的生命周期，具体的任务是由插件
 
   比如，我们可以自行配置创建项目的源码jar包。maven-source-plugin的jar-no-fork目标可以将项目的主代码打包成jar文件。我们将其绑定到clean生命周期的post-clean阶段测试一下：
 
-  ```
+  ```xml
   <plugin>
 		<groupId>org.apache.maven.plugins</groupId>
 		<artifactId>maven-source-plugin</artifactId>
@@ -354,53 +356,3 @@ For more information, run 'mvn help:describe [...] -Ddetail'
 
   其实`mvn help:describe -Dplugin=compiler`就等效于`mvn org.apache.maven.plugins:maven-help-plugin:2.2:describe -Dplugin=compiler`。help就是maven-help-plugin的前缀，maven能够根据这个前缀找到对应的artifactId，从而解析得到groupId和version，所有能够精确的定位某个插件。compiler也是前缀。
 
-## 依赖
-
-dependency标签可以声明以下一些元素：
-
-```
-<dependency>
-	<groupId>...</groupId>
-	<artifactId>...</artifactId>
-	<version>...</version>
-	<scope>...</scope>
-    <type>...</type>
-	<optional>...</optional>
-	<exclusions>
-		 <exclusion>...</exclusion>
-	</exclusions>
-</dependency>
-```
-groupId、artifactId、version：声明了依赖的基本坐标
-
-type: 依赖的类型，对应于项目坐标定义中的packaging，比如说jar
-
-scope：依赖的范围
-
-optional：是否是可选依赖
-
-exclusions: 排除传递性依赖
-
-- 依赖范围(scope)
-
-  Maven有三套classpath，编译项目主代码、编译测试代码、实际运行。依赖范围就是用来控制依赖与这三种classpath的关系.有以下几个选项：
-
-  依赖范围 | 对主代码classpath有效 | 对测试classpath有效 | 对运行时classpath有效
-  --------|----------------------|--------------------|----------------------
-  compile |         Y            |         Y          |           Y  
-  test    |         N            |         Y          |           N
-  provided|         Y            |         Y          |           N
-  runtime |         N            |         Y          |           Y
-  system  |         Y            |         Y          |           N
-
-- 传递性依赖
-  
-  我们在项目的pom.xml文件中声明了直接依赖，如果声明的这些依赖还依赖于其他第三方组件，在maven中，我们不用考虑这些间接依赖，也不用担心引入多余的依赖。Maven会解析各个直接依赖的pom，将那些必要的间接依赖以传递性依赖的方式引入到当前项目的classpath中。
-
-  依赖范围不仅能够控制依赖与三种classpath的关系，还会对传递性依赖产生影响。比如设A依赖于B，B依赖于C，A对于B是第一直接依赖，B对于C是第二直接依赖，A对与C是传递性依赖。第一直接依赖与第二直接依赖的依赖范围决定了传递性依赖的依赖范围。
-
-## 仓库
-## 构建
-## 聚合与继承
-
-## 属性与Profile
