@@ -71,5 +71,18 @@
         "folders": [
             "/home/yukai/project/blog/Hikyu.github.io"
         ]
+    },
+    "windowsState": {
+        "openedFolders": [],
+        "lastActiveWindow": {
+            "workspacePath": "/home/yukai/project/blog/Hikyu.github.io",
+            "uiState": {
+                "mode": 0,
+                "x": 0,
+                "y": 66,
+                "width": 1366,
+                "height": 668
+            }
+        }
     }
 }
