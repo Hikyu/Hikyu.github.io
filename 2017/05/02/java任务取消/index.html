@@ -1,0 +1,861 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="java,多线程," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="最近在用思维导图做读书笔记，虽然感觉没有网上所说的那么神奇，但是用来做笔记还是可以的。总结梳理了一下java取消任务执方面的一些内容，也是《java并发编程实战》的读书笔记。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="java任务取消">
+<meta property="og:url" content="http://yukai.space/2017/05/02/java任务取消/index.html">
+<meta property="og:site_name" content="YuKai's blog">
+<meta property="og:description" content="最近在用思维导图做读书笔记，虽然感觉没有网上所说的那么神奇，但是用来做笔记还是可以的。总结梳理了一下java取消任务执方面的一些内容，也是《java并发编程实战》的读书笔记。">
+<meta property="og:image" content="http://yukai.space/2017/05/02/java任务取消/java.png">
+<meta property="og:updated_time" content="2017-05-04T11:43:58.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="java任务取消">
+<meta name="twitter:description" content="最近在用思维导图做读书笔记，虽然感觉没有网上所说的那么神奇，但是用来做笔记还是可以的。总结梳理了一下java取消任务执方面的一些内容，也是《java并发编程实战》的读书笔记。">
+<meta name="twitter:image" content="http://yukai.space/2017/05/02/java任务取消/java.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yukai.space/2017/05/02/java任务取消/"/>
+
+
+
+
+
+  <title> java任务取消 | YuKai's blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">YuKai's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">好好学习，天天向上</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/page" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yukai.space/2017/05/02/java任务取消/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="于凯">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="YuKai's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                java任务取消
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-05-02T19:45:14+08:00">
+                2017-05-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/编程/" itemprop="url" rel="index">
+                    <span itemprop="name">编程</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>最近在用思维导图做读书笔记，虽然感觉没有网上所说的那么神奇，但是用来做笔记还是可以的。总结梳理了一下java取消任务执方面的一些内容，也是《java并发编程实战》的读书笔记。</p>
+</blockquote>
+<img src="/2017/05/02/java任务取消/java.png" alt="任务取消" title="任务取消">
+<a id="more"></a>
+<h2 id="取消原因"><a href="#取消原因" class="headerlink" title="取消原因"></a>取消原因</h2><p>取消一个任务执行的理由有很多，通常有以下几个</p>
+<ul>
+<li><p>用户请求取消</p>
+<p>通常用户点击“取消”按钮发出取消命令</p>
+</li>
+<li><p>有时间限制的操作</p>
+<p>计时任务，超时时就会取消任务执行并返回</p>
+</li>
+<li><p>应用程序逻辑</p>
+<p>比如有多个任务对一个问题进行分解和搜索解决方案，如果其中某个任务找到解决方案，其他并行的任务就可以取消了</p>
+</li>
+<li><p>发生错误</p>
+<p>比如爬虫程序下载网页到本地硬盘，如果盘满了之后爬取任务应该被取消</p>
+</li>
+<li><p>关闭</p>
+<p>程序或服务被关闭，则正在执行的任务也应该取消，而不是继续执行</p>
+</li>
+</ul>
+<h2 id="取消线程执行"><a href="#取消线程执行" class="headerlink" title="取消线程执行"></a>取消线程执行</h2><p>任务的取消执行，其实最后都会落到线程的终止上(任务都是由线程来执行)。在java中没有一种安全的抢占式方法来终止线程(Thread.stop 是不安全的终止线程执行的方法，已经废弃掉了)，所以需要一种很好的协作机制来平滑的关闭任务。</p>
+<h3 id="自然结束"><a href="#自然结束" class="headerlink" title="自然结束"></a>自然结束</h3><p>中断线程的最好方法是让代码自然执行到结束，而不是从外部强制打断他。为此可以设置一个“任务取消标志”，任务代码会定期的查看这个标志，如果发现标志被设定了，则任务提前结束。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">public class SomeJob &#123;</div><div class="line">	private List&lt;String&gt; list = new ArrayList&lt;&gt;();</div><div class="line">	private volatile boolean canceled = false;</div><div class="line"></div><div class="line">	public void run() &#123;</div><div class="line">		while (!canceled) &#123;</div><div class="line">			String res = getResult();</div><div class="line">			synchronized (this) &#123;</div><div class="line">				list.add(res);</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	private String getResult() &#123;</div><div class="line">		// do something...</div><div class="line">		return &quot;&quot;;</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	public void cancel() &#123;</div><div class="line">		this.canceled = true;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>上面的代码中，设置了一个volatile类型的变量canceled，所以其他线程对这个变量的修改对所有线程都是可见的(可见性)。每次循环执行某个操作之前都会检查这个变量是否被其他线程设置为true，如果为true则提前退出。</p>
+<p>这是很常见的一种取消任务执行的手段，但是也有他的弊端，比如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line">import java.util.concurrent.BlockingQueue;</div><div class="line">import java.util.concurrent.LinkedBlockingQueue;</div><div class="line"></div><div class="line">public class SomeJob &#123;</div><div class="line">	private BlockingQueue&lt;String&gt; list = new LinkedBlockingQueue&lt;&gt;(100);</div><div class="line">	private volatile boolean canceled = false;</div><div class="line"></div><div class="line">	public void run() &#123;</div><div class="line">		try &#123;</div><div class="line">			while (!canceled) &#123;</div><div class="line">				String res = getResult();</div><div class="line">				synchronized (this) &#123;</div><div class="line">					list.put(res);</div><div class="line">				&#125;</div><div class="line">			&#125;</div><div class="line">		&#125; catch (InterruptedException e) &#123;</div><div class="line">			e.printStackTrace();</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	private String getResult() &#123;</div><div class="line">		// do something...</div><div class="line">		return &quot;&quot;;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	public void cancel() &#123;</div><div class="line">		this.canceled = true;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>上面将list替换为支持阻塞的BlockingQueue，他是一个有界队列，当调用list的put操作时，如果队列已经填满，那么将会一直阻塞直到队列有空余位置为止。如果恰好执行put操作是阻塞了，此时我们调用了cancel方法，那么什么时候检查canceled标志是不确定的，响应性很差，极端情况下，有可能永远也不会去再下一次轮询中检查canceled标志，试想我们执行了取消后，消费队列的线程已经停止，此时put操作又阻塞，那么将会一直阻塞下去，这个线程失去响应。</p>
+<h3 id="线程中断"><a href="#线程中断" class="headerlink" title="线程中断"></a>线程中断</h3><p>通过线程自己的中断机制，可以解决上述问题。</p>
+<p>每个线程都有一个boolean类型的变量，表示中断状态。当中断线程时，这个线程的中断状态将被设置为true。在Thread中有三个方法可以设置或访问这个变量：</p>
+<ul>
+<li><p>Thread.interrupt: 中断目标线程</p>
+</li>
+<li><p>Thread.isInterrupted: 返回线程的中断状态</p>
+</li>
+<li><p>Thread.interrupted: 清除线程的中断状态，并返回之前的值</p>
+</li>
+</ul>
+<p>调用interrupt并不意味着立即停止目标线程正在进行的任务，而只是将中断状态设置为true：他并不会正真中断一个正在运行的线程，而只是发出了一种中断请求，线程可以看到这个中断状态，然后在合适的时刻处理。</p>
+<h4 id="中断请求"><a href="#中断请求" class="headerlink" title="中断请求"></a>中断请求</h4><h5 id="响应中断阻塞"><a href="#响应中断阻塞" class="headerlink" title="响应中断阻塞"></a>响应中断阻塞</h5><p>上面提到的中断请求，有些方法会处理这些请求，从而结束现在正在进行的任务。像上面代码中的BlockingQueue.put方法，当他在阻塞状态时，依然能够发现中断请求并提前返回，所以解决上面代码中的问题只需要对执行代码的线程thread调用thread.interrupt方法，BlockingQueue.put就可以从阻塞状态中恢复回来，从而完成取消。类似这样的支持中断的阻塞就叫做响应中断阻塞，主要有以下几个：</p>
+<ul>
+<li><p>Thread.sleep </p>
+</li>
+<li><p>Object.wait</p>
+</li>
+<li><p>Thread.join</p>
+</li>
+</ul>
+<p>这些支持中断的阻塞在响应中断时执行的操作包括：</p>
+<ul>
+<li><p>清除中断状态</p>
+</li>
+<li><p>抛出InterruptedException，表示阻塞操作由于中断而提前结束</p>
+</li>
+</ul>
+<p>jvm并不能保证这些阻塞方法检测到中断的速度，但在实际情况中响应速度还是很快的。</p>
+<p>利用线程本身的中断状态作为取消机制，我们可以将上面的代码再改造一下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">public class SomeJob &#123;</div><div class="line">	private BlockingQueue&lt;String&gt; list = new LinkedBlockingQueue&lt;&gt;();</div><div class="line"></div><div class="line">	public void run() &#123;</div><div class="line">		try &#123;</div><div class="line">			while (!Thread.currentThread().isInterrupted()) &#123;</div><div class="line">				String res = getResult();</div><div class="line">				synchronized (this) &#123;</div><div class="line">					list.put(res);</div><div class="line">				&#125;</div><div class="line">			&#125;</div><div class="line">		&#125; catch (InterruptedException e) &#123;</div><div class="line">			System.out.println(&quot;任务被取消...&quot;);</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	private String getResult() &#123;</div><div class="line">		// do something...</div><div class="line">		return &quot;&quot;;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	public void cancel(Thread thread) &#123;</div><div class="line">		thread.interrupt();</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>任务代码在每次轮询操作前检查当前线程的状态，如果被中断了就退出。cancel方法是对当前执行任务的线程进行中断。</p>
+<p>注意，调用cancel方法的是另一线程，传入的线程实例则是执行run方法的工作者线程，故在执行cancel方法后run方法可以检测到中断。</p>
+<h5 id="不响应中断阻塞"><a href="#不响应中断阻塞" class="headerlink" title="不响应中断阻塞"></a>不响应中断阻塞</h5><p>并非所有的阻塞方法和阻塞机制都能够响应中断请求，比如正在read或write上阻塞的socket就不会响应中断，调用线程的interrupt方法只能设置线程的中断状态，除此以外没有任何作用，因为这些阻塞方法并不会去检查线程中断状态，也不会处理中断。这些阻塞就是不响应中断阻塞。主要有以下几个：</p>
+<ul>
+<li><p>java.io包中的同步socket io: 从socket中获取的InputStream和OutputStream中的read或write方法都不会响应中断，解决办法是关闭这个socket，使得正在执行read或write方法而被阻塞的线程抛出一个SocketException</p>
+</li>
+<li><p>java.io包中的同步IO: 当中断一个正在InterruptibleChannel上等待的线程时，将抛出ClosedByInterruptException并关闭链路。</p>
+</li>
+<li><p>Selector的异步IO: 如果一个线程在调用Selector.select方法时阻塞了，那么调用close或wakeup方法会使线程抛出ClosedSelectorException并返回</p>
+</li>
+<li><p>获得某个锁: 如果一个线程由于等待某个内置锁而阻塞，将无法响应中断。Lock类中提供了lockInterruptibly方法，该方法允许在等待一个锁的同时仍能响应中断。(BlockingQueue.put可以响应中断缘于此)</p>
+</li>
+</ul>
+<p>一个简单的例子，取消socket任务：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line">public class CanceledThread extends Thread &#123;</div><div class="line">	private final Socket socket;</div><div class="line">	private final InputStream stream;</div><div class="line">	public CanceledThread(Socket socket) throws IOException &#123;</div><div class="line">		this.socket = socket;</div><div class="line">		this.stream = socket.getInputStream();</div><div class="line">	&#125;</div><div class="line">	@Override</div><div class="line">	public void interrupt() &#123;</div><div class="line">		try &#123;</div><div class="line">			socket.close();</div><div class="line">		&#125; catch (Exception e) &#123;</div><div class="line">			// do nothing</div><div class="line">		&#125; finally &#123;</div><div class="line">			super.interrupt();</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	@Override</div><div class="line">	public void run() &#123;</div><div class="line">		try &#123;</div><div class="line">			byte[] bytes = new byte[1024];</div><div class="line">			while (true) &#123;</div><div class="line">				int count = stream.read(bytes);</div><div class="line">				if (count &lt; 0) &#123;</div><div class="line">					break;</div><div class="line">				&#125; else if (count &gt; 0) &#123;</div><div class="line">					// 处理读到 bytes</div><div class="line">				&#125;</div><div class="line"> 				</div><div class="line">			&#125;</div><div class="line">		&#125; catch (Exception e) &#123;</div><div class="line">			// 可能捕捉到InterruptedException 或 SocketException</div><div class="line">			// 线程退出</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>在上面的代码中，即使socket的stream在read过程中阻塞了，也可以中断阻塞并返回。</p>
+<h4 id="中断处理"><a href="#中断处理" class="headerlink" title="中断处理"></a>中断处理</h4><p>上文提到，当调用可中断的阻塞库函数时，会抛出InterruptedException，这个异常会出现在我们的任务代码中(任务代码调用了这些阻塞方法)，有三种方法处理这个异常：</p>
+<ul>
+<li><p>不处理，或者在捕捉到异常后打印日志以及做一些资源回收工作</p>
+<p>确定我们的任务代码可以这么做时才这么做。这意味这这个任务完全可以在这个线程中取消，不必再向上层报告或需要更上层的代码处理。</p>
+</li>
+<li><p>传递异常，从而使你的方法也成为可中断的阻塞方法</p>
+<p>简单的将异常抛出，让上层代码处理，这意味着需要上层代码再做一些资源回收等工作。</p>
+</li>
+<li><p>恢复中断状态，从而使调用栈中的上层代码能够对其进行处理</p>
+<p>如果不想或无法(Runnable中)传递InterruptedException时，可以通过再次调用interrupt来恢复中断状态。此时上层代码就可以捕捉到这个中断，从而作出处理。</p>
+</li>
+</ul>
+<p>ThreadPoolExcutor就是处理中断的一个例子：当其拥有的工作者线程检测到中断时，他会检查线程池是否正在关闭。如果是，他会在结束前执行一些线程清理工作，否则他可能创建一个新线程将线程池恢复到合理的规模。</p>
+<h2 id="取消任务"><a href="#取消任务" class="headerlink" title="取消任务"></a>取消任务</h2><h3 id="终止线程池"><a href="#终止线程池" class="headerlink" title="终止线程池"></a>终止线程池</h3><p>线程池的生命周期是由ExcutorService控制的。ExcutorService提供了两种关闭线程池的方法：</p>
+<ul>
+<li><p>shutdownNow</p>
+<p>强行关闭线程池，首先关闭当前正在执行的任务，然后返回所有尚未启动的任务清单(在任务队列当中的)</p>
+<p>关闭速度快，但是有风险，正在执行中的任务可能在执行一半的时候被结束</p>
+</li>
+<li><p>shutdown</p>
+<p>正常关闭线程池，一直等到队列中的所有任务都执行完后才关闭，在此期间不接受新任务</p>
+<p>关闭速度慢，却更加安全</p>
+</li>
+</ul>
+<h3 id="终止基于线程的服务"><a href="#终止基于线程的服务" class="headerlink" title="终止基于线程的服务"></a>终止基于线程的服务</h3><p>在写程序时往往会用到日志，在代码中插入println也是一种日志行为。为了避免由于日志为服务带来性能损耗和并发风险(多个线程同时打印日志有可能引发并发问题)，我们往往将打印日志任务放到某个队列中，由专门的线程从队列中取出任务进行打印。下面设计这样一个日志服务：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div></pre></td><td class="code"><pre><div class="line">public class LogService &#123;</div><div class="line">	private final BlockingQueue&lt;String&gt; queue;</div><div class="line">	private final PrintWriter writer;</div><div class="line">	private final LoggerThread thread;</div><div class="line">	private boolean isShutDown = false;</div><div class="line">	private int reservations = 0;</div><div class="line"></div><div class="line">	public LogService(PrintWriter writer) &#123;</div><div class="line">		this.writer = writer;</div><div class="line">		thread = new LoggerThread();</div><div class="line">		queue = new LinkedBlockingQueue&lt;&gt;();</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	public void shutdown() &#123;</div><div class="line">		synchronized (this) &#123;</div><div class="line">			isShutDown = true;</div><div class="line">		&#125;</div><div class="line">		thread.interrupt();</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	public void log(String msg) throws InterruptedException &#123;</div><div class="line">		synchronized (this) &#123;</div><div class="line">			if (isShutDown) &#123;</div><div class="line">				throw new IllegalStateException(&quot;日志服务已经关闭...&quot;);</div><div class="line">			&#125;</div><div class="line">			reservations ++;</div><div class="line">		&#125;</div><div class="line">		queue.put(msg);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	class LoggerThread extends Thread &#123;</div><div class="line">		@Override</div><div class="line">		public void run() &#123;</div><div class="line">			try &#123;</div><div class="line">				while (true) &#123;</div><div class="line">					try &#123;</div><div class="line">						synchronized (LogService.this) &#123;</div><div class="line">							if (isShutDown &amp;&amp; reservations == 0) &#123;</div><div class="line">								break;</div><div class="line">							&#125;</div><div class="line">							String msg = queue.take();</div><div class="line">							synchronized (LogService.this) &#123;</div><div class="line">								reservations--;</div><div class="line">							&#125;</div><div class="line">							writer.println(msg);</div><div class="line">						&#125;</div><div class="line"></div><div class="line">					&#125; catch (InterruptedException e) &#123;</div><div class="line">						// retry</div><div class="line">					&#125;</div><div class="line">				&#125;</div><div class="line">			&#125; finally &#123;</div><div class="line">				writer.close();</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>当关闭日志服务时，日志服务不再会接收新的日志打印请求，并且会将队列中剩余的所有打印任务执行完毕，最后结束。如果此时日志打印线程恰好在queue.take方法中阻塞了，关闭日志服务时也能很好的从阻塞中恢复过来，结束服务。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+<div id="wechat_subscriber" style="display: block; padding: 10px 0; margin: 20px auto; width: 100%; text-align: center">
+    <img id="wechat_subscriber_qcode" src="/images/wechat-qcode.jpg" alt="于凯 wechat" style="width: 200px; max-width: 100%;"/>
+    <div>欢迎您扫一扫上面的微信公众号，订阅我的博客！</div>
+</div>
+
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/java/" rel="tag"># java</a>
+          
+            <a href="/tags/多线程/" rel="tag"># 多线程</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/04/26/线程池异常处理方案/" rel="next" title="线程池异常处理方案">
+                <i class="fa fa-chevron-left"></i> 线程池异常处理方案
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/05/02/~/Backups/workspaces/" rel="prev" title="">
+                 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="于凯" />
+          <p class="site-author-name" itemprop="name">于凯</p>
+           
+              <p class="site-description motion-element" itemprop="description">学习总结，生活总结。</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">58</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">23</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/5381447277" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  微博
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/Hikyu" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#取消原因"><span class="nav-number">1.</span> <span class="nav-text">取消原因</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#取消线程执行"><span class="nav-number">2.</span> <span class="nav-text">取消线程执行</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#自然结束"><span class="nav-number">2.1.</span> <span class="nav-text">自然结束</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#线程中断"><span class="nav-number">2.2.</span> <span class="nav-text">线程中断</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#中断请求"><span class="nav-number">2.2.1.</span> <span class="nav-text">中断请求</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#响应中断阻塞"><span class="nav-number">2.2.1.1.</span> <span class="nav-text">响应中断阻塞</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#不响应中断阻塞"><span class="nav-number">2.2.1.2.</span> <span class="nav-text">不响应中断阻塞</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#中断处理"><span class="nav-number">2.2.2.</span> <span class="nav-text">中断处理</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#取消任务"><span class="nav-number">3.</span> <span class="nav-text">取消任务</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#终止线程池"><span class="nav-number">3.1.</span> <span class="nav-text">终止线程池</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#终止基于线程的服务"><span class="nav-number">3.2.</span> <span class="nav-text">终止基于线程的服务</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">于凯</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
