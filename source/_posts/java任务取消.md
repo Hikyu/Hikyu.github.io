@@ -46,7 +46,7 @@ tags:
 
 中断线程的最好方法是让代码自然执行到结束，而不是从外部强制打断他。为此可以设置一个“任务取消标志”，任务代码会定期的查看这个标志，如果发现标志被设定了，则任务提前结束。
 
-```
+```java
 public class SomeJob {
 	private List<String> list = new ArrayList<>();
 	private volatile boolean canceled = false;
@@ -74,7 +74,7 @@ public class SomeJob {
 
 这是很常见的一种取消任务执行的手段，但是也有他的弊端，比如：
 
-```
+```java
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -144,7 +144,7 @@ jvm并不能保证这些阻塞方法检测到中断的速度，但在实际情�
 
 利用线程本身的中断状态作为取消机制，我们可以将上面的代码再改造一下：
 
-```
+```java
 public class SomeJob {
 	private BlockingQueue<String> list = new LinkedBlockingQueue<>();
 
@@ -189,7 +189,7 @@ public class SomeJob {
 
 一个简单的例子，取消socket任务：
 
-```
+```java
 public class CanceledThread extends Thread {
 	private final Socket socket;
 	private final InputStream stream;
@@ -271,7 +271,7 @@ ThreadPoolExcutor就是处理中断的一个例子：当其拥有的工作者线
 
 在写程序时往往会用到日志，在代码中插入println也是一种日志行为。为了避免由于日志为服务带来性能损耗和并发风险(多个线程同时打印日志有可能引发并发问题)，我们往往将打印日志任务放到某个队列中，由专门的线程从队列中取出任务进行打印。下面设计这样一个日志服务：
 
-```
+```java
 public class LogService {
 	private final BlockingQueue<String> queue;
 	private final PrintWriter writer;
