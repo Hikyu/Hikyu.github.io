@@ -5,7 +5,7 @@
 # Site
 title: YuKai's blog
 subtitle: 好好学习，天天向上
-description: 学习总结，生活总结。
+description: Who Are You
 author: 于凯
 language: zh-Hans
 timezone:
@@ -72,3 +72,9 @@ deploy:
   type: git
   repo: git@github.com:Hikyu/Hikyu.github.io.git
   branch: master
+
+search:
+  path: search.xml
+  field: post
+  format: html
+  limit: 10000

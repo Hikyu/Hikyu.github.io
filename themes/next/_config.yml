@@ -14,13 +14,13 @@ keywords: "Hexo, NexT"
 rss:
 
 # Specify the date when the site was setup
-#since: 2015
+since: 2016
 
 # icon between year and author @Footer
 authoricon: heart
 
 # Footer `powered-by` and `theme-info` copyright
-copyright: true
+copyright: false
 
 
 # Canonical, set a canonical link tag in your hexo, you could use it for your SEO of blog.
@@ -38,9 +38,10 @@ seo: false
 # When running the site in a subdirectory (e.g. domain.tld/blog), remove the leading slash (/archives -> archives)
 menu:
   home: /
-  categories: /categories
-  archives: /archives
-  tags: /tags
+  #categories: /categories
+  #archives: /archives
+  #tags: /tags
+  tools: /tools
   about: /page
   #sitemap: /sitemap.xml
   #commonweal: /404.html
@@ -59,6 +60,7 @@ menu_icons:
   categories: th
   schedule: calendar
   tags: tags
+  tools: archive
   archives: archive
   sitemap: sitemap
   commonweal: heartbeat
@@ -94,13 +96,13 @@ font:
   global:
     # external: true will load this font family from host.
     external: true
-    family: Lato
+    family: Monda
 
   # Font settings for Headlines (h1, h2, h3, h4, h5, h6)
   # Fallback to `global` font settings.
   headings:
     external: true
-    family:
+    family: Roboto Slab
 
   # Font settings for posts
   # Fallback to `global` font settings.
@@ -113,13 +115,13 @@ font:
   # The `size` option use `px` as unit
   logo:
     external: true
-    family:
+    family: Lobster Two
     size:
 
   # Font settings for <code> and code blocks.
   codes:
     external: true
-    family:
+    family: PT Mono
     size:
 
 
@@ -323,7 +325,7 @@ changyan:
 # Available value:
 #    button | slide
 # Warning: Baidu Share does not support https.
-#baidushare:
+baidushare: true
 ##  type: button
 
 # Share
@@ -456,7 +458,7 @@ algolia_search:
 
 # Local search
 local_search:
-  enable: false
+  enable: true
 
 # External URL with BASE64 encrypt & decrypt
 # Usage: {% exturl text url "title" %}
@@ -538,3 +540,5 @@ images: images
 
 # Theme version
 version: 5.1.0
+
+

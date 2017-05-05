@@ -6,15 +6,16 @@ comments: false
  name: "于凯"
  university: "中国民航大学"
  hometown: "山西晋中"
+ coordinate: "天津"
 {% endcodeblock %}
 
-本博客的目的在于记录工作和学习中的遇到的问题及解决方法，将学到的一些知识点总结下来。也有生活中的一些总结。
+本博客的目的在于记录工作和学习中的遇到的问题及解决方法，将学到的一些知识点总结下来。
 
 # 博客基础
 
-[Hexo](https://hexo.io/)一款轻量级的静态博客框架
-[hexo-theme-next](https://github.com/iissnan/hexo-theme-next)简洁的Hexo主题
-[Markdown](https://www.gitbook.com/book/noahsoft/-makedown/details)一款轻量级的标记语言
+[Hexo](https://hexo.io/) 一款轻量级的静态博客框架
+[hexo-theme-next](https://github.com/iissnan/hexo-theme-next) 简洁的Hexo主题
+[Markdown](https://www.gitbook.com/book/noahsoft/-makedown/details) 一款轻量级的标记语言
 
 # 技能栈
 
@@ -25,6 +26,8 @@ Git
 设计模式
 
 Linux
+
+Eclipse RCP
 
 # 书单
 
@@ -39,4 +42,6 @@ Linux
 《鸟哥的Linux私房菜》 人民邮电出版社
  
 《大型网站技术架构》 电子工业出版社
+
+《Maven实战》 机械工业出版社
 
