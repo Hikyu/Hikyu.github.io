@@ -11,8 +11,8 @@ tags:
 
 {% asset_img pool.jpg 线程池 %}
 
-<!-- more -->
 ## 使用线程池的原因
+<!-- more -->
 
 1. 无线创建线程的不足
 
@@ -303,7 +303,7 @@ abstract class SocketUsingTask<T> implements CancellableTask<T> {
 		this.socket = socket;
 	}
 	@Override
-	public void cancel() {
+	public void cancel() {在并发应用程序中，线程池是很重要的一块。读完《java并发编程实战》以及研究了一遍jdk源代码之后，总结一下线程池方面的知识~
 		try {
 			this.socket.close();
 		} catch (IOException e) {
