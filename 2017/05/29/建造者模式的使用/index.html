@@ -1,0 +1,987 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Monda:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|Lobster Two:300,300italic,400,400italic,700,700italic|PT Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="java," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="因为一个新项目的原因，去北京呆了半个多月，所以有好长时间没有写博客了。这段时间在写代码的过程中，学习到了建造者模式的一种用法，记录下来(设计模式在平时也会用到，网上文章多如牛毛，所以没怎么写关于设计模式这方面的日志)
+
+建造者模式建造者模式用来创建一个内部结构复杂的对象，拥有多个组成部分。建造者模式可以使用户无需知道这些组件的装配细节，只需要指定复杂对象的类型就可以得到该对象。
+有的复杂对象的组">
+<meta property="og:type" content="article">
+<meta property="og:title" content="建造者模式的使用">
+<meta property="og:url" content="http://yukai.space/2017/05/29/建造者模式的使用/index.html">
+<meta property="og:site_name" content="YuKai's blog">
+<meta property="og:description" content="因为一个新项目的原因，去北京呆了半个多月，所以有好长时间没有写博客了。这段时间在写代码的过程中，学习到了建造者模式的一种用法，记录下来(设计模式在平时也会用到，网上文章多如牛毛，所以没怎么写关于设计模式这方面的日志)
+
+建造者模式建造者模式用来创建一个内部结构复杂的对象，拥有多个组成部分。建造者模式可以使用户无需知道这些组件的装配细节，只需要指定复杂对象的类型就可以得到该对象。
+有的复杂对象的组">
+<meta property="og:image" content="http://yukai.space/2017/05/29/建造者模式的使用/builder.jpg">
+<meta property="og:updated_time" content="2017-05-29T14:27:48.996Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="建造者模式的使用">
+<meta name="twitter:description" content="因为一个新项目的原因，去北京呆了半个多月，所以有好长时间没有写博客了。这段时间在写代码的过程中，学习到了建造者模式的一种用法，记录下来(设计模式在平时也会用到，网上文章多如牛毛，所以没怎么写关于设计模式这方面的日志)
+
+建造者模式建造者模式用来创建一个内部结构复杂的对象，拥有多个组成部分。建造者模式可以使用户无需知道这些组件的装配细节，只需要指定复杂对象的类型就可以得到该对象。
+有的复杂对象的组">
+<meta name="twitter:image" content="http://yukai.space/2017/05/29/建造者模式的使用/builder.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yukai.space/2017/05/29/建造者模式的使用/"/>
+
+
+
+
+
+  <title> 建造者模式的使用 | YuKai's blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">YuKai's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">好好学习，天天向上</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            主页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tools">
+          <a href="/tools" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            工具
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/page" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocapitalize="off" autocomplete="off" autocorrect="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yukai.space/2017/05/29/建造者模式的使用/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="于凯">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="YuKai's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                建造者模式的使用
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-05-29T20:29:50+08:00">
+                2017-05-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/编程/" itemprop="url" rel="index">
+                    <span itemprop="name">编程</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>因为一个新项目的原因，去北京呆了半个多月，所以有好长时间没有写博客了。这段时间在写代码的过程中，学习到了建造者模式的一种用法，记录下来(设计模式在平时也会用到，网上文章多如牛毛，所以没怎么写关于设计模式这方面的日志)</p>
+</blockquote>
+<h2 id="建造者模式"><a href="#建造者模式" class="headerlink" title="建造者模式"></a>建造者模式</h2><p>建造者模式用来创建一个内部结构复杂的对象，拥有多个组成部分。建造者模式可以使用户无需知道这些组件的装配细节，只需要指定复杂对象的类型就可以得到该对象。</p>
+<p>有的复杂对象的组装还可能有一些限制条件，比如，某些属性必须存在，某些属性的初始化需要遵从一定的顺序等等。举一个修两层楼的比方：必须打好地基才能盖第一层楼，第一层盖好后才能盖第二层。</p>
+<p>复杂对象的创建过程被封装到一个建造者对象里面，用户可以直接使用建造者建造完毕的对象，而不必关心建造过程。</p>
+<img src="/2017/05/29/建造者模式的使用/builder.jpg" alt="builder" title="builder">
+<p>建造者模式包含上面几个对象：</p>
+<p>Builder：抽象建造者</p>
+<p>ConcreteBuilder：具体建造者</p>
+<p>Director：指挥者</p>
+<p>Product：产品角色</p>
+<p>还是用修楼那个例子来分析：</p>
+<p><strong>Client:</strong><br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> space.kyu.mode.builder;</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Client</span> </span>&#123;</div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line">		Builder builder = <span class="keyword">new</span> OneBuilder();</div><div class="line">		Director director = <span class="keyword">new</span> Director();</div><div class="line">		director.build(builder);</div><div class="line">		Building building = builder.getResult();</div><div class="line">		System.out.println(building);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p><strong>Director:</strong><br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> space.kyu.mode.builder;</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Director</span> </span>&#123;</div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">build</span><span class="params">(Builder builder)</span> </span>&#123;</div><div class="line">		builder.buildFoundation();</div><div class="line">		builder.buildLayer();</div><div class="line">		builder.buildSecondLayer();</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p><strong>Building:</strong><br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> space.kyu.mode.builder;</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Building</span> </span>&#123;</div><div class="line">	<span class="keyword">private</span> <span class="keyword">int</span> foundation;<span class="comment">//地基深度</span></div><div class="line">	<span class="keyword">private</span> <span class="keyword">int</span> layer;<span class="comment">//一层高度</span></div><div class="line">	<span class="keyword">private</span> <span class="keyword">int</span> secondLayer;<span class="comment">//二层高度</span></div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getFoundation</span><span class="params">()</span> </span>&#123;</div><div class="line">		<span class="keyword">return</span> foundation;</div><div class="line">	&#125;</div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setFoundation</span><span class="params">(<span class="keyword">int</span> foundation)</span> </span>&#123;</div><div class="line">		<span class="keyword">this</span>.foundation = foundation;</div><div class="line">	&#125;</div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getLayer</span><span class="params">()</span> </span>&#123;</div><div class="line">		<span class="keyword">return</span> layer;</div><div class="line">	&#125;</div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setLayer</span><span class="params">(<span class="keyword">int</span> layer)</span> </span>&#123;</div><div class="line">		<span class="keyword">this</span>.layer = layer;</div><div class="line">	&#125;</div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getSecondLayer</span><span class="params">()</span> </span>&#123;</div><div class="line">		<span class="keyword">return</span> secondLayer;</div><div class="line">	&#125;</div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setSecondLayer</span><span class="params">(<span class="keyword">int</span> secondLayer)</span> </span>&#123;</div><div class="line">		<span class="keyword">this</span>.secondLayer = secondLayer;</div><div class="line">	&#125;</div><div class="line">	<span class="meta">@Override</span></div><div class="line">	<span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>&#123;</div><div class="line">		<span class="keyword">return</span> <span class="string">"Building [foundation="</span> + foundation + <span class="string">", layer="</span> + layer</div><div class="line">				+ <span class="string">", secondLayer="</span> + secondLayer + <span class="string">"]"</span>;</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p><strong>Builder:</strong><br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> space.kyu.mode.builder;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">interface</span> <span class="title">Builder</span> </span>&#123;</div><div class="line">	<span class="function"><span class="keyword">void</span> <span class="title">buildFoundation</span><span class="params">()</span></span>;</div><div class="line">	<span class="function"><span class="keyword">void</span> <span class="title">buildLayer</span><span class="params">()</span></span>;</div><div class="line">	<span class="function"><span class="keyword">void</span> <span class="title">buildSecondLayer</span><span class="params">()</span></span>;</div><div class="line">	<span class="function">Building <span class="title">getResult</span><span class="params">()</span></span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p><strong>OneBuilder:</strong><br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> space.kyu.mode.builder;</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">OneBuilder</span> <span class="keyword">implements</span> <span class="title">Builder</span> </span>&#123;</div><div class="line">	Building building = <span class="keyword">new</span> Building();</div><div class="line">	<span class="meta">@Override</span></div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">buildFoundation</span><span class="params">()</span> </span>&#123;</div><div class="line">		building.setFoundation(<span class="number">5</span>);对象</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="meta">@Override</span></div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">buildLayer</span><span class="params">()</span> </span>&#123;</div><div class="line">		building.setLayer(<span class="number">3</span>);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="meta">@Override</span></div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">buildSecondLayer</span><span class="params">()</span> </span>&#123;</div><div class="line">		building.setSecondLayer(<span class="number">3</span>);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="meta">@Override</span></div><div class="line">	<span class="function"><span class="keyword">public</span> Building <span class="title">getResult</span><span class="params">()</span> </span>&#123;</div><div class="line">		<span class="keyword">return</span> building;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p><strong>TwoBuilder:</strong>对象<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> space.kyu.mode.builder;</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TwoBuilder</span> <span class="keyword">implements</span> <span class="title">Builder</span> </span>&#123;</div><div class="line">	Building building = <span class="keyword">new</span> Building();</div><div class="line">	<span class="meta">@Override</span></div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">buildFoundation</span><span class="params">()</span> </span>&#123;</div><div class="line">		building.setFoundation(<span class="number">4</span>);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="meta">@Override</span></div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">buildLayer</span><span class="params">()</span> </span>&#123;</div><div class="line">		building.setLayer(<span class="number">2</span>);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="meta">@Override</span></div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">buildSecondLayer</span><span class="params">()</span> </span>&#123;</div><div class="line">		building.setSecondLayer(<span class="number">2</span>);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="meta">@Override</span></div><div class="line">	<span class="function"><span class="keyword">public</span> Building <span class="title">getResult</span><span class="params">()</span> </span>&#123;</div><div class="line">		<span class="keyword">return</span> building;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>上面的例子中：</p>
+<p>类Client就是用户</p>
+<p>类Director就是指挥者Director</p>
+<p>类Builder就是抽象建造者Builder</p>
+<p>类Building就是产品Product</p>
+<p>类OneBuilder、TwoBuilder就是实际建造者</p>
+<p>可以看到，我们在客户端中只需要指定实际建造者，指挥类就可以为我们生成想要的产品。我们完全不需要知道这个二层小楼的建造过程，使用者与建造过程顺利解藕。并且，如果需要不同设计方案的二层小楼，我们只需要再实现一个实际建造者，并在客户端中指定即可。而且，修改一个实际建造者不会影响到其他的实现。</p>
+<p>建造者模式与工厂方法模式很类似，如果把上面的指挥类当作客户端的话，那么他基本上就是一个工厂方法模式了。</p>
+<p>建造者模式 与工厂方法模式的区别就在于增加了这个指挥类，因此建造者模式适用于创建过程更加复杂的对象。</p>
+<h2 id="扩展"><a href="#扩展" class="headerlink" title="扩展"></a>扩展</h2><p>其实这个扩展才是这篇日志的重点，是建造者模式的一种延伸，也是我在这段时间里面学习到的一种用法。</p>
+<p>这个用法一开始是在使用<code>org.apache.http.client.utils.URIBuilder</code>的时候学到的，当时用到的时候就觉得眼前一亮，马上想到了建造者模式的Builder，而且使用了流式接口，用起来很顺畅的感觉…</p>
+<p>后来看到了网上的一篇文章<a href="http://www.hollischuang.com/archives/1533" target="_blank" rel="external">设计模式（十）——建造者模式的实践</a>讲的就是这个用法，也是翻译了老外的一篇博客。原文已经分析的很好了，所以直接转载过来了。(作者的其他博客也是很通俗易懂的，值的学习)</p>
+<p>以下内容引用自<a href="http://www.hollischuang.com/archives/1533" target="_blank" rel="external">设计模式（十）——建造者模式的实践</a></p>
+<hr>
+<p>我不打算深入介绍设计模式的细节内容，因为有很多这方面的文章和书籍可供参考。</p>
+<p>本文主要关注于告诉你为什么以及在什么情况下你应该考虑使用建造者模式。</p>
+<p>然而，值得一提的是本文中的模式和GOF中的提出的有点不一样。那种原生的模式主要侧重于抽象构造的过程以达到通过修改builder的实现来得到不同的结果的目的。本文中主要介绍的这种模式并没有那么复杂，因为我删除了不必要的多个构造函数、多个可选参数以及大量的setter/getter方法。</p>
+<p>假设你有一个类，其中包含大量属性。就像下面的User类一样。假设你想让这个类是不可变的。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">User</span> </span>&#123;</div><div class="line">    <span class="keyword">private</span> <span class="keyword">final</span> String firstName;    <span class="comment">//required</span></div><div class="line">    <span class="keyword">private</span> <span class="keyword">final</span> String lastName;    <span class="comment">//required</span></div><div class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">int</span> age;    <span class="comment">//optional</span></div><div class="line">    <span class="keyword">private</span> <span class="keyword">final</span> String phone;    <span class="comment">//optional</span></div><div class="line">    <span class="keyword">private</span> <span class="keyword">final</span> String address;    <span class="comment">//optional</span></div><div class="line">    ...</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>在这样的类中，有一些属性是必须的（required）而另外一些是可选的（optional）。如果你想要构造这个类的实例，你会怎么做？把所有属性都设置成final类型，然后使用构造函数初始化他们嘛？但是，如果你想让这个类的调用者可以从众多的可选参数中选择自己想要的进行设置怎么办？</p>
+<p>第一个可想到的方案可能是重载多个构造函数，其中有一个只初始化必要的参数，还有一个会在初始化必要的参数同时初始化所有的可选参数，还有一些其他的构造函数介于两者之间，就是一次多初始化一个可选参数。就像下面的代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="title">User</span><span class="params">(String firstName, String lastName)</span> </span>&#123;</div><div class="line">    <span class="keyword">this</span>(firstName, lastName, <span class="number">0</span>);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="title">User</span><span class="params">(String firstName, String lastName, <span class="keyword">int</span> age)</span> </span>&#123;</div><div class="line">    <span class="keyword">this</span>(firstName, lastName, age, <span class="string">""</span>);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="title">User</span><span class="params">(String firstName, String lastName, <span class="keyword">int</span> age, String phone)</span> </span>&#123;</div><div class="line">    <span class="keyword">this</span>(firstName, lastName, age, phone, <span class="string">""</span>);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="title">User</span><span class="params">(String firstName, String lastName, <span class="keyword">int</span> age, String phone, String address)</span> </span>&#123;</div><div class="line">    <span class="keyword">this</span>.firstName = firstName;</div><div class="line">    <span class="keyword">this</span>.lastName = lastName;</div><div class="line">    <span class="keyword">this</span>.age = age;</div><div class="line">    <span class="keyword">this</span>.phone = phone;</div><div class="line">    <span class="keyword">this</span>.address = address;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>首先可以肯定的是，这样做是可以满足要求的。</p>
+<p>当然，这种方式的缺点也是很明显的。当一个类中只有几个参数的时候还好，如果一旦类中的参数逐渐增大，那么这个类就会变得很难阅读和维护。更重要的是，这样的一个类，调用者会很难使用。我到底应该使用哪个构造方法？是包含两个参数的还是包含三个参数的？如果我没有传递值的话那些属性的默认值是什么？如果我只想对address赋值而不对age和phone赋值怎么办？遇到这种情况可能我只能调用那个参数最全的构造函数，然后对于我不想要的参数值传递一个默认值。</p>
+<p>此外，如果多个参数的类型都相同那就很容易让人困惑，第一个String类型的参数到底是number还是address呢？</p>
+<p>还有没有其他方案可选择呢？我们可以遵循JaveBean规范，定义一个只包含无参数的构造方法和getter、setter方法的JavaBean。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">User</span> </span>&#123;</div><div class="line">    <span class="keyword">private</span> String firstName; <span class="comment">// required</span></div><div class="line">    <span class="keyword">private</span> String lastName; <span class="comment">// required</span></div><div class="line">    <span class="keyword">private</span> <span class="keyword">int</span> age; <span class="comment">// optional</span></div><div class="line">    <span class="keyword">private</span> String phone; <span class="comment">// optional</span></div><div class="line">    <span class="keyword">private</span> String address;  <span class="comment">//optional</span></div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getFirstName</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> firstName;</div><div class="line">    &#125;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setFirstName</span><span class="params">(String firstName)</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.firstName = firstName;</div><div class="line">    &#125;</div><div class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getLastName</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> lastName;</div><div class="line">    &#125;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setLastName</span><span class="params">(String lastName)</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.lastName = lastName;</div><div class="line">    &#125;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getAge</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> age;</div><div class="line">    &#125;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setAge</span><span class="params">(<span class="keyword">int</span> age)</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.age = age;</div><div class="line">    &#125;</div><div class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getPhone</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> phone;</div><div class="line">    &#125;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setPhone</span><span class="params">(String phone)</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.phone = phone;</div><div class="line">    &#125;</div><div class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getAddress</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> address;</div><div class="line">    &#125;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setAddress</span><span class="params">(String address)</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.address = address;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这种方式看上去很容易阅读和维护。对于调用者来说，我只需要创建一个空的对象，然后对于我想设置的参数调用setter方法设置就好了。这难道还有什么问题吗？其实存在两个问题。第一个问题是该类的实例状态不固定。如果你想创建一个User对象，该对象的5个属性都要赋值，那么直到所有的setXX方法都被调用之前，该对象都没有一个完整的状态。这意味着在该对象状态还不完整的时候，一部分客户端程序可能看见这个对象并且以为该对象已经构造完成。</p>
+<p>这种方法的第二个不足是User类是易变的（因为没有属性是final的）。你将会失去不可变对象带来的所有优点。</p>
+<p>幸运的是应对这种场景我们有第三种选择，建造者模式。解决方案类似如下所示：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">User</span> </span>&#123;</div><div class="line">    <span class="keyword">private</span> <span class="keyword">final</span> String firstName; <span class="comment">// required</span></div><div class="line">    <span class="keyword">private</span> <span class="keyword">final</span> String lastName; <span class="comment">// required</span></div><div class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">int</span> age; <span class="comment">// optional</span></div><div class="line">    <span class="keyword">private</span> <span class="keyword">final</span> String phone; <span class="comment">// optional</span></div><div class="line">    <span class="keyword">private</span> <span class="keyword">final</span> String address; <span class="comment">// optional</span></div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">private</span> <span class="title">User</span><span class="params">(UserBuilder builder)</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.firstName = builder.firstName;</div><div class="line">        <span class="keyword">this</span>.lastName = builder.lastName;</div><div class="line">        <span class="keyword">this</span>.age = builder.age;</div><div class="line">        <span class="keyword">this</span>.phone = builder.phone;</div><div class="line">        <span class="keyword">this</span>.address = builder.address;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getFirstName</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> firstName;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getLastName</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> lastName;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getAge</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> age;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getPhone</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> phone;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getAddress</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> address;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">UserBuilder</span> </span>&#123;</div><div class="line">        <span class="keyword">private</span> <span class="keyword">final</span> String firstName;</div><div class="line">        <span class="keyword">private</span> <span class="keyword">final</span> String lastName;</div><div class="line">        <span class="keyword">private</span> <span class="keyword">int</span> age;</div><div class="line">        <span class="keyword">private</span> String phone;</div><div class="line">        <span class="keyword">private</span> String address;</div><div class="line"></div><div class="line">        <span class="function"><span class="keyword">public</span> <span class="title">UserBuilder</span><span class="params">(String firstName, String lastName)</span> </span>&#123;</div><div class="line">            <span class="keyword">this</span>.firstName = firstName;</div><div class="line">            <span class="keyword">this</span>.lastName = lastName;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="function"><span class="keyword">public</span> UserBuilder <span class="title">age</span><span class="params">(<span class="keyword">int</span> age)</span> </span>&#123;</div><div class="line">            <span class="keyword">this</span>.age = age;</div><div class="line">            <span class="keyword">return</span> <span class="keyword">this</span>;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="function"><span class="keyword">public</span> UserBuilder <span class="title">phone</span><span class="params">(String phone)</span> </span>&#123;</div><div class="line">            <span class="keyword">this</span>.phone = phone;</div><div class="line">            <span class="keyword">return</span> <span class="keyword">this</span>;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="function"><span class="keyword">public</span> UserBuilder <span class="title">address</span><span class="params">(String address)</span> </span>&#123;</div><div class="line">            <span class="keyword">this</span>.address = address;</div><div class="line">            <span class="keyword">return</span> <span class="keyword">this</span>;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="function"><span class="keyword">public</span> User <span class="title">build</span><span class="params">()</span> </span>&#123;</div><div class="line">            <span class="keyword">return</span> <span class="keyword">new</span> User(<span class="keyword">this</span>);</div><div class="line">        &#125;</div><div class="line"></div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>值得注意的几个要点:</p>
+<blockquote>
+<p>User类的构造函数是私有的，这意味着你不能在外面直接创建这个类的对象。</p>
+<p>该类是不可变的。所有属性都是final类型的，在构造方法里面被赋值。另外，我们只为它们提供了getter方法。</p>
+<p>builder类使用流式接口风格，让客户端代码阅读起来更容易（我们马上就会看到一个它的例子）</p>
+<p>builder的构造方法只接收必要的参数，为了确保这些属性在构造方法里赋值，只有这些属性被定义成final类型。</p>
+<p>使用建造者模式有在本文开始时提到的两种方法的所有优点，并且没有它们的缺点。客户端代码写起来更简单，更重要的是，更易读。我听过的关于该模式的唯一批判是你必须在builder类里面复制类的属性。然而，考虑到这个事实，builder类通常是需要建造的类的一个静态类成员，它们一起扩展起来相当容易。（译者表示没明白为设定为静态成员扩展起来就容易了。设为静态成员我认为有一个好处就是可以避免出现is not an enclosing class的编译问题，创建对象时候更加方便）</p>
+</blockquote>
+<p>现在，试图创建一个新的User对象的客户端代码看起来如何那？让我们来看一下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> User <span class="title">getUser</span><span class="params">()</span> </span>&#123;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">new</span></div><div class="line">            User.UserBuilder(<span class="string">"Jhon"</span>, <span class="string">"Doe"</span>)</div><div class="line">            .age(<span class="number">30</span>)</div><div class="line">            .phone(<span class="string">"1234567"</span>)</div><div class="line">            .address(<span class="string">"Fake address 1234"</span>)</div><div class="line">            .build();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>译者注：如果UserBuilder没有设置为static的，以上代码会有编译错误。错误提示：User is not an enclosing class</p>
+<p>以上代码看上去相当整洁。我们可以只通过一行代码就可以创建一个User对象，并且这行代码也很容易读懂。除此之外，这样还能确保无论何时你想获取该类的对象都不会是不完整的（译者注：因为创建对象的过程是一气呵成的，一旦对象创建完成之后就不可修改了）。</p>
+<p>这种模式非常灵活，一个单独的builder类可以通过在调用build方法之前改变builder的属性来创建多个对象。builder类甚至可以在每次调用之间自动补全一些生成的字段，例如一个id或者序列号。</p>
+<p>值得注意的是，像构造函数一样，builder可以对参数的合法性进行检查，一旦发现参数不合法可以抛出IllegalStateException异常。</p>
+<p>但是，很重要的一点是，如果要检查参数的合法性，一定要先把参数传递给对象，然后在检查对象中的参数是否合法。其原因是因为builder并不是线程安全的。如果我们在创建真正的对象之前验证参数，参数值可能被另一个线程在参数验证完和参数被拷贝完成之间的时间修改。这段时间周期被称作“脆弱之窗”。我们的例子中情况如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> User <span class="title">build</span><span class="params">()</span> </span>&#123;</div><div class="line">    User user = <span class="keyword">new</span> user(<span class="keyword">this</span>);</div><div class="line">    <span class="keyword">if</span> (user.getAge() &gt; <span class="number">120</span>) &#123;</div><div class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalStateException(“Age out of range”); <span class="comment">// thread-safe</span></div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> user;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>上一个代码版本是线程安全的因为我们首先创建user对象，然后在不可变对象上验证条件约束。下面的代码在功能上看起来一样但是它不是线程安全的，你应该避免这么做：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> User <span class="title">build</span><span class="params">()</span> </span>&#123;</div><div class="line">    <span class="keyword">if</span> (age &gt; <span class="number">120</span>) &#123;</div><div class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalStateException(“Age out of range”); <span class="comment">// bad, not thread-safe</span></div><div class="line">    &#125;</div><div class="line">    <span class="comment">// This is the window of opportunity for a second thread to modify the value of age</span></div><div class="line">    <span class="keyword">return</span> <span class="keyword">new</span> User(<span class="keyword">this</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>建造者模式最后的一个优点是builder可以作为参数传递给一个方法，让该方法有为客户端创建一个或者多个对象的能力，而不需要知道创建对象的任何细节。为了这么做你可能通常需要一个如下所示的简单接口：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Builder</span> </span>&#123;</div><div class="line">    <span class="function">T <span class="title">build</span><span class="params">()</span></span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>借用之前的User例子，UserBuilder类可以实现Builder。如此，我们可以有如下的代码：</p>
+<p>UserCollection buildUserCollection(Builder userBuilder){…}</p>
+<p>译者注：关于这这最后一个优点的部分内容并没太看懂，希望有理解的人能过不吝赐教。</p>
+<hr>
+
+      
+    </div>
+
+    <div>
+      
+        
+<div id="wechat_subscriber" style="display: block; padding: 10px 0; margin: 20px auto; width: 100%; text-align: center">
+    <img id="wechat_subscriber_qcode" src="/images/wechat-qcode.jpg" alt="于凯 wechat" style="width: 200px; max-width: 100%;"/>
+    <div>欢迎您扫一扫上面的微信公众号，订阅我的博客！</div>
+</div>
+
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/java/" rel="tag"># java</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/05/08/java线程池的使用/" rel="next" title="java线程池的使用">
+                <i class="fa fa-chevron-left"></i> java线程池的使用
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        
+<script>
+  with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='//bdimg.share.baidu.com/static/api/js/share.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="于凯" />
+          <p class="site-author-name" itemprop="name">于凯</p>
+           
+              <p class="site-description motion-element" itemprop="description">Who Are You</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/">
+                <span class="site-state-item-count">60</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">22</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/5381447277" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  微博
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/Hikyu" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#建造者模式"><span class="nav-number">1.</span> <span class="nav-text">建造者模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#扩展"><span class="nav-number">2.</span> <span class="nav-text">扩展</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">于凯</span>
+</div>
+
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length == 0) {
+      search_path = "search.xml";
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.popup').toggle();
+    }
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+      $.ajax({
+        url: path,
+        dataType: "xml",
+        async: true,
+        success: function( xmlResponse ) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = $( "entry", xmlResponse ).map(function() {
+            return {
+              title: $( "title", this ).text(),
+              content: $("content",this).text(),
+              url: $( "url" , this).text()
+            };
+          }).get();
+          var $input = document.getElementById(search_id);
+          var $resultContent = document.getElementById(content_id);
+          $input.addEventListener('input', function(){
+            var matchcounts = 0;
+            var str='<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length > 1) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var content_index = [];
+                var data_title = data.title.trim().toLowerCase();
+                var data_content = data.content.trim().replace(/<[^>]+>/g,"").toLowerCase();
+                var data_url = decodeURIComponent(data.url);
+                var index_title = -1;
+                var index_content = -1;
+                var first_occur = -1;
+                // only match artiles with not empty titles and contents
+                if(data_title != '') {
+                  keywords.forEach(function(keyword, i) {
+                    index_title = data_title.indexOf(keyword);
+                    index_content = data_content.indexOf(keyword);
+                    if( index_title >= 0 || index_content >= 0 ){
+                      isMatch = true;
+                      if (i == 0) {
+                        first_occur = index_content;
+                      }
+                    }
+
+                  });
+                }
+                // show search results
+                if (isMatch) {
+                  matchcounts += 1;
+                  str += "<li><a href='"+ data_url +"' class='search-result-title'>"+ data_title +"</a>";
+                  var content = data.content.trim().replace(/<[^>]+>/g,"");
+                  if (first_occur >= 0) {
+                    // cut out 100 characters
+                    var start = first_occur - 20;
+                    var end = first_occur + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if(start == 0){
+                      end = 50;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    var match_content = content.substring(start, end);
+                    // highlight all keywords
+                    keywords.forEach(function(keyword){
+                      var regS = new RegExp(keyword, "gi");
+                      match_content = match_content.replace(regS, "<b class=\"search-keyword\">"+keyword+"</b>");
+                    });
+
+                    str += "<p class=\"search-result\">" + match_content +"...</p>"
+                  }
+                  str += "</li>";
+                }
+              })};
+            str += "</ul>";
+            if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>' }
+            if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>' }
+            $resultContent.innerHTML = str;
+          });
+          proceedsearch();
+        }
+      });}
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched == false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
