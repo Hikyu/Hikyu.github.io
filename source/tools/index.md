@@ -58,6 +58,8 @@ ssh客户端 : [MobaXterm](http://mobaxterm.mobatek.net/download.html)
 
 diff 工具 : [beyond compare 3](http://www.beyondcompare.cc/)    winmerge(生成csv格式对比结果)
 
+diff 在线对比 : [diffchecker](https://www.diffchecker.com/)
+
 抓包工具 : [wireshark](https://www.wireshark.org/)
 
 远程桌面 : teamviewer
@@ -77,6 +79,8 @@ diff 工具 : [beyond compare 3](http://www.beyondcompare.cc/)    winmerge(生�
 微信公众号编辑器 : 135编辑器
 
 博客 : [Hexo](https://hexo.io/) 
+
+搜索(Windows) : Everything
 
 翻墙
 
@@ -99,7 +103,7 @@ diff 工具 : [beyond compare 3](http://www.beyondcompare.cc/)    winmerge(生�
 
 [stackoverflow](https://stackoverflow.com/): 代码问题解决
 
-[vogella](http://www.vogella.com): Eclipse Rcp
+[vogella](http://www.vogella.com): Eclipse Rcp》
 
 [developerworks](https://www.ibm.com): java学习
 
