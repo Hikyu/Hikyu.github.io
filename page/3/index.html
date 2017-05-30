@@ -302,162 +302,6 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yukai.space/2017/02/26/Linux的五个查找命令/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="于凯">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="YuKai's blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2017/02/26/Linux的五个查找命令/" itemprop="url">
-                  Linux的五个查找命令
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-02-26T09:17:33+08:00">
-                2017-02-26
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/工具/" itemprop="url" rel="index">
-                    <span itemprop="name">工具</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <blockquote>
-<p>最近一直在读<a href="http://www.ruanyifeng.com">阮一峰老师的博客</a>,今天读到一篇介绍Linux查找命令的文章。恰好最近在学习linux，所以转载过来，当作一篇备忘录。</p>
-<p>原文链接：<a href="http://www.ruanyifeng.com/blog/2009/10/5_ways_to_search_for_files_using_the_terminal.html">Linux的五个查找命令</a></p>
-</blockquote>
-<p>使用电脑的时候，经常需要查找文件。</p>
-<p>在Linux中，有很多方法可以做到这一点。国外网站LinuxHaxor总结了五条命令，你可以看看自己知道几条。大多数程序员，可能经常使用其中的2到3条，对这5条命令都很熟悉的人应该是不多的。</p>
-<h2 id="find"><a href="#find" class="headerlink" title="find"></a>find</h2><p>find是最常见和最强大的查找命令，你可以用它找到任何你想找的文件。</p>
-<p>find的使用格式如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">　　$ find &lt;指定目录&gt; &lt;指定条件&gt; &lt;指定动作&gt;</div><div class="line">　　- &lt;指定目录&gt;： 所要搜索的目录及其所有子目录。默认为当前目录。</div><div class="line">　　- &lt;指定条件&gt;： 所要搜索的文件的特征。</div><div class="line">　　- &lt;指定动作&gt;： 对搜索结果进行特定的处理。</div></pre></td></tr></table></figure></p>
-<p>如果什么参数也不加，find默认搜索当前目录及其子目录，并且不过滤任何结果（也就是返回所有文件），将它们全都显示在屏幕上。</p>
-<p>find的使用实例：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">　　$ find . -name &apos;my*&apos;</div><div class="line">搜索当前目录（含子目录，以下同）中，所有文件名以my开头的文件。</div><div class="line">　　$ find . -name &apos;my*&apos; -ls</div><div class="line">搜索当前目录中，所有文件名以my开头的文件，并显示它们的详细信息。</div><div class="line">　　$ find . -type f -mmin -10</div><div class="line">搜索当前目录中，所有过去10分钟中更新过的普通文件。如果不加-type f参数，则搜索普通文件+特殊文件+目录。</div></pre></td></tr></table></figure></p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2017/02/26/Linux的五个查找命令/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yukai.space/2017/02/25/centos7BCM驱动安装/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1829,11 +1673,162 @@
 
 
     
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yukai.space/2016/11/24/java中的int\byte互转/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="于凯">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="YuKai's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/11/24/java中的int\byte互转/" itemprop="url">
+                  java 中的int/byte转换
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-11-24T22:48:55+08:00">
+                2016-11-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/编程/" itemprop="url" rel="index">
+                    <span itemprop="name">编程</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+          前言好久没有动博客了，看了下，将近两个月了吧。最近的两个月里面变懒了，没有了记录的动力。。。最近好像也没啥收获，惭愧。之前电脑中病毒之后(cryptolcker)，还好没有神马重要的东西，索性把硬盘重新格式化一遍，重做了系统。保留一套windows（实在受不了win10的自动更新了…）,又装了一套opensuse的系统。希望可以坚持学点linux。
+这段时间没有怎么看书，说一下读书情况。《重构》这本还是没有看完，读了大半。《深入理解jvm虚拟机》这本算是大致上浏览了一遍，发现确实是一本挺好的java书籍，日后还需多加翻阅理解。《大话设计模式》也是浏览了一遍，其中比较常见的模式有时候也可以用到，需要的时候再看吧。双十一买了一本《java并发编程实战》，看了大半，似懂非懂，但也是有收获的。不得不吐槽一下该书的翻译，实在是不敢恭维，但是想想自己的英语水平，目前还是忍了。。
+必须要振作起精神来了，总觉得自己每天无所事事呢。接下来的计划…..还是把并发编程这块看完吧，虽然没有什么实战的机会，总比不
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2016/11/24/java中的int\byte互转/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/2/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" href="/page/4/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/page/2/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/4/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1878,7 +1873,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/">
-                <span class="site-state-item-count">61</span>
+                <span class="site-state-item-count">60</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
