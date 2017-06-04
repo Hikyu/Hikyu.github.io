@@ -38,6 +38,8 @@ markdown: markdown here
 
 翻译: Google翻译
 
+ssh: secure shell
+
 ## 移动端(Android)
 ---
 
