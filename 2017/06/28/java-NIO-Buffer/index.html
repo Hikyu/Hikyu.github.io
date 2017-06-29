@@ -89,7 +89,7 @@
 <link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="java," />
 
 
 
@@ -105,16 +105,34 @@
 
 
 
-<meta name="description" content="Who Are You">
+<meta name="description" content="最近在看java nio方面的知识，打算写几篇博客总结一下，就从Buffer开始吧
+
+Bufferjava NIO库是在jdk1.4中引入的，NIO与IO之间的第一个区别在于，IO是面向流的，而NIO是面向块的。
+所谓的面向流是指：系统一次一个字节的处理数据，一个输入流产生一个字节的数据，一个输出流消费一个字节的数据。
+所谓的面向块是指：以块的形式处理数据。每一个操作都在一步中产生或者消费一个数">
 <meta property="og:type" content="article">
-<meta property="og:title" content="java-NIO-Buffer">
+<meta property="og:title" content="木耳炒山药">
 <meta property="og:url" content="http://yukai.space/2017/06/28/java-NIO-Buffer/index.html">
 <meta property="og:site_name" content="YuKai's blog">
-<meta property="og:description" content="Who Are You">
-<meta property="og:updated_time" content="2017-06-28T11:34:08.446Z">
+<meta property="og:description" content="最近在看java nio方面的知识，打算写几篇博客总结一下，就从Buffer开始吧
+
+Bufferjava NIO库是在jdk1.4中引入的，NIO与IO之间的第一个区别在于，IO是面向流的，而NIO是面向块的。
+所谓的面向流是指：系统一次一个字节的处理数据，一个输入流产生一个字节的数据，一个输出流消费一个字节的数据。
+所谓的面向块是指：以块的形式处理数据。每一个操作都在一步中产生或者消费一个数">
+<meta property="og:image" content="http://yukai.space/2017/06/28/java-NIO-Buffer/buffer.png">
+<meta property="og:image" content="http://yukai.space/2017/06/28/java-NIO-Buffer/buffer_api.png">
+<meta property="og:image" content="http://yukai.space/2017/06/28/java-NIO-Buffer/1.png">
+<meta property="og:image" content="http://yukai.space/2017/06/28/java-NIO-Buffer/2.png">
+<meta property="og:image" content="http://yukai.space/2017/06/28/java-NIO-Buffer/3.png">
+<meta property="og:updated_time" content="2017-06-29T12:33:47.653Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="java-NIO-Buffer">
-<meta name="twitter:description" content="Who Are You">
+<meta name="twitter:title" content="木耳炒山药">
+<meta name="twitter:description" content="最近在看java nio方面的知识，打算写几篇博客总结一下，就从Buffer开始吧
+
+Bufferjava NIO库是在jdk1.4中引入的，NIO与IO之间的第一个区别在于，IO是面向流的，而NIO是面向块的。
+所谓的面向流是指：系统一次一个字节的处理数据，一个输入流产生一个字节的数据，一个输出流消费一个字节的数据。
+所谓的面向块是指：以块的形式处理数据。每一个操作都在一步中产生或者消费一个数">
+<meta name="twitter:image" content="http://yukai.space/2017/06/28/java-NIO-Buffer/buffer.png">
 
 
 
@@ -148,7 +166,7 @@
 
 
 
-  <title> java-NIO-Buffer | YuKai's blog </title>
+  <title> 木耳炒山药 | YuKai's blog </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -322,7 +340,7 @@
             
             
               
-                java-NIO-Buffer
+                木耳炒山药
               
             
           </h1>
@@ -337,7 +355,7 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-28T19:34:08+08:00">
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-28T20:36:36+08:00">
                 2017-06-28
               </time>
             
@@ -347,6 +365,28 @@
             
           </span>
 
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/编程/" itemprop="url" rel="index">
+                    <span itemprop="name">编程</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
           
 
           
@@ -373,7 +413,184 @@
       
 
       
-        
+        <blockquote>
+<p>最近在看java nio方面的知识，打算写几篇博客总结一下，就从Buffer开始吧</p>
+</blockquote>
+<h2 id="Buffer"><a href="#Buffer" class="headerlink" title="Buffer"></a>Buffer</h2><p>java NIO库是在jdk1.4中引入的，NIO与IO之间的第一个区别在于，IO是面向流的，而NIO是面向块的。</p>
+<p>所谓的面向流是指：系统一次一个字节的处理数据，一个输入流产生一个字节的数据，一个输出流消费一个字节的数据。</p>
+<p>所谓的面向块是指：以块的形式处理数据。每一个操作都在一步中产生或者消费一个数据块。</p>
+<p>按块的方式处理数据要比按流的方式处理数据快，因为按块的方式读取或写入数据所执行的系统调用要远少于一次一个字节的方式，类似于BufferedInputStream的方式。</p>
+<p>上面所说的块，在NIO中就是Buffer对象。</p>
+<p>一个 Buffer(缓冲区) 实质上是一个容器对象，它包含一些要写入或者刚读出的数据。在 NIO 库中，所有数据都是用缓冲区处理的。在读取数据时，它是直接读到缓冲区中的。在写入数据时，它是写入到缓冲区中的。缓冲区实质上是一个数组。通常它是一个字节数组，但是也可以使用其他种类的数组。但是一个缓冲区不 仅仅 是一个数组。缓冲区提供了对数据的结构化访问，而且还可以跟踪系统的读/写进程。</p>
+<p>举例来说，ByteBuffer实质上是对byte数组进行了封装，其内部是一个byte数组，ByteBuffer对象提供了一些实用的API供我们去操作这个数组，完成一些读取或写入的功能。我们所要学习的，就是理解在调用这些API的时候，Buffer处理数组的方式。</p>
+<p>除了boolean类型之外，java为每种基本类型都封装了对应的Buffer对象。</p>
+<img src="/2017/06/28/java-NIO-Buffer/buffer.png" alt="Buffer" title="Buffer">
+<a id="more"></a>
+<h2 id="状态变量"><a href="#状态变量" class="headerlink" title="状态变量"></a>状态变量</h2><p>Buffer使用四个值指定了缓冲区在某个时刻的状态：</p>
+<p><strong>容量(Capacity)</strong>：缓冲区能够容纳的数据元素的最大数量</p>
+<p>实际上，这个值指定了底层数组的大小。这一值在缓冲区创建时被设定，并且永远不能被改变。</p>
+<p><strong>位置(Position)</strong>：下一个要被读或写的元素的索引</p>
+<p>position 变量跟踪已经写了多少数据。更准确地说，它指定了下一个字节将放到数组的哪一个元素中。比如，从通道中读三个字节到缓冲区中，那么缓冲区的 position 将会设置为3，指向数组中第四个元素。</p>
+<p>初始的position值为0。</p>
+<p><strong>边界(Limit)</strong>：缓冲区的第一个不能被读或写的元素。或者说，缓冲区中现存元素的计数。</p>
+<p>在写模式下，Buffer的limit表示你最多能往Buffer里写多少数据。</p>
+<p>当切换Buffer到读模式时， limit表示你最多能读到多少数据。因此，当切换Buffer到读模式时，limit会被设置成写模式下的position值。</p>
+<p><strong>标记(Mark)</strong>：一个备忘位置。</p>
+<p>调用 mark()来设定 mark = postion。调用 reset()设定 position = mark。</p>
+<p>初始的mark值为-1。</p>
+<p>上面四个属性遵循以下的关系：</p>
+<p><code>0 &lt;= mark &lt;= position &lt;= limit &lt;= capacity</code></p>
+<h2 id="API"><a href="#API" class="headerlink" title="API"></a>API</h2><img src="/2017/06/28/java-NIO-Buffer/buffer_api.png" alt="Buffer" title="Buffer">
+<ul>
+<li><strong>创建</strong></li>
+</ul>
+<p>在了解这些api之前，首先需要知道如何创建一个Buffer对象：</p>
+<p>在上一个小节中提到的7种缓冲区类没有一种是可以直接实例化的，他们都是抽象类，但都包含了静态工厂方法创建相应的实例。以ByteBuffer为例：(对于其他六中缓冲区类也适用)</p>
+<p><code>ByteBuffer buffer = ByteBuffer.allocate(1024);</code></p>
+<p>allocate方法分配了一个具有指定大小底层数组的缓冲区对象，这个大小也就是上面提到的Capacity。</p>
+<p>我们也可以使用已经存在的数组来作为缓冲区对象的底层数组：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">byte</span> array[] = <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">1024</span>];</div><div class="line">ByteBuffer buffer = ByteBuffer.wrap(array);</div></pre></td></tr></table></figure>
+<p>此时，buffer对象的底层数组指向了array，这意味着直接修改array数组也会使buffer对象读取的数据产生变化。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">byte</span>[] bs = <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">10</span>];</div><div class="line">ByteBuffer buffer = ByteBuffer.wrap(bs);</div><div class="line">System.out.println(buffer.toString());</div></pre></td></tr></table></figure>
+<p>打印如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">java.nio.HeapByteBuffer[pos=0 lim=10 cap=10]</div></pre></td></tr></table></figure>
+<p>可见，新初始化的Buffer实例中，position = 0，limit=capacity=10</p>
+<ul>
+<li><strong>存取</strong></li>
+</ul>
+<p>注意到Buffer类中并没有提供get或者put函数。实际上每一个Buffer对象都有这两个函数，但它们所采用的参数类型，以及它们返回的数据类型，对每个子类来说都是唯一的，所以它们不能在顶层Buffer类中被抽象地声明。这些存取方法被定义在Buffer类的子类当中，我们一ByteBuffer为例：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">byte</span> <span class="title">get</span><span class="params">()</span></span>;</div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">byte</span> <span class="title">get</span> <span class="params">(<span class="keyword">int</span> index)</span></span>;</div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> ByteBuffer <span class="title">put</span> <span class="params">(<span class="keyword">byte</span> b)</span></span>;</div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> ByteBuffer <span class="title">put</span> <span class="params">(<span class="keyword">int</span> index, <span class="keyword">byte</span> b)</span></span>;</div></pre></td></tr></table></figure>
+<p>ByteBuffer实际上还提供了 <code>get(byte[] dst, int offset, int length)</code>这样的接口，其内部实现也是循环调用了get()方法。</p>
+<p>get和put可以是相对的或者是绝对的。</p>
+<p>相对方案是不带有索引参数的函数。当相对函数被调用时，位置在返回时前进一。</p>
+<p>绝对存取不会影响缓冲区的位置属性(Position、Limit、Capacity、Mark)。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">buffer.put((<span class="keyword">byte</span>)<span class="string">'h'</span>).put((<span class="keyword">byte</span>)<span class="string">'e'</span>).put((<span class="keyword">byte</span>)<span class="string">'l'</span>).put((<span class="keyword">byte</span>)<span class="string">'l'</span>).put((<span class="keyword">byte</span>)<span class="string">'o'</span>);</div><div class="line">print(buffer, bs);</div><div class="line">buffer.put(<span class="number">0</span>, (<span class="keyword">byte</span>)<span class="string">'y'</span>).put((<span class="keyword">byte</span>)<span class="string">'y'</span>);</div><div class="line">print(buffer, bs);</div><div class="line"></div><div class="line"><span class="comment">//观察Buffer底层存储情况</span></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">print</span><span class="params">(Buffer buffer, <span class="keyword">byte</span>[] bs)</span> </span>&#123;</div><div class="line">		System.out.println(buffer.toString());</div><div class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; bs.length; i++) &#123;</div><div class="line">			<span class="keyword">if</span> (bs[i] != <span class="number">0</span>) &#123;</div><div class="line">				<span class="keyword">char</span> c = (<span class="keyword">char</span>)bs[i];</div><div class="line">				System.out.print(c);</div><div class="line">			&#125; <span class="keyword">else</span> &#123;</div><div class="line">				System.out.print(<span class="string">"$"</span>);</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">		System.out.println(<span class="string">""</span>);</div><div class="line">	&#125;</div></pre></td></tr></table></figure>
+<p>打印如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">java.nio.HeapByteBuffer[pos=5 lim=10 cap=10]</div><div class="line">hello$$$$$</div><div class="line">java.nio.HeapByteBuffer[pos=6 lim=10 cap=10]</div><div class="line">yelloy$$$$</div></pre></td></tr></table></figure>
+<p>可以看到，存入5个字节之后，position增加为5，limit与capacity不变。<br>调用buffer.put(0, (byte)’y’)，将bs[0]的数据改写为(byte)’y’，position并没有改变。</p>
+<ul>
+<li><strong>Buffer.flip()</strong></li>
+</ul>
+<p>我们想要将刚刚写入的数据读出的话应该怎么做？应该将position设为0：buffer.position(0)，就可以从正确的位置开始获取数据。但是它是怎样知道何时到达我们所插入数据末端的呢？这就是边界属性被引入的目的。边界属性指明了缓冲区有效内容的末端。我们需要将limit设置为当前位置：buffer.limit(buffer.position())。</p>
+<p><code>buffer.limit(buffer.position()).position(0);</code></p>
+<p>Buffer已经提供了一个方法封装了这些操作：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> Buffer <span class="title">flip</span><span class="params">()</span> </span>&#123;</div><div class="line">        limit = position;</div><div class="line">        position = <span class="number">0</span>;</div><div class="line">        mark = -<span class="number">1</span>;</div><div class="line">        <span class="keyword">return</span> <span class="keyword">this</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">buffer.flip();</div><div class="line">print(buffer, bs);</div></pre></td></tr></table></figure>
+<p>打印如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">java.nio.HeapByteBuffer[pos=0 lim=6 cap=10]</div><div class="line">yelloy$$$$</div></pre></td></tr></table></figure>
+<p>调用buffer.flip()后，limit设置为当前position值，position重置为0.</p>
+<ul>
+<li><strong>Buffer.rewind()</strong></li>
+</ul>
+<p>紧接着上面的程序：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">System.out.println((<span class="keyword">char</span>)buffer.get());</div><div class="line">System.out.println((<span class="keyword">char</span>)buffer.get(<span class="number">3</span>));</div><div class="line">print(buffer, bs);</div><div class="line">		</div><div class="line">buffer.rewind();</div><div class="line">print(buffer, bs);</div></pre></td></tr></table></figure>
+<p>打印如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">y</div><div class="line">l</div><div class="line">java.nio.HeapByteBuffer[pos=1 lim=6 cap=10]</div><div class="line">yelloy$$$$</div><div class="line">java.nio.HeapByteBuffer[pos=0 lim=6 cap=10]</div><div class="line">yelloy$$$$</div></pre></td></tr></table></figure>
+<p>可以看到，rewind()方法与filp()相似，但是不影响limit，他只是将position设为0，这样就可以从新读取已经读过的数据了。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> Buffer <span class="title">rewind</span><span class="params">()</span> </span>&#123;</div><div class="line">        position = <span class="number">0</span>;</div><div class="line">        mark = -<span class="number">1</span>;</div><div class="line">        <span class="keyword">return</span> <span class="keyword">this</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li><strong>Buffer.mark()、Buffer.reset()</strong></li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> Buffer <span class="title">mark</span><span class="params">()</span> </span>&#123;</div><div class="line">        mark = position;</div><div class="line">        <span class="keyword">return</span> <span class="keyword">this</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> Buffer <span class="title">reset</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">int</span> m = mark;</div><div class="line">        <span class="keyword">if</span> (m &lt; <span class="number">0</span>)</div><div class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> InvalidMarkException();</div><div class="line">        position = m;</div><div class="line">        <span class="keyword">return</span> <span class="keyword">this</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>Buffer.mark(),使缓冲区能够记住一个位置并在之后将其返回。</p>
+<p>缓冲区的标记在mark()函数被调用之前是未定义的，调用时标记被设为当前位置的值。reset()函数将位置设为当前的标记值。如果标记值未定义，调用reset()将导致InvalidMarkException异常。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">buffer.position(<span class="number">2</span>);</div><div class="line">buffer.mark();</div><div class="line">print(buffer, bs);</div><div class="line">buffer.position(<span class="number">4</span>);</div><div class="line">print(buffer, bs);</div><div class="line">buffer.reset();</div><div class="line">print(buffer, bs);</div></pre></td></tr></table></figure>
+<p>打印如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">java.nio.HeapByteBuffer[pos=2 lim=6 cap=10]</div><div class="line">yelloy$$$$</div><div class="line">java.nio.HeapByteBuffer[pos=4 lim=6 cap=10]</div><div class="line">yelloy$$$$</div><div class="line">java.nio.HeapByteBuffer[pos=2 lim=6 cap=10]</div><div class="line">yelloy$$$$</div></pre></td></tr></table></figure>
+<ul>
+<li><strong>Buffer.remaining()、Buffer.hasRemaining()</strong></li>
+</ul>
+<p>remaining()函数将返回从当前位置到上界还剩余的元素数目。</p>
+<p>hasRemaining()会返回是否已经达到缓冲区的边界。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">int</span> <span class="title">remaining</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> limit - position;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">boolean</span> <span class="title">hasRemaining</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> position &lt; limit;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>有两种方法读取缓冲区的所有剩余数据：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 第一种</span></div><div class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; buffer.hasRemaining(), i++) &#123;</div><div class="line">    myByteArray [i] = buffer.get();</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// 第二种</span></div><div class="line"><span class="keyword">int</span> count = buffer.remaining();</div><div class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; count, i++) &#123;</div><div class="line">    myByteArray [i] = buffer.get();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li><strong>Buffer.clear()</strong></li>
+</ul>
+<p>clear()函数将缓冲区重置为空状态。它并不改变缓冲区中的任何数据元素，而是仅仅将上界设为容量的值，并把位置设回 0。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> Buffer <span class="title">clear</span><span class="params">()</span> </span>&#123;</div><div class="line">        position = <span class="number">0</span>;</div><div class="line">        limit = capacity;</div><div class="line">        mark = -<span class="number">1</span>;</div><div class="line">        <span class="keyword">return</span> <span class="keyword">this</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li><strong>ByteBuffer.compact()</strong></li>
+</ul>
+<p>compact()方法并不是Buffer接口中定义的，而是属于ByteBuffer。</p>
+<p>如果Buffer中仍有未读的数据，且后续还需要这些数据，但是此时想要先写些数据，那么使用compact()方法。</p>
+<p>compact()方法将所有未读的数据拷贝到Buffer起始处。然后将position设到最后一个未读元素正后面。limit属性依然像clear()方法一样，设置成capacity。现在Buffer准备好写数据了，但是不会覆盖未读的数据。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">print(buffer, bs);</div><div class="line">System.out.println(buffer.remaining());</div><div class="line">buffer.compact();</div><div class="line">print(buffer, bs);</div></pre></td></tr></table></figure>
+<p>打印如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">java.nio.HeapByteBuffer[pos=2 lim=6 cap=10]</div><div class="line">yelloy$$$$</div><div class="line">4</div><div class="line">java.nio.HeapByteBuffer[pos=4 lim=10 cap=10]</div><div class="line">lloyoy$$$$</div></pre></td></tr></table></figure>
+<ul>
+<li><strong>ByteBuffer.equals()、ByteBuffer.compareTo()</strong></li>
+</ul>
+<p>可以使用equals()和compareTo()方法两个Buffer。</p>
+<p>下面提到的剩余元素是从 position到limit之间的元素。</p>
+<p><strong>equals()</strong></p>
+<p>当满足下列条件时，表示两个Buffer相等：</p>
+<p>有相同的类型（byte、char、int等）。</p>
+<p>Buffer中剩余的byte、char等的个数相等。</p>
+<p>Buffer中所有剩余的byte、char等都相同。</p>
+<p>在每个缓冲区中应被get()函数返回的剩余数据元素序列必须一致。</p>
+<p>equals只是比较Buffer的一部分，不是每一个在它里面的元素都比较。实际上，它只比较Buffer中的剩余元素。</p>
+<p><strong>compareTo()</strong></p>
+<p>compareTo()方法比较两个Buffer的剩余元素(byte、char等)， 如果满足下列条件，则认为一个Buffer“小于”另一个Buffer：</p>
+<p>第一个不相等的元素小于另一个Buffer中对应的元素 。</p>
+<p>所有元素都相等，但第一个Buffer比另一个先耗尽(第一个Buffer的元素个数比另一个少)。</p>
+<h2 id="只读缓冲区"><a href="#只读缓冲区" class="headerlink" title="只读缓冲区"></a>只读缓冲区</h2><p>可以使用asReadOnlyBuffer()函数来生成一个只读的缓冲区视图。</p>
+<p>这个新的缓冲区不允许使用put()，并且其isReadOnly()函数将会返回true。对这一只读缓冲区的put()函数的调用尝试会导致抛出ReadOnlyBufferException异常。</p>
+<p>两个缓冲区共享数据元素，拥有同样的容量，但每个缓冲区拥有各自的位置，上界和标记属性。对一个缓冲区内的数据元素所做的改变会反映在另外一个缓冲区上。</p>
+<h2 id="复制缓冲区"><a href="#复制缓冲区" class="headerlink" title="复制缓冲区"></a>复制缓冲区</h2><p>duplicate()函数创建了一个与原始缓冲区相似的新缓冲区。两个缓冲区共享数据元素，拥有同样的容量，但每个缓冲区拥有各自的位置，上界和标记属性。对一个缓冲区内的数据元素所做的改变会反映在另外一个缓冲区上。这一副本缓冲区具有与原始缓冲区同样的数据视图。如果原始的缓冲区为只读，或者为直接缓冲区，新的缓冲区将继承这些属性。</p>
+<p>复制一个缓冲区会创建一个新的Buffer对象，但并不复制数据。原始缓冲区和副本都会操作同样的数据元素。</p>
+<h2 id="直接缓冲区"><a href="#直接缓冲区" class="headerlink" title="直接缓冲区"></a>直接缓冲区</h2><p>直接ByteBuffer是通过调用ByteBuffer.allocateDirect(int capacity)函数来创建的。</p>
+<p>什么是直接缓冲区(DirectByteBuffer)呢？直接缓冲区意味着所分配的这段内存是堆外内存，而我们通过ByteBuffer.allocate(int capacity)或者ByteBuffer.wrap(byte[] array)分配的内存是堆内存，其返回的实例为HeapByteBuffer，HeapByteBuffer中持有一个byte数组，这个数组所占有的内存是堆内内存。</p>
+<p><a href="http://calvin1978.blogcn.com/articles/directbytebuffer.html" target="_blank" rel="external">Netty之Java堆外内存扫盲贴</a>了解java堆外内存。</p>
+<p>sun.nio.ch.FileChannelImpl.read(ByteBuffer dst)</p>
+<img src="/2017/06/28/java-NIO-Buffer/1.png" alt="sun.nio.ch.FileChannelImpl.read" title="sun.nio.ch.FileChannelImpl.read">
+<p>sun.nio.ch.IOUtil.read(FileDescriptor fd, ByteBuffer dst, long position,NativeDispatcher nd, Object lock)</p>
+<img src="/2017/06/28/java-NIO-Buffer/2.png" alt="sun.nio.ch.IOUtil.read" title="sun.nio.ch.IOUtil.read">
+<p>观察上面两段代码发现，我们通过一个文件通道去填充一个ByteBuffer时，先执行<code>sun.nio.ch.FileChannelImpl.read(ByteBuffer dst)</code>方法，其中调用了<code>sun.nio.ch.IOUtil.read(FileDescriptor fd, ByteBuffer dst, long position,NativeDispatcher nd, Object lock)</code>方法，观察这个方法，发现其中会做一个判断：如果是直接缓冲区(DirectBuffer)，直接调用<code>readIntoNativeBuffer(fd, dst, position, nd, lock)</code>并返回；如果是非直接缓冲区(HeapByteBuffer)，先获取一个直接缓冲区，然后使用该直接缓冲区作为参数调用<code>readIntoNativeBuffer(fd, dst, position, nd, lock)</code>，然后将填充完毕的DirectBuffer的内容复制到HeapByteBuffer当中，然后返回。</p>
+<p>直接缓冲区的内存分配调用了sun.misc.Unsafe.allocateMemory(size),返回了内存基地址，实际上就是malloc。</p>
+<p>看一下<a href="https://docs.oracle.com/javase/7/docs/api/java/nio/ByteBuffer.html" target="_blank" rel="external">java doc</a>对DirectBuffer的说明：</p>
+<blockquote>
+<p>A byte buffer is either direct or non-direct. Given a direct byte buffer, the Java virtual machine will make a best effort to perform native I/O operations directly upon it. That is, it will attempt to avoid copying the buffer’s content to (or from) an intermediate buffer before (or after) each invocation of one of the underlying operating system’s native I/O operations.</p>
+</blockquote>
+<p>给定一个直接字节缓冲区，Java 虚拟机将尽最大努力直接对它执行本机 I/O 操作。也就是说，它会在每一次调用底层操作系统的本机 I/O 操作之前(或之后)，尝试避免将缓冲区的内容拷贝到一个中间缓冲区中(或者从一个中间缓冲区中拷贝数据)。</p>
+<p>结合上面的代码，就可以理解这段话的含义。</p>
+<p>那么，为什么需要直接缓冲区，也就是堆外内存来执行IO呢？</p>
+<p>以读操作为例，数据从底层硬件读到内核缓冲区之后，操作系统会从内核空间复制数据到用户空间，此时的用户进程空间就是jvm，这意味着 I/O 操作的目标内存区域必须是连续的字节序列。在 Java 中，数组是对象，在 JVM 中，字节数组可能不会在内存中连续存储。因此，这个连续的字节序列就是直接缓冲区中分配的内存空间。需要直接缓冲区来当一个中间人，完成数据的写入或者读取。</p>
+<p>其实，在传统BIO中，也是这么做的，同样需要一个堆外内存来充当这个中间人：比如FileInputStream.read(byte b[], int off, int len):</p>
+<p>FileInputStream.read(byte b[], int off, int len)调用了readBytes(byte b[], int off, int len)方法，这个方法是一个本地方法：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="function">JNIEXPORT jint JNICALL  </span></div><div class="line"><span class="title">Java_java_io_FileInputStream_readBytes</span><span class="params">(JNIEnv *env, jobject <span class="keyword">this</span>,  </span></div><div class="line">        jbyteArray bytes, jint off, jint len) &#123;<span class="comment">//除了前两个参数，后三个就是readBytes方法传递进来的，字节数组、起始位置、长度三个参数  </span></div><div class="line"><span class="keyword">return</span> readBytes(env, <span class="keyword">this</span>, bytes, off, len, fis_fd);  </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div></pre></td><td class="code"><pre><div class="line"><span class="function">jint</span></div><div class="line"><span class="title">readBytes</span><span class="params">(JNIEnv *env, jobject <span class="keyword">this</span>, jbyteArray bytes,</span></div><div class="line">          jint off, jint len, jfieldID fid)</div><div class="line">&#123;</div><div class="line">    jint nread;</div><div class="line">    <span class="keyword">char</span> stackBuf[BUF_SIZE];</div><div class="line">    <span class="keyword">char</span> *buf = NULL;</div><div class="line">    FD fd;</div><div class="line"> </div><div class="line">    <span class="keyword">if</span> (IS_NULL(bytes)) &#123;</div><div class="line">        JNU_ThrowNullPointerException(env, NULL);</div><div class="line">        <span class="keyword">return</span> -<span class="number">1</span>;</div><div class="line">    &#125;</div><div class="line"> </div><div class="line">    <span class="keyword">if</span> (outOfBounds(env, off, len, bytes)) &#123;</div><div class="line">        JNU_ThrowByName(env, <span class="string">"java/lang/IndexOutOfBoundsException"</span>, NULL);</div><div class="line">        <span class="keyword">return</span> -<span class="number">1</span>;</div><div class="line">    &#125;</div><div class="line"> </div><div class="line">    <span class="keyword">if</span> (len == <span class="number">0</span>) &#123;</div><div class="line">        <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (len &gt; BUF_SIZE) &#123;</div><div class="line">        buf = malloc(len);<span class="comment">// buf的分配</span></div><div class="line">        <span class="keyword">if</span> (buf == NULL) &#123;</div><div class="line">            JNU_ThrowOutOfMemoryError(env, NULL);</div><div class="line">            <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">        &#125;</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">        buf = stackBuf;</div><div class="line">    &#125;</div><div class="line"> </div><div class="line">    fd = GET_FD(<span class="keyword">this</span>, fid);</div><div class="line">    <span class="keyword">if</span> (fd == -<span class="number">1</span>) &#123;</div><div class="line">        JNU_ThrowIOException(env, <span class="string">"Stream Closed"</span>);</div><div class="line">        nread = -<span class="number">1</span>;</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">        nread = IO_Read(fd, buf, len);<span class="comment">// buf是使用malloc分配的直接缓冲区，也就是堆外内存</span></div><div class="line">        <span class="keyword">if</span> (nread &gt; <span class="number">0</span>) &#123;</div><div class="line">            (*env)-&gt;SetByteArrayRegion(env, bytes, off, nread, (jbyte *)buf);<span class="comment">// 将直接缓冲区的内容copy到bytes数组中</span></div><div class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (nread == JVM_IO_ERR) &#123;</div><div class="line">            JNU_ThrowIOExceptionWithLastError(env, <span class="string">"Read error"</span>);</div><div class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (nread == JVM_IO_INTR) &#123;</div><div class="line">            JNU_ThrowByName(env, <span class="string">"java/io/InterruptedIOException"</span>, NULL);</div><div class="line">        &#125; <span class="keyword">else</span> &#123; <span class="comment">/* EOF */</span></div><div class="line">            nread = -<span class="number">1</span>;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"> </div><div class="line">    <span class="keyword">if</span> (buf != stackBuf) &#123;</div><div class="line">        free(buf);</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> nread;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>可以看到，这个方法其实最关键的就是IO_Read这个宏定义的处理，而IO_Read其实只是代表了一个方法名称叫handleRead，我们去看一下handleRead的源码。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"><span class="function">JNIEXPORT  </span></div><div class="line">size_t  </div><div class="line"><span class="title">handleRead</span><span class="params">(jlong fd, <span class="keyword">void</span> *buf, jint len)</span>  </div><div class="line">&#123;  </div><div class="line">    DWORD read = <span class="number">0</span>;  </div><div class="line">    BOOL result = <span class="number">0</span>;  </div><div class="line">    HANDLE h = (HANDLE)fd;  </div><div class="line">    <span class="keyword">if</span> (h == INVALID_HANDLE_VALUE) &#123;</div><div class="line">        <span class="keyword">return</span> -<span class="number">1</span>;  </div><div class="line">    &#125;  </div><div class="line">    result = ReadFile(h,          </div><div class="line">                      buf,       </div><div class="line">                      len,       </div><div class="line">                      &amp;read,      </div><div class="line">                      NULL);     </div><div class="line">    <span class="keyword">if</span> (result == <span class="number">0</span>) &#123;</div><div class="line">        <span class="keyword">int</span> error = GetLastError();  </div><div class="line">        <span class="keyword">if</span> (error == ERROR_BROKEN_PIPE) &#123;  </div><div class="line">            <span class="keyword">return</span> <span class="number">0</span>; </div><div class="line">        &#125;  </div><div class="line">        <span class="keyword">return</span> -<span class="number">1</span>;  </div><div class="line">    &#125;  </div><div class="line">    <span class="keyword">return</span> read;  </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>通过上面的代码可以发现，传统的BIO也是把操作系统返回的数据放到直接缓冲区当中，然后在copy回我们传入的byte数组当中。</p>
+<p>所有的缓冲区都提供了一个叫做isDirect()的boolean函数，来测试特定缓冲区是否为直接缓冲区。</p>
+<blockquote>
+<p>A direct byte buffer may be created by invoking the allocateDirect factory method of this class. The buffers returned by this method typically have somewhat higher allocation and deallocation costs than non-direct buffers. The contents of direct buffers may reside outside of the normal garbage-collected heap, and so their impact upon the memory footprint of an application might not be obvious. It is therefore recommended that direct buffers be allocated primarily for large, long-lived buffers that are subject to the underlying system’s native I/O operations. In general it is best to allocate direct buffers only when they yield a measureable gain in program performance.</p>
+</blockquote>
+<p>直接缓冲区虽然避免了复制内存带来的消耗，但直接缓冲区使用的内存是通过调用本地操作系统方面的代码分配的，绕过了标准 JVM 堆栈。建立和销毁直接缓冲区会明显比具有堆栈的缓冲区更加破费，并且可能带来不易察觉的内存泄漏，或oom问题。所以，如果对于性能要求不是很严格，一般情况下，使用非直接缓冲区就足够了。</p>
+<h2 id="缓冲区分片"><a href="#缓冲区分片" class="headerlink" title="缓冲区分片"></a>缓冲区分片</h2><p>slice() 方法根据现有的缓冲区创建一种 子缓冲区 。也就是说，它创建一个新的缓冲区，新缓冲区与原来的缓冲区的一部分共享数据。</p>
+<p>现在我们对这个缓冲区 分片 ，以创建一个包含槽 3 到槽 6 的子缓冲区。在某种意义上，子缓冲区就像原来的缓冲区中的一个 窗口。</p>
+<p>窗口的起始和结束位置通过设置 position 和 limit 值来指定，然后调用 Buffer 的 slice() 方法：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">print(buffer, bs);</div><div class="line">buffer.position( <span class="number">3</span> ).limit( <span class="number">7</span> );</div><div class="line">ByteBuffer slice = buffer.slice();</div><div class="line">print(slice, slice.array());</div></pre></td></tr></table></figure>
+<p>打印如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">java.nio.HeapByteBuffer[pos=4 lim=10 cap=10]</div><div class="line">lloyoy$$$$</div><div class="line">java.nio.HeapByteBuffer[pos=0 lim=4 cap=4]</div><div class="line">lloyoy$$$$</div></pre></td></tr></table></figure>
+<p>slice 是缓冲区的 子缓冲区 。不过， slice 和 buffer 共享同一个底层数据数组。</p>
+<h2 id="类型视图缓冲区"><a href="#类型视图缓冲区" class="headerlink" title="类型视图缓冲区"></a>类型视图缓冲区</h2><p>我们知道，Buffer可以作为通道执行IO的源头或者目标，但是通道只接受ByteBuffer类型的参数。比如read(ByteBuffer dst)。</p>
+<p>我们在进行IO操作时，可能会使用各种ByteBuffer类去读取文件内容，接收来自网络连接的数据使用各种ByteBuffer类去读取文件内容，接收来自网络连接的数据等。一旦数据到达了您的 ByteBuffer，我们需要对他进行一些操作。ByteBuffer类允许创建视图来将byte型缓冲区字节数据映射为其它的原始数据类型。例如，asLongBuffer()函数创建一个将八个字节型数据当成一个 long 型数据来存取的视图缓冲区。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">ByteBuffer</span> <span class="keyword">extends</span> <span class="title">Buffer</span> <span class="keyword">implements</span> <span class="title">Comparable</span></span>&#123;</div><div class="line">    <span class="comment">// 这里仅列出部分API</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> CharBuffer <span class="title">asCharBuffer</span><span class="params">()</span></span>;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> ShortBuffer <span class="title">asShortBuffer</span><span class="params">()</span></span>;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> IntBuffer <span class="title">asIntBuffer</span><span class="params">()</span></span>;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> LongBuffer <span class="title">asLongBuffer</span><span class="params">()</span></span>;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> FloatBuffer <span class="title">asFloatBuffer</span><span class="params">()</span></span>;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> DoubleBuffer <span class="title">asDoubleBuffer</span><span class="params">()</span></span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">buffer.clear();</div><div class="line">buffer.order(ByteOrder.BIG_ENDIAN);<span class="comment">//指定字节序</span></div><div class="line">buffer.put (<span class="number">0</span>, (<span class="keyword">byte</span>)<span class="number">0</span>);</div><div class="line">buffer.put (<span class="number">1</span>, (<span class="keyword">byte</span>)<span class="string">'H'</span>);</div><div class="line">buffer.put (<span class="number">2</span>, (<span class="keyword">byte</span>)<span class="number">0</span>);</div><div class="line">buffer.put (<span class="number">3</span>, (<span class="keyword">byte</span>)<span class="string">'i'</span>);</div><div class="line">buffer.put (<span class="number">4</span>, (<span class="keyword">byte</span>)<span class="number">0</span>);</div><div class="line">buffer.put (<span class="number">5</span>, (<span class="keyword">byte</span>)<span class="string">'!'</span>);</div><div class="line">buffer.put (<span class="number">6</span>, (<span class="keyword">byte</span>)<span class="number">0</span>);</div><div class="line"></div><div class="line">CharBuffer charBuffer = buffer.asCharBuffer();</div><div class="line">System.out.println(<span class="string">"pos="</span> + charBuffer.position() + <span class="string">" limit="</span> + charBuffer.limit() + <span class="string">" cap="</span> + charBuffer.capacity());;</div><div class="line">print(charBuffer, bs);</div></pre></td></tr></table></figure>
+<p>打印如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">pos=0 limit=5 cap=5</div><div class="line">Hi!   </div><div class="line">$H$i$!$$$$</div></pre></td></tr></table></figure>
+<p>新的缓冲区的容量是字节缓冲区中存在的元素数量除以视图类型中组成一个数据类型的字节数。视图缓冲区的第一个元素从创建它的ByteBuffer对象的位置开始(positon()函数的返回值)。</p>
+<img src="/2017/06/28/java-NIO-Buffer/3.png" alt="类型长度" title="类型长度">
+<h2 id="测试代码"><a href="#测试代码" class="headerlink" title="测试代码"></a>测试代码</h2><p>前面提到的测试代码汇总：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> java.nio.Buffer;</div><div class="line"><span class="keyword">import</span> java.nio.ByteBuffer;</div><div class="line"><span class="keyword">import</span> java.nio.ByteOrder;</div><div class="line"><span class="keyword">import</span> java.nio.CharBuffer;</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span> </span>&#123;</div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line">		<span class="keyword">byte</span>[] bs = <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">10</span>];</div><div class="line">		ByteBuffer buffer = ByteBuffer.wrap(bs);</div><div class="line">		System.out.println(buffer.toString());</div><div class="line">		<span class="comment">// put</span></div><div class="line">		buffer.put((<span class="keyword">byte</span>)<span class="string">'h'</span>).put((<span class="keyword">byte</span>)<span class="string">'e'</span>).put((<span class="keyword">byte</span>)<span class="string">'l'</span>).put((<span class="keyword">byte</span>)<span class="string">'l'</span>).put((<span class="keyword">byte</span>)<span class="string">'o'</span>);</div><div class="line">		print(buffer, bs);</div><div class="line">		buffer.put(<span class="number">0</span>, (<span class="keyword">byte</span>)<span class="string">'y'</span>).put((<span class="keyword">byte</span>)<span class="string">'y'</span>);</div><div class="line">		print(buffer, bs);</div><div class="line">		</div><div class="line">		<span class="comment">//flip</span></div><div class="line">		buffer.flip();</div><div class="line">		print(buffer, bs);</div><div class="line">		</div><div class="line">		<span class="comment">// rewind</span></div><div class="line">		System.out.println((<span class="keyword">char</span>)buffer.get());</div><div class="line">		System.out.println((<span class="keyword">char</span>)buffer.get(<span class="number">3</span>));</div><div class="line">		print(buffer, bs);</div><div class="line">		</div><div class="line">		buffer.rewind();</div><div class="line">		print(buffer, bs);</div><div class="line">		</div><div class="line">		<span class="comment">// mark reset</span></div><div class="line">		buffer.position(<span class="number">2</span>);</div><div class="line">		buffer.mark();</div><div class="line">		print(buffer, bs);</div><div class="line">		buffer.position(<span class="number">4</span>);</div><div class="line">		print(buffer, bs);</div><div class="line">		buffer.reset();</div><div class="line">		print(buffer, bs);</div><div class="line">		</div><div class="line">		<span class="comment">// compact</span></div><div class="line">		System.out.println(buffer.remaining());</div><div class="line">		buffer.compact();</div><div class="line">		print(buffer, bs);</div><div class="line">		</div><div class="line">		<span class="comment">// slice</span></div><div class="line">		buffer.position( <span class="number">3</span> ).limit( <span class="number">7</span> );</div><div class="line">		ByteBuffer slice = buffer.slice();</div><div class="line">		print(slice, slice.array());</div><div class="line">		</div><div class="line">		<span class="comment">// asCharBuffer</span></div><div class="line">		buffer.clear();</div><div class="line">		buffer.order(ByteOrder.BIG_ENDIAN);</div><div class="line">		buffer.put (<span class="number">0</span>, (<span class="keyword">byte</span>)<span class="number">0</span>);</div><div class="line">        buffer.put (<span class="number">1</span>, (<span class="keyword">byte</span>)<span class="string">'H'</span>);</div><div class="line">        buffer.put (<span class="number">2</span>, (<span class="keyword">byte</span>)<span class="number">0</span>);</div><div class="line">        buffer.put (<span class="number">3</span>, (<span class="keyword">byte</span>)<span class="string">'i'</span>);</div><div class="line">        buffer.put (<span class="number">4</span>, (<span class="keyword">byte</span>)<span class="number">0</span>);</div><div class="line">        buffer.put (<span class="number">5</span>, (<span class="keyword">byte</span>)<span class="string">'!'</span>);</div><div class="line">        buffer.put (<span class="number">6</span>, (<span class="keyword">byte</span>)<span class="number">0</span>);</div><div class="line">		CharBuffer charBuffer = buffer.asCharBuffer();</div><div class="line">		System.out.println(<span class="string">"pos="</span> + charBuffer.position() + <span class="string">" limit="</span> + charBuffer.limit() + <span class="string">" cap="</span> + charBuffer.capacity());;</div><div class="line">		print(charBuffer, bs);</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">print</span><span class="params">(Buffer buffer, <span class="keyword">byte</span>[] bs)</span> </span>&#123;</div><div class="line">		System.out.println(buffer.toString());</div><div class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; bs.length; i++) &#123;</div><div class="line">			<span class="keyword">if</span> (bs[i] != <span class="number">0</span>) &#123;</div><div class="line">				<span class="keyword">char</span> c = (<span class="keyword">char</span>)bs[i];</div><div class="line">				System.out.print(c);</div><div class="line">			&#125; <span class="keyword">else</span> &#123;</div><div class="line">				System.out.print(<span class="string">"$"</span>);</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">		System.out.println(<span class="string">""</span>);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://www.ksmpartners.com/2013/07/why-is-traditional-java-io-uninterruptable/" target="_blank" rel="external">Why is Traditional Java I/O Uninterruptable?</a></p>
+<p><a href="http://blog.csdn.net/zuoxiaolong8810/article/details/9974525" target="_blank" rel="external">JNI探秘—–FileInputStream的read方法详解</a></p>
+<p><a href="https://www.ibm.com/developerworks/cn/education/java/j-nio/j-nio.html" target="_blank" rel="external">NIO 入门</a></p>
+<p><a href="http://tutorials.jenkov.com/java-nio/buffers.html" target="_blank" rel="external">Java NIO Buffer</a></p>
+
       
     </div>
 
@@ -405,6 +622,12 @@
 
     <footer class="post-footer">
       
+        <div class="post-tags">
+          
+            <a href="/tags/java/" rel="tag"># java</a>
+          
+        </div>
+      
 
       
         
@@ -414,8 +637,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/06/05/如何从外网访问家里的电脑/" rel="next" title="如何从外网访问家里的电脑">
-                <i class="fa fa-chevron-left"></i> 如何从外网访问家里的电脑
+              <a href="/2017/06/24/并发场景下缓存的创建/" rel="next" title="并发场景下缓存的创建">
+                <i class="fa fa-chevron-left"></i> 并发场景下缓存的创建
               </a>
             
           </div>
@@ -423,10 +646,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2017/06/28/并发场景下缓存的创建/" rel="prev" title="并发场景下缓存的创建">
-                并发场景下缓存的创建 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -479,8 +698,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel sidebar-panel-active">
+      <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/images/avatar.jpg"
@@ -562,6 +790,22 @@
 
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Buffer"><span class="nav-number">1.</span> <span class="nav-text">Buffer</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#状态变量"><span class="nav-number">2.</span> <span class="nav-text">状态变量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#API"><span class="nav-number">3.</span> <span class="nav-text">API</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#只读缓冲区"><span class="nav-number">4.</span> <span class="nav-text">只读缓冲区</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#复制缓冲区"><span class="nav-number">5.</span> <span class="nav-text">复制缓冲区</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#直接缓冲区"><span class="nav-number">6.</span> <span class="nav-text">直接缓冲区</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#缓冲区分片"><span class="nav-number">7.</span> <span class="nav-text">缓冲区分片</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#类型视图缓冲区"><span class="nav-number">8.</span> <span class="nav-text">类型视图缓冲区</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#测试代码"><span class="nav-number">9.</span> <span class="nav-text">测试代码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">10.</span> <span class="nav-text">参考</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
