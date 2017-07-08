@@ -167,17 +167,17 @@ void fileOpen(JNIEnv *env, jobject this, jstring path, jfieldID fid, int flags)
 
 所以，FileInputStream打开文件的过程总结如下：
 
-1. 创建 FileDescriptor 对象
+- 创建 FileDescriptor 对象
 
 每一个 FileInputStream 有一个 FileDescriptor，代表这个流底层的文件的fd
 
-2. 调用 native 方法 open, 打开文件
+- 调用 native 方法 open, 打开文件
 
-3. 内部调用 handleOpen 打开文件，返回文件描述符 fd
+- 内部调用 handleOpen 打开文件，返回文件描述符 fd
 
 初始化 FileDescriptor 对象
 
-4. 将 文件描述符 fd 设置到，FileDescriptor 对象的 fd 中
+- 将 文件描述符 fd 设置到，FileDescriptor 对象的 fd 中
 
 ## 再谈java文件读取
 
