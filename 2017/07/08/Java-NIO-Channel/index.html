@@ -1,0 +1,1102 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Monda:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|Lobster Two:300,300italic,400,400italic,700,700italic|PT Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="java," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="Java NIO 学习第三篇–Channel
+
+Channel通道(Channel)的作用有类似于流(Stream)，用于传输文件或者网络上的数据。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java-NIO-Channel">
+<meta property="og:url" content="http://yukai.space/2017/07/08/Java-NIO-Channel/index.html">
+<meta property="og:site_name" content="YuKai's blog">
+<meta property="og:description" content="Java NIO 学习第三篇–Channel
+
+Channel通道(Channel)的作用有类似于流(Stream)，用于传输文件或者网络上的数据。">
+<meta property="og:image" content="http://yukai.space/2017/07/08/Java-NIO-Channel/channel.png">
+<meta property="og:image" content="http://yukai.space/2017/07/08/Java-NIO-Channel/filechannel.png">
+<meta property="og:image" content="http://yukai.space/2017/07/08/Java-NIO-Channel/api.png">
+<meta property="og:image" content="http://yukai.space/2017/07/08/Java-NIO-Channel/channel.png">
+<meta property="og:image" content="http://yukai.space/2017/07/08/Java-NIO-Channel/filechannel.png">
+<meta property="og:image" content="http://yukai.space/2017/07/08/Java-NIO-Channel/api.png">
+<meta property="og:image" content="http://yukai.space/2017/07/08/Java-NIO-Channel/bytechannel.png">
+<meta property="og:image" content="http://yukai.space/2017/07/08/Java-NIO-Channel/bytechannel.png">
+<meta property="og:updated_time" content="2017-07-08T13:47:24.876Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java-NIO-Channel">
+<meta name="twitter:description" content="Java NIO 学习第三篇–Channel
+
+Channel通道(Channel)的作用有类似于流(Stream)，用于传输文件或者网络上的数据。">
+<meta name="twitter:image" content="http://yukai.space/2017/07/08/Java-NIO-Channel/channel.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yukai.space/2017/07/08/Java-NIO-Channel/"/>
+
+
+
+
+
+  <title> Java-NIO-Channel | YuKai's blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">YuKai's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">好好学习，天天向上</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            主页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tools">
+          <a href="/tools" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            工具
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/page" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocapitalize="off" autocomplete="off" autocorrect="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yukai.space/2017/07/08/Java-NIO-Channel/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="于凯">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="YuKai's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Java-NIO-Channel
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-08T20:31:23+08:00">
+                2017-07-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/编程/" itemprop="url" rel="index">
+                    <span itemprop="name">编程</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>Java NIO 学习第三篇–Channel</p>
+</blockquote>
+<h2 id="Channel"><a href="#Channel" class="headerlink" title="Channel"></a>Channel</h2><p>通道(Channel)的作用有类似于流(Stream)，用于传输文件或者网络上的数据。</p>
+<img src="/2017/07/08/Java-NIO-Channel/channel.png" alt="channel" title="channel">
+<a id="more"></a>
+<p>上图中，箭头就相当于通道。一个不是很准确的例子：把通道想象成铁轨，缓冲区则是列车，铁轨的起始与终点则可以是socket，文件系统和我们的程序。假如当我们在代码中要写入数据到一份文件的时候，我们先把列车(缓冲区)装满，然后把列车(缓冲区)放置到铁轨上(通道)，数据就被传递到通道的另一端，文件系统。读取文件则相反，文件的内容被装到列车上，传递到程序这一侧，然后我们在代码中就可以读取这个列车中的内容(读取缓冲区)。</p>
+<p>通道与传统的流还是有一些区别的：</p>
+<ul>
+<li><p>通道可以同时支持读写(不是一定支持)，而流只支持单方向的操作，比如输入流只能读，输出流只能写。</p>
+</li>
+<li><p>通道可以支持异步的读或写，而流是同步的。</p>
+</li>
+<li><p>通道的读取或写入是通过缓冲区来进行的，而流则写入或返回字节。</p>
+</li>
+</ul>
+<h2 id="FileChannel"><a href="#FileChannel" class="headerlink" title="FileChannel"></a>FileChannel</h2><p>通道大致上可以分为两类：文件通道和socket通道。看一下文件通道：</p>
+<p>文件通道可以由以下几个方法获得：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">RandomAccessFile file = <span class="keyword">new</span> RandomAccessFile(<span class="keyword">new</span> File(fileName), <span class="string">"rw"</span>);</div><div class="line">FileChannel channel = file.getChannel();</div><div class="line"></div><div class="line">FileInputStream stream = <span class="keyword">new</span> FileInputStream(<span class="keyword">new</span> File(fileName));</div><div class="line">FileChannel channel = stream.getChannel();</div><div class="line"></div><div class="line">FileOutputStream stream = <span class="keyword">new</span> FileOutputStream(<span class="keyword">new</span> File(fileName));</div><div class="line">FileChannel channel = stream.getChannel();</div><div class="line"></div><div class="line">FileChannel channel = FileChannel.open(Paths.get(fileName));</div></pre></td></tr></table></figure>
+<p>FileChannel 类结构：</p>
+<img src="/2017/07/08/Java-NIO-Channel/filechannel.png" alt="Filechannel" title="Filechannel">
+<p>可见FileChannel实现了读写接口、聚集、发散接口，以及文件锁功能。下面会提到。</p>
+<p>看一下FileChannel的基本方法：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">FileChannel</span> <span class="keyword">extends</span> <span class="title">AbstractChannel</span> <span class="keyword">implements</span> <span class="title">ByteChannel</span>, <span class="title">GatheringByteChannel</span>, <span class="title">ScatteringByteChannel</span> </span>&#123;</div><div class="line">    <span class="comment">// 这里仅列出部分API</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">long</span> <span class="title">position</span><span class="params">()</span></span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">position</span> <span class="params">(<span class="keyword">long</span> newPosition)</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">int</span> <span class="title">read</span> <span class="params">(ByteBuffer dst)</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">int</span> <span class="title">read</span> <span class="params">(ByteBuffer dst, <span class="keyword">long</span> position)</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">int</span> <span class="title">write</span> <span class="params">(ByteBuffer src)</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">int</span> <span class="title">write</span> <span class="params">(ByteBuffer src, <span class="keyword">long</span> position)</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">long</span> <span class="title">size</span><span class="params">()</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">truncate</span> <span class="params">(<span class="keyword">long</span> size)</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">force</span> <span class="params">(<span class="keyword">boolean</span> metaData)</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>在通道出现之前，底层的文件操作都是通过RandomAccessFile类的方法来实现的。FileChannel模拟同样的 I/O 服务，因此它们的API自然也是很相似的。</p>
+<img src="/2017/07/08/Java-NIO-Channel/api.png" alt="Filechannel" title="Filechannel">
+<p>上图是FileChannel、RandomAccessFile 和 <a href="http://wiki.jikexueyuan.com/project/linux-process/posix.html" target="_blank" rel="external">POSIX I/O system calls</a> 三者在方法上的对应关系。</p>
+<p>POSIX接口我们在上一篇文章中也略有提及，他是一个系统级别的接口。下面看一下这几个接口，主要也是和上一篇文章文件描述符的介绍做一个呼应。</p>
+<ul>
+<li>position()和position(long newPosition)</li>
+</ul>
+<p>position()返回当前文件的position值，position(long newPosition)将当前position设置为指定值。当字节被read()或write()方法传输时，文件position会自动更新。</p>
+<p>position的含义与Buffer类中的position含义相似，都是指向下一个字节读取的位置。</p>
+<p>回想一下介绍文件描述符的文章当中提到，当进程打开一个文件时，内核就会创建一个新的file对象，这个file对象有一个字段loff_t f_pos描述了文件的当前位置，position相当于loff_t f_pos的映射。由此可知，如果是使用同一文件描述符读取文件，那么他们的position是相互影响的：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">RandomAccessFile file = <span class="keyword">new</span> RandomAccessFile(<span class="keyword">new</span> File(fileName), <span class="string">"rw"</span>);</div><div class="line">FileChannel channel = file.getChannel();</div><div class="line">System.out.println(<span class="string">"position: "</span> + channel.position());</div><div class="line">file.seek(<span class="number">30</span>);</div><div class="line">System.out.println(<span class="string">"position: "</span> + channel.position());</div></pre></td></tr></table></figure>
+<p>打印如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">position: 0</div><div class="line">position: 30</div></pre></td></tr></table></figure>
+<p>这是因为，file与channel使用了同一个文件描述符。如果新建另一个相同文件的通道，那么他们之间的position不会相互影响，因为使用了不同的文件描述符，指向不同的file对象。</p>
+<ul>
+<li>truncate(long size)</li>
+</ul>
+<p>当需要减少一个文件的size时，truncate()方法会砍掉指定的size值之外的所有数据。这个方法要求通道具有写权限。</p>
+<p>如果当前size大于给定size，超出给定size的所有字节都会被删除。如果提供的新size值大于或等于当前的文件size值，该文件不会被修改。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">RandomAccessFile file = <span class="keyword">new</span> RandomAccessFile(<span class="keyword">new</span> File(fileName), <span class="string">"rw"</span>);</div><div class="line">FileChannel channel = file.getChannel();</div><div class="line">System.out.println(<span class="string">"size: "</span> + channel.size());</div><div class="line">System.out.println(<span class="string">"position: "</span> + channel.position());</div><div class="line">System.out.println(<span class="string">"trucate: 90"</span>);</div><div class="line">channel.truncate(<span class="number">90</span>);</div><div class="line">System.out.println(<span class="string">"size: "</span> + channel.size());</div><div class="line">System.out.println(<span class="string">"position: "</span> + channel.position());</div></pre></td></tr></table></figure>
+<p>打印如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">size: 100</div><div class="line">position: 0</div><div class="line">trucate: 90</div><div class="line">size: 90</div><div class="line">position: 0</div></pre></td></tr></table></figure>
+<ul>
+<li>force (boolean metaData)</li>
+</ul>
+<p>force()方法告诉通道强制将全部待定的修改都应用到磁盘的文件上。</p>
+<p>如果文件位于一个本地文件系统，那么一旦force()方法返回，即可保证从通道被创建(或上次调用force())时起的对文件所做的全部修改已经被写入到磁盘。但是，如果文件位于一个远程的文件系统，如NFS上，那么不能保证待定修改一定能同步到永久存储器。</p>
+<p>force()方法的布尔型参数表示在方法返回值前文件的元数据(metadata)是否也要被同步更新到磁盘。元数据指文件所有者、访问权限、最后一次修改时间等信息。</p>
+<blockquote>
+<p>Java NIO 学习第三篇–Channel</p>
+</blockquote>
+<h2 id="Channel-1"><a href="#Channel-1" class="headerlink" title="Channel"></a>Channel</h2><p>通道(Channel)的作用有类似于流(Stream)，用于传输文件或者网络上的数据。</p>
+<img src="/2017/07/08/Java-NIO-Channel/channel.png" alt="channel" title="channel">
+<p>上图中，箭头就相当于通道。一个不是很准确的例子：把通道想象成铁轨，缓冲区则是列车，铁轨的起始与终点则可以是socket，文件系统和我们的程序。假如当我们在代码中要写入数据到一份文件的时候，我们先把列车(缓冲区)装满，然后把列车(缓冲区)放置到铁轨上(通道)，数据就被传递到通道的另一端，文件系统。读取文件则相反，文件的内容被装到列车上，传递到程序这一侧，然后我们在代码中就可以读取这个列车中的内容(读取缓冲区)。</p>
+<p>通道与传统的流还是有一些区别的：</p>
+<ul>
+<li><p>通道可以同时支持读写(不是一定支持)，而流只支持单方向的操作，比如输入流只能读，输出流只能写。</p>
+</li>
+<li><p>通道可以支持异步的读或写，而流是同步的。</p>
+</li>
+<li><p>通道的读取或写入是通过缓冲区来进行的，而流则写入或返回字节。</p>
+</li>
+</ul>
+<h2 id="FileChannel-1"><a href="#FileChannel-1" class="headerlink" title="FileChannel"></a><a href="https://docs.oracle.com/javase/7/docs/api/java/nio/channels/FileChannel.html" target="_blank" rel="external">FileChannel</a></h2><p>通道大致上可以分为两类：文件通道和socket通道。看一下文件通道：</p>
+<p>文件通道可以由以下几个方法获得：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">RandomAccessFile file = <span class="keyword">new</span> RandomAccessFile(<span class="keyword">new</span> File(fileName), <span class="string">"rw"</span>);</div><div class="line">FileChannel channel = file.getChannel();</div><div class="line"></div><div class="line">FileInputStream stream = <span class="keyword">new</span> FileInputStream(<span class="keyword">new</span> File(fileName));</div><div class="line">FileChannel channel = stream.getChannel();</div><div class="line"></div><div class="line">FileOutputStream stream = <span class="keyword">new</span> FileOutputStream(<span class="keyword">new</span> File(fileName));</div><div class="line">FileChannel channel = stream.getChannel();</div><div class="line"></div><div class="line">FileChannel channel = FileChannel.open(Paths.get(fileName));</div></pre></td></tr></table></figure>
+<p>FileChannel 类结构：</p>
+<img src="/2017/07/08/Java-NIO-Channel/filechannel.png" alt="Filechannel" title="Filechannel">
+<p>可见FileChannel实现了读写接口、聚集、发散接口，以及文件锁功能。下面会提到。</p>
+<p>看一下FileChannel的基本方法：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">FileChannel</span> <span class="keyword">extends</span> <span class="title">AbstractChannel</span> <span class="keyword">implements</span> <span class="title">ByteChannel</span>, <span class="title">GatheringByteChannel</span>, <span class="title">ScatteringByteChannel</span> </span>&#123;</div><div class="line">    <span class="comment">// 这里仅列出部分API</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">long</span> <span class="title">position</span><span class="params">()</span></span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">position</span> <span class="params">(<span class="keyword">long</span> newPosition)</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">int</span> <span class="title">read</span> <span class="params">(ByteBuffer dst)</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">int</span> <span class="title">read</span> <span class="params">(ByteBuffer dst, <span class="keyword">long</span> position)</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">int</span> <span class="title">write</span> <span class="params">(ByteBuffer src)</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">int</span> <span class="title">write</span> <span class="params">(ByteBuffer src, <span class="keyword">long</span> position)</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">long</span> <span class="title">size</span><span class="params">()</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">truncate</span> <span class="params">(<span class="keyword">long</span> size)</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">force</span> <span class="params">(<span class="keyword">boolean</span> metaData)</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>在通道出现之前，底层的文件操作都是通过RandomAccessFile类的方法来实现的。FileChannel模拟同样的 I/O 服务，因此它们的API自然也是很相似的。</p>
+<img src="/2017/07/08/Java-NIO-Channel/api.png" alt="Filechannel" title="Filechannel">
+<p>上图是FileChannel、RandomAccessFile 和 <a href="http://wiki.jikexueyuan.com/project/linux-process/posix.html" target="_blank" rel="external">POSIX I/O system calls</a> 三者在方法上的对应关系。</p>
+<p>POSIX接口我们在上一篇文章中也略有提及，他是一个系统级别的接口。下面看一下这几个接口，主要也是和上一篇文章文件描述符的介绍做一个呼应。</p>
+<ul>
+<li>position()和position(long newPosition)</li>
+</ul>
+<p>position()返回当前文件的position值，position(long newPosition)将当前position设置为指定值。当字节被read()或write()方法传输时，文件position会自动更新。</p>
+<p>position的含义与Buffer类中的position含义相似，都是指向下一个字节读取的位置。</p>
+<p>回想一下介绍文件描述符的文章当中提到，当进程打开一个文件时，内核就会创建一个新的file对象，这个file对象有一个字段loff_t f_pos描述了文件的当前位置，position相当于loff_t f_pos的映射。由此可知，如果是使用同一文件描述符读取文件，那么他们的position是相互影响的：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">RandomAccessFile file = <span class="keyword">new</span> RandomAccessFile(<span class="keyword">new</span> File(fileName), <span class="string">"rw"</span>);</div><div class="line">FileChannel channel = file.getChannel();</div><div class="line">System.out.println(<span class="string">"position: "</span> + channel.position());</div><div class="line">file.seek(<span class="number">30</span>);</div><div class="line">System.out.println(<span class="string">"position: "</span> + channel.position());</div></pre></td></tr></table></figure>
+<p>打印如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">position: 0</div><div class="line">position: 30</div></pre></td></tr></table></figure>
+<p>这是因为，file与channel使用了同一个文件描述符。如果新建另一个相同文件的通道，那么他们之间的position不会相互影响，因为使用了不同的文件描述符，指向不同的file对象。</p>
+<ul>
+<li>truncate(long size)</li>
+</ul>
+<p>当需要减少一个文件的size时，truncate()方法会砍掉指定的size值之外的所有数据。这个方法要求通道具有写权限。</p>
+<p>如果当前size大于给定size，超出给定size的所有字节都会被删除。如果提供的新size值大于或等于当前的文件size值，该文件不会被修改。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">RandomAccessFile file = <span class="keyword">new</span> RandomAccessFile(<span class="keyword">new</span> File(fileName), <span class="string">"rw"</span>);</div><div class="line">FileChannel channel = file.getChannel();</div><div class="line">System.out.println(<span class="string">"size: "</span> + channel.size());</div><div class="line">System.out.println(<span class="string">"position: "</span> + channel.position());</div><div class="line">System.out.println(<span class="string">"trucate: 90"</span>);</div><div class="line">channel.truncate(<span class="number">90</span>);</div><div class="line">System.out.println(<span class="string">"size: "</span> + channel.size());</div><div class="line">System.out.println(<span class="string">"position: "</span> + channel.position());</div></pre></td></tr></table></figure>
+<p>打印如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">size: 100</div><div class="line">position: 0</div><div class="line">trucate: 90</div><div class="line">size: 90</div><div class="line">position: 0</div></pre></td></tr></table></figure>
+<ul>
+<li>force (boolean metaData)</li>
+</ul>
+<p>force()方法告诉通道强制将全部待定的修改都应用到磁盘的文件上。</p>
+<p>如果文件位于一个本地文件系统，那么一旦force()方法返回，即可保证从通道被创建(或上次调用force())时起的对文件所做的全部修改已经被写入到磁盘。但是，如果文件位于一个远程的文件系统，如NFS上，那么不能保证待定修改一定能同步到永久存储器。</p>
+<p>force()方法的布尔型参数表示在方法返回值前文件的元数据(metadata)是否也要被同步更新到磁盘。元数据指文件所有者、访问权限、最后一次修改时间等信息。</p>
+<p>FileChannel对象是线程安全的。如果有一个线程已经在执行会影响通道位置或文件大小的操作，那么其他尝试进行此类操作之一的线程必须等待。</p>
+<h2 id="ReadableByteChannel、WritableByteChannel"><a href="#ReadableByteChannel、WritableByteChannel" class="headerlink" title="ReadableByteChannel、WritableByteChannel"></a>ReadableByteChannel、WritableByteChannel</h2><p>通道可以是单向或者双向的。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">ReadableByteChannel</span> <span class="keyword">extends</span> <span class="title">Channel</span></span>&#123;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">read</span> <span class="params">(ByteBuffer dst)</span> <span class="keyword">throws</span> IOException</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">WritableByteChannel</span> <span class="keyword">extends</span> <span class="title">Channel</span></span>&#123;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">write</span> <span class="params">(ByteBuffer src)</span> <span class="keyword">throws</span> IOException</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">ByteChannel</span> <span class="keyword">extends</span> <span class="title">ReadableByteChannel</span>, <span class="title">WritableByteChannel</span></span>&#123;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<img src="/2017/07/08/Java-NIO-Channel/bytechannel.png" alt="channel" title="channel">
+<p>实现ReadableByteChannel或WritableByteChannel其中之一的channel是单向的，只可以读或者写。如果一个类同时实现了这两种接口，那么他就具备了双向传输的能力。</p>
+<p>java为我们提供了一个接口ByteChannel，同时继承了上述两个接口。所以，实现了ByteChannel接口的类可以读，也可以写。</p>
+<p>在<strong>FlieChannel</strong>这一节中我们知道，文件在不同的方式下以不同的权限打开。比如<code>FileInputStream.getChannel()</code>方法返回一个FileChannel实例，FileChannel是个抽象类，间接的实现了ByteChannel接口，也就意味着提供了read和write接口。但是<code>FileInputStream.getChannel()</code>方法返回的FileChannel实际上是只读的，很简单，因为FileInputStream本身就是个输入流啊~在这样一个通道上调用write方法将抛出NonWritableChannelException异常，因为FileInputStream对象总是以read-only的权限打开通道。看一下代码：</p>
+<p>FileInputStream.getChannel()</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> FileChannel <span class="title">getChannel</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">synchronized</span> (<span class="keyword">this</span>) &#123;</div><div class="line">            <span class="keyword">if</span> (channel == <span class="keyword">null</span>) &#123;</div><div class="line">                <span class="comment">// 第三个参数指定通道是否可读，第四个参数指定通道是否可写</span></div><div class="line">                channel = FileChannelImpl.open(fd, path, <span class="keyword">true</span>, <span class="keyword">false</span>, <span class="keyword">this</span>);</div><div class="line"></div><div class="line">                <span class="comment">/*</span></div><div class="line">                 * Increment fd's use count. Invoking the channel's close()</div><div class="line">                 * method will result in decrementing the use count set for</div><div class="line">                 * the channel.</div><div class="line">                 */</div><div class="line">                fd.incrementAndGetUseCount();</div><div class="line">            &#125;</div><div class="line">            <span class="keyword">return</span> channel;</div><div class="line">        &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>同样的，<code>FileOutputStream.getChannel()</code>返回的通道是不可读的。</p>
+<h2 id="InterruptibleChannel"><a href="#InterruptibleChannel" class="headerlink" title="InterruptibleChannel"></a>InterruptibleChannel</h2><p>InterruptibleChannel是一个标记接口，当被通道使用时可以标示该通道是可以中断的。</p>
+<p>如果一个线程在一个通道上处于阻塞状态时被中断(另外一个线程调用该线程的interrupt()方法设置中断状态)，那么该通道将被关闭，该被阻塞线程也会产生一个ClosedByInterruptException异常。也就是说，假如一个线程的interrupt status被设置并且该线程试图访问一个通道，那么这个通道将立即被关闭，同时将抛出相同的ClosedByInterruptException异常。</p>
+<p>在<a href="http://yukai.space/2017/05/02/java%E4%BB%BB%E5%8A%A1%E5%8F%96%E6%B6%88/">java任务取消</a>中提到了，传统的java io 在读写时阻塞，是不会响应中断的。解决办法就是使用InterruptibleChannel，在线程被中断时可以关闭通道并返回。</p>
+<p>可中断的通道也是可以异步关闭。实现InterruptibleChannel接口的通道可以在任何时候被关闭，即使有另一个被阻塞的线程在等待该通道上的一个I/O操作完成。当一个通道被关闭时，休眠在该通道上的所有线程都将被唤醒并接收到一个AsynchronousCloseException异常。接着通道就被关闭并将不再可用。</p>
+<h2 id="Scatter-Gather"><a href="#Scatter-Gather" class="headerlink" title="Scatter/Gather"></a>Scatter/Gather</h2><p>发散(Scatter)读取是将数据读入多个缓冲区(缓冲区数组)的操作。通道将数据依次填满到每个缓冲区当中。</p>
+<p>汇聚(Gather)写出是将多个缓冲区(缓冲区数组)数据依次写入到通道的操作。</p>
+<p>在FileChannel中提到的两个接口，提供了发散汇聚的功能：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">ScatteringByteChannel</span> <span class="keyword">extends</span> <span class="title">ReadableByteChannel</span></span>&#123;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">long</span> <span class="title">read</span> <span class="params">(ByteBuffer[] dsts)</span> <span class="keyword">throws</span> IOException</span>;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">long</span> <span class="title">read</span> <span class="params">(ByteBuffer[] dsts, <span class="keyword">int</span> offset, <span class="keyword">int</span> length)</span> <span class="keyword">throws</span> IOException</span>;</div><div class="line">&#125;</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">GatheringByteChannel</span> <span class="keyword">extends</span> <span class="title">WritableByteChannel</span></span>&#123;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">long</span> <span class="title">write</span><span class="params">(ByteBuffer[] srcs)</span> <span class="keyword">throws</span> IOException</span>;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">long</span> <span class="title">write</span><span class="params">(ByteBuffer[] srcs, <span class="keyword">int</span> offset, <span class="keyword">int</span> length)</span> <span class="keyword">throws</span> IOException</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>发散汇聚在某些场景下是很有用的，比如有一个消息协议格式分为head和body(比如http协议)，我们在接收这样一个消息的时候，通常的做法是把数据一下子都读过来，然后解析他。使用通道的发散功能会使这个过程变得简单：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// head数据128字节</span></div><div class="line">ByteBuffer header = ByteBuffer.allocate(<span class="number">128</span>);</div><div class="line"><span class="comment">// body数据1024字节</span></div><div class="line">ByteBuffer body   = ByteBuffer.allocate(<span class="number">1024</span>);</div><div class="line"></div><div class="line">ByteBuffer[] bufferArray = &#123; header, body &#125;;</div><div class="line"></div><div class="line">channel.read(bufferArray);</div></pre></td></tr></table></figure>
+<p>通道会依次填满这个buffer数组的每个buffer，如果一个buffer满了，就移动到下一个buffer。很自然的把head和body的数据分开了，但是要注意head和body的数据长度必须是固定的，因为channel只有填满一个buffer之后才会移动到下一个buffer。</p>
+<h2 id="FileLock"><a href="#FileLock" class="headerlink" title="FileLock"></a>FileLock</h2><p>摘抄一段oracle官网上FileLock的介绍吧，感觉说的挺清楚了。(因为懒，就不翻译了，读起来不是很费劲)</p>
+<blockquote>
+<p>A token representing a lock on a region of a file.<br>A file-lock object is created each time a lock is acquired on a file via one of the lock or tryLock methods of the FileChannel class, or the lock or tryLock methods of the AsynchronousFileChannel class.</p>
+<p>A file-lock object is initially valid. It remains valid until the lock is released by invoking the release method, by closing the channel that was used to acquire it, or by the termination of the Java virtual machine, whichever comes first. The validity of a lock may be tested by invoking its &gt;isValid method.</p>
+<p>A file lock is either exclusive or shared. A shared lock prevents other concurrently-running programs from acquiring an overlapping exclusive lock, but does allow them to acquire overlapping shared locks. An exclusive lock prevents other programs from acquiring an overlapping lock of either type. &gt;Once it is released, a lock has no further effect on the locks that may be acquired by other programs.</p>
+<p>Whether a lock is exclusive or shared may be determined by invoking its isShared method. Some platforms do not support shared locks, in which case a request for a shared lock is automatically converted into a request for an exclusive lock.</p>
+<p>The locks held on a particular file by a single Java virtual machine do not overlap. The overlaps method may be used to test whether a candidate lock range overlaps an existing lock.</p>
+<p>A file-lock object records the file channel upon whose file the lock is held, the type and validity of the lock, and the position and size of the locked region. Only the validity of a lock is subject to change over time; all other aspects of a lock’s state are immutable.</p>
+<p>File locks are held on behalf of the entire Java virtual machine. They are not suitable for controlling access to a file by multiple threads within the same virtual machine.</p>
+<p>File-lock objects are safe for use by multiple concurrent threads.</p>
+<p><strong>Platform dependencies</strong></p>
+<p>This file-locking API is intended to map directly to the native locking facility of the underlying operating system. Thus the locks held on a file should be visible to all programs that have access to the file, regardless of the language in which those programs are written.</p>
+<p>Whether or not a lock actually prevents another program from accessing the content of the locked region is system-dependent and therefore unspecified. The native file-locking facilities of some systems are merely advisory, meaning that programs must cooperatively observe a known locking protocol in &gt;order to guarantee data integrity. On other systems native file locks are mandatory, meaning that if one program locks a region of a file then other programs are actually prevented from accessing that region in a way that would violate the lock. On yet other systems, whether native file locks are &gt;advisory or mandatory is configurable on a per-file basis. To ensure consistent and correct behavior across platforms, it is strongly recommended that the locks provided by this API be used as if they were advisory locks.</p>
+<p>On some systems, acquiring a mandatory lock on a region of a file prevents that region from being mapped into memory, and vice versa. Programs that combine locking and mapping should be prepared for this combination to fail.</p>
+<p>On some systems, closing a channel releases all locks held by the Java virtual machine on the underlying file regardless of whether the locks were acquired via that channel or via another channel open on the same file. It is strongly recommended that, within a program, a unique channel be used to &gt;acquire all locks on any given file.</p>
+<p>Some network filesystems permit file locking to be used with memory-mapped files only when the locked regions are page-aligned and a whole multiple of the underlying hardware’s page size. Some network filesystems do not implement file locks on regions that extend past a certain position, often 230 &gt;or 231. In general, great care should be taken when locking files that reside on network filesystems.</p>
+</blockquote>
+<p>FileLock可以由以下几个方法获得：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">FileChannel</span> <span class="keyword">extends</span> <span class="title">AbstractChannel</span> <span class="keyword">implements</span> <span class="title">ByteChannel</span>, <span class="title">GatheringByteChannel</span>, <span class="title">ScatteringByteChannel</span> </span>&#123;</div><div class="line"><span class="comment">// 这里仅列出部分API</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">final</span> FileLock <span class="title">lock</span><span class="params">()</span></span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">abstract</span> FileLock <span class="title">lock</span> <span class="params">(<span class="keyword">long</span> position, <span class="keyword">long</span> size, <span class="keyword">boolean</span> shared)</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">final</span> FileLock <span class="title">tryLock</span><span class="params">()</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">abstract</span> FileLock <span class="title">tryLock</span> <span class="params">(<span class="keyword">long</span> position, <span class="keyword">long</span> size, <span class="keyword">boolean</span> shared)</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>其中，lock是阻塞的，tryLock是非阻塞的。position和size决定了锁定的区域，shared决定了文件锁是共享的还是独占的。</p>
+<p>不带参数的lock方法等价于<code>fileChannel.lock(0L, Long.MAX_VALUE, false)</code>，tryLock亦然。</p>
+<p>lock方法是响应中断的，当线程被中断时方法抛出FileLockInterruptionException异常。如果通道被另外一个线程关闭，该暂停线程将恢复并产生一个 AsynchronousCloseException异常。</p>
+<p>上面还提到了，文件锁是针对于进程级别的。如果有多个进程同时对一个文件锁定，并且其中有独占锁的话，这些锁的申请会被串行化。</p>
+<p>如果是同一个进程(Jvm实例)的多个线程同时请求同一个文件区域的lock的话，会抛出OverlappingFileLockException异常。</p>
+<h2 id="Channel-to-Channel"><a href="#Channel-to-Channel" class="headerlink" title="Channel-to-Channel"></a>Channel-to-Channel</h2><p>FileChannel提供了接口，用于通道和通道之间的直接传输。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">FileChannel</span> <span class="keyword">extends</span> <span class="title">AbstractChannel</span> <span class="keyword">implements</span> <span class="title">ByteChannel</span>, <span class="title">GatheringByteChannel</span>, <span class="title">ScatteringByteChannel</span> </span>&#123;</div><div class="line">    <span class="comment">// 这里仅列出部分API</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">long</span> <span class="title">transferTo</span> <span class="params">(<span class="keyword">long</span> position, <span class="keyword">long</span> count, WritableByteChannel target)</span></span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">long</span> <span class="title">transferFrom</span> <span class="params">(ReadableByteChannel src, <span class="keyword">long</span> position, <span class="keyword">long</span> count)</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>只有FileChannel类有这两个方法，因此Channel-to-Channel传输中通道之一必须是FileChannel。不能在socket通道之间直接传输数据，不过socket通道实现WritableByteChannel和ReadableByteChannel接口，因此文件的内容可以用transferTo()方法传输给一个socket通道，或者也可以用transferFrom()方法将数据从一个socket通道直接读取到一个文件中。</p>
+<p>直接的通道传输不会更新与某个FileChannel关联的position值。请求的数据传输将从position参数指定的位置开始，传输的字节数不超过count参数的值。实际传输的字节数会由方法返回。</p>
+<p>直接通道传输的另一端如果是socket通道并且处于非阻塞模式的话，数据的传输将具有不确定性。比如，transferFrom从socket通道读取数据，如果socket中的数据尚未准备好，那么方法将直接返回。</p>
+<p>例子：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">RandomAccessFile fromFile = <span class="keyword">new</span> RandomAccessFile(<span class="string">"fromFile.txt"</span>, <span class="string">"rw"</span>);</div><div class="line">FileChannel      fromChannel = fromFile.getChannel();</div><div class="line"></div><div class="line">RandomAccessFile toFile = <span class="keyword">new</span> RandomAccessFile(<span class="string">"toFile.txt"</span>, <span class="string">"rw"</span>);</div><div class="line">FileChannel      toChannel = toFile.getChannel();</div><div class="line"></div><div class="line"><span class="keyword">long</span> position = <span class="number">0</span>;</div><div class="line"><span class="keyword">long</span> count    = fromChannel.size();</div><div class="line"></div><div class="line">toChannel.transferFrom(fromChannel, position, count);</div><div class="line"></div><div class="line"></div><div class="line">RandomAccessFile fromFile = <span class="keyword">new</span> RandomAccessFile(<span class="string">"fromFile.txt"</span>, <span class="string">"rw"</span>);</div><div class="line">FileChannel      fromChannel = fromFile.getChannel();</div><div class="line"></div><div class="line">RandomAccessFile toFile = <span class="keyword">new</span> RandomAccessFile(<span class="string">"toFile.txt"</span>, <span class="string">"rw"</span>);</div><div class="line">FileChannel      toChannel = toFile.getChannel();</div><div class="line"></div><div class="line"><span class="keyword">long</span> position = <span class="number">0</span>;</div><div class="line"><span class="keyword">long</span> count    = fromChannel.size();</div><div class="line"></div><div class="line">fromChannel.transferTo(position, count, toChannel);</div></pre></td></tr></table></figure>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="http://www.365mini.com/page/java-nio-course-17.htm" target="_blank" rel="external">Java nio入门教程详解</a></p>
+<h2 id="ReadableByteChannel、WritableByteChannel-1"><a href="#ReadableByteChannel、WritableByteChannel-1" class="headerlink" title="ReadableByteChannel、WritableByteChannel"></a>ReadableByteChannel、WritableByteChannel</h2><p>通道可以是单向或者双向的。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">ReadableByteChannel</span> <span class="keyword">extends</span> <span class="title">Channel</span></span>&#123;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">read</span> <span class="params">(ByteBuffer dst)</span> <span class="keyword">throws</span> IOException</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">WritableByteChannel</span> <span class="keyword">extends</span> <span class="title">Channel</span></span>&#123;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">write</span> <span class="params">(ByteBuffer src)</span> <span class="keyword">throws</span> IOException</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">ByteChannel</span> <span class="keyword">extends</span> <span class="title">ReadableByteChannel</span>, <span class="title">WritableByteChannel</span></span>&#123;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<img src="/2017/07/08/Java-NIO-Channel/bytechannel.png" alt="channel" title="channel">
+<p>实现ReadableByteChannel或WritableByteChannel其中之一的channel是单向的，只可以读或者写。如果一个类同时实现了这两种接口，那么他就具备了双向传输的能力。</p>
+<p>java为我们提供了一个接口ByteChannel，同时继承了上述两个接口。所以，实现了ByteChannel接口的类可以读，也可以写。</p>
+<p>在<strong>FlieChannel</strong>这一节中我们知道，文件在不同的方式下以不同的权限打开。比如<code>FileInputStream.getChannel()</code>方法返回一个FileChannel实例，FileChannel是个抽象类，间接的实现了ByteChannel接口，也就意味着提供了read和write接口。但是<code>FileInputStream.getChannel()</code>方法返回的FileChannel实际上是只读的，很简单，因为FileInputStream本身就是个输入流啊~在这样一个通道上调用write方法将抛出NonWritableChannelException异常，因为FileInputStream对象总是以read-only的权限打开通道。看一下代码：</p>
+<p>FileInputStream.getChannel()</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> FileChannel <span class="title">getChannel</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">synchronized</span> (<span class="keyword">this</span>) &#123;</div><div class="line">            <span class="keyword">if</span> (channel == <span class="keyword">null</span>) &#123;</div><div class="line">                <span class="comment">// 第三个参数指定通道是否可读，第四个参数指定通道是否可写</span></div><div class="line">                channel = FileChannelImpl.open(fd, path, <span class="keyword">true</span>, <span class="keyword">false</span>, <span class="keyword">this</span>);</div><div class="line"></div><div class="line">                <span class="comment">/*</span></div><div class="line">                 * Increment fd's use count. Invoking the channel's close()</div><div class="line">                 * method will result in decrementing the use count set for</div><div class="line">                 * the channel.</div><div class="line">                 */</div><div class="line">                fd.incrementAndGetUseCount();</div><div class="line">            &#125;</div><div class="line">            <span class="keyword">return</span> channel;</div><div class="line">        &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>同样的，<code>FileOutputStream.getChannel()</code>返回的通道是不可读的。</p>
+<h2 id="InterruptibleChannel-1"><a href="#InterruptibleChannel-1" class="headerlink" title="InterruptibleChannel"></a>InterruptibleChannel</h2><p>InterruptibleChannel是一个标记接口，当被通道使用时可以标示该通道是可以中断的。</p>
+<p>如果一个线程在一个通道上处于阻塞状态时被中断(另外一个线程调用该线程的interrupt()方法设置中断状态)，那么该通道将被关闭，该被阻塞线程也会产生一个ClosedByInterruptException异常。也就是说，假如一个线程的interrupt status被设置并且该线程试图访问一个通道，那么这个通道将立即被关闭，同时将抛出相同的ClosedByInterruptException异常。</p>
+<p>在<a href="http://yukai.space/2017/05/02/java%E4%BB%BB%E5%8A%A1%E5%8F%96%E6%B6%88/">java任务取消</a>中提到了，传统的java io 在读写时阻塞，是不会响应中断的。解决办法就是使用InterruptibleChannel，在线程被中断时可以关闭通道并返回。</p>
+<p>可中断的通道也是可以异步关闭。实现InterruptibleChannel接口的通道可以在任何时候被关闭，即使有另一个被阻塞的线程在等待该通道上的一个I/O操作完成。当一个通道被关闭时，休眠在该通道上的所有线程都将被唤醒并接收到一个AsynchronousCloseException异常。接着通道就被关闭并将不再可用。</p>
+<h2 id="Scatter-Gather-1"><a href="#Scatter-Gather-1" class="headerlink" title="Scatter/Gather"></a>Scatter/Gather</h2><p>发散(Scatter)读取是将数据读入多个缓冲区(缓冲区数组)的操作。通道将数据依次填满到每个缓冲区当中。</p>
+<p>汇聚(Gather)写出是将多个缓冲区(缓冲区数组)数据依次写入到通道的操作。</p>
+<p>在FileChannel中提到的两个接口，提供了发散汇聚的功能：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">ScatteringByteChannel</span> <span class="keyword">extends</span> <span class="title">ReadableByteChannel</span></span>&#123;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">long</span> <span class="title">read</span> <span class="params">(ByteBuffer[] dsts)</span> <span class="keyword">throws</span> IOException</span>;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">long</span> <span class="title">read</span> <span class="params">(ByteBuffer[] dsts, <span class="keyword">int</span> offset, <span class="keyword">int</span> length)</span> <span class="keyword">throws</span> IOException</span>;</div><div class="line">&#125;</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">GatheringByteChannel</span> <span class="keyword">extends</span> <span class="title">WritableByteChannel</span></span>&#123;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">long</span> <span class="title">write</span><span class="params">(ByteBuffer[] srcs)</span> <span class="keyword">throws</span> IOException</span>;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">long</span> <span class="title">write</span><span class="params">(ByteBuffer[] srcs, <span class="keyword">int</span> offset, <span class="keyword">int</span> length)</span> <span class="keyword">throws</span> IOException</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>发散汇聚在某些场景下是很有用的，比如有一个消息协议格式分为head和body(比如http协议)，我们在接收这样一个消息的时候，通常的做法是把数据一下子都读过来，然后解析他。使用通道的发散功能会使这个过程变得简单：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// head数据128字节</span></div><div class="line">ByteBuffer header = ByteBuffer.allocate(<span class="number">128</span>);</div><div class="line"><span class="comment">// body数据1024字节</span></div><div class="line">ByteBuffer body   = ByteBuffer.allocate(<span class="number">1024</span>);</div><div class="line"></div><div class="line">ByteBuffer[] bufferArray = &#123; header, body &#125;;</div><div class="line"></div><div class="line">channel.read(bufferArray);</div></pre></td></tr></table></figure>
+<p>通道会依次填满这个buffer数组的每个buffer，如果一个buffer满了，就移动到下一个buffer。很自然的把head和body的数据分开了，但是要注意head和body的数据长度必须是固定的，因为channel只有填满一个buffer之后才会移动到下一个buffer。</p>
+<h2 id="FileLock-1"><a href="#FileLock-1" class="headerlink" title="FileLock"></a>FileLock</h2><h2 id="Channel-to-Channel-1"><a href="#Channel-to-Channel-1" class="headerlink" title="Channel-to-Channel"></a>Channel-to-Channel</h2><p>FileChannel提供了接口，用于通道和通道之间的直接传输。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">FileChannel</span> <span class="keyword">extends</span> <span class="title">AbstractChannel</span> <span class="keyword">implements</span> <span class="title">ByteChannel</span>, <span class="title">GatheringByteChannel</span>, <span class="title">ScatteringByteChannel</span> </span>&#123;</div><div class="line">    <span class="comment">// 这里仅列出部分API</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">long</span> <span class="title">transferTo</span> <span class="params">(<span class="keyword">long</span> position, <span class="keyword">long</span> count, WritableByteChannel target)</span></span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">long</span> <span class="title">transferFrom</span> <span class="params">(ReadableByteChannel src, <span class="keyword">long</span> position, <span class="keyword">long</span> count)</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>只有FileChannel类有这两个方法，因此Channel-to-Channel传输中通道之一必须是FileChannel。不能在socket通道之间直接传输数据，不过socket通道实现WritableByteChannel和ReadableByteChannel接口，因此文件的内容可以用transferTo()方法传输给一个socket通道，或者也可以用transferFrom()方法将数据从一个socket通道直接读取到一个文件中。</p>
+<p>直接的通道传输不会更新与某个FileChannel关联的position值。请求的数据传输将从position参数指定的位置开始，传输的字节数不超过count参数的值。实际传输的字节数会由方法返回。</p>
+<p>直接通道传输的另一端如果是socket通道并且处于非阻塞模式的话，数据的传输将具有不确定性。比如，transferFrom从socket通道读取数据，如果socket中的数据尚未准备好，那么方法将直接返回。</p>
+<p>例子：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">RandomAccessFile fromFile = <span class="keyword">new</span> RandomAccessFile(<span class="string">"fromFile.txt"</span>, <span class="string">"rw"</span>);</div><div class="line">FileChannel      fromChannel = fromFile.getChannel();</div><div class="line"></div><div class="line">RandomAccessFile toFile = <span class="keyword">new</span> RandomAccessFile(<span class="string">"toFile.txt"</span>, <span class="string">"rw"</span>);</div><div class="line">FileChannel      toChannel = toFile.getChannel();</div><div class="line"></div><div class="line"><span class="keyword">long</span> position = <span class="number">0</span>;</div><div class="line"><span class="keyword">long</span> count    = fromChannel.size();</div><div class="line"></div><div class="line">toChannel.transferFrom(fromChannel, position, count);</div><div class="line"></div><div class="line"></div><div class="line">RandomAccessFile fromFile = <span class="keyword">new</span> RandomAccessFile(<span class="string">"fromFile.txt"</span>, <span class="string">"rw"</span>);</div><div class="line">FileChannel      fromChannel = fromFile.getChannel();</div><div class="line"></div><div class="line">RandomAccessFile toFile = <span class="keyword">new</span> RandomAccessFile(<span class="string">"toFile.txt"</span>, <span class="string">"rw"</span>);</div><div class="line">FileChannel      toChannel = toFile.getChannel();</div><div class="line"></div><div class="line"><span class="keyword">long</span> position = <span class="number">0</span>;</div><div class="line"><span class="keyword">long</span> count    = fromChannel.size();</div><div class="line"></div><div class="line">fromChannel.transferTo(position, count, toChannel);</div></pre></td></tr></table></figure>
+<h2 id="参考-1"><a href="#参考-1" class="headerlink" title="参考"></a>参考</h2><p><a href="http://www.365mini.com/page/java-nio-course-17.htm" target="_blank" rel="external">Java nio入门教程详解</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+<div id="wechat_subscriber" style="display: block; padding: 10px 0; margin: 20px auto; width: 100%; text-align: center">
+    <img id="wechat_subscriber_qcode" src="/images/wechat-qcode.jpg" alt="于凯 wechat" style="width: 200px; max-width: 100%;"/>
+    <div>欢迎您扫一扫上面的微信公众号，订阅我的博客！</div>
+</div>
+
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/java/" rel="tag"># java</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/07/07/java文件描述符/" rel="next" title="java文件描述符">
+                <i class="fa fa-chevron-left"></i> java文件描述符
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        
+<script>
+  with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='//bdimg.share.baidu.com/static/api/js/share.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="于凯" />
+          <p class="site-author-name" itemprop="name">于凯</p>
+           
+              <p class="site-description motion-element" itemprop="description">Who Are You</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/">
+                <span class="site-state-item-count">66</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">22</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/5381447277" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  微博
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/Hikyu" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Channel"><span class="nav-number">1.</span> <span class="nav-text">Channel</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#FileChannel"><span class="nav-number">2.</span> <span class="nav-text">FileChannel</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Channel-1"><span class="nav-number">3.</span> <span class="nav-text">Channel</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#FileChannel-1"><span class="nav-number">4.</span> <span class="nav-text">FileChannel</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ReadableByteChannel、WritableByteChannel"><span class="nav-number">5.</span> <span class="nav-text">ReadableByteChannel、WritableByteChannel</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#InterruptibleChannel"><span class="nav-number">6.</span> <span class="nav-text">InterruptibleChannel</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Scatter-Gather"><span class="nav-number">7.</span> <span class="nav-text">Scatter/Gather</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#FileLock"><span class="nav-number">8.</span> <span class="nav-text">FileLock</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Channel-to-Channel"><span class="nav-number">9.</span> <span class="nav-text">Channel-to-Channel</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">10.</span> <span class="nav-text">参考</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ReadableByteChannel、WritableByteChannel-1"><span class="nav-number">11.</span> <span class="nav-text">ReadableByteChannel、WritableByteChannel</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#InterruptibleChannel-1"><span class="nav-number">12.</span> <span class="nav-text">InterruptibleChannel</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Scatter-Gather-1"><span class="nav-number">13.</span> <span class="nav-text">Scatter/Gather</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#FileLock-1"><span class="nav-number">14.</span> <span class="nav-text">FileLock</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Channel-to-Channel-1"><span class="nav-number">15.</span> <span class="nav-text">Channel-to-Channel</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考-1"><span class="nav-number">16.</span> <span class="nav-text">参考</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">于凯</span>
+</div>
+
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length == 0) {
+      search_path = "search.xml";
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.popup').toggle();
+    }
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+      $.ajax({
+        url: path,
+        dataType: "xml",
+        async: true,
+        success: function( xmlResponse ) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = $( "entry", xmlResponse ).map(function() {
+            return {
+              title: $( "title", this ).text(),
+              content: $("content",this).text(),
+              url: $( "url" , this).text()
+            };
+          }).get();
+          var $input = document.getElementById(search_id);
+          var $resultContent = document.getElementById(content_id);
+          $input.addEventListener('input', function(){
+            var matchcounts = 0;
+            var str='<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length > 1) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var content_index = [];
+                var data_title = data.title.trim().toLowerCase();
+                var data_content = data.content.trim().replace(/<[^>]+>/g,"").toLowerCase();
+                var data_url = decodeURIComponent(data.url);
+                var index_title = -1;
+                var index_content = -1;
+                var first_occur = -1;
+                // only match artiles with not empty titles and contents
+                if(data_title != '') {
+                  keywords.forEach(function(keyword, i) {
+                    index_title = data_title.indexOf(keyword);
+                    index_content = data_content.indexOf(keyword);
+                    if( index_title >= 0 || index_content >= 0 ){
+                      isMatch = true;
+                      if (i == 0) {
+                        first_occur = index_content;
+                      }
+                    }
+
+                  });
+                }
+                // show search results
+                if (isMatch) {
+                  matchcounts += 1;
+                  str += "<li><a href='"+ data_url +"' class='search-result-title'>"+ data_title +"</a>";
+                  var content = data.content.trim().replace(/<[^>]+>/g,"");
+                  if (first_occur >= 0) {
+                    // cut out 100 characters
+                    var start = first_occur - 20;
+                    var end = first_occur + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if(start == 0){
+                      end = 50;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    var match_content = content.substring(start, end);
+                    // highlight all keywords
+                    keywords.forEach(function(keyword){
+                      var regS = new RegExp(keyword, "gi");
+                      match_content = match_content.replace(regS, "<b class=\"search-keyword\">"+keyword+"</b>");
+                    });
+
+                    str += "<p class=\"search-result\">" + match_content +"...</p>"
+                  }
+                  str += "</li>";
+                }
+              })};
+            str += "</ul>";
+            if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>' }
+            if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>' }
+            $resultContent.innerHTML = str;
+          });
+          proceedsearch();
+        }
+      });}
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched == false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

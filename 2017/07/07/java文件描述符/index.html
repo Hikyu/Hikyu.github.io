@@ -116,7 +116,7 @@
 内核中，对应于每个进程都有一个文件描述符表，表示这个进程打开的所有文件。文件描述符就是这个表的索引。
 文件描述表中每一项都是一个指针，指向一个用于描述打开的文件的数据块———file对象，file对象中描述了文件的打开模式，读写位置等重要信息。">
 <meta property="og:image" content="http://yukai.space/2017/07/07/java文件描述符/filedescriptors.png">
-<meta property="og:updated_time" content="2017-07-07T13:01:29.758Z">
+<meta property="og:updated_time" content="2017-07-07T13:04:55.310Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="java文件描述符">
 <meta name="twitter:description" content="文件描述符在Linux中，进程是通过文件描述符（file descriptors，简称fd）而不是文件名来访问文件的，文件描述符实际上是一个整数。
@@ -437,20 +437,20 @@
 <p>在 win32 的实现中将 创建好的 文件句柄 设置到 handle 字段，在 linux 版本中则使用的是 FileDescriptor 的 fd 字段。</p>
 <p>由此，可知 handle 和 fd 是共存的但并不同时在使用，在 win32 平台上使用 handle 字段，在 linux 平台上使用 fd 字段。</p>
 <p>所以，FileInputStream打开文件的过程总结如下：</p>
-<ol>
+<ul>
 <li>创建 FileDescriptor 对象</li>
-</ol>
+</ul>
 <p>每一个 FileInputStream 有一个 FileDescriptor，代表这个流底层的文件的fd</p>
-<ol>
+<ul>
 <li><p>调用 native 方法 open, 打开文件</p>
 </li>
 <li><p>内部调用 handleOpen 打开文件，返回文件描述符 fd</p>
 </li>
-</ol>
+</ul>
 <p>初始化 FileDescriptor 对象</p>
-<ol>
+<ul>
 <li>将 文件描述符 fd 设置到，FileDescriptor 对象的 fd 中</li>
-</ol>
+</ul>
 <h2 id="再谈java文件读取"><a href="#再谈java文件读取" class="headerlink" title="再谈java文件读取"></a>再谈java文件读取</h2><p>在<a href="http://yukai.space/2017/06/28/java-NIO-Buffer/">java-NIO-Buffer</a>这篇文章中我们提到了<code>FileInputStream.read</code>方法，再来回顾一下：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div></pre></td><td class="code"><pre><div class="line"><span class="function">JNIEXPORT jint JNICALL  </span></div><div class="line"><span class="title">Java_java_io_FileInputStream_readBytes</span><span class="params">(JNIEnv *env, jobject <span class="keyword">this</span>,  </span></div><div class="line">        jbyteArray bytes, jint off, jint len) &#123;<span class="comment">//除了前两个参数，后三个就是readBytes方法传递进来的，字节数组、起始位置、长度三个参数  </span></div><div class="line"><span class="keyword">return</span> readBytes(env, <span class="keyword">this</span>, bytes, off, len, fis_fd);  </div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function">jint</span></div><div class="line"><span class="title">readBytes</span><span class="params">(JNIEnv *env, jobject <span class="keyword">this</span>, jbyteArray bytes,</span></div><div class="line">          jint off, jint len, jfieldID fid)</div><div class="line">&#123;</div><div class="line">    jint nread;</div><div class="line">    <span class="keyword">char</span> stackBuf[BUF_SIZE];</div><div class="line">    <span class="keyword">char</span> *buf = NULL;</div><div class="line">    FD fd;</div><div class="line"> </div><div class="line">    <span class="keyword">if</span> (IS_NULL(bytes)) &#123;</div><div class="line">        JNU_ThrowNullPointerException(env, NULL);</div><div class="line">        <span class="keyword">return</span> -<span class="number">1</span>;</div><div class="line">    &#125;</div><div class="line"> </div><div class="line">    <span class="keyword">if</span> (outOfBounds(env, off, len, bytes)) &#123;</div><div class="line">        JNU_ThrowByName(env, <span class="string">"java/lang/IndexOutOfBoundsException"</span>, NULL);</div><div class="line">        <span class="keyword">return</span> -<span class="number">1</span>;</div><div class="line">    &#125;</div><div class="line"> </div><div class="line">    <span class="keyword">if</span> (len == <span class="number">0</span>) &#123;</div><div class="line">        <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (len &gt; BUF_SIZE) &#123;</div><div class="line">        buf = malloc(len);<span class="comment">// buf的分配</span></div><div class="line">        <span class="keyword">if</span> (buf == NULL) &#123;</div><div class="line">            JNU_ThrowOutOfMemoryError(env, NULL);</div><div class="line">            <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">        &#125;</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">        buf = stackBuf;</div><div class="line">    &#125;</div><div class="line"> </div><div class="line">    fd = GET_FD(<span class="keyword">this</span>, fid);</div><div class="line">    <span class="keyword">if</span> (fd == -<span class="number">1</span>) &#123;</div><div class="line">        JNU_ThrowIOException(env, <span class="string">"Stream Closed"</span>);</div><div class="line">        nread = -<span class="number">1</span>;</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">        nread = IO_Read(fd, buf, len);<span class="comment">// buf是使用malloc分配的直接缓冲区，也就是堆外内存</span></div><div class="line">        <span class="keyword">if</span> (nread &gt; <span class="number">0</span>) &#123;</div><div class="line">            (*env)-&gt;SetByteArrayRegion(env, bytes, off, nread, (jbyte *)buf);<span class="comment">// 将直接缓冲区的内容copy到bytes数组中</span></div><div class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (nread == JVM_IO_ERR) &#123;</div><div class="line">            JNU_ThrowIOExceptionWithLastError(env, <span class="string">"Read error"</span>);</div><div class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (nread == JVM_IO_INTR) &#123;</div><div class="line">            JNU_ThrowByName(env, <span class="string">"java/io/InterruptedIOException"</span>, NULL);</div><div class="line">        &#125; <span class="keyword">else</span> &#123; <span class="comment">/* EOF */</span></div><div class="line">            nread = -<span class="number">1</span>;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"> </div><div class="line">    <span class="keyword">if</span> (buf != stackBuf) &#123;</div><div class="line">        free(buf);</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> nread;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>上述代码中的<code>fis_fd</code>是不是很眼熟？他就是<code>FileInputStream.fd</code>字段的内存偏移量。注意到<code>fd = GET_FD(this, fid);</code>这个方法，获取到其对应的文件描述符，然后使用该文件描述符读取文件内容，填充缓冲区。由此可见，java底层读取文件都是通过文件描述符来进行的。比如：</p>
@@ -515,6 +515,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/07/08/Java-NIO-Channel/" rel="prev" title="Java-NIO-Channel">
+                Java-NIO-Channel <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -592,7 +596,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/">
-                <span class="site-state-item-count">65</span>
+                <span class="site-state-item-count">66</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
