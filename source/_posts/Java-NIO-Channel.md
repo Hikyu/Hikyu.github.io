@@ -13,144 +13,17 @@ tags: java
 
 {% asset_img channel.png channel %}
 
+上图中，箭头就相当于通道。一个不是很准确的例子：把通道想象成铁轨，缓冲区则是列车，铁轨的起始与终点则可以是socket，文件系统和我们的程序。假如当我们在代码中要写入数据到一份文件的时候，我们先把列车(缓冲区)装满，然后把列车(缓冲区)放置到铁轨上(通道)，数据就被传递到通道的另一端，文件系统。读取文件则相反，文件的内容被装到列车上，传递到程序这一侧，然后我们在代码中就可以读取这个列车中的内容(读取缓冲区)。
+
+通道与传统的流还是有一些区别的：
+
+- 通道可以同时支持读写(不是一定支持)，而流只支持单方向的操作，比如输入流只能读，输出流只能写。
+
+- 通道可以支持异步的读或写，而流是同步的。
+
+- 通道的读取或写入是通过缓冲区来进行的，而流则写入或返回字节。
+
 <!-- more -->
-
-上图中，箭头就相当于通道。一个不是很准确的例子：把通道想象成铁轨，缓冲区则是列车，铁轨的起始与终点则可以是socket，文件系统和我们的程序。假如当我们在代码中要写入数据到一份文件的时候，我们先把列车(缓冲区)装满，然后把列车(缓冲区)放置到铁轨上(通道)，数据就被传递到通道的另一端，文件系统。读取文件则相反，文件的内容被装到列车上，传递到程序这一侧，然后我们在代码中就可以读取这个列车中的内容(读取缓冲区)。
-
-通道与传统的流还是有一些区别的：
-
-- 通道可以同时支持读写(不是一定支持)，而流只支持单方向的操作，比如输入流只能读，输出流只能写。
-
-- 通道可以支持异步的读或写，而流是同步的。
-
-- 通道的读取或写入是通过缓冲区来进行的，而流则写入或返回字节。
-
-## FileChannel
-
-通道大致上可以分为两类：文件通道和socket通道。看一下文件通道：
-
-文件通道可以由以下几个方法获得：
-
-```java
-RandomAccessFile file = new RandomAccessFile(new File(fileName), "rw");
-FileChannel channel = file.getChannel();
-
-FileInputStream stream = new FileInputStream(new File(fileName));
-FileChannel channel = stream.getChannel();
-
-FileOutputStream stream = new FileOutputStream(new File(fileName));
-FileChannel channel = stream.getChannel();
-
-FileChannel channel = FileChannel.open(Paths.get(fileName));
-```
-
-FileChannel 类结构：
-
-{% asset_img filechannel.png Filechannel %}
-
-可见FileChannel实现了读写接口、聚集、发散接口，以及文件锁功能。下面会提到。
-
-看一下FileChannel的基本方法：
-
-```java
-public abstract class FileChannel extends AbstractChannel implements ByteChannel, GatheringByteChannel, ScatteringByteChannel {
-    // 这里仅列出部分API
-    public abstract long position()
-    public abstract void position (long newPosition)
-    public abstract int read (ByteBuffer dst)
-    public abstract int read (ByteBuffer dst, long position)
-    public abstract int write (ByteBuffer src)
-    public abstract int write (ByteBuffer src, long position)
-    public abstract long size()
-    public abstract void truncate (long size)
-    public abstract void force (boolean metaData)
-}
-```
-
-在通道出现之前，底层的文件操作都是通过RandomAccessFile类的方法来实现的。FileChannel模拟同样的 I/O 服务，因此它们的API自然也是很相似的。
-
-{% asset_img api.png Filechannel %}
-
-上图是FileChannel、RandomAccessFile 和 [POSIX I/O system calls](http://wiki.jikexueyuan.com/project/linux-process/posix.html) 三者在方法上的对应关系。
-
-POSIX接口我们在上一篇文章中也略有提及，他是一个系统级别的接口。下面看一下这几个接口，主要也是和上一篇文章文件描述符的介绍做一个呼应。
-
-- position()和position(long newPosition)
-
-position()返回当前文件的position值，position(long newPosition)将当前position设置为指定值。当字节被read()或write()方法传输时，文件position会自动更新。
-
-position的含义与Buffer类中的position含义相似，都是指向下一个字节读取的位置。
-
-回想一下介绍文件描述符的文章当中提到，当进程打开一个文件时，内核就会创建一个新的file对象，这个file对象有一个字段loff_t f_pos描述了文件的当前位置，position相当于loff_t f_pos的映射。由此可知，如果是使用同一文件描述符读取文件，那么他们的position是相互影响的：
-
-```java
-RandomAccessFile file = new RandomAccessFile(new File(fileName), "rw");
-FileChannel channel = file.getChannel();
-System.out.println("position: " + channel.position());
-file.seek(30);
-System.out.println("position: " + channel.position());
-```
-
-打印如下：
-
-```
-position: 0
-position: 30
-```
-
-这是因为，file与channel使用了同一个文件描述符。如果新建另一个相同文件的通道，那么他们之间的position不会相互影响，因为使用了不同的文件描述符，指向不同的file对象。
-
-- truncate(long size)
-
-当需要减少一个文件的size时，truncate()方法会砍掉指定的size值之外的所有数据。这个方法要求通道具有写权限。
-
-如果当前size大于给定size，超出给定size的所有字节都会被删除。如果提供的新size值大于或等于当前的文件size值，该文件不会被修改。
-
-```java
-RandomAccessFile file = new RandomAccessFile(new File(fileName), "rw");
-FileChannel channel = file.getChannel();
-System.out.println("size: " + channel.size());
-System.out.println("position: " + channel.position());
-System.out.println("trucate: 90");
-channel.truncate(90);
-System.out.println("size: " + channel.size());
-System.out.println("position: " + channel.position());
-```
-
-打印如下：
-
-```
-size: 100
-position: 0
-trucate: 90
-size: 90
-position: 0
-```
-
--  force (boolean metaData)
-
-force()方法告诉通道强制将全部待定的修改都应用到磁盘的文件上。
-
-如果文件位于一个本地文件系统，那么一旦force()方法返回，即可保证从通道被创建(或上次调用force())时起的对文件所做的全部修改已经被写入到磁盘。但是，如果文件位于一个远程的文件系统，如NFS上，那么不能保证待定修改一定能同步到永久存储器。
-
-force()方法的布尔型参数表示在方法返回值前文件的元数据(metadata)是否也要被同步更新到磁盘。元数据指文件所有者、访问权限、最后一次修改时间等信息。
-> Java NIO 学习第三篇--Channel
-
-## Channel
-
-通道(Channel)的作用有类似于流(Stream)，用于传输文件或者网络上的数据。
-
-{% asset_img channel.png channel %}
-
-上图中，箭头就相当于通道。一个不是很准确的例子：把通道想象成铁轨，缓冲区则是列车，铁轨的起始与终点则可以是socket，文件系统和我们的程序。假如当我们在代码中要写入数据到一份文件的时候，我们先把列车(缓冲区)装满，然后把列车(缓冲区)放置到铁轨上(通道)，数据就被传递到通道的另一端，文件系统。读取文件则相反，文件的内容被装到列车上，传递到程序这一侧，然后我们在代码中就可以读取这个列车中的内容(读取缓冲区)。
-
-通道与传统的流还是有一些区别的：
-
-- 通道可以同时支持读写(不是一定支持)，而流只支持单方向的操作，比如输入流只能读，输出流只能写。
-
-- 通道可以支持异步的读或写，而流是同步的。
-
-- 通道的读取或写入是通过缓冲区来进行的，而流则写入或返回字节。
 
 ## [FileChannel](https://docs.oracle.com/javase/7/docs/api/java/nio/channels/FileChannel.html)
 
