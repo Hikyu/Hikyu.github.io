@@ -107,28 +107,31 @@
 
 <meta name="description" content="Java NIO 学习第三篇–Channel
 
-Channel通道(Channel)的作用有类似于流(Stream)，用于传输文件或者网络上的数据。">
+Channel通道(Channel)的作用有类似于流(Stream)，用于传输文件或者网络上的数据。
+
+上图中，箭头就相当于通道。一个不是很准确的例子：把通道想象成铁轨，缓冲区则是列车，铁轨的起始与终点则可以是socket，文件系统和我们的程序。假如当我们在代码中要写入数据到一份文件的时候，我们先把列车(缓冲区)装满，然后把列车(缓冲区)放置到铁轨">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Java-NIO-Channel">
 <meta property="og:url" content="http://yukai.space/2017/07/08/Java-NIO-Channel/index.html">
 <meta property="og:site_name" content="YuKai's blog">
 <meta property="og:description" content="Java NIO 学习第三篇–Channel
 
-Channel通道(Channel)的作用有类似于流(Stream)，用于传输文件或者网络上的数据。">
-<meta property="og:image" content="http://yukai.space/2017/07/08/Java-NIO-Channel/channel.png">
-<meta property="og:image" content="http://yukai.space/2017/07/08/Java-NIO-Channel/filechannel.png">
-<meta property="og:image" content="http://yukai.space/2017/07/08/Java-NIO-Channel/api.png">
+Channel通道(Channel)的作用有类似于流(Stream)，用于传输文件或者网络上的数据。
+
+上图中，箭头就相当于通道。一个不是很准确的例子：把通道想象成铁轨，缓冲区则是列车，铁轨的起始与终点则可以是socket，文件系统和我们的程序。假如当我们在代码中要写入数据到一份文件的时候，我们先把列车(缓冲区)装满，然后把列车(缓冲区)放置到铁轨">
 <meta property="og:image" content="http://yukai.space/2017/07/08/Java-NIO-Channel/channel.png">
 <meta property="og:image" content="http://yukai.space/2017/07/08/Java-NIO-Channel/filechannel.png">
 <meta property="og:image" content="http://yukai.space/2017/07/08/Java-NIO-Channel/api.png">
 <meta property="og:image" content="http://yukai.space/2017/07/08/Java-NIO-Channel/bytechannel.png">
 <meta property="og:image" content="http://yukai.space/2017/07/08/Java-NIO-Channel/bytechannel.png">
-<meta property="og:updated_time" content="2017-07-08T13:47:24.876Z">
+<meta property="og:updated_time" content="2017-07-08T13:54:14.121Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java-NIO-Channel">
 <meta name="twitter:description" content="Java NIO 学习第三篇–Channel
 
-Channel通道(Channel)的作用有类似于流(Stream)，用于传输文件或者网络上的数据。">
+Channel通道(Channel)的作用有类似于流(Stream)，用于传输文件或者网络上的数据。
+
+上图中，箭头就相当于通道。一个不是很准确的例子：把通道想象成铁轨，缓冲区则是列车，铁轨的起始与终点则可以是socket，文件系统和我们的程序。假如当我们在代码中要写入数据到一份文件的时候，我们先把列车(缓冲区)装满，然后把列车(缓冲区)放置到铁轨">
 <meta name="twitter:image" content="http://yukai.space/2017/07/08/Java-NIO-Channel/channel.png">
 
 
@@ -415,69 +418,18 @@ Channel通道(Channel)的作用有类似于流(Stream)，用于传输文件或�
 </blockquote>
 <h2 id="Channel"><a href="#Channel" class="headerlink" title="Channel"></a>Channel</h2><p>通道(Channel)的作用有类似于流(Stream)，用于传输文件或者网络上的数据。</p>
 <img src="/2017/07/08/Java-NIO-Channel/channel.png" alt="channel" title="channel">
+<p>上图中，箭头就相当于通道。一个不是很准确的例子：把通道想象成铁轨，缓冲区则是列车，铁轨的起始与终点则可以是socket，文件系统和我们的程序。假如当我们在代码中要写入数据到一份文件的时候，我们先把列车(缓冲区)装满，然后把列车(缓冲区)放置到铁轨上(通道)，数据就被传递到通道的另一端，文件系统。读取文件则相反，文件的内容被装到列车上，传递到程序这一侧，然后我们在代码中就可以读取这个列车中的内容(读取缓冲区)。</p>
+<p>通道与传统的流还是有一些区别的：</p>
+<ul>
+<li><p>通道可以同时支持读写(不是一定支持)，而流只支持单方向的操作，比如输入流只能读，输出流只能写。</p>
+</li>
+<li><p>通道可以支持异步的读或写，而流是同步的。</p>
+</li>
+<li><p>通道的读取或写入是通过缓冲区来进行的，而流则写入或返回字节。</p>
+</li>
+</ul>
 <a id="more"></a>
-<p>上图中，箭头就相当于通道。一个不是很准确的例子：把通道想象成铁轨，缓冲区则是列车，铁轨的起始与终点则可以是socket，文件系统和我们的程序。假如当我们在代码中要写入数据到一份文件的时候，我们先把列车(缓冲区)装满，然后把列车(缓冲区)放置到铁轨上(通道)，数据就被传递到通道的另一端，文件系统。读取文件则相反，文件的内容被装到列车上，传递到程序这一侧，然后我们在代码中就可以读取这个列车中的内容(读取缓冲区)。</p>
-<p>通道与传统的流还是有一些区别的：</p>
-<ul>
-<li><p>通道可以同时支持读写(不是一定支持)，而流只支持单方向的操作，比如输入流只能读，输出流只能写。</p>
-</li>
-<li><p>通道可以支持异步的读或写，而流是同步的。</p>
-</li>
-<li><p>通道的读取或写入是通过缓冲区来进行的，而流则写入或返回字节。</p>
-</li>
-</ul>
-<h2 id="FileChannel"><a href="#FileChannel" class="headerlink" title="FileChannel"></a>FileChannel</h2><p>通道大致上可以分为两类：文件通道和socket通道。看一下文件通道：</p>
-<p>文件通道可以由以下几个方法获得：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">RandomAccessFile file = <span class="keyword">new</span> RandomAccessFile(<span class="keyword">new</span> File(fileName), <span class="string">"rw"</span>);</div><div class="line">FileChannel channel = file.getChannel();</div><div class="line"></div><div class="line">FileInputStream stream = <span class="keyword">new</span> FileInputStream(<span class="keyword">new</span> File(fileName));</div><div class="line">FileChannel channel = stream.getChannel();</div><div class="line"></div><div class="line">FileOutputStream stream = <span class="keyword">new</span> FileOutputStream(<span class="keyword">new</span> File(fileName));</div><div class="line">FileChannel channel = stream.getChannel();</div><div class="line"></div><div class="line">FileChannel channel = FileChannel.open(Paths.get(fileName));</div></pre></td></tr></table></figure>
-<p>FileChannel 类结构：</p>
-<img src="/2017/07/08/Java-NIO-Channel/filechannel.png" alt="Filechannel" title="Filechannel">
-<p>可见FileChannel实现了读写接口、聚集、发散接口，以及文件锁功能。下面会提到。</p>
-<p>看一下FileChannel的基本方法：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">FileChannel</span> <span class="keyword">extends</span> <span class="title">AbstractChannel</span> <span class="keyword">implements</span> <span class="title">ByteChannel</span>, <span class="title">GatheringByteChannel</span>, <span class="title">ScatteringByteChannel</span> </span>&#123;</div><div class="line">    <span class="comment">// 这里仅列出部分API</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">long</span> <span class="title">position</span><span class="params">()</span></span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">position</span> <span class="params">(<span class="keyword">long</span> newPosition)</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">int</span> <span class="title">read</span> <span class="params">(ByteBuffer dst)</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">int</span> <span class="title">read</span> <span class="params">(ByteBuffer dst, <span class="keyword">long</span> position)</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">int</span> <span class="title">write</span> <span class="params">(ByteBuffer src)</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">int</span> <span class="title">write</span> <span class="params">(ByteBuffer src, <span class="keyword">long</span> position)</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">long</span> <span class="title">size</span><span class="params">()</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">truncate</span> <span class="params">(<span class="keyword">long</span> size)</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">force</span> <span class="params">(<span class="keyword">boolean</span> metaData)</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>在通道出现之前，底层的文件操作都是通过RandomAccessFile类的方法来实现的。FileChannel模拟同样的 I/O 服务，因此它们的API自然也是很相似的。</p>
-<img src="/2017/07/08/Java-NIO-Channel/api.png" alt="Filechannel" title="Filechannel">
-<p>上图是FileChannel、RandomAccessFile 和 <a href="http://wiki.jikexueyuan.com/project/linux-process/posix.html" target="_blank" rel="external">POSIX I/O system calls</a> 三者在方法上的对应关系。</p>
-<p>POSIX接口我们在上一篇文章中也略有提及，他是一个系统级别的接口。下面看一下这几个接口，主要也是和上一篇文章文件描述符的介绍做一个呼应。</p>
-<ul>
-<li>position()和position(long newPosition)</li>
-</ul>
-<p>position()返回当前文件的position值，position(long newPosition)将当前position设置为指定值。当字节被read()或write()方法传输时，文件position会自动更新。</p>
-<p>position的含义与Buffer类中的position含义相似，都是指向下一个字节读取的位置。</p>
-<p>回想一下介绍文件描述符的文章当中提到，当进程打开一个文件时，内核就会创建一个新的file对象，这个file对象有一个字段loff_t f_pos描述了文件的当前位置，position相当于loff_t f_pos的映射。由此可知，如果是使用同一文件描述符读取文件，那么他们的position是相互影响的：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">RandomAccessFile file = <span class="keyword">new</span> RandomAccessFile(<span class="keyword">new</span> File(fileName), <span class="string">"rw"</span>);</div><div class="line">FileChannel channel = file.getChannel();</div><div class="line">System.out.println(<span class="string">"position: "</span> + channel.position());</div><div class="line">file.seek(<span class="number">30</span>);</div><div class="line">System.out.println(<span class="string">"position: "</span> + channel.position());</div></pre></td></tr></table></figure>
-<p>打印如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">position: 0</div><div class="line">position: 30</div></pre></td></tr></table></figure>
-<p>这是因为，file与channel使用了同一个文件描述符。如果新建另一个相同文件的通道，那么他们之间的position不会相互影响，因为使用了不同的文件描述符，指向不同的file对象。</p>
-<ul>
-<li>truncate(long size)</li>
-</ul>
-<p>当需要减少一个文件的size时，truncate()方法会砍掉指定的size值之外的所有数据。这个方法要求通道具有写权限。</p>
-<p>如果当前size大于给定size，超出给定size的所有字节都会被删除。如果提供的新size值大于或等于当前的文件size值，该文件不会被修改。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">RandomAccessFile file = <span class="keyword">new</span> RandomAccessFile(<span class="keyword">new</span> File(fileName), <span class="string">"rw"</span>);</div><div class="line">FileChannel channel = file.getChannel();</div><div class="line">System.out.println(<span class="string">"size: "</span> + channel.size());</div><div class="line">System.out.println(<span class="string">"position: "</span> + channel.position());</div><div class="line">System.out.println(<span class="string">"trucate: 90"</span>);</div><div class="line">channel.truncate(<span class="number">90</span>);</div><div class="line">System.out.println(<span class="string">"size: "</span> + channel.size());</div><div class="line">System.out.println(<span class="string">"position: "</span> + channel.position());</div></pre></td></tr></table></figure>
-<p>打印如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">size: 100</div><div class="line">position: 0</div><div class="line">trucate: 90</div><div class="line">size: 90</div><div class="line">position: 0</div></pre></td></tr></table></figure>
-<ul>
-<li>force (boolean metaData)</li>
-</ul>
-<p>force()方法告诉通道强制将全部待定的修改都应用到磁盘的文件上。</p>
-<p>如果文件位于一个本地文件系统，那么一旦force()方法返回，即可保证从通道被创建(或上次调用force())时起的对文件所做的全部修改已经被写入到磁盘。但是，如果文件位于一个远程的文件系统，如NFS上，那么不能保证待定修改一定能同步到永久存储器。</p>
-<p>force()方法的布尔型参数表示在方法返回值前文件的元数据(metadata)是否也要被同步更新到磁盘。元数据指文件所有者、访问权限、最后一次修改时间等信息。</p>
-<blockquote>
-<p>Java NIO 学习第三篇–Channel</p>
-</blockquote>
-<h2 id="Channel-1"><a href="#Channel-1" class="headerlink" title="Channel"></a>Channel</h2><p>通道(Channel)的作用有类似于流(Stream)，用于传输文件或者网络上的数据。</p>
-<img src="/2017/07/08/Java-NIO-Channel/channel.png" alt="channel" title="channel">
-<p>上图中，箭头就相当于通道。一个不是很准确的例子：把通道想象成铁轨，缓冲区则是列车，铁轨的起始与终点则可以是socket，文件系统和我们的程序。假如当我们在代码中要写入数据到一份文件的时候，我们先把列车(缓冲区)装满，然后把列车(缓冲区)放置到铁轨上(通道)，数据就被传递到通道的另一端，文件系统。读取文件则相反，文件的内容被装到列车上，传递到程序这一侧，然后我们在代码中就可以读取这个列车中的内容(读取缓冲区)。</p>
-<p>通道与传统的流还是有一些区别的：</p>
-<ul>
-<li><p>通道可以同时支持读写(不是一定支持)，而流只支持单方向的操作，比如输入流只能读，输出流只能写。</p>
-</li>
-<li><p>通道可以支持异步的读或写，而流是同步的。</p>
-</li>
-<li><p>通道的读取或写入是通过缓冲区来进行的，而流则写入或返回字节。</p>
-</li>
-</ul>
-<h2 id="FileChannel-1"><a href="#FileChannel-1" class="headerlink" title="FileChannel"></a><a href="https://docs.oracle.com/javase/7/docs/api/java/nio/channels/FileChannel.html" target="_blank" rel="external">FileChannel</a></h2><p>通道大致上可以分为两类：文件通道和socket通道。看一下文件通道：</p>
+<h2 id="FileChannel"><a href="#FileChannel" class="headerlink" title="FileChannel"></a><a href="https://docs.oracle.com/javase/7/docs/api/java/nio/channels/FileChannel.html" target="_blank" rel="external">FileChannel</a></h2><p>通道大致上可以分为两类：文件通道和socket通道。看一下文件通道：</p>
 <p>文件通道可以由以下几个方法获得：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">RandomAccessFile file = <span class="keyword">new</span> RandomAccessFile(<span class="keyword">new</span> File(fileName), <span class="string">"rw"</span>);</div><div class="line">FileChannel channel = file.getChannel();</div><div class="line"></div><div class="line">FileInputStream stream = <span class="keyword">new</span> FileInputStream(<span class="keyword">new</span> File(fileName));</div><div class="line">FileChannel channel = stream.getChannel();</div><div class="line"></div><div class="line">FileOutputStream stream = <span class="keyword">new</span> FileOutputStream(<span class="keyword">new</span> File(fileName));</div><div class="line">FileChannel channel = stream.getChannel();</div><div class="line"></div><div class="line">FileChannel channel = FileChannel.open(Paths.get(fileName));</div></pre></td></tr></table></figure>
 <p>FileChannel 类结构：</p>
@@ -804,7 +756,7 @@ Channel通道(Channel)的作用有类似于流(Stream)，用于传输文件或�
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Channel"><span class="nav-number">1.</span> <span class="nav-text">Channel</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#FileChannel"><span class="nav-number">2.</span> <span class="nav-text">FileChannel</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Channel-1"><span class="nav-number">3.</span> <span class="nav-text">Channel</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#FileChannel-1"><span class="nav-number">4.</span> <span class="nav-text">FileChannel</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ReadableByteChannel、WritableByteChannel"><span class="nav-number">5.</span> <span class="nav-text">ReadableByteChannel、WritableByteChannel</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#InterruptibleChannel"><span class="nav-number">6.</span> <span class="nav-text">InterruptibleChannel</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Scatter-Gather"><span class="nav-number">7.</span> <span class="nav-text">Scatter/Gather</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#FileLock"><span class="nav-number">8.</span> <span class="nav-text">FileLock</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Channel-to-Channel"><span class="nav-number">9.</span> <span class="nav-text">Channel-to-Channel</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">10.</span> <span class="nav-text">参考</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ReadableByteChannel、WritableByteChannel-1"><span class="nav-number">11.</span> <span class="nav-text">ReadableByteChannel、WritableByteChannel</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#InterruptibleChannel-1"><span class="nav-number">12.</span> <span class="nav-text">InterruptibleChannel</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Scatter-Gather-1"><span class="nav-number">13.</span> <span class="nav-text">Scatter/Gather</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#FileLock-1"><span class="nav-number">14.</span> <span class="nav-text">FileLock</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Channel-to-Channel-1"><span class="nav-number">15.</span> <span class="nav-text">Channel-to-Channel</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考-1"><span class="nav-number">16.</span> <span class="nav-text">参考</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Channel"><span class="nav-number">1.</span> <span class="nav-text">Channel</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#FileChannel"><span class="nav-number">2.</span> <span class="nav-text">FileChannel</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ReadableByteChannel、WritableByteChannel"><span class="nav-number">3.</span> <span class="nav-text">ReadableByteChannel、WritableByteChannel</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#InterruptibleChannel"><span class="nav-number">4.</span> <span class="nav-text">InterruptibleChannel</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Scatter-Gather"><span class="nav-number">5.</span> <span class="nav-text">Scatter/Gather</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#FileLock"><span class="nav-number">6.</span> <span class="nav-text">FileLock</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Channel-to-Channel"><span class="nav-number">7.</span> <span class="nav-text">Channel-to-Channel</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">8.</span> <span class="nav-text">参考</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ReadableByteChannel、WritableByteChannel-1"><span class="nav-number">9.</span> <span class="nav-text">ReadableByteChannel、WritableByteChannel</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#InterruptibleChannel-1"><span class="nav-number">10.</span> <span class="nav-text">InterruptibleChannel</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Scatter-Gather-1"><span class="nav-number">11.</span> <span class="nav-text">Scatter/Gather</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#FileLock-1"><span class="nav-number">12.</span> <span class="nav-text">FileLock</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Channel-to-Channel-1"><span class="nav-number">13.</span> <span class="nav-text">Channel-to-Channel</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考-1"><span class="nav-number">14.</span> <span class="nav-text">参考</span></a></li></ol></div>
             
 
           </div>
