@@ -1,0 +1,999 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Monda:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|Lobster Two:300,300italic,400,400italic,700,700italic|PT Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="linux," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="学习Java-NIO在网络端的应用，就需要了解Linux的网络IO模型，才能够体会为什么需要NIO和NIO的好处在哪里。
+
+什么是同步与异步、阻塞与非阻塞引用知乎 怎样理解阻塞非阻塞与同步异步的区别？ 上面的一个回答，很生动的说明了同步异步，阻塞非阻塞之间的区别联系：
+
+老张爱喝茶，废话不说，煮开水。
+出场人物：老张，水壶两把（普通水壶，简称水壶；会响的水壶，简称响水壶）。
+1 老张把水壶放到火">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux网络IO模型">
+<meta property="og:url" content="http://yukai.space/2017/07/10/Linux网络IO模型/index.html">
+<meta property="og:site_name" content="YuKai's blog">
+<meta property="og:description" content="学习Java-NIO在网络端的应用，就需要了解Linux的网络IO模型，才能够体会为什么需要NIO和NIO的好处在哪里。
+
+什么是同步与异步、阻塞与非阻塞引用知乎 怎样理解阻塞非阻塞与同步异步的区别？ 上面的一个回答，很生动的说明了同步异步，阻塞非阻塞之间的区别联系：
+
+老张爱喝茶，废话不说，煮开水。
+出场人物：老张，水壶两把（普通水壶，简称水壶；会响的水壶，简称响水壶）。
+1 老张把水壶放到火">
+<meta property="og:image" content="http://yukai.space/2017/07/10/Linux网络IO模型/io.png">
+<meta property="og:image" content="http://yukai.space/2017/07/10/Linux网络IO模型/blockIO.png">
+<meta property="og:image" content="http://yukai.space/2017/07/10/Linux网络IO模型/nonblockingIO.png">
+<meta property="og:image" content="http://yukai.space/2017/07/10/Linux网络IO模型/mutiplexingIO.png">
+<meta property="og:image" content="http://yukai.space/2017/07/10/Linux网络IO模型/asyncIO.png">
+<meta property="og:updated_time" content="2017-07-12T14:33:07.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Linux网络IO模型">
+<meta name="twitter:description" content="学习Java-NIO在网络端的应用，就需要了解Linux的网络IO模型，才能够体会为什么需要NIO和NIO的好处在哪里。
+
+什么是同步与异步、阻塞与非阻塞引用知乎 怎样理解阻塞非阻塞与同步异步的区别？ 上面的一个回答，很生动的说明了同步异步，阻塞非阻塞之间的区别联系：
+
+老张爱喝茶，废话不说，煮开水。
+出场人物：老张，水壶两把（普通水壶，简称水壶；会响的水壶，简称响水壶）。
+1 老张把水壶放到火">
+<meta name="twitter:image" content="http://yukai.space/2017/07/10/Linux网络IO模型/io.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yukai.space/2017/07/10/Linux网络IO模型/"/>
+
+
+
+
+
+  <title> Linux网络IO模型 | YuKai's blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">YuKai's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">好好学习，天天向上</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            主页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tools">
+          <a href="/tools" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            工具
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/page" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocapitalize="off" autocomplete="off" autocorrect="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yukai.space/2017/07/10/Linux网络IO模型/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="于凯">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="YuKai's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Linux网络IO模型
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-10T22:23:37+08:00">
+                2017-07-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/技术/" itemprop="url" rel="index">
+                    <span itemprop="name">技术</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>学习Java-NIO在网络端的应用，就需要了解Linux的网络IO模型，才能够体会为什么需要NIO和NIO的好处在哪里。</p>
+</blockquote>
+<h2 id="什么是同步与异步、阻塞与非阻塞"><a href="#什么是同步与异步、阻塞与非阻塞" class="headerlink" title="什么是同步与异步、阻塞与非阻塞"></a>什么是同步与异步、阻塞与非阻塞</h2><p>引用知乎 <a href="https://www.zhihu.com/question/19732473/answer/23434554" target="_blank" rel="external">怎样理解阻塞非阻塞与同步异步的区别？</a> 上面的一个回答，很生动的说明了同步异步，阻塞非阻塞之间的区别联系：</p>
+<hr>
+<p>老张爱喝茶，废话不说，煮开水。</p>
+<p>出场人物：老张，水壶两把（普通水壶，简称水壶；会响的水壶，简称响水壶）。</p>
+<p>1 老张把水壶放到火上，立等水开。（同步阻塞）</p>
+<p>老张觉得自己有点傻</p>
+<p>2 老张把水壶放到火上，去客厅看电视，时不时去厨房看看水开没有。（同步非阻塞）</p>
+<p>老张还是觉得自己有点傻，于是变高端了，买了把会响笛的那种水壶。水开之后，能大声发出嘀~~~~的噪音。</p>
+<p>3 老张把响水壶放到火上，立等水开。（异步阻塞）</p>
+<p>老张觉得这样傻等意义不大</p>
+<p>4 老张把响水壶放到火上，去客厅看电视，水壶响之前不再去看它了，响了再去拿壶。（异步非阻塞）</p>
+<p>老张觉得自己聪明了。</p>
+<p>所谓同步异步，只是对于水壶而言。普通水壶，同步；响水壶，异步。虽然都能干活，但响水壶可以在自己完工之后，提示老张水开了。这是普通水壶所不能及的。同步只能让调用者去轮询自己（情况2中），造成老张效率的低下。</p>
+<p>所谓阻塞非阻塞，仅仅对于老张而言。立等的老张，阻塞；看电视的老张，非阻塞。情况1和情况3中老张就是阻塞的，媳妇喊他都不知道。虽然3中响水壶是异步的，可对于立等的老张没有太大的意义。所以一般异步是配合非阻塞使用的，这样才能发挥异步的效用。</p>
+<hr>
+<a id="more"></a>
+<p>看上面的例子，我们再来关注Linux网络IO模型，然后结合这个例子去理解。</p>
+<h2 id="Linux网络IO模型"><a href="#Linux网络IO模型" class="headerlink" title="Linux网络IO模型"></a>Linux网络IO模型</h2><p>Unix提供了五种IO模式，分别是：</p>
+<ul>
+<li><p>阻塞IO</p>
+</li>
+<li><p>非阻塞IO</p>
+</li>
+<li><p>IO复用</p>
+</li>
+<li><p>信号驱动IO</p>
+</li>
+<li><p>异步IO</p>
+</li>
+</ul>
+<p>在之前的学习中我们也了解了从用户进程到底层硬件执行IO的过程，以read为例：</p>
+<img src="/2017/07/10/Linux网络IO模型/io.png" alt="io" title="io">
+<p>数据需要从硬件设备拷贝到内核空间的缓冲区，然后从内核缓冲区拷贝到用户进程空间。</p>
+<p>我们把<strong>数据需要从硬件设备拷贝到内核空间的缓冲区</strong>这个过程类比为烧水，<strong>从内核缓冲区拷贝到用户进程空间</strong>这个过程类比为用烧好的水泡茶。</p>
+<h3 id="阻塞IO"><a href="#阻塞IO" class="headerlink" title="阻塞IO"></a>阻塞IO</h3><img src="/2017/07/10/Linux网络IO模型/blockIO.png" alt="blockIO" title="blockIO">
+<p>阻塞IO是最常用的IO模型，我们在java中调用传统BIO(InputStream、OutpuytStream)的读写方法都是这种IO模型。</p>
+<p>观察上图，在进程空间中调用recvfrom，其系统调用直到数据从硬件设备拷贝到内核缓冲区并且从内核拷贝到用户进程空间时才会返回，在此期间一直是阻塞的，进程在从调用recvfrom到他返回这段时间一直都是阻塞的，故称为阻塞IO。</p>
+<p>阻塞IO对应了我们上面提到的同步阻塞。在这种IO模式下整个过程相当于使用不会响的普通水壶烧水，并且老张一直在旁边盯着，干不了其他事。水烧好后老张再去泡茶。整个过程是同步阻塞的。</p>
+<p>在阻塞IO模式下，在同一个线程当中，我们对于多个连接，只能依次处理：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">while</span> <span class="keyword">true</span> &#123;</div><div class="line">    <span class="keyword">for</span> i in stream[] &#123;</div><div class="line">        <span class="comment">//可能会阻塞很长时间</span></div><div class="line">        read until available </div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="非阻塞IO"><a href="#非阻塞IO" class="headerlink" title="非阻塞IO"></a>非阻塞IO</h3><img src="/2017/07/10/Linux网络IO模型/nonblockingIO.png" alt="nonblockingIO" title="nonblockingIO">
+<p>用户进程发起一个recvfrom调用的时候，如果内核缓冲区的数据还没有准备好(没有完全从硬件拷贝到内核)，那么他不会阻塞用户进程，而是立刻返回一个error。用户发起一个recvfrom操作之后，不需要等待，而是马上会得到一个结果，用户可以判断这个结果，如果是一个error，表示数据还没有准备好，于是可以再次发起recvfrom操作，一旦内核数据准备好了，就可以把数据拷贝到用户进程空间，然后返回。</p>
+<p>这种IO模型称之为非阻塞IO，整个过程可以类比为：在这种IO模式下调用recvfrom相当于使用不会响的普通水壶烧水，老张时不时跑到厨房看看水烧开了没(这个过程是同步非阻塞的)，如果水烧开了，他就用烧开的水泡茶(相当于从内核copy数据到用户空间这一段，这个过程其实是同步阻塞的)</p>
+<p>在非阻塞IO模式下，我们发现可以在一个线程中处理多个连接了：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 忙轮询</span></div><div class="line"><span class="keyword">while</span> <span class="keyword">true</span> &#123;</div><div class="line">    <span class="keyword">for</span> i in stream[]; &#123;</div><div class="line">        <span class="comment">// 如果数据没有准备好，就立即返回，处理下一个流</span></div><div class="line">        read until unavailable </div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>我们只要不停的把所有流从头到尾问一遍，又从头开始。这样就可以处理多个流了，但这样的做法显然不好，因为如果所有的流都没有数据，那么只会白白浪费CPU。</p>
+<p>为了避免CPU空转，可以引进了一个代理: select或poll(两者本质上相同)</p>
+<h3 id="IO复用"><a href="#IO复用" class="headerlink" title="IO复用"></a>IO复用</h3><img src="/2017/07/10/Linux网络IO模型/mutiplexingIO.png" alt="mutiplexingIO" title="mutiplexingIO">
+<p>Linux 提供了select/poll，进程将一个或多个fd传递给select或poll系统调用，并且阻塞在select或poll方法上。同时，kernel会侦测所有select负责的fd是否处于就绪状态，如果有任何一个fd就绪，select或poll就会返回，这个时候用户进程再调用recvfrom，将数据从内核缓冲区拷贝到用户进程空间。</p>
+<p>这个图和blocking IO的图有些相似，但是还有一些区别。因为这里需要使用两个system call (select 和 recvfrom)，而blocking IO只调用了一个system call (recvfrom)。但是，用select的优势在于它可以同时处理多个connection。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">while</span> <span class="keyword">true</span> &#123;</div><div class="line">    <span class="comment">// 在select上阻塞</span></div><div class="line">    select(streams[])</div><div class="line">    <span class="comment">// 无差别轮询</span></div><div class="line">    <span class="keyword">for</span> i in streams[] &#123;</div><div class="line">        read until unavailable</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>于是，如果没有I/O事件产生，我们的程序就会阻塞在select处。但是依然有个问题，我们从select那里仅仅知道了，有I/O事件发生了，但却并不知道是那几个流(可能有一个，多个，甚至全部)，我们只能无差别轮询所有流，找出能读出数据，或者写入数据的流，对他们进行操作。使用select，我们有O(n)的无差别轮询复杂度，同时处理的流越多，每一次无差别轮询时间就越长。</p>
+<p>Linux还提供了一个epoll系统调用，不同于忙轮询和无差别轮询，epoll之会把哪个流发生了怎样的I/O事件通知我们。此时我们对这些流的操作都是有意义的(复杂度降低到了O(1))。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 事先调用epoll_ctl注册感兴趣的事件到epollfd</span></div><div class="line"><span class="keyword">while</span> <span class="keyword">true</span> &#123;</div><div class="line">    <span class="comment">// 返回触发注册事件的流</span></div><div class="line">    active_stream[] = epoll_wait(epollfd)</div><div class="line">    <span class="comment">// 无须遍历所有的流</span></div><div class="line">    <span class="keyword">for</span> i in active_stream[] &#123;</div><div class="line">        read or write till</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="信号驱动IO"><a href="#信号驱动IO" class="headerlink" title="信号驱动IO"></a>信号驱动IO</h3>
+<p>首先开启套接口信号驱动IO功能，并通过系统调用sigaction执行一个信号处理函数，此系统调用立即返回。当数据准备就绪时，就为该进程生成一个sigio信号，通过信号回调通知进程。进程调用recvfrom读取数据，将数据从内核缓冲区拷贝到用户进程空间。</p>
+<p>上面的过程可以类比为：老张使用会响的水壶烧水，然后就去客厅看电视了。水烧好后水壶响起来(这个过程是异步非阻塞的)，老张再来厨房用烧好的水泡茶(这个过程是同步阻塞的)。</p>
+<h3 id="异步IO"><a href="#异步IO" class="headerlink" title="异步IO"></a>异步IO</h3><img src="/2017/07/10/Linux网络IO模型/asyncIO.png" alt="asyncIO" title="asyncIO">
+<p>用户进程发起recvfrom操作之后，立刻就可以开始去做其它的事。而另一方面，从kernel的角度，当它收到一个asynchronous read之后，首先它会立刻返回，所以不会对用户进程产生任何block。然后，kernel会等待数据准备完成，然后将数据拷贝到用户内存，当这一切都完成之后，kernel会给用户进程发送一个signal，告诉它read操作完成了。</p>
+<p>这种IO模式与信号驱动IO的区别在于：信号驱动IO由内核通知我们什么时候可以开始一个IO操作，异步IO则由内核告诉我们IO操作何时完成。</p>
+<p>异步IO模式可以类比为：在这种IO模式下整个过程相当于使用会响的水壶烧水，并且，这个水壶更加智能，水烧好后可以自动泡茶，然后发出声响通知老张。老张把水放到火上就去客厅看电视了，水烧好并且茶叶泡好之后，水壶发出声响通知老张。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://segmentfault.com/a/1190000003063859" target="_blank" rel="external">Linux IO模式及 select、poll、epoll详解</a></p>
+<p><a href="https://www.zhihu.com/question/19732473" target="_blank" rel="external">怎样理解阻塞非阻塞与同步异步的区别？</a></p>
+<p><a href="https://www.zhihu.com/question/20122137/answer/14049112" target="_blank" rel="external">epoll 或者 kqueue 的原理是什么？</a></p>
+<p>《Netty权威指南》 电子工业出版社</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+<div id="wechat_subscriber" style="display: block; padding: 10px 0; margin: 20px auto; width: 100%; text-align: center">
+    <img id="wechat_subscriber_qcode" src="/images/wechat-qcode.jpg" alt="于凯 wechat" style="width: 200px; max-width: 100%;"/>
+    <div>欢迎您扫一扫上面的微信公众号，订阅我的博客！</div>
+</div>
+
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/linux/" rel="tag"># linux</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/07/08/Java-NIO-Channel/" rel="next" title="Java-NIO-Channel">
+                <i class="fa fa-chevron-left"></i> Java-NIO-Channel
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/07/12/springboot配置https/" rel="prev" title="springboot配置https">
+                springboot配置https <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        
+<script>
+  with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='//bdimg.share.baidu.com/static/api/js/share.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="于凯" />
+          <p class="site-author-name" itemprop="name">于凯</p>
+           
+              <p class="site-description motion-element" itemprop="description">Who Are You</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/">
+                <span class="site-state-item-count">68</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">23</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/5381447277" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  微博
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/Hikyu" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是同步与异步、阻塞与非阻塞"><span class="nav-number">1.</span> <span class="nav-text">什么是同步与异步、阻塞与非阻塞</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Linux网络IO模型"><span class="nav-number">2.</span> <span class="nav-text">Linux网络IO模型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#阻塞IO"><span class="nav-number">2.1.</span> <span class="nav-text">阻塞IO</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#非阻塞IO"><span class="nav-number">2.2.</span> <span class="nav-text">非阻塞IO</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#IO复用"><span class="nav-number">2.3.</span> <span class="nav-text">IO复用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#信号驱动IO"><span class="nav-number">2.4.</span> <span class="nav-text">信号驱动IO</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#异步IO"><span class="nav-number">2.5.</span> <span class="nav-text">异步IO</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">3.</span> <span class="nav-text">参考</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">于凯</span>
+</div>
+
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length == 0) {
+      search_path = "search.xml";
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.popup').toggle();
+    }
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+      $.ajax({
+        url: path,
+        dataType: "xml",
+        async: true,
+        success: function( xmlResponse ) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = $( "entry", xmlResponse ).map(function() {
+            return {
+              title: $( "title", this ).text(),
+              content: $("content",this).text(),
+              url: $( "url" , this).text()
+            };
+          }).get();
+          var $input = document.getElementById(search_id);
+          var $resultContent = document.getElementById(content_id);
+          $input.addEventListener('input', function(){
+            var matchcounts = 0;
+            var str='<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length > 1) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var content_index = [];
+                var data_title = data.title.trim().toLowerCase();
+                var data_content = data.content.trim().replace(/<[^>]+>/g,"").toLowerCase();
+                var data_url = decodeURIComponent(data.url);
+                var index_title = -1;
+                var index_content = -1;
+                var first_occur = -1;
+                // only match artiles with not empty titles and contents
+                if(data_title != '') {
+                  keywords.forEach(function(keyword, i) {
+                    index_title = data_title.indexOf(keyword);
+                    index_content = data_content.indexOf(keyword);
+                    if( index_title >= 0 || index_content >= 0 ){
+                      isMatch = true;
+                      if (i == 0) {
+                        first_occur = index_content;
+                      }
+                    }
+
+                  });
+                }
+                // show search results
+                if (isMatch) {
+                  matchcounts += 1;
+                  str += "<li><a href='"+ data_url +"' class='search-result-title'>"+ data_title +"</a>";
+                  var content = data.content.trim().replace(/<[^>]+>/g,"");
+                  if (first_occur >= 0) {
+                    // cut out 100 characters
+                    var start = first_occur - 20;
+                    var end = first_occur + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if(start == 0){
+                      end = 50;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    var match_content = content.substring(start, end);
+                    // highlight all keywords
+                    keywords.forEach(function(keyword){
+                      var regS = new RegExp(keyword, "gi");
+                      match_content = match_content.replace(regS, "<b class=\"search-keyword\">"+keyword+"</b>");
+                    });
+
+                    str += "<p class=\"search-result\">" + match_content +"...</p>"
+                  }
+                  str += "</li>";
+                }
+              })};
+            str += "</ul>";
+            if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>' }
+            if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>' }
+            $resultContent.innerHTML = str;
+          });
+          proceedsearch();
+        }
+      });}
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched == false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
