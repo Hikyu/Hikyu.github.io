@@ -302,6 +302,163 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yukai.space/2016/09/24/记录这周工作遇到的坑/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="于凯">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="YuKai's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/09/24/记录这周工作遇到的坑/" itemprop="url">
+                  记录工作遇到的坑
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-09-24T16:30:44+08:00">
+                2016-09-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/技术/" itemprop="url" rel="index">
+                    <span itemprop="name">技术</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>昨天晚上12.30才进的家门，回来之后还远程合了个代码打了个包，发布restAPI新版本之用。这一周的主要工作就是在做一个web服务器，是一个集群的中间件。因为着急发布新版本，所以昨晚加班到12点多…</p>
+<p>主要实现了几个接口，实现了ssl双向验证功能。其实ssl双向验证的功能主要是了解ssl原理之后如何配置的问题。期间还学习了session和cookie的原理。ssl与cookie、session单开一篇进行总结。这篇日志记录一下这周工作中遇到的一些坑，不一定是技术上的，但是遇到这些小问题还是耽误了一些时间。这篇日志也会持续更新，把以后遇到的坑都总结到这里来。</p>
+<p>希望以后遇到类似的情况能够迅速找到原因将其解决，同时也希望能帮助到可能会看到这篇文章的人。</p>
+<h2 id="Spring项目通过export方法打包为jar的问题"><a href="#Spring项目通过export方法打包为jar的问题" class="headerlink" title="Spring项目通过export方法打包为jar的问题"></a>Spring项目通过export方法打包为jar的问题</h2><p>在前面的日志中已经有<a href="http://yukai.space/2016/09/19/Spring%E9%A1%B9%E7%9B%AE%E6%89%93%E5%8C%85%E4%B8%BAjar/">专门的一篇</a>来总结这个问题:<strong>当通过export方式打包Spring项目时，一定要记得勾选Add Directory Entries这个选项，否则spring无法正确扫描到controller，发生404</strong></p>
+<h2 id="使用-PathVariable注解时抛出java-lang-IllegalArgumentException异常"><a href="#使用-PathVariable注解时抛出java-lang-IllegalArgumentException异常" class="headerlink" title="使用@PathVariable注解时抛出java.lang.IllegalArgumentException异常"></a>使用@PathVariable注解时抛出java.lang.IllegalArgumentException异常</h2><p>假如你的项目中有一个类似下面的controller来接收一个请求：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@GET</span></div><div class="line"><span class="meta">@RequestMapping</span>(<span class="string">"web/&#123;groupName&#125;"</span>)</div><div class="line"><span class="meta">@Consumes</span>(MediaType.APPLICATION_JSON)</div><div class="line"><span class="meta">@Produces</span>(MediaType.APPLICATION_JSON)</div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">getWorkerAddress</span><span class="params">(HttpServletRequest request, HttpServletResponse response,</div><div class="line">		@PathVariable String groupName)</span> </span>&#123;</div><div class="line">		doSomething...</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>当你的项目运行时你发起一个<code>http://ip:port/web/groupName1</code>这样的请求，那么很有可能服务器会报这样一个异常：<strong>java.lang.IllegalArgumentException: Name for argument type [java.lang.String] not available, and parameter name information not found in class file either.</strong></p>
+<p>大概的意思就是参数名称信息没有在类文件中找到。若是浏览器为客户端，浏览器的页面是这样的：</p>
+<img src="/2016/09/24/记录这周工作遇到的坑/error.png" alt="error" title="error">
+<p>解决这个异常的方法有两种：</p>
+<p><strong>1.在@PathVariable注解后面加上参数名，比如：@PathVariable(“groupName”)</strong></p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2016/09/24/记录这周工作遇到的坑/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yukai.space/2016/09/20/Eclipse编码问题终极解决方案/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1695,159 +1852,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yukai.space/2016/07/24/java_Tips/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="于凯">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="YuKai's blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/07/24/java_Tips/" itemprop="url">
-                  java编程技巧
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-07-24T12:48:55+08:00">
-                2016-07-24
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/编程/" itemprop="url" rel="index">
-                    <span itemprop="name">编程</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <blockquote>
-<p>突然想到把自己平时用到的，网上看到的java编程过程中的小技巧总结下来~~</p>
-</blockquote>
-<p> <strong>1</strong>. 循环中尽量不要使用try..catch 代码块，应该将其放在最外层</p>
-<p> <strong>2</strong>. if语句中,判断条件尽量不要使用if(!…)的形式，这样只会使代码更加难以理解</p>
-<p> <strong>3</strong>. 循环内不要不断创建对象引用，而应该：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">Object obj = <span class="keyword">null</span>;</div><div class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt;= count; i++) &#123; </div><div class="line"> obj = <span class="keyword">new</span> Object(); </div><div class="line">&#125;</div></pre></td></tr></table></figure>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2016/07/24/java_Tips/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1897,7 +1901,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/">
-                <span class="site-state-item-count">67</span>
+                <span class="site-state-item-count">68</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
