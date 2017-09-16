@@ -3,7 +3,10 @@ layout: post
 title: Linux网络IO模型
 date: 2017-07-10 22:23:37
 categories: 技术
-tags: linux
+tags:
+- linux
+- java
+- NIO
 ---
 > 学习Java-NIO在网络端的应用，就需要了解Linux的网络IO模型，才能够体会为什么需要NIO和NIO的好处在哪里。
 

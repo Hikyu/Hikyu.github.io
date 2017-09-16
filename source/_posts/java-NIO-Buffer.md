@@ -3,7 +3,9 @@ layout: post
 title: Java-NIO-Buffer
 date: 2017-06-28 20:36:36
 categories: 编程
-tags: java
+tags: 
+- java
+- NIO
 ---
 > 最近在看java nio方面的知识，打算写几篇博客总结一下，就从Buffer开始吧
 

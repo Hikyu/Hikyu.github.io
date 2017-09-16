@@ -3,7 +3,9 @@ layout: post
 title: Java-NIO-MappedByteBuffer
 date: 2017-07-04 07:56:08
 categories: 编程
-tags: java
+tags: 
+- java
+- NIO
 ---
 > java nio 学习第二篇--内存映射文件
 

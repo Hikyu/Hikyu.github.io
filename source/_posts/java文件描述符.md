@@ -4,7 +4,8 @@ title: java文件描述符
 date: 2017-07-07 20:54:29
 categories: 编程
 tags: 
-- java 
+- java
+- NIO
 ---
 
 ## 文件描述符

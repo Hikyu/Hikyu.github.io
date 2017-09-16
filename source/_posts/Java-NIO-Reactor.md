@@ -3,7 +3,9 @@ layout: post
 title: Java-NIO-Reactor
 date: 2017-09-13 09:53:08
 categories: 编程
-tags: java
+tags: 
+- java
+- NIO
 ---
 
 >接着学习java-NIO。这次要从宏观架构上来学习NIO，并涉及到一个模型：Reactor线程模型。
