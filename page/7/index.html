@@ -302,7 +302,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yukai.space/2016/04/28/java中的类型转换/">
+    <link itemprop="mainEntityOfPage" href="http://yukai.space/2016/06/30/java中的枚举/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="于凯">
@@ -324,8 +324,8 @@
             
               
                 
-                <a class="post-title-link" href="/2016/04/28/java中的类型转换/" itemprop="url">
-                  java中的类型转换
+                <a class="post-title-link" href="/2016/06/30/java中的枚举/" itemprop="url">
+                  java中的枚举
                 </a>
               
             
@@ -341,8 +341,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-04-28T12:48:55+08:00">
-                2016-04-28
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-06-30T12:48:55+08:00">
+                2016-06-30
               </time>
             
 
@@ -401,26 +401,169 @@
       
         
           <blockquote>
-<p>以前一直对java中的类型转换了解的不是很清楚，因为平时写代码有IDE的帮助，所以往往忽略这一块的内容，但往往就是这样的小知识点不清楚，很有可能造成很大的错误。所以在闲暇时间总结一下这些可能被遗忘的知识点。网上已经有很多相关的介绍文章了，现在来梳理一番：</p>
+<p>已经好久没有动博客了，毕业之后的第一篇。下班了单开一篇，把毕业照补上。</p>
 </blockquote>
-<h2 id="基本类型"><a href="#基本类型" class="headerlink" title="基本类型"></a><strong>基本类型</strong></h2><ul>
-<li><strong>基本类型优先级</strong></li>
-</ul>
-<p>首先来看java中的基本类型有哪些：</p>
-<p>byte：byte数据类型是一个8位有符号二进制补码整数。</p>
-<p>short：short数据类型为16位有符号二进制补码整数。</p>
-<p>int：int数据类型是一个32位有符号二进制补码整数</p>
-<p>long: long数据类型是一个64位二进制补码整数</p>
-<p>float: float数据类型是单精度、32位、符合IEEE 754标准的浮点数</p>
-<p>boolean: boolean数据类型只有两个可能的值：true和false</p>
-<p>double: double数据类型是双精度、64位、符合IEEE 754标准的浮点数；</p>
-<p>char: char数据类型是一个16位的Unicode字符</p>
-<p>基本类型优先级由低到高排序：</p>
-<p>(byte short char) int long float double</p>
-<p>其中，byte short char 平级</p>
+<p>Java中的枚举是在JDK1.5以后出现的。之前的开发过程中并没有用过，但是有碰到过关于枚举的代码。貌似是一种更为简单有效的常量定义方式。学习之，希望以后的写代码过程中可以熟悉并掌握枚举的用法。</p>
+<h2 id="使用场景："><a href="#使用场景：" class="headerlink" title="使用场景："></a>使用场景：</h2><p>每当需要一组固定的常量的时候，如一周的天数、一年四季等。或者是在我们编译前就知道其包含的所有值的集合，比如定义了一些状态等等。这个时候就有可能需要使用枚举了。</p>
+<h2 id="与-public-static-final-的常量定义方式进行比较："><a href="#与-public-static-final-的常量定义方式进行比较：" class="headerlink" title="与 public static final 的常量定义方式进行比较："></a>与 public static final 的常量定义方式进行比较：</h2><p>在以上的场景中，回顾以往的做法，比如我们定义这样一些状态：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">State</span> </span>&#123;</div><div class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> Normal = <span class="number">0</span>;<span class="comment">//正常</span></div><div class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> Update = <span class="number">1</span>;<span class="comment">//已更新</span></div><div class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> Delete = <span class="number">2</span>;<span class="comment">//已删除</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2016/04/28/java中的类型转换/#more" rel="contents">
+            <a class="btn" href="/2016/06/30/java中的枚举/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yukai.space/2016/06/21/java中的ThreadLocal/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="于凯">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="YuKai's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/06/21/java中的ThreadLocal/" itemprop="url">
+                  java中的ThreadLocal
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-06-21T12:48:55+08:00">
+                2016-06-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/编程/" itemprop="url" rel="index">
+                    <span itemprop="name">编程</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <blockquote>
+<p>今天测试那边在做压力测试的时候，发现新版本的Jdbc占用CPU很高，导致并发量降低，研究半天，发现出问题的地方在于每条语句执行过后都会调用ThreadLocal的get方法。研究一番ThreadLocal…</p>
+</blockquote>
+<h2 id="问题背景："><a href="#问题背景：" class="headerlink" title="问题背景："></a><strong>问题背景</strong>：</h2><p>每次sql语句执行结束之后，最后都会接受后台传回的ReadyForQueryPacket包，标记语句执行完毕。在新版本的协议当中，针对读写分离的功能，在这个包中增加了一些要接收的数据：标记数据库主机状态的lsn。这个lsn标志着主备机之间的数据是否存在差异。每次执行完sql语句之后，都要将数据库后台传回来的lsn与当前主机的lsn进行比较，从而决定下一步的读写过程。每次取本机的lsn操作长这样：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">LsnVo lv = ((LsnVo)DispatchConnection.threadLocalLsn.get());</div></pre></td></tr></table></figure>
+<p>其中，threadLocalLsn是DispatchConnection中的一个ThreadLocal类的静态对象。由于每次执行sql语句之后都会执行它的get方法，导致不必要的cpu浪费。这就是cpu异常的原因。</p>
+<p>遂改之：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">LsnVo lv = ((DispatchConnection) conn).getLsnVo();</div></pre></td></tr></table></figure>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2016/06/21/java中的ThreadLocal/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -577,6 +720,170 @@
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2016/04/28/java中的equals与hashcode/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yukai.space/2016/04/28/java中的类型转换/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="于凯">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="YuKai's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/04/28/java中的类型转换/" itemprop="url">
+                  java中的类型转换
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-04-28T12:48:55+08:00">
+                2016-04-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/编程/" itemprop="url" rel="index">
+                    <span itemprop="name">编程</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <blockquote>
+<p>以前一直对java中的类型转换了解的不是很清楚，因为平时写代码有IDE的帮助，所以往往忽略这一块的内容，但往往就是这样的小知识点不清楚，很有可能造成很大的错误。所以在闲暇时间总结一下这些可能被遗忘的知识点。网上已经有很多相关的介绍文章了，现在来梳理一番：</p>
+</blockquote>
+<h2 id="基本类型"><a href="#基本类型" class="headerlink" title="基本类型"></a><strong>基本类型</strong></h2><ul>
+<li><strong>基本类型优先级</strong></li>
+</ul>
+<p>首先来看java中的基本类型有哪些：</p>
+<p>byte：byte数据类型是一个8位有符号二进制补码整数。</p>
+<p>short：short数据类型为16位有符号二进制补码整数。</p>
+<p>int：int数据类型是一个32位有符号二进制补码整数</p>
+<p>long: long数据类型是一个64位二进制补码整数</p>
+<p>float: float数据类型是单精度、32位、符合IEEE 754标准的浮点数</p>
+<p>boolean: boolean数据类型只有两个可能的值：true和false</p>
+<p>double: double数据类型是双精度、64位、符合IEEE 754标准的浮点数；</p>
+<p>char: char数据类型是一个16位的Unicode字符</p>
+<p>基本类型优先级由低到高排序：</p>
+<p>(byte short char) int long float double</p>
+<p>其中，byte short char 平级</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2016/04/28/java中的类型转换/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1559,358 +1866,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yukai.space/2016/03/29/代码格式/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="于凯">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="YuKai's blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/03/29/代码格式/" itemprop="url">
-                  代码规范
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-03-29T16:31:55+08:00">
-                2016-03-29
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/编程/" itemprop="url" rel="index">
-                    <span itemprop="name">编程</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <blockquote>
-<p>最近写的代码提上去让领导评审，回来给我的建议都是逻辑虽然正确，但代码十分凌乱，命名不规范，看着很不舒服。<br> 所以决定总结一些规范，以后写代码要注意了~</p>
-</blockquote>
-<ul>
-<li><h2 id="命名"><a href="#命名" class="headerlink" title="命名"></a><strong>命名</strong></h2><ul>
-<li><p>变量，方法，类命名要表义，严格禁止使用 name1, name2 等命名</p>
-</li>
-<li><p>避免使用数字，但可用 2 代替 to，用 4 代替 for 等，如 go2Clean</p>
-</li>
-</ul>
-<ol>
-<li><p>方法</p>
-<p>方法名第一个单词小写，以后每个单词首字母大写。</p>
-</li>
-<li><p>类、接口</p>
-<p>所有单词首字母都大写。使用能确切反应该类、接口含义、功能等的词。一般采用名词</p>
-</li>
-<li><p>字段、常量</p>
-<p>成员变量、局部变量第一个单词小写，如 userName, instance。</p>
-<p>常量全部大写，在词与词之前用下划线连接，如 MAX_NUMBER。</p>
-<p>代码中禁止使用硬编码，把一些数字或字符串定义成常用量。</p>
-</li>
-</ol>
-</li>
-</ul>
-<ul>
-<li><h2 id="注释"><a href="#注释" class="headerlink" title="注释"></a><strong>注释</strong></h2><ol>
-<li><p>成员变量注释</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/** 成员变量注释 */</span></div><div class="line"><span class="keyword">protected</span> Object mObject0;</div><div class="line"></div><div class="line"><span class="comment">/**</div><div class="line"> * 对于注释多于一行的，采用这种方式来</div><div class="line"> * 定义该变量</div><div class="line"> */</span></div><div class="line"><span class="keyword">private</span> Object mObject4;</div></pre></td></tr></table></figure>
-</li>
-<li><p>方法描述</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</div><div class="line">  * 方法描述...</div><div class="line">  * </div><div class="line">  * <span class="doctag">@param</span> param1  参数1描述...</div><div class="line">  * <span class="doctag">@param</span> param2  参数2描述...</div><div class="line">  * <span class="doctag">@param</span> paramXX 参数XX描述... （注意：请将参数、描述都对齐）</div><div class="line">  */</span></div><div class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doSomething</span><span class="params">(<span class="keyword">int</span> param1, <span class="keyword">float</span> param2, String paramXX)</span> </span>&#123;&#125;</div></pre></td></tr></table></figure>
-</li>
-</ol>
-<p>3.方法内部注释</p>
-<p>  可以使用 /<em>注释</em>/ 进行注释，也可以使用 //注释  进行注释，最好所有代码保持一致。但多行连续注释不应该使用后者。</p>
-  <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span> (a == <span class="number">2</span>) &#123;</div><div class="line">    <span class="keyword">return</span> TRUE;            <span class="comment">/* special case */</span></div><div class="line">&#125; <span class="keyword">else</span> &#123;    </div><div class="line">    <span class="keyword">return</span> isprime(a);      <span class="comment">/* works only for odd a */</span>&#125;</div></pre></td></tr></table></figure>
-</li>
-</ul>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2016/03/29/代码格式/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yukai.space/2016/03/22/常用快捷键总结/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="于凯">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="YuKai's blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/03/22/常用快捷键总结/" itemprop="url">
-                  常用快捷键总结
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-03-22T16:31:55+08:00">
-                2016-03-22
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/工具/" itemprop="url" rel="index">
-                    <span itemprop="name">工具</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <ul>
-<li><h2 id="ECLIPSE"><a href="#ECLIPSE" class="headerlink" title="ECLIPSE:"></a>ECLIPSE:</h2><p> <strong>查看代码</strong></p>
-<p> Ctrl+O 搜索当前类变量及方法</p>
-<p> Ctrl+H 打开搜索对话框</p>
-<p> Ctrl+Shift+G  搜索选中变量或方法的引用</p>
-<p> Ctrl+D 删除当前行</p>
-<p> Ctrl+Shift+F 格式化代码</p>
-<p> F4 查看当前类继承结构</p>
-<p> Ctrl+Shift+R 搜索类，文件等资源</p>
-<p> Ctrl+Shift+O 倒包</p>
-<p> Ctrl + 1 ：快速修复</p>
-<p> Ctrl + Shift + /(小键盘) ：收起左侧导航树或代码(依据当前焦点而定)</p>
-<p> Ctrl + *(小键盘) ：展开代码</p>
-<p> Shift + Enter ：在当前行下方插入一行空行</p>
-<p> Alt + 向上键 ：当前行与上方行交换</p>
-<p> Alt + 向下键 ：当前行与下方行交换</p>
-<p> Shift + Alt + R : 重命名</p>
-<p> Shift + Alt + L (表达式末尾)：为表达式赋值为局部变量</p>
-<p> Shift + 向上键/向下键 : 选中此行</p>
-<p> Shift + Alt + M : 提取选中代码为一个方法</p>
-<p> Ctrl + . : 下一个错误</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2016/03/22/常用快捷键总结/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1960,7 +1915,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/">
-                <span class="site-state-item-count">73</span>
+                <span class="site-state-item-count">75</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
