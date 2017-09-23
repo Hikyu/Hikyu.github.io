@@ -675,4 +675,4 @@ Server 端的dump内容
 
 最后上一张Thread的状态转换图：
 
-{% asset_img states.png java thread states %}
+{% asset_img thread_states.png java_thread_states %}
