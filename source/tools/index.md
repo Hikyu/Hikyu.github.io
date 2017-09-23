@@ -40,6 +40,8 @@ markdown: markdown here
 
 ssh: secure shell
 
+代理: SwitchyOmega
+
 ## 移动端(Android)
 ---
 

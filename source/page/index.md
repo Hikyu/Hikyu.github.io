@@ -9,8 +9,6 @@ comments: false
  coordinate: "天津"
 {% endcodeblock %}
 
-本博客的目的在于记录工作和学习中的遇到的问题及解决方法，将学到的一些知识点总结下来。
-
 # 博客基础
 
 [Hexo](https://hexo.io/) 一款轻量级的静态博客框架
@@ -29,6 +27,8 @@ Linux
 
 Eclipse RCP
 
+Docker
+
 # 书单
 
 《重构 改善既有代码的设计》  人民邮电出版社
@@ -46,4 +46,8 @@ Eclipse RCP
 《Maven实战》 机械工业出版社
 
 《计算机网络(第5版)》 电子工业出版社
+
+《Spring实战(第四版)》 人民邮电出版社
+
+《第一本Docker书》 人民邮电出版社
 
