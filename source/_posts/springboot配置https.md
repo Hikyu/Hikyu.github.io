@@ -3,7 +3,7 @@ layout: post
 title: springboot配置https
 date: 2017-07-12 22:19:17
 categories: 技术
-tags: 密码学
+tags: 加密
 ---
 > 这两天打算在组内做个培训，关于Https方面的。于是一直在查资料，理解，顺便把今天了解的内容总结一下。
 
