@@ -118,7 +118,8 @@
 获取Dumpjava 提供了查看当前用户启动的java进程的工具 JPS：jps
 123455008 org.eclipse.equinox.launcher_1.">
 <meta property="og:image" content="http://yukai.space/2017/09/23/读懂Java-Thread-Dump/Synchronized.png">
-<meta property="og:updated_time" content="2017-09-23T00:39:44.652Z">
+<meta property="og:image" content="http://yukai.space/2017/09/23/读懂Java-Thread-Dump/thread_states.png">
+<meta property="og:updated_time" content="2017-09-23T00:42:00.263Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="读懂Java_Thread_Dump">
 <meta name="twitter:description" content="前段时间有现场发现死锁的问题，查看发回来的jstack dump文件，发现虽然大致看懂，但是不是很透彻。从网上看了一些介绍jstack的文章，大部分复制粘贴，讲解的也不够透彻，现在有时间来自己整理一下jstack的知识，记录一下~
@@ -517,7 +518,7 @@
 <p>注意到，虽然线程阻塞在SocketInputStream.socketRead或者ServerSocket.accept方法上，但是dump文件中线程的状态依然为RUNNABLE。因为RUNNABLE表示的是线程在虚拟机中的状态信息，在操作系统中该线程有可能因为其他原因被阻塞。</p>
 <p>有了上面各种情况下Dump文件的参照，再拿到真实环境下的Dump文件对照分析也应该容易一些了。</p>
 <p>最后上一张Thread的状态转换图：</p>
-
+<img src="/2017/09/23/读懂Java-Thread-Dump/thread_states.png" alt="java_thread_states" title="java_thread_states">
 
       
     </div>
