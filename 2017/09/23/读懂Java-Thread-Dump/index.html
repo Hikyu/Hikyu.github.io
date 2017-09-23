@@ -1,0 +1,1026 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Monda:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|Lobster Two:300,300italic,400,400italic,700,700italic|PT Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="java," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="前段时间有现场发现死锁的问题，查看发回来的jstack dump文件，发现虽然大致看懂，但是不是很透彻。从网上看了一些介绍jstack的文章，大部分复制粘贴，讲解的也不够透彻，现在有时间来自己整理一下jstack的知识，记录一下~
+
+获取Dumpjava 提供了查看当前用户启动的java进程的工具 JPS：jps
+123455008 org.eclipse.equinox.launcher_1.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="读懂Java_Thread_Dump">
+<meta property="og:url" content="http://yukai.space/2017/09/23/读懂Java-Thread-Dump/index.html">
+<meta property="og:site_name" content="YuKai's blog">
+<meta property="og:description" content="前段时间有现场发现死锁的问题，查看发回来的jstack dump文件，发现虽然大致看懂，但是不是很透彻。从网上看了一些介绍jstack的文章，大部分复制粘贴，讲解的也不够透彻，现在有时间来自己整理一下jstack的知识，记录一下~
+
+获取Dumpjava 提供了查看当前用户启动的java进程的工具 JPS：jps
+123455008 org.eclipse.equinox.launcher_1.">
+<meta property="og:image" content="http://yukai.space/2017/09/23/读懂Java-Thread-Dump/Synchronized.png">
+<meta property="og:updated_time" content="2017-09-23T00:36:53.023Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="读懂Java_Thread_Dump">
+<meta name="twitter:description" content="前段时间有现场发现死锁的问题，查看发回来的jstack dump文件，发现虽然大致看懂，但是不是很透彻。从网上看了一些介绍jstack的文章，大部分复制粘贴，讲解的也不够透彻，现在有时间来自己整理一下jstack的知识，记录一下~
+
+获取Dumpjava 提供了查看当前用户启动的java进程的工具 JPS：jps
+123455008 org.eclipse.equinox.launcher_1.">
+<meta name="twitter:image" content="http://yukai.space/2017/09/23/读懂Java-Thread-Dump/Synchronized.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yukai.space/2017/09/23/读懂Java-Thread-Dump/"/>
+
+
+
+
+
+  <title> 读懂Java_Thread_Dump | YuKai's blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">YuKai's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">好好学习，天天向上</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            主页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tools">
+          <a href="/tools" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            工具
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/page" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocapitalize="off" autocomplete="off" autocorrect="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yukai.space/2017/09/23/读懂Java-Thread-Dump/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="于凯">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="YuKai's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                读懂Java_Thread_Dump
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-23T08:30:09+08:00">
+                2017-09-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/技术/" itemprop="url" rel="index">
+                    <span itemprop="name">技术</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>前段时间有现场发现死锁的问题，查看发回来的jstack dump文件，发现虽然大致看懂，但是不是很透彻。从网上看了一些介绍jstack的文章，大部分复制粘贴，讲解的也不够透彻，现在有时间来自己整理一下jstack的知识，记录一下~</p>
+</blockquote>
+<h2 id="获取Dump"><a href="#获取Dump" class="headerlink" title="获取Dump"></a>获取Dump</h2><p>java 提供了查看<strong>当前用户启动的java进程</strong>的工具 JPS：<code>jps</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="number">5008</span> org.eclipse.equinox.launcher_1.3.201.v20161025-<span class="number">1711</span>.jar</div><div class="line"><span class="number">10712</span> Main</div><div class="line"><span class="number">888</span> App</div><div class="line"><span class="number">15804</span> Jps</div><div class="line"><span class="number">34300</span> SynchronizedTest</div></pre></td></tr></table></figure>
+<a id="more"></a>
+<p>根据对应的java进程，查看其Thread Dump：<code>jstack 34300</code></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div></pre></td><td class="code"><pre><div class="line">2017-09-22 14:57:46</div><div class="line">Full thread dump Java HotSpot(TM) 64-Bit Server VM (25.91-b15 mixed mode):</div><div class="line"></div><div class="line">"DestroyJavaVM" #12 prio=5 os_prio=0 tid=0x0000000001c7e000 nid=0x7ca4 waiting on condition [0x0000000000000000]</div><div class="line">   java.lang.Thread.State: RUNNABLE</div><div class="line"></div><div class="line">"Synchronized_second" #11 prio=5 os_prio=0 tid=0x000000005887c000 nid=0x7430 waiting for monitor entry [0x00000000593af000]</div><div class="line">   java.lang.Thread.State: BLOCKED (on object monitor)</div><div class="line">        at jstack.SynchronizedTest$1.run(SynchronizedTest.java:8)</div><div class="line">        - waiting to lock &lt;0x00000000d5ad8fe8&gt; (a java.lang.Class for jstack.SynchronizedTest)</div><div class="line">        at java.lang.Thread.run(Thread.java:745)</div><div class="line"></div><div class="line">"Synchronized_first" #10 prio=5 os_prio=0 tid=0x000000005887b000 nid=0x5bdc runnable [0x000000005969f000]</div><div class="line">   java.lang.Thread.State: RUNNABLE</div><div class="line">        at jstack.SynchronizedTest$1.run(SynchronizedTest.java:8)</div><div class="line">        - locked &lt;0x00000000d5ad8fe8&gt; (a java.lang.Class for jstack.SynchronizedTest)</div><div class="line">        at java.lang.Thread.run(Thread.java:745)</div><div class="line"></div><div class="line">"Service Thread" #9 daemon prio=9 os_prio=0 tid=0x0000000058812800 nid=0x7a6c runnable [0x0000000000000000]</div><div class="line">   java.lang.Thread.State: RUNNABLE</div><div class="line"></div><div class="line">"C1 CompilerThread2" #8 daemon prio=9 os_prio=2 tid=0x000000005879a000 nid=0xc07c waiting on condition [0x0000000000000000]</div><div class="line">   java.lang.Thread.State: RUNNABLE</div><div class="line"></div><div class="line">"C2 CompilerThread1" #7 daemon prio=9 os_prio=2 tid=0x0000000058797000 nid=0x7e5c waiting on condition [0x0000000000000000]</div><div class="line">   java.lang.Thread.State: RUNNABLE</div><div class="line"></div><div class="line">"C2 CompilerThread0" #6 daemon prio=9 os_prio=2 tid=0x000000005877e000 nid=0x9474 waiting on condition [0x0000000000000000]</div><div class="line">   java.lang.Thread.State: RUNNABLE</div><div class="line"></div><div class="line">"Attach Listener" #5 daemon prio=5 os_prio=2 tid=0x000000005876b800 nid=0x861c waiting on condition [0x0000000000000000]</div><div class="line">   java.lang.Thread.State: RUNNABLE</div><div class="line"></div><div class="line">"Signal Dispatcher" #4 daemon prio=9 os_prio=2 tid=0x000000005751a000 nid=0x1ff4 runnable [0x0000000000000000]</div><div class="line">   java.lang.Thread.State: RUNNABLE</div><div class="line"></div><div class="line">"Finalizer" #3 daemon prio=8 os_prio=1 tid=0x00000000574fb000 nid=0x2e84 in Object.wait() [0x000000005875f000]</div><div class="line">   java.lang.Thread.State: WAITING (on object monitor)</div><div class="line">        at java.lang.Object.wait(Native Method)</div><div class="line">        - waiting on &lt;0x00000000d5988ee0&gt; (a java.lang.ref.ReferenceQueue$Lock)</div><div class="line">        at java.lang.ref.ReferenceQueue.remove(ReferenceQueue.java:143)</div><div class="line">        - locked &lt;0x00000000d5988ee0&gt; (a java.lang.ref.ReferenceQueue$Lock)</div><div class="line">        at java.lang.ref.ReferenceQueue.remove(ReferenceQueue.java:164)</div><div class="line">        at java.lang.ref.Finalizer$FinalizerThread.run(Finalizer.java:209)</div><div class="line"></div><div class="line">"Reference Handler" #2 daemon prio=10 os_prio=2 tid=0x00000000574b2000 nid=0x9dc8 in Object.wait() [0x000000005840f000]</div><div class="line">   java.lang.Thread.State: WAITING (on object monitor)</div><div class="line">        at java.lang.Object.wait(Native Method)</div><div class="line">        - waiting on &lt;0x00000000d5986b50&gt; (a java.lang.ref.Reference$Lock)</div><div class="line">        at java.lang.Object.wait(Object.java:502)</div><div class="line">        at java.lang.ref.Reference.tryHandlePending(Reference.java:191)</div><div class="line">        - locked &lt;0x00000000d5986b50&gt; (a java.lang.ref.Reference$Lock)</div><div class="line">        at java.lang.ref.Reference$ReferenceHandler.run(Reference.java:153)</div><div class="line"></div><div class="line">"VM Thread" os_prio=2 tid=0x00000000574aa800 nid=0x3b08 runnable</div><div class="line"></div><div class="line">"GC task thread#0 (ParallelGC)" os_prio=0 tid=0x000000000233c800 nid=0xcba4 runnable</div><div class="line"></div><div class="line">"GC task thread#1 (ParallelGC)" os_prio=0 tid=0x000000000233e000 nid=0x51f4 runnable</div><div class="line"></div><div class="line">"GC task thread#2 (ParallelGC)" os_prio=0 tid=0x000000000233f800 nid=0x2474 runnable</div><div class="line"></div><div class="line">"GC task thread#3 (ParallelGC)" os_prio=0 tid=0x0000000002341000 nid=0x6048 runnable</div><div class="line"></div><div class="line">"VM Periodic Task Thread" os_prio=2 tid=0x000000005886d000 nid=0x902c waiting on condition</div><div class="line"></div><div class="line">JNI global references: 16</div></pre></td></tr></table></figure>
+<p>注意，无论是使用jps命令或者jstack，要<strong>确保执行该命令的用户和启动java进程的用户为同一用户</strong>。</p>
+<h2 id="格式分析"><a href="#格式分析" class="headerlink" title="格式分析"></a>格式分析</h2><p>观察上面的Dump文件，列出了进程12964所启动的所有线程的某一时刻的状态，我们要关注的是与业务逻辑相关的线程，比如：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">"Synchronized_second" #11 prio=5 os_prio=0 tid=0x000000005887c000 nid=0x7430 waiting for monitor entry [0x00000000593af000]</div><div class="line">   java.lang.Thread.State: BLOCKED (on object monitor)</div><div class="line">        at jstack.SynchronizedTest$1.run(SynchronizedTest.java:8)</div><div class="line">        - waiting to lock &lt;0x00000000d5ad8fe8&gt; (a java.lang.Class for jstack.SynchronizedTest)</div><div class="line">        at java.lang.Thread.run(Thread.java:745)</div></pre></td></tr></table></figure>
+<p>Synchronized_second：是线程的名字，可以在实例化Thread对象的时候指定。如果没有显示指定，java会按照”Thread-n”的方式命名线程，n为从0开始的序号。如果使用了jdk提供的线程池，线程的命名方式为”pool-m-thread-n”</p>
+<p>prio=5：线程优先级</p>
+<p>os_prio：系统线程优先级</p>
+<p>tid：线程ID，在jvm中的唯一标识</p>
+<p>nid：本地线程ID，线程在操作系统中的标识</p>
+<p>waiting for monitor entry：线程当前的动作，代表线程当前的执行情况</p>
+<p>java.lang.Thread.State：线程当前状态，由Thread.State定义:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="keyword">enum</span> State &#123;</div><div class="line">        <span class="comment">/**</span></div><div class="line">         * Thread state for a thread which has not yet started.</div><div class="line">         */</div><div class="line">        NEW,</div><div class="line"></div><div class="line">        <span class="comment">/**</span></div><div class="line">         * Thread state for a runnable thread.  A thread in the runnable</div><div class="line">         * state is executing in the Java virtual machine but it may</div><div class="line">         * be waiting for other resources from the operating system</div><div class="line">         * such as processor.</div><div class="line">         */</div><div class="line">        RUNNABLE,</div><div class="line"></div><div class="line">        <span class="comment">/**</span></div><div class="line">         * Thread state for a thread blocked waiting for a monitor lock.</div><div class="line">         * A thread in the blocked state is waiting for a monitor lock</div><div class="line">         * to enter a synchronized block/method or</div><div class="line">         * reenter a synchronized block/method after calling</div><div class="line">         * &#123;<span class="doctag">@link</span> Object#wait() Object.wait&#125;.</div><div class="line">         */</div><div class="line">        BLOCKED,</div><div class="line"></div><div class="line">        <span class="comment">/**</span></div><div class="line">         * Thread state for a waiting thread.</div><div class="line">         * A thread is in the waiting state due to calling one of the</div><div class="line">         * following methods:</div><div class="line">         * &lt;ul&gt;</div><div class="line">         *   &lt;li&gt;&#123;<span class="doctag">@link</span> Object#wait() Object.wait&#125; with no timeout&lt;/li&gt;</div><div class="line">         *   &lt;li&gt;&#123;<span class="doctag">@link</span> #join() Thread.join&#125; with no timeout&lt;/li&gt;</div><div class="line">         *   &lt;li&gt;&#123;<span class="doctag">@link</span> LockSupport#park() LockSupport.park&#125;&lt;/li&gt;</div><div class="line">         * &lt;/ul&gt;</div><div class="line">         *</div><div class="line">         * &lt;p&gt;A thread in the waiting state is waiting for another thread to</div><div class="line">         * perform a particular action.</div><div class="line">         *</div><div class="line">         * For example, a thread that has called &lt;tt&gt;Object.wait()&lt;/tt&gt;</div><div class="line">         * on an object is waiting for another thread to call</div><div class="line">         * &lt;tt&gt;Object.notify()&lt;/tt&gt; or &lt;tt&gt;Object.notifyAll()&lt;/tt&gt; on</div><div class="line">         * that object. A thread that has called &lt;tt&gt;Thread.join()&lt;/tt&gt;</div><div class="line">         * is waiting for a specified thread to terminate.</div><div class="line">         */</div><div class="line">        WAITING,</div><div class="line"></div><div class="line">        <span class="comment">/**</span></div><div class="line">         * Thread state for a waiting thread with a specified waiting time.</div><div class="line">         * A thread is in the timed waiting state due to calling one of</div><div class="line">         * the following methods with a specified positive waiting time:</div><div class="line">         * &lt;ul&gt;</div><div class="line">         *   &lt;li&gt;&#123;<span class="doctag">@link</span> #sleep Thread.sleep&#125;&lt;/li&gt;</div><div class="line">         *   &lt;li&gt;&#123;<span class="doctag">@link</span> Object#wait(long) Object.wait&#125; with timeout&lt;/li&gt;</div><div class="line">         *   &lt;li&gt;&#123;<span class="doctag">@link</span> #join(long) Thread.join&#125; with timeout&lt;/li&gt;</div><div class="line">         *   &lt;li&gt;&#123;<span class="doctag">@link</span> LockSupport#parkNanos LockSupport.parkNanos&#125;&lt;/li&gt;</div><div class="line">         *   &lt;li&gt;&#123;<span class="doctag">@link</span> LockSupport#parkUntil LockSupport.parkUntil&#125;&lt;/li&gt;</div><div class="line">         * &lt;/ul&gt;</div><div class="line">         */</div><div class="line">        TIMED_WAITING,</div><div class="line"></div><div class="line">        <span class="comment">/**</span></div><div class="line">         * Thread state for a terminated thread.</div><div class="line">         * The thread has completed execution.</div><div class="line">         */</div><div class="line">        TERMINATED;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>上面的这些状态反映了线程在虚拟机中的执行状态(而不是操作系统中的状态信息)，同一时刻，一个线程只能有一种状态：</p>
+<table>
+<thead>
+<tr>
+<th>State</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>NEW</td>
+<td>线程未启动，即创建了Thread实例，调用start方法之前，线程处于NEW状态</td>
+</tr>
+<tr>
+<td>RUNNABLE</td>
+<td>表示线程具备运行的所有条件，正在运行或在执行队列中等待内核调用。如果线程一直处于这个状态(对比不同时刻的Dump文件)，表示该线程一直在执行或者一直处于等待队列中</td>
+</tr>
+<tr>
+<td>BLOCKED</td>
+<td>线程正在等待获取内置锁，进入Synchronized关键字修饰的代码块或方法</td>
+</tr>
+<tr>
+<td>WAITING</td>
+<td>线程正在等待某个事件的发生，可能是由于调用了下列方法：Thread.join、Object.wait、LockSupport.park</td>
+</tr>
+<tr>
+<td>TIMED_WAITING</td>
+<td>线程正在等待某个事件的发生，如果达到限定的时间，线程也能恢复运行，可能是由于调用了下列方法：Thread.sleep(long)、Object.wait(long)、Thread.join(long)、LockSupport.parkNanos、LockSupport.parkUntil</td>
+</tr>
+<tr>
+<td>TERMINATED</td>
+<td>线程执行完毕，只剩Thread对象存在</td>
+</tr>
+</tbody>
+</table>
+<p>waiting to lock：线程调用修饰, 即线程执行的额外信息</p>
+<h2 id="Entry-Set-amp-Wait-Set"><a href="#Entry-Set-amp-Wait-Set" class="headerlink" title="Entry Set &amp; Wait Set"></a>Entry Set &amp; Wait Set</h2><p>注意到上面的Thread Dump中出现了<code>waiting for monitor entry</code>，这代表什么意思呢？还需要了解java的Synchronized机制：</p>
+<p>Synchronized使用了内置锁Monitor，每一个java对象都有且只有一个Monitor</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">Object lock = <span class="keyword">new</span> Object();</div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</div><div class="line">    <span class="keyword">synchronized</span> (lock) &#123;</div><div class="line">       <span class="comment">//do somthing</span></div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>使用Synchronized修饰代码称为临界区，jvm使用lock对象的Monitor实现多线程对这段代码的互斥访问：</p>
+<img src="/2017/09/23/读懂Java-Thread-Dump/Synchronized.png" alt="synchronized" title="synchronized">
+<p>Monitor对象有两个队列，WaitSet和EntrySet</p>
+<ul>
+<li><p>线程通过synchronized要求获取对象的锁。首先进入EntrySet队列，如果此刻没有其他线程持有Monitor，直接得到Monitor，进入临界区，如果此时Monitor已经被其他线程持有，则在EntrySet队列中等待</p>
+</li>
+<li><p>持有Monitor的线程将Monitor释放(退出临界区或调用lock.wait)，EntrySet队列中的线程开始竞争Monitor，得到Monitor的线程可以进入临界区，其他线程继续等待</p>
+</li>
+<li><p>持有Monitor的线程调用lock.wait方法，该线程立即释放Monitor，并且被放入WaitSet</p>
+</li>
+<li><p>持有Monitor的线程lock.notify方法，jvm从WaitSet中选择一个线程放入EntrySet，如果调用了lock.notifyAll方法，则WaitSet中的所有线程都被放入EntrySet</p>
+</li>
+</ul>
+<h2 id="Dump-实例"><a href="#Dump-实例" class="headerlink" title="Dump 实例"></a>Dump 实例</h2><p>下面实际看一下Thread.sleep、Synchronized、ReentrantLock、Thread.join等情况下的Dump文件内容：</p>
+<ul>
+<li>Thread.sleep</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SleepTest</span> </span>&#123;</div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line">		Runnable runnable = <span class="keyword">new</span> Runnable() &#123;</div><div class="line">			</div><div class="line">			<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</div><div class="line">				<span class="keyword">try</span> &#123;</div><div class="line">					Thread.sleep(<span class="number">200000</span>);</div><div class="line">				&#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</div><div class="line">					e.printStackTrace();</div><div class="line">				&#125;</div><div class="line">			&#125;</div><div class="line">		&#125;;</div><div class="line">		</div><div class="line">		Thread thread = <span class="keyword">new</span> Thread(runnable, <span class="string">"yukai"</span>);</div><div class="line">		thread.setDaemon(<span class="keyword">false</span>);</div><div class="line">		thread.start();</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">&quot;yukai&quot; #10 prio=5 os_prio=0 tid=0x0000000058e1c000 nid=0x27dc waiting on condition [0x000000005950e000]</div><div class="line">		   java.lang.Thread.State: TIMED_WAITING (sleeping)</div><div class="line">		        at java.lang.Thread.sleep(Native Method)</div><div class="line">		        at jstack.SleepTest$1.run(SleepTest.java:9)</div><div class="line">		        at java.lang.Thread.run(Thread.java:745)</div></pre></td></tr></table></figure>
+<ul>
+<li>Thread.join</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">JoinTest</span> </span>&#123;</div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line">		Thread thread = <span class="keyword">new</span> Thread() &#123;</div><div class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</div><div class="line">                <span class="keyword">try</span> &#123;</div><div class="line">                    Thread.sleep(<span class="number">30000</span>);</div><div class="line">                &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</div><div class="line">                    e.printStackTrace();</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;;</div><div class="line">        thread.start();</div><div class="line">        <span class="keyword">try</span> &#123;</div><div class="line">			thread.join();</div><div class="line">		&#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</div><div class="line">			e.printStackTrace();</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">&quot;main&quot; #1 prio=5 os_prio=0 tid=0x0000000001b9e000 nid=0xb2c8 in Object.wait() [0x00000000027de000]</div><div class="line">		   java.lang.Thread.State: WAITING (on object monitor)</div><div class="line">		        at java.lang.Object.wait(Native Method)</div><div class="line">		        - waiting on &lt;0x00000000d5adb268&gt; (a jstack.JoinTest$1)</div><div class="line">		        at java.lang.Thread.join(Thread.java:1245)</div><div class="line">		        - locked &lt;0x00000000d5adb268&gt; (a jstack.JoinTest$1)</div><div class="line">		        at java.lang.Thread.join(Thread.java:1319)</div><div class="line">		        at jstack.JoinTest.main(JoinTest.java:16)</div></pre></td></tr></table></figure>
+<ul>
+<li>Synchronized</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SynchronizedTest</span> </span>&#123;</div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line">		Runnable runnable = <span class="keyword">new</span> Runnable() &#123;</div><div class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</div><div class="line">                <span class="keyword">synchronized</span> (SynchronizedTest.class) &#123;</div><div class="line">                    <span class="keyword">while</span> (<span class="keyword">true</span>) &#123;</div><div class="line">						</div><div class="line">					&#125;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;;</div><div class="line">        </div><div class="line">        <span class="keyword">new</span> Thread(runnable, <span class="string">"Synchronized_first"</span>).start();</div><div class="line">        <span class="keyword">try</span> &#123;</div><div class="line">			Thread.sleep(<span class="number">1000</span>);</div><div class="line">		&#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</div><div class="line">			e.printStackTrace();</div><div class="line">		&#125;</div><div class="line">        </div><div class="line">        <span class="keyword">new</span> Thread(runnable, <span class="string">"Synchronized_second"</span>).start();</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">&quot;Synchronized_first&quot; #10 prio=5 os_prio=0 tid=0x0000000058c09000 nid=0x3f0c runnable [0x00000000598ff000]</div><div class="line">        		   java.lang.Thread.State: RUNNABLE</div><div class="line">        		        at jstack.SynchronizedTest$1.run(SynchronizedTest.java:8)</div><div class="line">        		        - locked &lt;0x00000000d5ad8fe8&gt; (a java.lang.Class for jstack.SynchronizedTest)</div><div class="line">        		        at java.lang.Thread.run(Thread.java:745)</div><div class="line"></div><div class="line">&quot;Synchronized_second&quot; #11 prio=5 os_prio=0 tid=0x0000000058c0a000 nid=0xab20 waiting for monitor entry [0x0000000059a4f000]</div><div class="line">        		   java.lang.Thread.State: BLOCKED (on object monitor)</div><div class="line">        		        at jstack.SynchronizedTest$1.run(SynchronizedTest.java:8)</div><div class="line">        		        - waiting to lock &lt;0x00000000d5ad8fe8&gt; (a java.lang.Class for jstack.SynchronizedTest)</div><div class="line">        		        at java.lang.Thread.run(Thread.java:745)</div></pre></td></tr></table></figure>
+<ul>
+<li>Object.wait</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SynchronizedConditionTest</span> </span>&#123;</div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line">		</div><div class="line">        <span class="keyword">new</span> Thread(SynchronizedConditionTest.wait, <span class="string">"Synchronized_Condition"</span>).start();</div><div class="line"></div><div class="line">        <span class="keyword">new</span> Thread(SynchronizedConditionTest.timeWait, <span class="string">"Synchronized_Condition_time"</span>).start();</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="keyword">public</span> <span class="keyword">static</span> Runnable wait = <span class="keyword">new</span> Runnable() &#123;</div><div class="line">		Object lock = <span class="keyword">new</span> Object();</div><div class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</div><div class="line">            <span class="keyword">synchronized</span> (lock) &#123;</div><div class="line">                <span class="keyword">try</span> &#123;</div><div class="line">                	lock.wait();</div><div class="line">                &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</div><div class="line">                    e.printStackTrace();</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;;</div><div class="line"></div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> Runnable timeWait = <span class="keyword">new</span> Runnable() &#123;</div><div class="line">		Object lock = <span class="keyword">new</span> Object();</div><div class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</div><div class="line">            <span class="keyword">synchronized</span> (lock) &#123;</div><div class="line">                <span class="keyword">try</span> &#123;</div><div class="line">                	lock.wait(<span class="number">20000</span>);</div><div class="line">                &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</div><div class="line">                    e.printStackTrace();</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">&quot;Synchronized_Condition&quot; #10 prio=5 os_prio=0 tid=0x000000005893e800 nid=0x3468 in Object.wait() [0x000000005995f000]</div><div class="line">			   java.lang.Thread.State: WAITING (on object monitor)</div><div class="line">			        at java.lang.Object.wait(Native Method)</div><div class="line">			        - waiting on &lt;0x00000000d5adb980&gt; (a java.lang.Object)</div><div class="line">			        at java.lang.Object.wait(Object.java:502)</div><div class="line">			        at jstack.SynchronizedConditionTest$1.run(SynchronizedConditionTest.java:16)</div><div class="line">			        - locked &lt;0x00000000d5adb980&gt; (a java.lang.Object)</div><div class="line">			        at java.lang.Thread.run(Thread.java:745)</div><div class="line"></div><div class="line">&quot;Synchronized_Condition_time&quot; #11 prio=5 os_prio=0 tid=0x000000005893f000 nid=0x4f84 in Object.wait() [0x000000005905f000]</div><div class="line">    		   java.lang.Thread.State: TIMED_WAITING (on object monitor)</div><div class="line">    		        at java.lang.Object.wait(Native Method)</div><div class="line">    		        - waiting on &lt;0x00000000d5add2b8&gt; (a java.lang.Object)</div><div class="line">    		        at jstack.SynchronizedConditionTest$2.run(SynchronizedConditionTest.java:29)</div><div class="line">    		        - locked &lt;0x00000000d5add2b8&gt; (a java.lang.Object)</div><div class="line">    		        at java.lang.Thread.run(Thread.java:745)</div></pre></td></tr></table></figure>
+<ul>
+<li>ReentrantLock</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ReentrantLockTest</span> </span>&#123;</div><div class="line">	<span class="keyword">private</span> <span class="keyword">static</span> Lock lock = <span class="keyword">new</span> ReentrantLock();</div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line">		Runnable runnable = <span class="keyword">new</span> Runnable() &#123;</div><div class="line"></div><div class="line">			<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</div><div class="line">				<span class="keyword">try</span> &#123;</div><div class="line">					lock.lock();</div><div class="line">					<span class="keyword">while</span> (<span class="keyword">true</span>) &#123;</div><div class="line">						</div><div class="line">					&#125;</div><div class="line">				&#125; <span class="keyword">finally</span> &#123;</div><div class="line">					lock.unlock();</div><div class="line">				&#125;</div><div class="line">			&#125;</div><div class="line">		&#125;;</div><div class="line">		</div><div class="line">		<span class="keyword">new</span> Thread(runnable, <span class="string">"ReentrantLock_first"</span>).start();</div><div class="line">		<span class="keyword">try</span> &#123;</div><div class="line">			Thread.sleep(<span class="number">1000</span>);</div><div class="line">		&#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</div><div class="line">			e.printStackTrace();</div><div class="line">		&#125;</div><div class="line">	</div><div class="line">		<span class="keyword">new</span> Thread(runnable, <span class="string">"ReentrantLock_second"</span>).start();</div><div class="line">	&#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">&quot;ReentrantLock_first&quot; #10 prio=5 os_prio=0 tid=0x0000000058a53000 nid=0xb9a8 runnable [0x000000005988f000]</div><div class="line">				   java.lang.Thread.State: RUNNABLE</div><div class="line">				        at jstack.ReentrantLockTest$1.run(ReentrantLockTest.java:14)</div><div class="line">				        at java.lang.Thread.run(Thread.java:745)</div><div class="line"></div><div class="line">&quot;ReentrantLock_second&quot; #11 prio=5 os_prio=0 tid=0x0000000058a53800 nid=0x6440 waiting on condition [0x000000005998e000]</div><div class="line">				   java.lang.Thread.State: WAITING (parking)</div><div class="line">				        at sun.misc.Unsafe.park(Native Method)</div><div class="line">				        - parking to wait for  &lt;0x00000000d5adb7d8&gt; (a java.util.concurrent.locks.ReentrantLock$NonfairSync)</div><div class="line">				        at java.util.concurrent.locks.LockSupport.park(LockSupport.java:175)</div><div class="line">				        at java.util.concurrent.locks.AbstractQueuedSynchronizer.parkAndCheckInterrupt(AbstractQueuedSynchronizer.java:836)</div><div class="line">				        at java.util.concurrent.locks.AbstractQueuedSynchronizer.acquireQueued(AbstractQueuedSynchronizer.java:870)</div><div class="line">				        at java.util.concurrent.locks.AbstractQueuedSynchronizer.acquire(AbstractQueuedSynchronizer.java:1199)</div><div class="line">				        at java.util.concurrent.locks.ReentrantLock$NonfairSync.lock(ReentrantLock.java:209)</div><div class="line">				        at java.util.concurrent.locks.ReentrantLock.lock(ReentrantLock.java:285)</div><div class="line">				        at jstack.ReentrantLockTest$1.run(ReentrantLockTest.java:13)</div><div class="line">				        at java.lang.Thread.run(Thread.java:745)</div></pre></td></tr></table></figure>
+<ul>
+<li>Condition</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ReentrantLockConditionTest</span> </span>&#123;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line"></div><div class="line">		<span class="keyword">new</span> Thread(ReentrantLockConditionTest.timeWait, <span class="string">"ReentrantLock_Condition_Time"</span>).start();</div><div class="line"></div><div class="line">		<span class="keyword">new</span> Thread(ReentrantLockConditionTest.wait, <span class="string">"ReentrantLock_Condition"</span>).start();</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="keyword">public</span> <span class="keyword">static</span> Runnable wait = <span class="keyword">new</span> Runnable() &#123;</div><div class="line">		<span class="keyword">private</span> Lock lock = <span class="keyword">new</span> ReentrantLock();</div><div class="line">		<span class="keyword">private</span> Condition condition = lock.newCondition();</div><div class="line"></div><div class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</div><div class="line">			<span class="keyword">try</span> &#123;</div><div class="line">				<span class="comment">// 加锁, 进入临界区</span></div><div class="line">				lock.lock();</div><div class="line">				condition.await();</div><div class="line">			&#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</div><div class="line">				e.printStackTrace();</div><div class="line">			&#125; <span class="keyword">finally</span> &#123;</div><div class="line">				<span class="comment">// 解锁, 退出临界区</span></div><div class="line">				lock.unlock();</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">	&#125;;</div><div class="line">	</div><div class="line">	<span class="keyword">public</span> <span class="keyword">static</span> Runnable timeWait = <span class="keyword">new</span> Runnable() &#123;</div><div class="line">		<span class="keyword">private</span> Lock lock = <span class="keyword">new</span> ReentrantLock();</div><div class="line">		<span class="keyword">private</span> Condition condition = lock.newCondition();</div><div class="line"></div><div class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</div><div class="line">			<span class="keyword">try</span> &#123;</div><div class="line">				<span class="comment">// 加锁, 进入临界区</span></div><div class="line">				lock.lock();</div><div class="line">				condition.await(<span class="number">20000</span>, TimeUnit.MILLISECONDS);</div><div class="line">			&#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</div><div class="line">				e.printStackTrace();</div><div class="line">			&#125; <span class="keyword">finally</span> &#123;</div><div class="line">				<span class="comment">// 解锁, 退出临界区</span></div><div class="line">				lock.unlock();</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">	&#125;;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">&quot;ReentrantLock_Condition&quot; #11 prio=5 os_prio=0 tid=0x000000005899a000 nid=0x47ac waiting on condition [0x000000005999f000]</div><div class="line">			   java.lang.Thread.State: WAITING (parking)</div><div class="line">			        at sun.misc.Unsafe.park(Native Method)</div><div class="line">			        - parking to wait for  &lt;0x00000000d5add5a0&gt; (a java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject)</div><div class="line">			        at java.util.concurrent.locks.LockSupport.park(LockSupport.java:175)</div><div class="line">			        at java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.await(AbstractQueuedSynchronizer.java:2039)</div><div class="line">			        at jstack.ReentrantLockConditionTest$1.run(ReentrantLockConditionTest.java:25)</div><div class="line">			        at java.lang.Thread.run(Thread.java:745)</div><div class="line"></div><div class="line">&quot;ReentrantLock_Condition_Time&quot; #10 prio=5 os_prio=0 tid=0x0000000058999000 nid=0x2744 waiting on condition [0x000000005935f000]</div><div class="line">			   java.lang.Thread.State: TIMED_WAITING (parking)</div><div class="line">			        at sun.misc.Unsafe.park(Native Method)</div><div class="line">			        - parking to wait for  &lt;0x00000000d5adf550&gt; (a java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject)</div><div class="line">			        at java.util.concurrent.locks.LockSupport.parkNanos(LockSupport.java:215)</div><div class="line">			        at java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.await(AbstractQueuedSynchronizer.java:2163)</div><div class="line">			        at jstack.ReentrantLockConditionTest$2.run(ReentrantLockConditionTest.java:43)</div><div class="line">			        at java.lang.Thread.run(Thread.java:745)</div></pre></td></tr></table></figure>
+<ul>
+<li>socket</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Server</span> </span>&#123;</div><div class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> PORT = <span class="number">12345</span>;<span class="comment">//监听的端口号     </span></div><div class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> NUMBER = <span class="number">0</span>;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;    </div><div class="line">        System.out.println(<span class="string">"服务器启动...\n"</span>);    </div><div class="line">        Server server = <span class="keyword">new</span> Server();    </div><div class="line">        server.init();    </div><div class="line">    &#125;    </div><div class="line">    </div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">init</span><span class="params">()</span> </span>&#123;    </div><div class="line">        <span class="keyword">try</span> &#123;    </div><div class="line">            ServerSocket serverSocket = <span class="keyword">new</span> ServerSocket(PORT);    </div><div class="line">            <span class="keyword">while</span> (<span class="keyword">true</span>) &#123;    </div><div class="line">                <span class="comment">// 一旦有堵塞, 则表示服务器与客户端获得了连接    </span></div><div class="line">                Socket client = serverSocket.accept();    </div><div class="line">                <span class="comment">// 处理这次连接    </span></div><div class="line">                <span class="keyword">new</span> HandlerThread(client);    </div><div class="line">            &#125;    </div><div class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;    </div><div class="line">            System.out.println(<span class="string">"服务器异常: "</span> + e.getMessage());    </div><div class="line">        &#125;    </div><div class="line">    &#125;    </div><div class="line">    </div><div class="line">    <span class="keyword">private</span> <span class="class"><span class="keyword">class</span> <span class="title">HandlerThread</span> <span class="keyword">implements</span> <span class="title">Runnable</span> </span>&#123;    </div><div class="line">        <span class="keyword">private</span> Socket socket;    </div><div class="line">        <span class="function"><span class="keyword">public</span> <span class="title">HandlerThread</span><span class="params">(Socket client)</span> </span>&#123;    </div><div class="line">            socket = client;    </div><div class="line">            <span class="keyword">new</span> Thread(<span class="keyword">this</span>, <span class="string">"server"</span> + NUMBER).start();    </div><div class="line">        &#125;    </div><div class="line">    </div><div class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;    </div><div class="line">            <span class="keyword">try</span> &#123;    </div><div class="line">                <span class="comment">// 读取客户端数据    </span></div><div class="line">                DataInputStream input = <span class="keyword">new</span> DataInputStream(socket.getInputStream());  </div><div class="line">                String clientInputStr = input.readUTF();<span class="comment">//这里要注意和客户端输出流的写方法对应,否则会抛 EOFException  </span></div><div class="line">                <span class="comment">// 处理客户端数据    </span></div><div class="line">                System.out.println(<span class="string">"客户端发过来的内容:"</span> + clientInputStr);    </div><div class="line">    </div><div class="line">                <span class="comment">// 向客户端回复信息    </span></div><div class="line">                DataOutputStream out = <span class="keyword">new</span> DataOutputStream(socket.getOutputStream());    </div><div class="line">                System.out.print(<span class="string">"请输入:\t"</span>);    </div><div class="line">                <span class="comment">// 发送键盘输入的一行    </span></div><div class="line">                String s = <span class="keyword">new</span> BufferedReader(<span class="keyword">new</span> InputStreamReader(System.in)).readLine();    </div><div class="line">                out.writeUTF(s);    </div><div class="line">                  </div><div class="line">                out.close();    </div><div class="line">                input.close();    </div><div class="line">            &#125; <span class="keyword">catch</span> (Exception e) &#123;    </div><div class="line">                System.out.println(<span class="string">"服务器 run 异常: "</span> + e.getMessage());    </div><div class="line">            &#125; <span class="keyword">finally</span> &#123;    </div><div class="line">                <span class="keyword">if</span> (socket != <span class="keyword">null</span>) &#123;    </div><div class="line">                    <span class="keyword">try</span> &#123;    </div><div class="line">                        socket.close();    </div><div class="line">                    &#125; <span class="keyword">catch</span> (Exception e) &#123;    </div><div class="line">                        socket = <span class="keyword">null</span>;    </div><div class="line">                        System.out.println(<span class="string">"服务端 finally 异常:"</span> + e.getMessage());    </div><div class="line">                    &#125;    </div><div class="line">                &#125;    </div><div class="line">            &#125;   </div><div class="line">        &#125;    </div><div class="line">    &#125;    </div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Client</span> </span>&#123;</div><div class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> String IP_ADDR = <span class="string">"localhost"</span>;<span class="comment">// 服务器地址</span></div><div class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> PORT = <span class="number">12345</span>;<span class="comment">// 服务器端口号</span></div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line">		System.out.println(<span class="string">"客户端启动..."</span>);</div><div class="line">		System.out.println(<span class="string">"当接收到服务器端字符为 \"OK\" 的时候, 客户端将终止\n"</span>);</div><div class="line">		<span class="keyword">while</span> (<span class="keyword">true</span>) &#123;</div><div class="line">			Socket socket = <span class="keyword">null</span>;</div><div class="line">			<span class="keyword">try</span> &#123;</div><div class="line">				<span class="comment">// 创建一个流套接字并将其连接到指定主机上的指定端口号</span></div><div class="line">				socket = <span class="keyword">new</span> Socket(IP_ADDR, PORT);</div><div class="line"></div><div class="line">				<span class="comment">// 读取服务器端数据</span></div><div class="line">				DataInputStream input = <span class="keyword">new</span> DataInputStream(socket.getInputStream());</div><div class="line">				<span class="comment">// 向服务器端发送数据</span></div><div class="line">				DataOutputStream out = <span class="keyword">new</span> DataOutputStream(socket.getOutputStream());</div><div class="line">				System.out.print(<span class="string">"请输入: \t"</span>);</div><div class="line">				String str = <span class="keyword">new</span> BufferedReader(<span class="keyword">new</span> InputStreamReader(System.in)).readLine();</div><div class="line">				out.writeUTF(str);</div><div class="line"></div><div class="line">				String ret = input.readUTF();</div><div class="line">				System.out.println(<span class="string">"服务器端返回过来的是: "</span> + ret);</div><div class="line">				<span class="comment">// 如接收到 "OK" 则断开连接</span></div><div class="line">				<span class="keyword">if</span> (<span class="string">"OK"</span>.equals(ret)) &#123;</div><div class="line">					System.out.println(<span class="string">"客户端将关闭连接"</span>);</div><div class="line">					Thread.sleep(<span class="number">500</span>);</div><div class="line">					<span class="keyword">break</span>;</div><div class="line">				&#125;</div><div class="line"></div><div class="line">				out.close();</div><div class="line">				input.close();</div><div class="line">			&#125; <span class="keyword">catch</span> (Exception e) &#123;</div><div class="line">				System.out.println(<span class="string">"客户端异常:"</span> + e.getMessage());</div><div class="line">			&#125; <span class="keyword">finally</span> &#123;</div><div class="line">				<span class="keyword">if</span> (socket != <span class="keyword">null</span>) &#123;</div><div class="line">					<span class="keyword">try</span> &#123;</div><div class="line">						socket.close();</div><div class="line">					&#125; <span class="keyword">catch</span> (IOException e) &#123;</div><div class="line">						socket = <span class="keyword">null</span>;</div><div class="line">						System.out.println(<span class="string">"客户端 finally 异常:"</span> + e.getMessage());</div><div class="line">					&#125;</div><div class="line">				&#125;</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>Server 端的dump内容</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">&quot;main&quot; #1 prio=5 os_prio=0 tid=0x000000000049e000 nid=0x6eec runnable [0x00000000027fe000]</div><div class="line">		   java.lang.Thread.State: RUNNABLE</div><div class="line">		        at java.net.DualStackPlainSocketImpl.accept0(Native Method)</div><div class="line">		        at java.net.DualStackPlainSocketImpl.socketAccept(DualStackPlainSocketImpl.java:131)</div><div class="line">		        at java.net.AbstractPlainSocketImpl.accept(AbstractPlainSocketImpl.java:409)</div><div class="line">		        at java.net.PlainSocketImpl.accept(PlainSocketImpl.java:199)</div><div class="line">		        - locked &lt;0x00000000d5adc508&gt; (a java.net.SocksSocketImpl)</div><div class="line">		        at java.net.ServerSocket.implAccept(ServerSocket.java:545)</div><div class="line">		        at java.net.ServerSocket.accept(ServerSocket.java:513)</div><div class="line">		        at jstack.socket.Server.init(Server.java:24)</div><div class="line">		        at jstack.socket.Server.main(Server.java:16)</div><div class="line"></div><div class="line">&quot;server0&quot; #10 prio=5 os_prio=0 tid=0x0000000058a64000 nid=0x317c runnable [0x0000000059b3e000]</div><div class="line">    		   java.lang.Thread.State: RUNNABLE</div><div class="line">    		        at java.net.SocketInputStream.socketRead0(Native Method)</div><div class="line">    		        at java.net.SocketInputStream.socketRead(SocketInputStream.java:116)</div><div class="line">    		        at java.net.SocketInputStream.read(SocketInputStream.java:170)</div><div class="line">    		        at java.net.SocketInputStream.read(SocketInputStream.java:141)</div><div class="line">    		        at java.net.SocketInputStream.read(SocketInputStream.java:223)</div><div class="line">    		        at java.io.DataInputStream.readUnsignedShort(DataInputStream.java:337)</div><div class="line">    		        at java.io.DataInputStream.readUTF(DataInputStream.java:589)</div><div class="line">    		        at java.io.DataInputStream.readUTF(DataInputStream.java:564)</div><div class="line">    		        at jstack.socket.Server$HandlerThread.run(Server.java:44)</div><div class="line">    		        at java.lang.Thread.run(Thread.java:745)</div></pre></td></tr></table></figure>
+<p>注意到，虽然线程阻塞在SocketInputStream.socketRead或者ServerSocket.accept方法上，但是dump文件中线程的状态依然为RUNNABLE。因为RUNNABLE表示的是线程在虚拟机中的状态信息，在操作系统中该线程有可能因为其他原因被阻塞。</p>
+<p>有了上面各种情况下Dump文件的参照，再拿到真实环境下的Dump文件对照分析也应该容易一些了。</p>
+<p>最后上一张Thread的状态转换图：</p>
+
+
+      
+    </div>
+
+    <div>
+      
+        
+<div id="wechat_subscriber" style="display: block; padding: 10px 0; margin: 20px auto; width: 100%; text-align: center">
+    <img id="wechat_subscriber_qcode" src="/images/wechat-qcode.jpg" alt="于凯 wechat" style="width: 200px; max-width: 100%;"/>
+    <div>欢迎您扫一扫上面的微信公众号，订阅我的博客！</div>
+</div>
+
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/java/" rel="tag"># java</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/09/16/理解JavaScript作用域链/" rel="next" title="理解JavaScript作用域链">
+                <i class="fa fa-chevron-left"></i> 理解JavaScript作用域链
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        
+<script>
+  with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='//bdimg.share.baidu.com/static/api/js/share.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="于凯" />
+          <p class="site-author-name" itemprop="name">于凯</p>
+           
+              <p class="site-description motion-element" itemprop="description">Who Are You</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/">
+                <span class="site-state-item-count">76</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">27</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/5381447277" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  微博
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/Hikyu" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#获取Dump"><span class="nav-number">1.</span> <span class="nav-text">获取Dump</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#格式分析"><span class="nav-number">2.</span> <span class="nav-text">格式分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Entry-Set-amp-Wait-Set"><span class="nav-number">3.</span> <span class="nav-text">Entry Set & Wait Set</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Dump-实例"><span class="nav-number">4.</span> <span class="nav-text">Dump 实例</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">于凯</span>
+</div>
+
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length == 0) {
+      search_path = "search.xml";
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.popup').toggle();
+    }
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+      $.ajax({
+        url: path,
+        dataType: "xml",
+        async: true,
+        success: function( xmlResponse ) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = $( "entry", xmlResponse ).map(function() {
+            return {
+              title: $( "title", this ).text(),
+              content: $("content",this).text(),
+              url: $( "url" , this).text()
+            };
+          }).get();
+          var $input = document.getElementById(search_id);
+          var $resultContent = document.getElementById(content_id);
+          $input.addEventListener('input', function(){
+            var matchcounts = 0;
+            var str='<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length > 1) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var content_index = [];
+                var data_title = data.title.trim().toLowerCase();
+                var data_content = data.content.trim().replace(/<[^>]+>/g,"").toLowerCase();
+                var data_url = decodeURIComponent(data.url);
+                var index_title = -1;
+                var index_content = -1;
+                var first_occur = -1;
+                // only match artiles with not empty titles and contents
+                if(data_title != '') {
+                  keywords.forEach(function(keyword, i) {
+                    index_title = data_title.indexOf(keyword);
+                    index_content = data_content.indexOf(keyword);
+                    if( index_title >= 0 || index_content >= 0 ){
+                      isMatch = true;
+                      if (i == 0) {
+                        first_occur = index_content;
+                      }
+                    }
+
+                  });
+                }
+                // show search results
+                if (isMatch) {
+                  matchcounts += 1;
+                  str += "<li><a href='"+ data_url +"' class='search-result-title'>"+ data_title +"</a>";
+                  var content = data.content.trim().replace(/<[^>]+>/g,"");
+                  if (first_occur >= 0) {
+                    // cut out 100 characters
+                    var start = first_occur - 20;
+                    var end = first_occur + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if(start == 0){
+                      end = 50;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    var match_content = content.substring(start, end);
+                    // highlight all keywords
+                    keywords.forEach(function(keyword){
+                      var regS = new RegExp(keyword, "gi");
+                      match_content = match_content.replace(regS, "<b class=\"search-keyword\">"+keyword+"</b>");
+                    });
+
+                    str += "<p class=\"search-result\">" + match_content +"...</p>"
+                  }
+                  str += "</li>";
+                }
+              })};
+            str += "</ul>";
+            if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>' }
+            if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>' }
+            $resultContent.innerHTML = str;
+          });
+          proceedsearch();
+        }
+      });}
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched == false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
