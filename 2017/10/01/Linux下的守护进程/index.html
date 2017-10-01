@@ -1,0 +1,991 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Monda:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|Lobster Two:300,300italic,400,400italic,700,700italic|PT Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="linux," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="这两天在搭建VNC服务的时候，遇到一个简单的问题，却困扰了我有一会：网上的教程大部分是修改.service文件，然后启动服务，但是我发现使用vncserver这个命令也可以达到同样的目的，这两者之间有什么区别呢？查了一些资料，简单的做一个总结。
+
+工作管理一般情况下，我们可能会在命令行下这样启动一个程序，以新做的版本管理系统为例：
+1java -jar VersionManager.jar">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux下的守护进程">
+<meta property="og:url" content="http://yukai.space/2017/10/01/Linux下的守护进程/index.html">
+<meta property="og:site_name" content="YuKai's blog">
+<meta property="og:description" content="这两天在搭建VNC服务的时候，遇到一个简单的问题，却困扰了我有一会：网上的教程大部分是修改.service文件，然后启动服务，但是我发现使用vncserver这个命令也可以达到同样的目的，这两者之间有什么区别呢？查了一些资料，简单的做一个总结。
+
+工作管理一般情况下，我们可能会在命令行下这样启动一个程序，以新做的版本管理系统为例：
+1java -jar VersionManager.jar">
+<meta property="og:updated_time" content="2017-10-01T00:54:11.729Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Linux下的守护进程">
+<meta name="twitter:description" content="这两天在搭建VNC服务的时候，遇到一个简单的问题，却困扰了我有一会：网上的教程大部分是修改.service文件，然后启动服务，但是我发现使用vncserver这个命令也可以达到同样的目的，这两者之间有什么区别呢？查了一些资料，简单的做一个总结。
+
+工作管理一般情况下，我们可能会在命令行下这样启动一个程序，以新做的版本管理系统为例：
+1java -jar VersionManager.jar">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yukai.space/2017/10/01/Linux下的守护进程/"/>
+
+
+
+
+
+  <title> Linux下的守护进程 | YuKai's blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">YuKai's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">好好学习，天天向上</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            主页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tools">
+          <a href="/tools" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            工具
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/page" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocapitalize="off" autocomplete="off" autocorrect="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yukai.space/2017/10/01/Linux下的守护进程/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="于凯">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="YuKai's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Linux下的守护进程
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-01T08:47:51+08:00">
+                2017-10-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/技术/" itemprop="url" rel="index">
+                    <span itemprop="name">技术</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>这两天在搭建VNC服务的时候，遇到一个简单的问题，却困扰了我有一会：网上的教程大部分是修改.service文件，然后启动服务，但是我发现使用vncserver这个命令也可以达到同样的目的，这两者之间有什么区别呢？查了一些资料，简单的做一个总结。</p>
+</blockquote>
+<h2 id="工作管理"><a href="#工作管理" class="headerlink" title="工作管理"></a>工作管理</h2><p>一般情况下，我们可能会在命令行下这样启动一个程序，以新做的版本管理系统为例：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">java -jar VersionManager.jar</div></pre></td></tr></table></figure>
+<a id="more"></a>
+<p>现在，内网中的其他机器可以通过80端口访问本机提供的web服务了。一切都很正常。</p>
+<p>注意到一个问题，新启动的程序独占了命令行窗口，并随时打印一些程序运行期间的log出来。<br>如果想在同一个命令行窗口再执行其他命令，那么需要Ctrl+c停止这个web服务才可以。</p>
+<p>这个时候的web服务称为<code>前台任务</code>，一旦我们退出这个命令行窗口，该服务也随之关闭，无法访问。</p>
+<p>如何将其变成一个后台执行的任务，从而不影响命令行再执行其他命令呢？</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">java -jar VersionManager.jar &amp;</div></pre></td></tr></table></figure>
+<p>只要在命令的尾部加上符号&amp;，启动的进程就会成为”后台任务”。”后台任务”有两个特点：</p>
+<ol>
+<li><p>继承当前 session （对话）的标准输出（stdout）和标准错误（stderr）。因此，后台任务的所有输出依然会同步地在命令行下显示。</p>
+</li>
+<li><p>不再继承当前 session 的标准输入（stdin）。你无法向这个任务输入指令了。如果它试图读取标准输入，就会暂停执行（halt）。</p>
+</li>
+</ol>
+<p>所以，我们以上述方式启动web服务，他的运行日志依然会打印在屏幕上面。但是与前台任务的一个区别就是，现在可以在命令行执行其他命令了，所有的输出都会混杂在一起打印在屏幕上。</p>
+<p>有没有办法解决这种问题呢？那就是重定向：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">java -jar VersionManager.jar &gt;info.log 2&gt;&amp;1 &amp;</div></pre></td></tr></table></figure>
+<p>上述命令把web服务输出的标准输出和标准错误信息都重定向到了info.log这个文件，屏幕上不会再有任何的信息被打印出来了。你也可以像之前那样查看web服务的输出信息：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">tail -f info.log</div></pre></td></tr></table></figure>
+<p>此时，web服务的输出又动态的在屏幕上打印出来了。</p>
+<p>如果要让正在运行的”前台任务”变为”后台任务”，可以先按ctrl + z，然后执行bg命令。(让最近一个暂停的”后台任务”继续执行)</p>
+<p>如何查看<strong>当前session</strong>有哪些后台任务在运行呢？</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ jobs -l //打印pid</div><div class="line">[1]- 17000 运行中               nohup java -jar VersionManager.jar &gt; logs/info.log 2&gt;&amp;1 &amp;</div><div class="line">[2]+ 22738 停止                  vim cron.log</div></pre></td></tr></table></figure>
+<p>将指定的后台任务变成前台执行：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">fg 2 //继续编辑cron.log</div></pre></td></tr></table></figure>
+<p>最后做一个小结：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">查看后台任务：jobs -l</div><div class="line">将后台任务取回前台：fg number //number为任务号</div><div class="line">暂停前台任务，并将任务放到后台：ctrl + z</div><div class="line">暂停的后台任务继续执行：bg number //number为任务号</div><div class="line">结束前台任务：ctrl + c</div><div class="line">结束后台任务：kill pid //pid可以通过jobs -l进行查看</div></pre></td></tr></table></figure>
+<h2 id="脱机管理"><a href="#脱机管理" class="headerlink" title="脱机管理"></a>脱机管理</h2><p>通过上面的内容，我们了解到如何将一个任务放在后台执行。后台任务都是基于当前session的，如果我们退出了当前的session(关闭了命令行窗口或执行exit)，后台任务还会执行吗？</p>
+<blockquote>
+<p>想起了之前有个现场的技术支持人员打电话跟我反映，一个rest服务总是无规律的宕掉。刚开始我也想不通，后来才想到是上面提到的原因…</p>
+</blockquote>
+<p>看一下session退出的时候发生了什么：</p>
+<ol>
+<li><p>用户准备退出 session</p>
+</li>
+<li><p>系统向该 session 发出SIGHUP信号</p>
+</li>
+<li><p>session 将SIGHUP信号发给所有子进程</p>
+</li>
+<li><p>子进程收到SIGHUP信号后，自动退出</p>
+</li>
+</ol>
+<p>上面的流程可以解释，随着session退出，前台任务也会结束。那么后台任务是否也会收到SIGHUP信号后退出呢？</p>
+<p>这由 Shell 的huponexit参数决定的。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">shopt | grep huponexit</div></pre></td></tr></table></figure>
+<p>执行上面的命令，就会看到huponexit参数的值。如果显示<code>off</code>，表示session 退出的时候，不会把SIGHUP信号发给”后台任务”，从而”后台任务”不会随着 session 一起退出。</p>
+<p>但是，为了确保我们的web服务变成一个可靠的守护进程，我们应该显式的指出 session 退出的时候，不把SIGHUP信号发给”后台任务”：</p>
+<h3 id="nohup"><a href="#nohup" class="headerlink" title="nohup"></a>nohup</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">nohup java -jar VersionManager.jar &amp;</div></pre></td></tr></table></figure>
+<p><code>nohup</code>对<code>java -jar VersionManager.jar</code>命令做了几件事：</p>
+<ul>
+<li><p>阻止SIGHUP信号发到这个进程。</p>
+</li>
+<li><p>关闭标准输入。该进程不再能够接收任何输入，即使运行在前台。</p>
+</li>
+<li><p>重定向标准输出和标准错误到文件nohup.out。</p>
+</li>
+</ul>
+<p>一般情况下，我们会重定向web服务的输出：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">nohup java -jar VersionManager.jar &gt;info.log 2&gt;&amp;1 &amp;</div></pre></td></tr></table></figure>
+<p>至此，我们的web服务已经变成了一个可靠的守护进程。</p>
+<h3 id="tmux"><a href="#tmux" class="headerlink" title="tmux"></a>tmux</h3><p>还有一种方法，那就是使用tmux。tmux可以在当前session里新建一个session。当前的session退出不会影响到新建的session。重新登录之后还可以连上之前建立的session。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">// 新建 session</div><div class="line">$ tmux new -s session_name</div><div class="line"></div><div class="line">// 切换到指定 session</div><div class="line">$ tmux attach -t session_name</div><div class="line"></div><div class="line">// 列出所有 session</div><div class="line">$ tmux list-sessions</div><div class="line"></div><div class="line">// 退出当前 session，返回前一个 session </div><div class="line">$ tmux detach</div><div class="line"></div><div class="line">// 杀死指定 session</div><div class="line">$ tmux kill-session -t session-name</div></pre></td></tr></table></figure>
+<p>参考<a href="https://linux.cn/article-3952-1.html" target="_blank" rel="external">如何使用Tmux提高终端环境下的效率</a></p>
+<h2 id="systemd服务"><a href="#systemd服务" class="headerlink" title="systemd服务"></a>systemd服务</h2><blockquote>
+<p>systemd 是 Linux 下的一款系统和服务管理器。Systemd 并不是一个命令，而是一组命令，涉及到系统管理的方方面面。</p>
+</blockquote>
+<p>在centos7中，我们也许会使用systemd来管理我们的一些程序，比如ssh:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">// 启动ssh服务</div><div class="line">systemctl start sshd.service</div><div class="line">// 设置ssh服务开机启动</div><div class="line">systemctl enable sshd.service</div><div class="line">...</div></pre></td></tr></table></figure>
+<p>我们也可以通过systemd来管理我们的守护进程，成为真正意义上的系统服务。</p>
+<p>关于systemd的使用不再赘述，参考<a href="https://wiki.archlinux.org/index.php/systemd_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87" target="_blank" rel="external">Systemd (简体中文)</a>)</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="http://www.ruanyifeng.com/blog/2016/02/linux-daemon.html" target="_blank" rel="external">Linux 守护进程的启动方法</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+<div id="wechat_subscriber" style="display: block; padding: 10px 0; margin: 20px auto; width: 100%; text-align: center">
+    <img id="wechat_subscriber_qcode" src="/images/wechat-qcode.jpg" alt="于凯 wechat" style="width: 200px; max-width: 100%;"/>
+    <div>欢迎您扫一扫上面的微信公众号，订阅我的博客！</div>
+</div>
+
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/linux/" rel="tag"># linux</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/09/23/读懂Java-Thread-Dump/" rel="next" title="读懂Java_Thread_Dump">
+                <i class="fa fa-chevron-left"></i> 读懂Java_Thread_Dump
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/10/01/VncServer的安装与使用/" rel="prev" title="VncServer的安装与使用">
+                VncServer的安装与使用 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        
+<script>
+  with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='//bdimg.share.baidu.com/static/api/js/share.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="于凯" />
+          <p class="site-author-name" itemprop="name">于凯</p>
+           
+              <p class="site-description motion-element" itemprop="description">Learning...</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/">
+                <span class="site-state-item-count">78</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">27</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/5381447277" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  微博
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/Hikyu" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#工作管理"><span class="nav-number">1.</span> <span class="nav-text">工作管理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#脱机管理"><span class="nav-number">2.</span> <span class="nav-text">脱机管理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#nohup"><span class="nav-number">2.1.</span> <span class="nav-text">nohup</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#tmux"><span class="nav-number">2.2.</span> <span class="nav-text">tmux</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#systemd服务"><span class="nav-number">3.</span> <span class="nav-text">systemd服务</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">4.</span> <span class="nav-text">参考</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">于凯</span>
+</div>
+
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length == 0) {
+      search_path = "search.xml";
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.popup').toggle();
+    }
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+      $.ajax({
+        url: path,
+        dataType: "xml",
+        async: true,
+        success: function( xmlResponse ) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = $( "entry", xmlResponse ).map(function() {
+            return {
+              title: $( "title", this ).text(),
+              content: $("content",this).text(),
+              url: $( "url" , this).text()
+            };
+          }).get();
+          var $input = document.getElementById(search_id);
+          var $resultContent = document.getElementById(content_id);
+          $input.addEventListener('input', function(){
+            var matchcounts = 0;
+            var str='<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length > 1) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var content_index = [];
+                var data_title = data.title.trim().toLowerCase();
+                var data_content = data.content.trim().replace(/<[^>]+>/g,"").toLowerCase();
+                var data_url = decodeURIComponent(data.url);
+                var index_title = -1;
+                var index_content = -1;
+                var first_occur = -1;
+                // only match artiles with not empty titles and contents
+                if(data_title != '') {
+                  keywords.forEach(function(keyword, i) {
+                    index_title = data_title.indexOf(keyword);
+                    index_content = data_content.indexOf(keyword);
+                    if( index_title >= 0 || index_content >= 0 ){
+                      isMatch = true;
+                      if (i == 0) {
+                        first_occur = index_content;
+                      }
+                    }
+
+                  });
+                }
+                // show search results
+                if (isMatch) {
+                  matchcounts += 1;
+                  str += "<li><a href='"+ data_url +"' class='search-result-title'>"+ data_title +"</a>";
+                  var content = data.content.trim().replace(/<[^>]+>/g,"");
+                  if (first_occur >= 0) {
+                    // cut out 100 characters
+                    var start = first_occur - 20;
+                    var end = first_occur + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if(start == 0){
+                      end = 50;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    var match_content = content.substring(start, end);
+                    // highlight all keywords
+                    keywords.forEach(function(keyword){
+                      var regS = new RegExp(keyword, "gi");
+                      match_content = match_content.replace(regS, "<b class=\"search-keyword\">"+keyword+"</b>");
+                    });
+
+                    str += "<p class=\"search-result\">" + match_content +"...</p>"
+                  }
+                  str += "</li>";
+                }
+              })};
+            str += "</ul>";
+            if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>' }
+            if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>' }
+            $resultContent.innerHTML = str;
+          });
+          proceedsearch();
+        }
+      });}
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched == false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
