@@ -1,6 +1,6 @@
 ---
 layout: post
-title: java类加载
+title: Java读取资源文件
 date: 2017-10-31 19:56:22
 categories: 编程
 tags:
@@ -9,13 +9,13 @@ tags:
 ---
 > 写java代码时常常需要加载一些外部的资源，通常我们会使用全路径名加载一份资源，比如：C:\Users\Yukai\Desktop\abc.jpg . 但是，有些时候我们需要加载的是源代码路径下的资源或者配置文件等等，更习惯于使用相对路径，或者直接给一个文件名，就希望能够找到我们需要的配置文件。如何做到？常见的方法是使用了 class.getResource 或 classloader.getResource
 
-<!-- more -->
-
 ## class.getResource && classloader.getResource ?
 
 这两个方法看起来很相似，他们直接有什么区别？
 
 直接上网搜索能够得到一些答案，但都不如查看源代码来的直接：
+
+<!-- more -->
 
 `Class.getResourceAsStream(String name)`
 
