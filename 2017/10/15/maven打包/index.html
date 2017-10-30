@@ -1,0 +1,978 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Monda:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|Lobster Two:300,300italic,400,400italic,700,700italic|PT Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="maven," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="前段时间做的web项目涉及到了打包的问题，记录一下使用maven打包的过程…
+
+项目打包为fatjar什么是fatjar？做过java项目的都知道，一个项目从开发到部署，一般需要经过打包，把一些资源文件和类文件压缩到一块，形成一个单独的文件，叫做jar（或者war）。如果这个项目依赖了一些第三方的jar包，在最终的部署阶段，这些jar有两种存在方式：
+
+一种是单独放到一个与项目jar包并行的文件">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用maven打包">
+<meta property="og:url" content="http://yukai.space/2017/10/15/maven打包/index.html">
+<meta property="og:site_name" content="YuKai's blog">
+<meta property="og:description" content="前段时间做的web项目涉及到了打包的问题，记录一下使用maven打包的过程…
+
+项目打包为fatjar什么是fatjar？做过java项目的都知道，一个项目从开发到部署，一般需要经过打包，把一些资源文件和类文件压缩到一块，形成一个单独的文件，叫做jar（或者war）。如果这个项目依赖了一些第三方的jar包，在最终的部署阶段，这些jar有两种存在方式：
+
+一种是单独放到一个与项目jar包并行的文件">
+<meta property="og:updated_time" content="2017-10-30T14:09:45.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="使用maven打包">
+<meta name="twitter:description" content="前段时间做的web项目涉及到了打包的问题，记录一下使用maven打包的过程…
+
+项目打包为fatjar什么是fatjar？做过java项目的都知道，一个项目从开发到部署，一般需要经过打包，把一些资源文件和类文件压缩到一块，形成一个单独的文件，叫做jar（或者war）。如果这个项目依赖了一些第三方的jar包，在最终的部署阶段，这些jar有两种存在方式：
+
+一种是单独放到一个与项目jar包并行的文件">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yukai.space/2017/10/15/maven打包/"/>
+
+
+
+
+
+  <title> 使用maven打包 | YuKai's blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">YuKai's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">好好学习，天天向上</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            主页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tools">
+          <a href="/tools" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            工具
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/page" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocapitalize="off" autocomplete="off" autocorrect="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yukai.space/2017/10/15/maven打包/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="于凯">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="YuKai's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                使用maven打包
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-15T19:56:22+08:00">
+                2017-10-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/工具/" itemprop="url" rel="index">
+                    <span itemprop="name">工具</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>前段时间做的web项目涉及到了打包的问题，记录一下使用maven打包的过程…</p>
+</blockquote>
+<h2 id="项目打包为fatjar"><a href="#项目打包为fatjar" class="headerlink" title="项目打包为fatjar"></a>项目打包为fatjar</h2><p>什么是fatjar？做过java项目的都知道，一个项目从开发到部署，一般需要经过打包，把一些资源文件和类文件压缩到一块，形成一个单独的文件，叫做jar（或者war）。如果这个项目依赖了一些第三方的jar包，在最终的部署阶段，这些jar有两种存在方式：</p>
+<ul>
+<li>一种是单独放到一个与项目jar包并行的文件夹中（一般叫做lib），然后使用<code>-classpath</code>将这个文件夹下的jar加入到classpath</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">---</div><div class="line">  |--VersionManager.jar</div><div class="line">  |</div><div class="line">  |--lib</div><div class="line">      |</div><div class="line">      |--a.jar</div><div class="line">      |</div><div class="line">      |--b.jar</div></pre></td></tr></table></figure>
+<a id="more"></a>
+<p><code>java -cp lib/*;VersionManager.jar com.oscar.App</code></p>
+<p>a.jar与b.jar分别为依赖的第三方jar包，VersionManager.jar是项目jar，com.oscar.App是启动类</p>
+<p>注意，window下的变量分隔符为”;”，而linux下则为”:”</p>
+<ul>
+<li>一种是直接把依赖的第三方jar包与项目打包到一块，形成一个单独的jar</li>
+</ul>
+<p><code>java -cp VersionManager.jar com.oscar.App</code></p>
+<p>显然，fatjar的运行命令看起来更简洁一些。如何使用maven打包fatjar？</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">build</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">plugins</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">plugin</span>&gt;</span></div><div class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.maven.plugins<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></div><div class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>maven-assembly-plugin<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></div><div class="line">            <span class="tag">&lt;<span class="name">version</span>&gt;</span>CHOOSE LATEST VERSION HERE<span class="tag">&lt;/<span class="name">version</span>&gt;</span></div><div class="line">            <span class="tag">&lt;<span class="name">configuration</span>&gt;</span></div><div class="line">                <span class="tag">&lt;<span class="name">descriptorRefs</span>&gt;</span></div><div class="line">                    <span class="tag">&lt;<span class="name">descriptorRef</span>&gt;</span>jar-with-dependencies<span class="tag">&lt;/<span class="name">descriptorRef</span>&gt;</span></div><div class="line">                <span class="tag">&lt;/<span class="name">descriptorRefs</span>&gt;</span></div><div class="line">            <span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></div><div class="line">            <span class="tag">&lt;<span class="name">executions</span>&gt;</span></div><div class="line">                <span class="tag">&lt;<span class="name">execution</span>&gt;</span></div><div class="line">                    <span class="tag">&lt;<span class="name">id</span>&gt;</span>assemble-all<span class="tag">&lt;/<span class="name">id</span>&gt;</span></div><div class="line">                    <span class="tag">&lt;<span class="name">phase</span>&gt;</span>package<span class="tag">&lt;/<span class="name">phase</span>&gt;</span></div><div class="line">                    <span class="tag">&lt;<span class="name">goals</span>&gt;</span></div><div class="line">                        <span class="tag">&lt;<span class="name">goal</span>&gt;</span>single<span class="tag">&lt;/<span class="name">goal</span>&gt;</span></div><div class="line">                    <span class="tag">&lt;/<span class="name">goals</span>&gt;</span></div><div class="line">                <span class="tag">&lt;/<span class="name">execution</span>&gt;</span></div><div class="line">            <span class="tag">&lt;/<span class="name">executions</span>&gt;</span></div><div class="line">        <span class="tag">&lt;/<span class="name">plugin</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">plugins</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">build</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>上面的配置将打包fatjar的目标绑定到了package阶段。使用<code>maven package</code>命令，在项目target目录下会生成两个jar文件：*with-dependencies.jar就是生成的 “fatjar”，另一个则是不包含第三方依赖的普通jar包。</p>
+<h2 id="项目单独打包"><a href="#项目单独打包" class="headerlink" title="项目单独打包"></a>项目单独打包</h2><p>有时候，fatjar并不是完美的发布方案。想到下面两个原因：</p>
+<ol>
+<li><p>由于fatjar包含了所有第三方的依赖，这个单独的jar包往往会变得很大。修改了一些代码上的bug之后，需要远程部署到生产环境，如果jar包很大，传输起来不是很方便。</p>
+</li>
+<li><p>依赖的第三方jar拥有一些输出日志的功能。比如，在项目中依赖了某个jdbc的jar包，而这个jar提供了可以通过一些连接参数动态的输出sql日志到jdbc jar所在的同级目录的功能。此时如果jdbc的jar被打包到fatjar当中，输出日志时会报错。</p>
+</li>
+</ol>
+<p>考虑到上面两种情况，我们还是需要第一种部署方案：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">---</div><div class="line">  |</div><div class="line">  |--src/main/java</div><div class="line">  |             |</div><div class="line">  |             |--.java</div><div class="line">  |             </div><div class="line">  |--src/main/resource</div><div class="line">                |</div><div class="line">                |--application.yml</div><div class="line">                |</div><div class="line">                |--log4j.properties</div></pre></td></tr></table></figure>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">build</span>&gt;</span></div><div class="line">	<span class="tag">&lt;<span class="name">plugins</span>&gt;</span></div><div class="line">        <span class="comment">&lt;!-- 指定编译时使用的jdk版本 --&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">plugin</span>&gt;</span></div><div class="line">			<span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.maven.plugins<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></div><div class="line">			<span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>maven-compiler-plugin<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></div><div class="line">			<span class="tag">&lt;<span class="name">version</span>&gt;</span>3.1<span class="tag">&lt;/<span class="name">version</span>&gt;</span></div><div class="line">			<span class="tag">&lt;<span class="name">configuration</span>&gt;</span></div><div class="line">				<span class="tag">&lt;<span class="name">source</span>&gt;</span>1.8<span class="tag">&lt;/<span class="name">source</span>&gt;</span></div><div class="line">				<span class="tag">&lt;<span class="name">target</span>&gt;</span>1.8<span class="tag">&lt;/<span class="name">target</span>&gt;</span></div><div class="line">			<span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></div><div class="line">		<span class="tag">&lt;/<span class="name">plugin</span>&gt;</span></div><div class="line">		<span class="comment">&lt;!-- 将依赖的jar拷贝到lib目录下 --&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">plugin</span>&gt;</span></div><div class="line">			<span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.maven.plugins<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></div><div class="line">			<span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>maven-dependency-plugin<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></div><div class="line">			<span class="tag">&lt;<span class="name">executions</span>&gt;</span></div><div class="line">				<span class="tag">&lt;<span class="name">execution</span>&gt;</span></div><div class="line">					<span class="tag">&lt;<span class="name">id</span>&gt;</span>copy-dependencies<span class="tag">&lt;/<span class="name">id</span>&gt;</span></div><div class="line">					<span class="tag">&lt;<span class="name">phase</span>&gt;</span>package<span class="tag">&lt;/<span class="name">phase</span>&gt;</span></div><div class="line">					<span class="tag">&lt;<span class="name">goals</span>&gt;</span></div><div class="line">						<span class="tag">&lt;<span class="name">goal</span>&gt;</span>copy-dependencies<span class="tag">&lt;/<span class="name">goal</span>&gt;</span></div><div class="line">					<span class="tag">&lt;/<span class="name">goals</span>&gt;</span></div><div class="line">					<span class="tag">&lt;<span class="name">configuration</span>&gt;</span></div><div class="line">						<span class="tag">&lt;<span class="name">outputDirectory</span>&gt;</span>$&#123;project.build.directory&#125;/lib<span class="tag">&lt;/<span class="name">outputDirectory</span>&gt;</span></div><div class="line">					<span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></div><div class="line">				<span class="tag">&lt;/<span class="name">execution</span>&gt;</span></div><div class="line">			<span class="tag">&lt;/<span class="name">executions</span>&gt;</span></div><div class="line">		<span class="tag">&lt;/<span class="name">plugin</span>&gt;</span></div><div class="line">        <span class="comment">&lt;!-- 拷贝项目src/main/resources/目录下的指定配置文件到conf目录下 --&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">plugin</span>&gt;</span></div><div class="line">			<span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.maven.plugins<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></div><div class="line">			<span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>maven-resources-plugin<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></div><div class="line">			<span class="tag">&lt;<span class="name">executions</span>&gt;</span></div><div class="line">				<span class="tag">&lt;<span class="name">execution</span>&gt;</span></div><div class="line">					<span class="tag">&lt;<span class="name">id</span>&gt;</span>copy-resource<span class="tag">&lt;/<span class="name">id</span>&gt;</span></div><div class="line">					<span class="tag">&lt;<span class="name">phase</span>&gt;</span>package<span class="tag">&lt;/<span class="name">phase</span>&gt;</span></div><div class="line">					<span class="tag">&lt;<span class="name">goals</span>&gt;</span></div><div class="line">						<span class="tag">&lt;<span class="name">goal</span>&gt;</span>copy-resources<span class="tag">&lt;/<span class="name">goal</span>&gt;</span></div><div class="line">					<span class="tag">&lt;/<span class="name">goals</span>&gt;</span></div><div class="line">					<span class="tag">&lt;<span class="name">configuration</span>&gt;</span></div><div class="line">						<span class="tag">&lt;<span class="name">encoding</span>&gt;</span>UTF-8<span class="tag">&lt;/<span class="name">encoding</span>&gt;</span>				</div><div class="line">						<span class="tag">&lt;<span class="name">outputDirectory</span>&gt;</span>$&#123;project.build.directory&#125;/conf<span class="tag">&lt;/<span class="name">outputDirectory</span>&gt;</span></div><div class="line">						<span class="tag">&lt;<span class="name">resources</span>&gt;</span></div><div class="line">							<span class="tag">&lt;<span class="name">resource</span>&gt;</span></div><div class="line">								<span class="tag">&lt;<span class="name">directory</span>&gt;</span>src/main/resources/<span class="tag">&lt;/<span class="name">directory</span>&gt;</span></div><div class="line">								<span class="tag">&lt;<span class="name">filtering</span>&gt;</span>true<span class="tag">&lt;/<span class="name">filtering</span>&gt;</span></div><div class="line">								<span class="tag">&lt;<span class="name">includes</span>&gt;</span></div><div class="line">									<span class="tag">&lt;<span class="name">include</span>&gt;</span>application.yml<span class="tag">&lt;/<span class="name">include</span>&gt;</span></div><div class="line">									<span class="tag">&lt;<span class="name">include</span>&gt;</span>log4j.properties<span class="tag">&lt;/<span class="name">include</span>&gt;</span></div><div class="line">								<span class="tag">&lt;/<span class="name">includes</span>&gt;</span></div><div class="line">							<span class="tag">&lt;/<span class="name">resource</span>&gt;</span></div><div class="line">						<span class="tag">&lt;/<span class="name">resources</span>&gt;</span></div><div class="line">					<span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></div><div class="line">				<span class="tag">&lt;/<span class="name">execution</span>&gt;</span></div><div class="line">			<span class="tag">&lt;/<span class="name">executions</span>&gt;</span></div><div class="line">		<span class="tag">&lt;/<span class="name">plugin</span>&gt;</span></div><div class="line">        <span class="comment">&lt;!-- 指定打包时的一些选项 --&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">plugin</span>&gt;</span></div><div class="line">			<span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.maven.plugins<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></div><div class="line">			<span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>maven-jar-plugin<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></div><div class="line">			<span class="tag">&lt;<span class="name">configuration</span>&gt;</span></div><div class="line">				<span class="tag">&lt;<span class="name">finalName</span>&gt;</span>VersionManager<span class="tag">&lt;/<span class="name">finalName</span>&gt;</span></div><div class="line">				<span class="tag">&lt;<span class="name">archive</span>&gt;</span></div><div class="line">					<span class="tag">&lt;<span class="name">manifest</span>&gt;</span></div><div class="line">						<span class="comment">&lt;!-- 为依赖包添加路径, 这些路径会写在MANIFEST文件的Class-Path下 --&gt;</span></div><div class="line">						<span class="tag">&lt;<span class="name">addClasspath</span>&gt;</span>true<span class="tag">&lt;/<span class="name">addClasspath</span>&gt;</span></div><div class="line">						<span class="tag">&lt;<span class="name">classpathPrefix</span>&gt;</span>lib/<span class="tag">&lt;/<span class="name">classpathPrefix</span>&gt;</span></div><div class="line">						<span class="tag">&lt;<span class="name">mainClass</span>&gt;</span>com.oscar.tempVersionManager.web.App<span class="tag">&lt;/<span class="name">mainClass</span>&gt;</span></div><div class="line">					<span class="tag">&lt;/<span class="name">manifest</span>&gt;</span></div><div class="line">					<span class="tag">&lt;<span class="name">manifestEntries</span>&gt;</span></div><div class="line">						<span class="comment">&lt;!-- 在Class-Path下添加配置文件的路径 --&gt;</span></div><div class="line">						<span class="tag">&lt;<span class="name">Class-Path</span>&gt;</span>conf/<span class="tag">&lt;/<span class="name">Class-Path</span>&gt;</span></div><div class="line">					<span class="tag">&lt;/<span class="name">manifestEntries</span>&gt;</span></div><div class="line">				<span class="tag">&lt;/<span class="name">archive</span>&gt;</span></div><div class="line">				<span class="tag">&lt;<span class="name">excludes</span>&gt;</span></div><div class="line">					<span class="tag">&lt;<span class="name">exclude</span>&gt;</span>application.yml<span class="tag">&lt;/<span class="name">exclude</span>&gt;</span></div><div class="line">					<span class="tag">&lt;<span class="name">exclude</span>&gt;</span>log4j.properties<span class="tag">&lt;/<span class="name">exclude</span>&gt;</span></div><div class="line">				<span class="tag">&lt;/<span class="name">excludes</span>&gt;</span></div><div class="line">			<span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></div><div class="line">		<span class="tag">&lt;/<span class="name">plugin</span>&gt;</span></div><div class="line">	<span class="tag">&lt;/<span class="name">plugins</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">build</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>注意几点：</p>
+<ul>
+<li><p>将依赖的jar包复制到target/lib目录下</p>
+</li>
+<li><p>将application.yml、log4j.properties复制到target/conf目录下</p>
+</li>
+<li><p>将lib目录下的jar包加入到MANIFEST.MF配置的classpath中</p>
+</li>
+<li><p>将conf目录下的文件添加到MANIFEST.MF配置的classpath中</p>
+</li>
+<li><p>application.yml、log4j.properties将不被打包到jar中</p>
+</li>
+<li><p>配置生成jar包的名字为VersionManager</p>
+</li>
+</ul>
+<p>通过上面几点的配置，最终在target目录下生成了conf/，lib/，VersionManager.jar</p>
+<p>将这三个文件拷贝到生产环境当中，然后执行java命令：</p>
+<p><code>nohup java -jar VersionManager.jar &gt;logs/info.log 2&gt;&amp;1 &amp;</code></p>
+<p>logs目录为日志文件的输出目录。</p>
+<p>nohup的使用参阅<a href="http://yukai.space/2017/10/01/Linux%E4%B8%8B%E7%9A%84%E5%AE%88%E6%8A%A4%E8%BF%9B%E7%A8%8B/">Linux下的守护进程</a></p>
+<h2 id="存在的问题"><a href="#存在的问题" class="headerlink" title="存在的问题"></a>存在的问题</h2><p>以上两种方式都存在一个问题，那就是无论是<code>maven-assembly-plugin</code>还是<code>maven-dependency-plugin</code>都会忽略下面的形式的依赖：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.oscar<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>starteam100<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span> </div><div class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span> </div><div class="line">    <span class="tag">&lt;<span class="name">scope</span>&gt;</span>system<span class="tag">&lt;/<span class="name">scope</span>&gt;</span> </div><div class="line">    <span class="tag">&lt;<span class="name">systemPath</span>&gt;</span>$&#123;project.basedir&#125;/lib/starteam100.jar<span class="tag">&lt;/<span class="name">systemPath</span>&gt;</span> </div><div class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></div></pre></td></tr></table></figure>
+<p><a href="https://stackoverflow.com/questions/2229757/maven-add-a-dependency-to-a-jar-by-relative-path" target="_blank" rel="external">stackoverflow</a>给出了解决方案：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line">If you really want this (understand, if you can&apos;t use a corporate repository), then my advice would be to use a &quot;file repository&quot; local to the project and to not use a system scoped dependency. The system scoped should be avoided, such dependencies don&apos;t work well in many situation (e.g. in assembly), they cause more troubles than benefits.</div><div class="line"></div><div class="line">So, instead, declare a repository local to the project:</div><div class="line"></div><div class="line">&lt;repositories&gt;</div><div class="line">  &lt;repository&gt;</div><div class="line">    &lt;id&gt;my-local-repo&lt;/id&gt;</div><div class="line">    &lt;url&gt;file://$&#123;basedir&#125;/my-repo&lt;/url&gt;</div><div class="line">  &lt;/repository&gt;</div><div class="line">&lt;/repositories&gt;</div><div class="line"></div><div class="line">Install your third party lib in there using install:install-file with the localRepositoryPath parameter:</div><div class="line"></div><div class="line"></div><div class="line"> mvn install:install-file -Dfile=&lt;path-to-file&gt; -DgroupId=&lt;myGroup&gt; \ </div><div class="line">                         -DartifactId=&lt;myArtifactId&gt; -Dversion=&lt;myVersion&gt; \</div><div class="line">                         -Dpackaging=&lt;myPackaging&gt; -DlocalRepositoryPath=&lt;path&gt;</div><div class="line"></div><div class="line">Update: It appears that install:install-file ignores the localRepositoryPath when using the version 2.2 of the plugin. However, it works with version 2.3 and later of the plugin. So use the fully qualified name of the plugin to specify the version:</div><div class="line"></div><div class="line">mvn org.apache.maven.plugins:maven-install-plugin:2.3.1:install-file \</div><div class="line">                         -Dfile=&lt;path-to-file&gt; -DgroupId=&lt;myGroup&gt; \ </div><div class="line">                         -DartifactId=&lt;myArtifactId&gt; -Dversion=&lt;myVersion&gt; \</div><div class="line">                         -Dpackaging=&lt;myPackaging&gt; -DlocalRepositoryPath=&lt;path&gt;</div><div class="line">maven-install-plugin documentation</div><div class="line"></div><div class="line">Finally, declare it like any other dependency (but without the system scope):</div><div class="line"></div><div class="line">&lt;dependency&gt;</div><div class="line">  &lt;groupId&gt;your.group.id&lt;/groupId&gt;</div><div class="line">  &lt;artifactId&gt;3rdparty&lt;/artifactId&gt;</div><div class="line">  &lt;version&gt;X.Y.Z&lt;/version&gt;</div><div class="line">&lt;/dependency&gt;</div><div class="line"></div><div class="line">This is IMHO a better solution than using a system scope as your dependency will be treated like a good citizen (e.g. it will be included in an assembly and so on).</div><div class="line"></div><div class="line">Now, I have to mention that the &quot;right way&quot; to deal with this situation in a corporate environment (maybe not the case here) would be to use a corporate repository.</div></pre></td></tr></table></figure>
+<h2 id="类路径下查找配置文件"><a href="#类路径下查找配置文件" class="headerlink" title="类路径下查找配置文件"></a>类路径下查找配置文件</h2><p>上面的打包过程中，把配置文件application.yml、log4j.properties拷贝到/conf目录下，主要是为了可以在不用更新jar的情况下修改一些配置，只要重启进程便可以生效。否则，如果配置文件被打包到jar中，修改配置文件就会变得比较麻烦。</p>
+<p>但是，代码中如何能够读取到指定的配置文件呢？spring中有一个类提供了在classpath中读取指定文件的功能：</p>
+<p><code>File dumpFile = new org.springframework.core.io.ClassPathResource(&quot;application.yml&quot;).getFile();</code></p>
+<p>但是每次做项目的时候不一定都会依赖spring。看了一下源码，写了一个类似的比较简单的util类，帮助我们在代码中读取类路径下的配置文件：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> java.io.IOException;</div><div class="line"><span class="keyword">import</span> java.net.URL;</div><div class="line"></div><div class="line"><span class="keyword">import</span> org.apache.commons.io.IOUtils;</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ClassPathResource</span> </span>&#123;</div><div class="line">	<span class="keyword">private</span> ClassLoader classLoader;</div><div class="line">	<span class="keyword">private</span> String path;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="title">ClassPathResource</span><span class="params">(String path)</span> </span>&#123;</div><div class="line">		<span class="keyword">this</span>.path = path;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="keyword">public</span> <span class="keyword">byte</span>[] getBytes() <span class="keyword">throws</span> IOException &#123;</div><div class="line">		URL url = resolveURL();</div><div class="line">		<span class="keyword">byte</span>[] byteArray = IOUtils.toByteArray(url.openStream());</div><div class="line">		<span class="keyword">return</span> byteArray;</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	<span class="function"><span class="keyword">public</span> String <span class="title">getString</span><span class="params">()</span> <span class="keyword">throws</span> IOException </span>&#123;</div><div class="line">		<span class="keyword">return</span> <span class="keyword">new</span> String(getBytes());</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">private</span> URL <span class="title">resolveURL</span><span class="params">()</span> </span>&#123;</div><div class="line">		<span class="keyword">if</span> (<span class="keyword">this</span>.classLoader == <span class="keyword">null</span>) &#123;</div><div class="line">			classLoader = getDefaultClassLoader();</div><div class="line">		&#125;</div><div class="line">		URL url = classLoader.getResource(path);</div><div class="line">		<span class="keyword">if</span> (url != <span class="keyword">null</span>) &#123;</div><div class="line">			<span class="keyword">return</span> url;</div><div class="line">		&#125;</div><div class="line">		url = ClassLoader.getSystemResource(path);</div><div class="line">		<span class="keyword">if</span> (url == <span class="keyword">null</span>) &#123;</div><div class="line">			<span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(String.format(<span class="string">"Error opening %s"</span>, path));</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">return</span> url;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">private</span> ClassLoader <span class="title">getDefaultClassLoader</span><span class="params">()</span> </span>&#123;</div><div class="line">		ClassLoader cl = <span class="keyword">null</span>;</div><div class="line">		<span class="keyword">try</span> &#123;</div><div class="line">			cl = Thread.currentThread().getContextClassLoader();</div><div class="line">		&#125; <span class="keyword">catch</span> (Throwable ex) &#123;</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">if</span> (cl == <span class="keyword">null</span>) &#123;</div><div class="line">			cl = ClassPathResource.class.getClassLoader();</div><div class="line">			<span class="keyword">if</span> (cl == <span class="keyword">null</span>) &#123;</div><div class="line">				<span class="keyword">try</span> &#123;</div><div class="line">					cl = ClassLoader.getSystemClassLoader();</div><div class="line">				&#125; <span class="keyword">catch</span> (Throwable ex) &#123;</div><div class="line">				&#125;</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">return</span> cl;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>以上</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+<div id="wechat_subscriber" style="display: block; padding: 10px 0; margin: 20px auto; width: 100%; text-align: center">
+    <img id="wechat_subscriber_qcode" src="/images/wechat-qcode.jpg" alt="于凯 wechat" style="width: 200px; max-width: 100%;"/>
+    <div>欢迎您扫一扫上面的微信公众号，订阅我的博客！</div>
+</div>
+
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/maven/" rel="tag"># maven</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/10/01/VncServer的安装与使用/" rel="next" title="VncServer的安装与使用">
+                <i class="fa fa-chevron-left"></i> VncServer的安装与使用
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/10/31/Java读取资源文件/" rel="prev" title="java类加载">
+                java类加载 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        
+<script>
+  with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='//bdimg.share.baidu.com/static/api/js/share.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="于凯" />
+          <p class="site-author-name" itemprop="name">于凯</p>
+           
+              <p class="site-description motion-element" itemprop="description">Learning...</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/">
+                <span class="site-state-item-count">80</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">28</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/5381447277" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  微博
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/Hikyu" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#项目打包为fatjar"><span class="nav-number">1.</span> <span class="nav-text">项目打包为fatjar</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#项目单独打包"><span class="nav-number">2.</span> <span class="nav-text">项目单独打包</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#存在的问题"><span class="nav-number">3.</span> <span class="nav-text">存在的问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#类路径下查找配置文件"><span class="nav-number">4.</span> <span class="nav-text">类路径下查找配置文件</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">于凯</span>
+</div>
+
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length == 0) {
+      search_path = "search.xml";
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.popup').toggle();
+    }
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+      $.ajax({
+        url: path,
+        dataType: "xml",
+        async: true,
+        success: function( xmlResponse ) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = $( "entry", xmlResponse ).map(function() {
+            return {
+              title: $( "title", this ).text(),
+              content: $("content",this).text(),
+              url: $( "url" , this).text()
+            };
+          }).get();
+          var $input = document.getElementById(search_id);
+          var $resultContent = document.getElementById(content_id);
+          $input.addEventListener('input', function(){
+            var matchcounts = 0;
+            var str='<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length > 1) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var content_index = [];
+                var data_title = data.title.trim().toLowerCase();
+                var data_content = data.content.trim().replace(/<[^>]+>/g,"").toLowerCase();
+                var data_url = decodeURIComponent(data.url);
+                var index_title = -1;
+                var index_content = -1;
+                var first_occur = -1;
+                // only match artiles with not empty titles and contents
+                if(data_title != '') {
+                  keywords.forEach(function(keyword, i) {
+                    index_title = data_title.indexOf(keyword);
+                    index_content = data_content.indexOf(keyword);
+                    if( index_title >= 0 || index_content >= 0 ){
+                      isMatch = true;
+                      if (i == 0) {
+                        first_occur = index_content;
+                      }
+                    }
+
+                  });
+                }
+                // show search results
+                if (isMatch) {
+                  matchcounts += 1;
+                  str += "<li><a href='"+ data_url +"' class='search-result-title'>"+ data_title +"</a>";
+                  var content = data.content.trim().replace(/<[^>]+>/g,"");
+                  if (first_occur >= 0) {
+                    // cut out 100 characters
+                    var start = first_occur - 20;
+                    var end = first_occur + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if(start == 0){
+                      end = 50;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    var match_content = content.substring(start, end);
+                    // highlight all keywords
+                    keywords.forEach(function(keyword){
+                      var regS = new RegExp(keyword, "gi");
+                      match_content = match_content.replace(regS, "<b class=\"search-keyword\">"+keyword+"</b>");
+                    });
+
+                    str += "<p class=\"search-result\">" + match_content +"...</p>"
+                  }
+                  str += "</li>";
+                }
+              })};
+            str += "</ul>";
+            if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>' }
+            if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>' }
+            $resultContent.innerHTML = str;
+          });
+          proceedsearch();
+        }
+      });}
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched == false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,974 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Monda:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|Lobster Two:300,300italic,400,400italic,700,700italic|PT Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="java,类加载," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="写java代码时常常需要加载一些外部的资源，通常我们会使用全路径名加载一份资源，比如：C:\Users\Yukai\Desktop\abc.jpg . 但是，有些时候我们需要加载的是源代码路径下的资源或者配置文件等等，更习惯于使用相对路径，或者直接给一个文件名，就希望能够找到我们需要的配置文件。如何做到？常见的方法是使用了 class.getResource 或 classloader.getR">
+<meta property="og:type" content="article">
+<meta property="og:title" content="java类加载">
+<meta property="og:url" content="http://yukai.space/2017/10/31/Java读取资源文件/index.html">
+<meta property="og:site_name" content="YuKai's blog">
+<meta property="og:description" content="写java代码时常常需要加载一些外部的资源，通常我们会使用全路径名加载一份资源，比如：C:\Users\Yukai\Desktop\abc.jpg . 但是，有些时候我们需要加载的是源代码路径下的资源或者配置文件等等，更习惯于使用相对路径，或者直接给一个文件名，就希望能够找到我们需要的配置文件。如何做到？常见的方法是使用了 class.getResource 或 classloader.getR">
+<meta property="og:image" content="http://yukai.space/2017/10/31/Java读取资源文件/project.png">
+<meta property="og:image" content="http://yukai.space/2017/10/31/Java读取资源文件/classpath.png">
+<meta property="og:updated_time" content="2017-10-30T13:16:56.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="java类加载">
+<meta name="twitter:description" content="写java代码时常常需要加载一些外部的资源，通常我们会使用全路径名加载一份资源，比如：C:\Users\Yukai\Desktop\abc.jpg . 但是，有些时候我们需要加载的是源代码路径下的资源或者配置文件等等，更习惯于使用相对路径，或者直接给一个文件名，就希望能够找到我们需要的配置文件。如何做到？常见的方法是使用了 class.getResource 或 classloader.getR">
+<meta name="twitter:image" content="http://yukai.space/2017/10/31/Java读取资源文件/project.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yukai.space/2017/10/31/Java读取资源文件/"/>
+
+
+
+
+
+  <title> java类加载 | YuKai's blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">YuKai's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">好好学习，天天向上</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            主页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tools">
+          <a href="/tools" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            工具
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/page" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocapitalize="off" autocomplete="off" autocorrect="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yukai.space/2017/10/31/Java读取资源文件/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="于凯">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="YuKai's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                java类加载
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-31T19:56:22+08:00">
+                2017-10-31
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/编程/" itemprop="url" rel="index">
+                    <span itemprop="name">编程</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>写java代码时常常需要加载一些外部的资源，通常我们会使用全路径名加载一份资源，比如：C:\Users\Yukai\Desktop\abc.jpg . 但是，有些时候我们需要加载的是源代码路径下的资源或者配置文件等等，更习惯于使用相对路径，或者直接给一个文件名，就希望能够找到我们需要的配置文件。如何做到？常见的方法是使用了 class.getResource 或 classloader.getResource</p>
+</blockquote>
+<a id="more"></a>
+<h2 id="class-getResource-amp-amp-classloader-getResource"><a href="#class-getResource-amp-amp-classloader-getResource" class="headerlink" title="class.getResource &amp;&amp; classloader.getResource ?"></a>class.getResource &amp;&amp; classloader.getResource ?</h2><p>这两个方法看起来很相似，他们直接有什么区别？</p>
+<p>直接上网搜索能够得到一些答案，但都不如查看源代码来的直接：</p>
+<p><code>Class.getResourceAsStream(String name)</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> InputStream <span class="title">getResourceAsStream</span><span class="params">(String name)</span> </span>&#123;</div><div class="line">    name = resolveName(name);</div><div class="line">    ClassLoader cl = getClassLoader0();</div><div class="line">    <span class="keyword">if</span> (cl==<span class="keyword">null</span>) &#123;</div><div class="line">        <span class="comment">// A system class.</span></div><div class="line">        <span class="keyword">return</span> ClassLoader.getSystemResourceAsStream(name);</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> cl.getResourceAsStream(name);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>上面的代码可以看出， <code>Class.getResourceAsStream(String name)</code> 最终还是调用了 <code>classloader.getResourceAsStream(String name)</code> 。但是两者还是有一些区别的，注意 <code>name =resolveName(name)</code>这一行， <code>Class.getResourceAsStream(String name)</code>在这里做了一些处理：</p>
+<p><code>Class.resolveName(String name)</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">private</span> String <span class="title">resolveName</span><span class="params">(String name)</span> </span>&#123;</div><div class="line">    <span class="keyword">if</span> (name == <span class="keyword">null</span>) &#123;</div><div class="line">        <span class="keyword">return</span> name;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">if</span> (!name.startsWith(<span class="string">"/"</span>)) &#123;</div><div class="line">        Class&lt;?&gt; c = <span class="keyword">this</span>;</div><div class="line">        <span class="keyword">while</span> (c.isArray()) &#123;</div><div class="line">            c = c.getComponentType();</div><div class="line">        &#125;</div><div class="line">        String baseName = c.getName();</div><div class="line">        <span class="keyword">int</span> index = baseName.lastIndexOf(<span class="string">'.'</span>);</div><div class="line">        <span class="keyword">if</span> (index != -<span class="number">1</span>) &#123;</div><div class="line">            name = baseName.substring(<span class="number">0</span>, index).replace(<span class="string">'.'</span>, <span class="string">'/'</span>)</div><div class="line">                +<span class="string">"/"</span>+name;</div><div class="line">        &#125;</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">        name = name.substring(<span class="number">1</span>);</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> name;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>现在看这段代码还有点云里雾绕，不妨写几行代码测试一下，看看这段代码到底在干嘛：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">App</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line">        System.out.println(<span class="string">"App.class.getClassLoader().getResource(\"\") : "</span> + App.class.getClassLoader().getResource(<span class="string">""</span>));</div><div class="line">        System.out.println(<span class="string">"App.class.getClassLoader().getResource(\"/\") : "</span> + App.class.getClassLoader().getResource(<span class="string">"/"</span>));</div><div class="line">        System.out.println(<span class="string">"App.class.getResource(\"\") : "</span> + App.class.getResource(<span class="string">""</span>));</div><div class="line">        System.out.println(<span class="string">"App.class.getResource(\"/\") : "</span> + App.class.getResource(<span class="string">"/"</span>));</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>输出：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">App.class.getClassLoader().getResource(<span class="string">""</span>) : file:/D:/workspace/eclipse/cluster/TestClassloader/bin/</div><div class="line">App.class.getClassLoader().getResource(<span class="string">"/"</span>) : <span class="keyword">null</span></div><div class="line">App.class.getResource(<span class="string">""</span>) : file:/D:/workspace/eclipse/cluster/TestClassloader/bin/space/yukai/</div><div class="line">App.class.getResource(<span class="string">"/"</span>) : file:/D:/workspace/eclipse/cluster/TestClassloader/bin/</div></pre></td></tr></table></figure>
+<p>虽然上面的代码使用了getResource，但与getResourceAsStream大同小异。</p>
+<p>可以看到，</p>
+<p><code>calssloder.getResource(&quot;&quot;)</code>方法返回了classpath根路径（eclipse工程中，编译生成的类文件存放在/bin目录下）;</p>
+<p><code>calssloder.getResource(&quot;/&quot;)</code>方法返回null，说明calssloder.getResource不支持以”/“开头的参数;</p>
+<p><code>class.getResource(&quot;&quot;)</code>方法返回了App.class所在的路径;</p>
+<p><code>class.getResource(&quot;/&quot;)</code>与<code>calssloder.getResource(&quot;&quot;)</code>表现一致，返回了classpath的根路径</p>
+<p>再回顾上面的代码，是否有一点明白了呢？</p>
+<p>工程目录结构如下图：</p>
+<img src="/2017/10/31/Java读取资源文件/project.png" alt="project" title="project">
+<ul>
+<li>读取根目录下的tmp（src/）:</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">// 第一种方法</div><div class="line">InputStream in = App.class.getResourceAsStream(&quot;/tmp&quot;);</div><div class="line">// 第二种方法</div><div class="line">InputStream in =ClassLoader.getSystemClassLoader().getResourceAsStream(&quot;tmp&quot;);</div></pre></td></tr></table></figure>
+<ul>
+<li>读取App类同级目录下的tmp（src/space/yukai）</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">// 第一种方法</div><div class="line">InputStream in = App.class.getResourceAsStream(&quot;tmp&quot;);</div><div class="line">// 第二种方法</div><div class="line">InputStream in =ClassLoader.getSystemClassLoader().getResourceAsStream(&quot;space/yukai/tmp&quot;);</div><div class="line">//第三种方法</div><div class="line">InputStream in = App.class.getResourceAsStream(&quot;/space/yukai/tmp&quot;);</div></pre></td></tr></table></figure>
+<ul>
+<li>读取MyClassloader同级目录下的tmp（src/space/yukai/classloader）:</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 第一种方法</span></div><div class="line">InputStream in = App.class.getResourceAsStream(<span class="string">"classloader/tmp"</span>);</div><div class="line"><span class="comment">// 第二种方法</span></div><div class="line">InputStream in =ClassLoader.getSystemClassLoader().getResourceAsStream(<span class="string">"space/yukai/classloader/tmp"</span>);</div><div class="line"><span class="comment">//第三种方法</span></div><div class="line">InputStream in = App.class.getResourceAsStream(<span class="string">"/space/yukai/classloader/tmp"</span>);</div></pre></td></tr></table></figure>
+<h2 id="classloader-getResource"><a href="#classloader-getResource" class="headerlink" title="classloader.getResource"></a>classloader.getResource</h2><p>上面提到了<code>Class.getResourceAsStream(String name)</code> 最终还是调用了<code>classloader.getResourceAsStream(String name)</code>，那么<code>classloader.getResourceAsStream(String name)</code>是如何寻找我们要读取的资源呢？</p>
+<p><code>classloadergetResourceAsStream(String name)</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> InputStream <span class="title">getResourceAsStream</span><span class="params">(String name)</span> </span>&#123;</div><div class="line">    URL url = getResource(name);</div><div class="line">    <span class="keyword">try</span> &#123;</div><div class="line">        <span class="keyword">return</span> url != <span class="keyword">null</span> ? url.openStream() : <span class="keyword">null</span>;</div><div class="line">    &#125; <span class="keyword">catch</span> (IOException e) &#123;</div><div class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">public</span> URL <span class="title">getResource</span><span class="params">(String name)</span> </span>&#123;</div><div class="line">    URL url;</div><div class="line">    <span class="keyword">if</span> (parent != <span class="keyword">null</span>) &#123;</div><div class="line">        url = parent.getResource(name);</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">        url = getBootstrapResource(name);</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">if</span> (url == <span class="keyword">null</span>) &#123;</div><div class="line">        url = findResource(name);</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> url;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>上面<code>getResource(String name)</code>中的代码是否有中熟悉的感觉？这不就是<a href="http://yukai.space/2017/04/06/java%E7%B1%BB%E5%8A%A0%E8%BD%BD/">classloader的双亲委托机制</a>么？</p>
+<p>首先使用自己的父类加载器寻找资源，如果父类加载器为null，表示此时的类加载器是启动类加载器，故调用<code>getBootstrapResource(name)</code>方法查询资源。如果所有的祖先类加载器都找不到指定的资源，那么调用该类加载器的<code>findResource(name)</code>方法。</p>
+<p>那么这些类加载器是去哪查询资源是否存在呢？与加载类时查询的路径一致，对于我们的应用来说，我们应该关心AppClassLoader，我们自定义的资源往往存放于其查询的路径上，也就是classpath指定的路径。</p>
+<h2 id="classpath"><a href="#classpath" class="headerlink" title="classpath"></a>classpath</h2><p>在上文的例子中，classpath指向eclipse自动生成的/bin目录。我们如何在eclipse中添加我们自定义的classpath呢？</p>
+<p>有两种方法：</p>
+<ul>
+<li>工程右键-&gt;Build Path-&gt;Configure Build Path-&gt;Source标签-&gt;点击右侧AddFolder  可以将工程目录下的文件夹设置为Source目录</li>
+</ul>
+<p>比如常见的Maven中的resources目录，就是Source目录。</p>
+<p>设置为Source目录之后，eclipse在编译源文件时，会自动将Source目录下的文件拷贝到/bin目录，自然也就是classpath下了。</p>
+<p>这种方法的限制就是只能把工程目录下的文件夹添加进去。</p>
+<ul>
+<li>设置运行时classpath</li>
+</ul>
+<p>在菜单栏点击run-&gt;Run Configurations-&gt;Classpath</p>
+<img src="/2017/10/31/Java读取资源文件/classpath.png" alt="classpath" title="classpath">
+<p>如图所示，点击右侧Advanced按钮，可以添加文件夹到运行时classpath。</p>
+<p>当然，如果是在命令行下直接运行java程序的话，可以使用<code>-classpath</code>选项指定classpath</p>
+<p>在maven中，可以使用下面的方法指定jar包的classpath：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">plugin</span>&gt;</span></div><div class="line">	<span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.maven.plugins<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></div><div class="line">	<span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>maven-jar-plugin<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></div><div class="line">	<span class="tag">&lt;<span class="name">configuration</span>&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">finalName</span>&gt;</span>ReleaseTool<span class="tag">&lt;/<span class="name">finalName</span>&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">archive</span>&gt;</span></div><div class="line">			<span class="tag">&lt;<span class="name">manifest</span>&gt;</span></div><div class="line">				<span class="comment">&lt;!-- 为依赖包添加路径, 这些路径会写在MANIFEST文件的Class-Path下 --&gt;</span></div><div class="line">				<span class="tag">&lt;<span class="name">addClasspath</span>&gt;</span>true<span class="tag">&lt;/<span class="name">addClasspath</span>&gt;</span></div><div class="line">				<span class="tag">&lt;<span class="name">classpathPrefix</span>&gt;</span>lib/<span class="tag">&lt;/<span class="name">classpathPrefix</span>&gt;</span></div><div class="line">				<span class="tag">&lt;<span class="name">mainClass</span>&gt;</span>com.oscar.releasetool.app.App<span class="tag">&lt;/<span class="name">mainClass</span>&gt;</span></div><div class="line">			<span class="tag">&lt;/<span class="name">manifest</span>&gt;</span></div><div class="line">			<span class="tag">&lt;<span class="name">manifestEntries</span>&gt;</span></div><div class="line">				<span class="comment">&lt;!-- 在Class-Path下添加配置文件的路径 --&gt;</span></div><div class="line">				<span class="tag">&lt;<span class="name">Class-Path</span>&gt;</span>./<span class="tag">&lt;/<span class="name">Class-Path</span>&gt;</span></div><div class="line">			<span class="tag">&lt;/<span class="name">manifestEntries</span>&gt;</span></div><div class="line">		<span class="tag">&lt;/<span class="name">archive</span>&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">excludes</span>&gt;</span></div><div class="line">			<span class="tag">&lt;<span class="name">exclude</span>&gt;</span>config.json<span class="tag">&lt;/<span class="name">exclude</span>&gt;</span></div><div class="line">		<span class="tag">&lt;/<span class="name">excludes</span>&gt;</span></div><div class="line">	<span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">plugin</span>&gt;</span></div></pre></td></tr></table></figure>
+<hr>
+<p>我们可以将配置文件放到任何需要的地方，然后将配置文件所在的目录添加到classpath，使用classloader.getResourceAsStream方法来读取。利用这种方法可以做到配置文件与jar包分离，并且配置文件所在的目录是可以自定义的。Spring读取application.properties使用的是同样的原理。</p>
+<p>可以使用下面的代码查看当前classpath:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">String classpath = System.getProperty(<span class="string">"java.class.path"</span>);</div><div class="line">String[] classpathEntries = classpath.split(File.pathSeparator);</div><div class="line"><span class="keyword">for</span> (String str1 : classpathEntries) &#123;</div><div class="line">    System.out.println(str1);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="读取jar包所在的位置"><a href="#读取jar包所在的位置" class="headerlink" title="读取jar包所在的位置"></a>读取jar包所在的位置</h2><p>有时候需要知道jar包所在的位置，比如我们的项目需要一个默认的日志文件输出路径，这个路径就可以是运行时jar包所在的目录。如何获取jar包所在的目录？</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">URL url = App.class.getProtectionDomain().getCodeSource().getLocation();</div><div class="line">String path = url.toURL().getPath();</div></pre></td></tr></table></figure>
+<p>注意，上面的方法仅适用jdk1.5及以上</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+<div id="wechat_subscriber" style="display: block; padding: 10px 0; margin: 20px auto; width: 100%; text-align: center">
+    <img id="wechat_subscriber_qcode" src="/images/wechat-qcode.jpg" alt="于凯 wechat" style="width: 200px; max-width: 100%;"/>
+    <div>欢迎您扫一扫上面的微信公众号，订阅我的博客！</div>
+</div>
+
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/java/" rel="tag"># java</a>
+          
+            <a href="/tags/类加载/" rel="tag"># 类加载</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/10/15/maven打包/" rel="next" title="使用maven打包">
+                <i class="fa fa-chevron-left"></i> 使用maven打包
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        
+<script>
+  with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='//bdimg.share.baidu.com/static/api/js/share.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="于凯" />
+          <p class="site-author-name" itemprop="name">于凯</p>
+           
+              <p class="site-description motion-element" itemprop="description">Learning...</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/">
+                <span class="site-state-item-count">80</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">28</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/5381447277" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  微博
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/Hikyu" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#class-getResource-amp-amp-classloader-getResource"><span class="nav-number">1.</span> <span class="nav-text">class.getResource && classloader.getResource ?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#classloader-getResource"><span class="nav-number">2.</span> <span class="nav-text">classloader.getResource</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#classpath"><span class="nav-number">3.</span> <span class="nav-text">classpath</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#读取jar包所在的位置"><span class="nav-number">4.</span> <span class="nav-text">读取jar包所在的位置</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">于凯</span>
+</div>
+
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length == 0) {
+      search_path = "search.xml";
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.popup').toggle();
+    }
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+      $.ajax({
+        url: path,
+        dataType: "xml",
+        async: true,
+        success: function( xmlResponse ) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = $( "entry", xmlResponse ).map(function() {
+            return {
+              title: $( "title", this ).text(),
+              content: $("content",this).text(),
+              url: $( "url" , this).text()
+            };
+          }).get();
+          var $input = document.getElementById(search_id);
+          var $resultContent = document.getElementById(content_id);
+          $input.addEventListener('input', function(){
+            var matchcounts = 0;
+            var str='<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length > 1) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var content_index = [];
+                var data_title = data.title.trim().toLowerCase();
+                var data_content = data.content.trim().replace(/<[^>]+>/g,"").toLowerCase();
+                var data_url = decodeURIComponent(data.url);
+                var index_title = -1;
+                var index_content = -1;
+                var first_occur = -1;
+                // only match artiles with not empty titles and contents
+                if(data_title != '') {
+                  keywords.forEach(function(keyword, i) {
+                    index_title = data_title.indexOf(keyword);
+                    index_content = data_content.indexOf(keyword);
+                    if( index_title >= 0 || index_content >= 0 ){
+                      isMatch = true;
+                      if (i == 0) {
+                        first_occur = index_content;
+                      }
+                    }
+
+                  });
+                }
+                // show search results
+                if (isMatch) {
+                  matchcounts += 1;
+                  str += "<li><a href='"+ data_url +"' class='search-result-title'>"+ data_title +"</a>";
+                  var content = data.content.trim().replace(/<[^>]+>/g,"");
+                  if (first_occur >= 0) {
+                    // cut out 100 characters
+                    var start = first_occur - 20;
+                    var end = first_occur + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if(start == 0){
+                      end = 50;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    var match_content = content.substring(start, end);
+                    // highlight all keywords
+                    keywords.forEach(function(keyword){
+                      var regS = new RegExp(keyword, "gi");
+                      match_content = match_content.replace(regS, "<b class=\"search-keyword\">"+keyword+"</b>");
+                    });
+
+                    str += "<p class=\"search-result\">" + match_content +"...</p>"
+                  }
+                  str += "</li>";
+                }
+              })};
+            str += "</ul>";
+            if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>' }
+            if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>' }
+            $resultContent.innerHTML = str;
+          });
+          proceedsearch();
+        }
+      });}
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched == false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
