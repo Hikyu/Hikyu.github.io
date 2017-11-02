@@ -3,7 +3,9 @@ layout: post
 title: java类加载
 date: 2017-04-06 19:56:22
 categories: 编程
-tags: java
+tags:
+- java
+- 类加载
 ---
 > 本篇笔记的目标是理解类加载器的架构，学会实现类加载器并理解热替换的底层原理。
 

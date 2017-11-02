@@ -1,8 +1,11 @@
+---
 layout: post
 title: java I/O总结
 date: 2017-03-19 17:09:19
 categories: 编程
-tags: java io
+tags:
+- java
+- NIO
 ---
 > 在平时维护JDBC驱动的过程中，经常会接触到IO相关的代码。总结梳理一下java中的IO~
 
