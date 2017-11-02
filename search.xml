@@ -400,6 +400,7 @@
       </categories>
       <tags>
         <tag>java</tag>
+        <tag>类加载</tag>
       </tags>
   </entry>
   <entry>
@@ -443,7 +444,8 @@
         <category>编程</category>
       </categories>
       <tags>
-        <tag>java io</tag>
+        <tag>java</tag>
+        <tag>NIO</tag>
       </tags>
   </entry>
   <entry>
