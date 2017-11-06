@@ -302,6 +302,160 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yukai.space/2016/08/22/关于加密的一点总结/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="于凯">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="YuKai's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/08/22/关于加密的一点总结/" itemprop="url">
+                  关于加密的一点总结
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-08-22T20:59:00+08:00">
+                2016-08-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/技术/" itemprop="url" rel="index">
+                    <span itemprop="name">技术</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>前两天了解了一下数据库JDBC创建Connection的过程，其中验证用户密码的过程使用了加密算法，研究之。</p>
+<h2 id="信息摘要算法"><a href="#信息摘要算法" class="headerlink" title="信息摘要算法"></a>信息摘要算法</h2><h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><p>验证用户名密码的整个过程主要使用了MD5算法。严格来说，<a href="https://zh.wikipedia.org/wiki/MD5">MD5</a>不是一种加密算法，而是一种信息摘要算法。</p>
+<p>所谓的信息摘要算法，其实就是一种特殊的散列算法。关于散列，之前在<a href="http://yukai.space/2016/04/28/java%E4%B8%AD%E7%9A%84equals%E4%B8%8Ehashcode/">这篇</a>总结中提到过。简单来说，就是把给出的”信息”经过哈希之后得到的值，就是这些内容的”摘要”。</p>
+<h3 id="特点"><a href="#特点" class="headerlink" title="特点"></a>特点</h3><p>信息摘要算法有这样几个特点：</p>
+<p>1.生成固定长度的摘要。以MD5为例，无论信息有多大，经过MD5哈希之后，得到的是一个128bit的值。</p>
+<p>2.算法不可逆。也就是说，不能通过摘要得到信息。可以参考一下知乎上的这个<a href="http://www.zhihu.com/question/22651987">提问</a>.</p>
+<p>3.一般来说，信息不同，摘要也不同。虽然说冲突是一定存在的(无限多可能的信息映射到2的128次方这么大的集合当中)，但是好的摘要算法，要求无法找到两条消息，使他们的摘要相同。</p>
+<p>满足了以上几点的散列算法，就是一种消息摘要算法。那么消息摘要又有什么作用呢？</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2016/08/22/关于加密的一点总结/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yukai.space/2016/08/16/Java集合框架学习总结/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1674,162 +1828,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yukai.space/2016/04/28/java中的equals与hashcode/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="于凯">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="YuKai's blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/04/28/java中的equals与hashcode/" itemprop="url">
-                  通过HashMap认识equals与hashcode
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-04-28T12:48:55+08:00">
-                2016-04-28
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/编程/" itemprop="url" rel="index">
-                    <span itemprop="name">编程</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <blockquote>
-<p>最近读了HashMap的源码，对HashCode与equals有了一定的了解，总结一下，顺便理一下HashMap中的核心算法。</p>
-</blockquote>
-<h2 id="什么是hashcode-hashcode的作用是什么"><a href="#什么是hashcode-hashcode的作用是什么" class="headerlink" title="什么是hashcode,hashcode的作用是什么"></a>什么是hashcode,hashcode的作用是什么</h2><p>hashcode并不是java中独有的。设想一下，如果让你设计一个算法，根据关键码去得到一个集合中的某个值或者这个关键码所在的位置。普通的做法就是挨个比较，高级一点的使用二分检索或者树形检索等算法。但是以上的检索算法都跟集合的长度N有关，当问题规模N很大时，这些检索的效率可能十分低下。</p>
-<p>理想的情况是，根据关键码，我们就可以定位记录所在的位置，而不用去挨个进行比较。也就是说，在关键码与记录存放的位置之间做一种映射。这个映射的方法就是hash(哈希)函数，或者叫散列函数，也就是java中的hashCode()方法，他所返回的值就是hashcode，根据hashcode可以找到记录的位置。</p>
-<p>按照散列的存储方式构造的存储结构叫做散列表。散列表中的一个位置称之为一个槽。</p>
-<p>hashCode()方法存在于java.lang.Object类当中，任何类都可以继承修改这个方法。hashCode()方法返回调用它的实例的hashCode值，是个int值。</p>
-<p>注：以下代码均来自jdk1.7</p>
-<p>String中hashCode()方法的实现：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">hashCode</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">int</span> h = hash;</div><div class="line">        <span class="keyword">if</span> (h == <span class="number">0</span> &amp;&amp; value.length &gt; <span class="number">0</span>) &#123;</div><div class="line">            <span class="keyword">char</span> val[] = value;</div><div class="line"></div><div class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; value.length; i++) &#123;</div><div class="line">                h = <span class="number">31</span> * h + val[i];</div><div class="line">            &#125;</div><div class="line">            hash = h;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> h;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2016/04/28/java中的equals与hashcode/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1879,7 +1877,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/">
-                <span class="site-state-item-count">82</span>
+                <span class="site-state-item-count">83</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -1901,7 +1899,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">28</span>
+                <span class="site-state-item-count">27</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
