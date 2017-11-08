@@ -114,7 +114,7 @@ youyan_uid: false
 # gitment
 ## 教程：https://imsun.net/posts/gitment-introduction/ 网站上进行查看
 gitment:
-  enable: false #如果不使用则设置false关闭
+  enable: true #如果不使用则设置false关闭
   owner: Hikyu # 你的github名称或者id id的获取方式为https://api.github.com/users/forvoid（你的名称）中的id极为github id
   repo: Hikyu.github.io # 你的留言存放的位置 我的是放在我的github的github page上面
   client_id: 61886569157db60efa97 # Register a new OAuth application https://github.com/settings/applications/new 
