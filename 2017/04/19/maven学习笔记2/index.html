@@ -13,7 +13,7 @@
 <meta property="og:site_name" content="YuKai's blog">
 <meta property="og:description" content="依赖dependency标签可以声明以下一些元素：
 1234567891011&amp;lt;dependency&amp;gt;	&amp;lt;groupId&amp;gt;...&amp;lt;/groupId&amp;gt;	&amp;lt;artifactId&amp;gt;...&amp;lt;/artifactId&amp;gt;	&amp;lt;version&amp;gt;...&amp;lt;/version&amp;gt;	&amp;lt;scope&amp;gt;...&amp;lt;/scope&amp;gt;">
-<meta property="og:updated_time" content="2017-11-08T03:25:25.641Z">
+<meta property="og:updated_time" content="2017-11-08T08:56:26.871Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="maven学习笔记(二)">
 <meta name="twitter:description" content="依赖dependency标签可以声明以下一些元素：
@@ -107,15 +107,99 @@
 <ul>
 <li><p>依赖范围(scope)</p>
 <p>Maven有三套classpath，编译项目主代码、编译测试代码、实际运行。依赖范围就是用来控制依赖与这三种classpath的关系.有以下几个选项：</p>
-<p>依赖范围 | 对主代码classpath有效 | 对测试classpath有效 | 对运行时classpath有效<br>——–|———————-|——————–|———————-<br>compile |         Y            |         Y          |           Y<br>test    |         N            |         Y          |           N<br>provided|         Y            |         Y          |           N<br>runtime |         N            |         Y          |           Y<br>system  |         Y            |         Y          |           N</p>
 </li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>依赖范围</th>
+<th>对主代码classpath有效</th>
+<th>对测试classpath有效</th>
+<th>对运行时classpath有效</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>compile</td>
+<td>Y</td>
+<td>Y</td>
+<td>Y</td>
+</tr>
+<tr>
+<td>test</td>
+<td>N</td>
+<td>Y</td>
+<td>N</td>
+</tr>
+<tr>
+<td>provided</td>
+<td>Y</td>
+<td>Y</td>
+<td>N</td>
+</tr>
+<tr>
+<td>runtime</td>
+<td>N</td>
+<td>Y</td>
+<td>Y</td>
+</tr>
+<tr>
+<td>system</td>
+<td>Y</td>
+<td>Y</td>
+<td>N</td>
+</tr>
+</tbody>
+</table>
+<ul>
 <li><p>传递性依赖</p>
 <p>我们在项目的pom.xml文件中声明了直接依赖，如果声明的这些依赖还依赖于其他第三方组件，在maven中，我们不用考虑这些间接依赖，也不用担心引入多余的依赖。Maven会解析各个直接依赖的pom，将那些必要的间接依赖以传递性依赖的方式引入到当前项目的classpath中。</p>
 <p>依赖范围不仅能够控制依赖与三种classpath的关系，还会对传递性依赖产生影响。比如设A依赖于B，B依赖于C，A对于B是第一直接依赖，B对于C是第二直接依赖，A对与C是传递性依赖。第一直接依赖与第二直接依赖的依赖范围决定了传递性依赖的依赖范围。如下图，最左边第一列表示第一直接依赖范围，最上面一行表示第二直接依赖范围，中间交叉单元格表示传递性依赖范围</p>
-<pre><code>| compile | test | provided | runtime
-</code></pre><p>——–|———|——|———-|———–<br>compile | compile |      |          | runtime<br>test    | test    |      |          | test<br>provided| provided|      | provided | provided<br>runtime | runtime |      |          | runtime </p>
-<p>比如，account-email 项目有一个com.icegree:greemail:1.3.1b的直接依赖，这是第一直接依赖，其依赖范围是test；而greemail又有一个javax.mail:mail:1.4的直接依赖，这是第二直接依赖，其依赖的范围是compile。根据上面的表格可以推断，javax.mail:mail:1.4是account-email的一个范围是test的传递依赖。</p>
 </li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>compile</th>
+<th>test</th>
+<th>provided</th>
+<th>runtime</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>compile</td>
+<td>compile</td>
+<td></td>
+<td></td>
+<td>runtime</td>
+</tr>
+<tr>
+<td>test</td>
+<td>test</td>
+<td></td>
+<td></td>
+<td>test</td>
+</tr>
+<tr>
+<td>provided</td>
+<td>provided</td>
+<td></td>
+<td>provided</td>
+<td>provided</td>
+</tr>
+<tr>
+<td>runtime</td>
+<td>runtime</td>
+<td></td>
+<td></td>
+<td>runtime</td>
+</tr>
+</tbody>
+</table>
+<p>  比如，account-email 项目有一个com.icegree:greemail:1.3.1b的直接依赖，这是第一直接依赖，其依赖范围是test；而greemail又有一个javax.mail:mail:1.4的直接依赖，这是第二直接依赖，其依赖的范围是compile。根据上面的表格可以推断，javax.mail:mail:1.4是account-email的一个范围是test的传递依赖。</p>
+<ul>
 <li><p>依赖调解</p>
 <p>对于一个构件，存在于不同依赖路径上。选择哪个路径上的构件就是依赖调解要解决的问题，有两种策略：</p>
 <ol>
@@ -385,10 +469,6 @@
     
   
     
-
-  
-    <!--微信公众号二维码-->
-
 
   
 </aside>

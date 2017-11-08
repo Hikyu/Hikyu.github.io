@@ -103,7 +103,7 @@
 <hr>
         
           <p class="article-more-link">
-            <a href="/2016/03/03/markdown/#more">继续阅读全文 »</a>
+            <a href="/2016/03/03/markdown/#more">阅读全文 »</a>
           </p>
         
       
@@ -153,7 +153,7 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line">class SyncTag &#123;</div><div class="line">	public int threadNO;</div><div class="line">	public SyncTag() &#123;</div><div class="line">	    threadNO = 0;</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line">class ThreadA extend Thread&#123;</div><div class="line">	SyncTag syncTag;</div><div class="line">	int scriptNO;</div><div class="line">	ThreadA(SyncTag syncTag,int scriptNO)&#123;</div><div class="line">			this.syncTag=syncTag;</div><div class="line">			this.scriptNO=scriptNO;</div><div class="line">	&#125;</div><div class="line">	public void Run()&#123;</div><div class="line">			synchronized (syncTag) &#123;</div><div class="line">                if (syncTag.threadNO != scriptNO) &#123;</div><div class="line">                        try &#123;</div><div class="line">                                syncTag.wait();</div><div class="line">                        &#125; catch (InterruptedException e) &#123;</div><div class="line">                                    e.printStackTrace();</div><div class="line">                        &#125;</div><div class="line">                &#125;</div><div class="line">                dosomething();</div><div class="line">                syncTag.threadNO++;</div><div class="line">                syncTag.notifyAll();</div><div class="line">			&#125;</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line">public class Test&#123;</div><div class="line">	public static void main(String args[])&#123;</div><div class="line">		    SyncTag syncTag=new SyncTag();</div><div class="line">			for(int i=0;i&lt;10;++i)&#123;</div><div class="line">				ThreadA t=new ThreadA(syncTag,i);</div><div class="line">				t.start();</div><div class="line">			&#125;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
         
           <p class="article-more-link">
-            <a href="/2015/12/21/notify问题/#more">继续阅读全文 »</a>
+            <a href="/2015/12/21/notify问题/#more">阅读全文 »</a>
           </p>
         
       
@@ -203,7 +203,7 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">Integer j;</div><div class="line">ThreadTest(Integer i)&#123;</div><div class="line">		j=i;</div><div class="line">&#125;</div><div class="line">public void run() &#123;</div><div class="line">		synchronized(j)&#123;</div><div class="line">		  j++;</div><div class="line">		&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
         
           <p class="article-more-link">
-            <a href="/2015/12/17/java同步锁锁什么/#more">继续阅读全文 »</a>
+            <a href="/2015/12/17/java同步锁锁什么/#more">阅读全文 »</a>
           </p>
         
       
@@ -274,10 +274,6 @@
 
   
     
-
-  
-    <!--微信公众号二维码-->
-
 
   
 </aside>

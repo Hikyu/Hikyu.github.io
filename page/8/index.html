@@ -108,7 +108,7 @@
 <p>注意上图中圈起来的部分：这部分表示了Default采用哪种编码是如何决定的。</p>
         
           <p class="article-more-link">
-            <a href="/2016/09/20/Eclipse编码问题终极解决方案/#more">继续阅读全文 »</a>
+            <a href="/2016/09/20/Eclipse编码问题终极解决方案/#more">阅读全文 »</a>
           </p>
         
       
@@ -164,7 +164,7 @@
 <img src="/2016/09/19/Spring项目打包为jar/2.png" alt="404" title="404">
         
           <p class="article-more-link">
-            <a href="/2016/09/19/Spring项目打包为jar/#more">继续阅读全文 »</a>
+            <a href="/2016/09/19/Spring项目打包为jar/#more">阅读全文 »</a>
           </p>
         
       
@@ -216,7 +216,7 @@
 <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BankAccount</span> </span>&#123;</div><div class="line">	<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> accountBalance = <span class="number">10000</span>;</div><div class="line"></div><div class="line">	<span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Save</span> <span class="keyword">implements</span> <span class="title">Runnable</span> </span>&#123;</div><div class="line">		<span class="keyword">private</span> <span class="keyword">int</span> money;</div><div class="line"></div><div class="line">		<span class="function"><span class="keyword">public</span> <span class="title">Save</span><span class="params">(<span class="keyword">int</span> money)</span> </span>&#123;</div><div class="line">			<span class="keyword">this</span>.money = money;</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		<span class="meta">@Override</span></div><div class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</div><div class="line">			<span class="comment">//存钱</span></div><div class="line">			<span class="keyword">int</span> tempAccount = accountBalance + money;</div><div class="line">			<span class="comment">//设置余额</span></div><div class="line">			accountBalance = tempAccount;</div><div class="line">			System.out.println(<span class="string">"此次存入："</span> + money);</div><div class="line">			System.out.println(<span class="string">"当前余额："</span> + accountBalance);</div><div class="line">		&#125;</div><div class="line"></div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Obtain</span> <span class="keyword">implements</span> <span class="title">Runnable</span> </span>&#123;</div><div class="line"></div><div class="line">		<span class="keyword">private</span> <span class="keyword">int</span> money;</div><div class="line"></div><div class="line">		<span class="function"><span class="keyword">public</span> <span class="title">Obtain</span><span class="params">(<span class="keyword">int</span> money)</span> </span>&#123;</div><div class="line">			<span class="keyword">this</span>.money = money;</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		<span class="meta">@Override</span></div><div class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</div><div class="line">			<span class="keyword">if</span> (money &gt; accountBalance) &#123;</div><div class="line">				System.out.println(<span class="string">"余额不足"</span>);</div><div class="line">				<span class="keyword">return</span>;</div><div class="line">			&#125;</div><div class="line">			<span class="comment">//取钱</span></div><div class="line">			<span class="keyword">int</span> tempAccount = accountBalance - money;</div><div class="line">			<span class="keyword">try</span> &#123;</div><div class="line">				Thread.sleep(<span class="number">1000</span>);<span class="comment">//艾玛，卡了一秒</span></div><div class="line">			&#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</div><div class="line">				e.printStackTrace();</div><div class="line">			&#125;</div><div class="line">			<span class="comment">//设置余额</span></div><div class="line">			accountBalance = tempAccount;</div><div class="line">			System.out.println(<span class="string">"此次取出："</span> + money);</div><div class="line">			System.out.println(<span class="string">"当前余额："</span> + accountBalance);</div><div class="line">		&#125;</div><div class="line"></div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String args[])</span> </span>&#123;</div><div class="line">		<span class="keyword">int</span> saveMoney = <span class="number">10000</span>;</div><div class="line">		<span class="keyword">int</span> obtainMoney = <span class="number">10000</span>;</div><div class="line">		<span class="comment">//自己取钱</span></div><div class="line">		Thread obtain = <span class="keyword">new</span> Thread(<span class="keyword">new</span> Obtain(obtainMoney));</div><div class="line">		<span class="comment">//老婆存钱</span></div><div class="line">		Thread save = <span class="keyword">new</span> Thread(<span class="keyword">new</span> Save(saveMoney));</div><div class="line">		obtain.start();</div><div class="line">		save.start();</div><div class="line">	&#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
         
           <p class="article-more-link">
-            <a href="/2016/09/10/理解java内存模型/#more">继续阅读全文 »</a>
+            <a href="/2016/09/10/理解java内存模型/#more">阅读全文 »</a>
           </p>
         
       
@@ -285,7 +285,7 @@
 <p>线程创建和终止状态不再讨论。</p>
         
           <p class="article-more-link">
-            <a href="/2016/08/31/理解notify notifyall sleep/#more">继续阅读全文 »</a>
+            <a href="/2016/08/31/理解notify notifyall sleep/#more">阅读全文 »</a>
           </p>
         
       
@@ -341,7 +341,7 @@
 <p>满足了以上几点的散列算法，就是一种消息摘要算法。那么消息摘要又有什么作用呢？</p>
         
           <p class="article-more-link">
-            <a href="/2016/08/22/关于加密的一点总结/#more">继续阅读全文 »</a>
+            <a href="/2016/08/22/关于加密的一点总结/#more">阅读全文 »</a>
           </p>
         
       
@@ -393,7 +393,7 @@
 <p>通过上图可以看出，java集合框架主要分为两棵树，一棵继承自Collection，一棵继承自Map。接下来分四个部分总结一下。</p>
         
           <p class="article-more-link">
-            <a href="/2016/08/16/Java集合框架学习总结/#more">继续阅读全文 »</a>
+            <a href="/2016/08/16/Java集合框架学习总结/#more">阅读全文 »</a>
           </p>
         
       
@@ -449,7 +449,7 @@
 <h2 id="synchronized修饰代码块"><a href="#synchronized修饰代码块" class="headerlink" title="synchronized修饰代码块"></a>synchronized修饰代码块</h2><h3 id="synchronized同步锁为普通对象"><a href="#synchronized同步锁为普通对象" class="headerlink" title="synchronized同步锁为普通对象"></a>synchronized同步锁为普通对象</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">function</span><span class="params">()</span></span>&#123;</div><div class="line">	<span class="keyword">synchronized</span> (object) &#123;</div><div class="line">		<span class="comment">//doSomething...		</span></div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
         
           <p class="article-more-link">
-            <a href="/2016/08/16/synchronized的一些用法/#more">继续阅读全文 »</a>
+            <a href="/2016/08/16/synchronized的一些用法/#more">阅读全文 »</a>
           </p>
         
       
@@ -514,7 +514,7 @@
 <p>前两本书可以作为工具书来使用。后三本计划在今年之前读一遍。</p>
         
           <p class="article-more-link">
-            <a href="/2016/08/15/一些计划/#more">继续阅读全文 »</a>
+            <a href="/2016/08/15/一些计划/#more">阅读全文 »</a>
           </p>
         
       
@@ -583,10 +583,6 @@
 
   
     
-
-  
-    <!--微信公众号二维码-->
-
 
   
 </aside>
