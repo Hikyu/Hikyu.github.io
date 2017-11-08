@@ -4,7 +4,7 @@ title: linux分区
 date: 2017-03-04 11:45:43
 categories: 
 - 技术
-- 工具
+- Linux
 tags: linux
 ---
 > 每次安装linux的时候，都会选择分区和挂载点。但是基本上没怎么研究过linux分区的细节，今天回顾了一下《鸟哥的linux私房菜》，总结一下分区的相关知识。

@@ -42,13 +42,13 @@ exclusions: 排除传递性依赖
 
   Maven有三套classpath，编译项目主代码、编译测试代码、实际运行。依赖范围就是用来控制依赖与这三种classpath的关系.有以下几个选项：
 
-  依赖范围 | 对主代码classpath有效 | 对测试classpath有效 | 对运行时classpath有效
-  --------|----------------------|--------------------|----------------------
-  compile |         Y            |         Y          |           Y  
-  test    |         N            |         Y          |           N
-  provided|         Y            |         Y          |           N
-  runtime |         N            |         Y          |           Y
-  system  |         Y            |         Y          |           N
+| 依赖范围     | 对主代码classpath有效 | 对测试classpath有效 | 对运行时classpath有效 |
+|----------|-----------------|----------------|-----------------|
+| compile  | Y               | Y              | Y               |
+| test     | N               | Y              | N               |
+| provided | Y               | Y              | N               |
+| runtime  | N               | Y              | Y               |
+| system   | Y               | Y              | N               |
 
 - 传递性依赖
   
@@ -56,12 +56,12 @@ exclusions: 排除传递性依赖
 
   依赖范围不仅能够控制依赖与三种classpath的关系，还会对传递性依赖产生影响。比如设A依赖于B，B依赖于C，A对于B是第一直接依赖，B对于C是第二直接依赖，A对与C是传递性依赖。第一直接依赖与第二直接依赖的依赖范围决定了传递性依赖的依赖范围。如下图，最左边第一列表示第一直接依赖范围，最上面一行表示第二直接依赖范围，中间交叉单元格表示传递性依赖范围
 
-          | compile | test | provided | runtime
-  --------|---------|------|----------|-----------
-  compile | compile |      |          | runtime 
-  test    | test    |      |          | test 
-  provided| provided|      | provided | provided 
-  runtime | runtime |      |          | runtime 
+| compile  | test     | provided | runtime  |          |
+|----------|----------|----------|----------|----------|
+| compile  | compile  |          |          | runtime  |
+| test     | test     |          |          | test     |
+| provided | provided |          | provided | provided |
+| runtime  | runtime  |          |          | runtime  |
 
   比如，account-email 项目有一个com.icegree:greemail:1.3.1b的直接依赖，这是第一直接依赖，其依赖范围是test；而greemail又有一个javax.mail:mail:1.4的直接依赖，这是第二直接依赖，其依赖的范围是compile。根据上面的表格可以推断，javax.mail:mail:1.4是account-email的一个范围是test的传递依赖。
 

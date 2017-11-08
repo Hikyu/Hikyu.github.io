@@ -10,7 +10,7 @@ menu:
 email: 'debiaoyu@gmail.com'
 
 # 内容 Content
-excerpt_link: 继续阅读全文 »
+excerpt_link: 阅读全文 »
 fancybox: true
 
 # 启用social widgets时有效
@@ -50,7 +50,7 @@ widgets:
 - recent_posts
 - archive
 # - friendly_link
-- wechat
+# - wechat
 
 # 提供以下内置组件
 # - post_content      # 文章目录
@@ -115,10 +115,10 @@ youyan_uid: false
 ## 教程：https://imsun.net/posts/gitment-introduction/ 网站上进行查看
 gitment:
   enable: false #如果不使用则设置false关闭
-  owner: giscafer # 你的github名称或者id id的获取方式为https://api.github.com/users/forvoid（你的名称）中的id极为github id
-  repo: giscafer.github.io # 你的留言存放的位置 我的是放在我的github的github page上面
-  client_id: 7e5dd6cdb9xxaxa4cf91a # Register a new OAuth application https://github.com/settings/applications/new 
-  client_secret: 97f37d5c27c4a511xx4fxx623d391c85cb97f8 
+  owner: Hikyu # 你的github名称或者id id的获取方式为https://api.github.com/users/forvoid（你的名称）中的id极为github id
+  repo: Hikyu.github.io # 你的留言存放的位置 我的是放在我的github的github page上面
+  client_id: 61886569157db60efa97 # Register a new OAuth application https://github.com/settings/applications/new 
+  client_secret: 6475bb7c8faaf44ff2e12c272a46505a0eecf46f 
 
 ## disqus
 disqus_shortname: false
