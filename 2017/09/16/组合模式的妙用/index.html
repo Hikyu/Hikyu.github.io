@@ -233,6 +233,8 @@ Composite 定义有枝节点行为，用来存储子部件，在Component接口�
        
       
       
+           <div id="gitment_comments"></div>
+    
   </div>
  
   
@@ -330,6 +332,22 @@ window.onload = function() {
 
 <!-- author:forvoid begin -->
 <!-- author:forvoid begin -->
+
+  <link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+  <script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script> 
+  <script>
+  var gitment = new Gitment({
+    // id: '页面 ID', // 可选。默认为 location.href
+    owner: 'Hikyu',
+    repo: 'Hikyu.github.io',
+    oauth: {
+    client_id: '61886569157db60efa97',
+    client_secret: '6475bb7c8faaf44ff2e12c272a46505a0eecf46f',
+    }
+  })
+  gitment.render(document.getElementById("gitment_comments"))
+</script>
+
 
 <!-- author:forvoid end -->
 
