@@ -1,7 +1,10 @@
+---
 layout: post
 title: 理解notify notifyall sleep
 date: 2016-08-31 21:27:09
-categories: 编程
+categories:
+- 技术
+- 编程
 tags:
 - java
 - 多线程 

@@ -2,7 +2,9 @@
 layout: post
 title: java泛型学习
 date: 2016-10-10 20:05:03
-categories: 编程 
+categories: 
+- 技术
+- 编程
 tags:
 - java
 ---

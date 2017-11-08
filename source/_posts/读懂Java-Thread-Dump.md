@@ -2,7 +2,9 @@
 layout: post
 title: 读懂Java_Thread_Dump
 date: 2017-09-23 08:30:09
-categories: 技术
+categories:
+- 技术
+- 编程
 tags: java
 ---
 

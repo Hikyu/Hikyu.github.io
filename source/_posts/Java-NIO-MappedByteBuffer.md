@@ -2,7 +2,9 @@
 layout: post
 title: Java-NIO-MappedByteBuffer
 date: 2017-07-04 07:56:08
-categories: 编程
+categories: 
+- 技术
+- 编程
 tags: 
 - java
 - NIO

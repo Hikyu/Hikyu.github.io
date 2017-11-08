@@ -2,7 +2,9 @@
 layout: post
 title:  "java同步锁锁什么"
 date:   2015-12-17 14:10:55
-categories: 编程
+categories: 
+- 技术
+- 编程
 tags: 
 - java
 - 多线程

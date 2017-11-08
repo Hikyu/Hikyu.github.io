@@ -1,7 +1,10 @@
+---
 layout: post
 title: Java集合框架学习总结
 date: 2016-08-16 22:50:16
-categories: 编程 
+categories:
+- 技术
+- 编程
 tags: 
 - java
 - 源码

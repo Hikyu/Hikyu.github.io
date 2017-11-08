@@ -2,7 +2,9 @@
 layout: post
 title: git服务器的配置
 date: 2017-09-06 09:46:49
-categories: 工具
+categories: 
+- 技术
+- 工具
 tags: 
 - git
 ---

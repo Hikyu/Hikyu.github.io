@@ -1,7 +1,10 @@
+---
 layout: post
 title: 记一次苦逼经历--关于spring项目打包为jar运行
 date: 2016-09-19 21:41:48
-categories: 技术
+categories: 
+- 技术
+- 编程
 tags: 
 - 服务器
 - spring

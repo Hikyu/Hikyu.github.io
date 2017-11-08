@@ -2,7 +2,9 @@
 layout: post
 title: java类加载
 date: 2017-04-06 19:56:22
-categories: 编程
+categories: 
+- 技术
+- 编程
 tags:
 - java
 - 类加载

@@ -2,7 +2,9 @@
 layout: post
 title: java序列化与反序列化
 date: 2017-03-22 20:14:46
-categories: 编程
+categories: 
+- 技术
+- 编程
 tags: java
 ---
 

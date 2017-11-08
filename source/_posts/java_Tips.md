@@ -1,7 +1,9 @@
 ---
 layout: post
 title: "java编程技巧"
-categories: 编程
+categories: 
+- 技术
+- 编程
 tags: 
 - java
 date:   2016-7-24 12:48:55

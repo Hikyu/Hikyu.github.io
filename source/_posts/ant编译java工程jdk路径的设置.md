@@ -1,7 +1,9 @@
 ---
 layout: post
 title:  "ANT编译java工程经jdk路径的设置"
-categories: 工具
+categories: 
+- 技术
+- 工具
 tags: 
 - java
 - ant

@@ -1,7 +1,9 @@
 ---
 layout: post
 date: 2016-08-16 15:31:44
-categories: 编程
+categories:
+- 技术
+- 编程
 title: synchronized的用法
 tags: 
 - 多线程

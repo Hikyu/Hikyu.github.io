@@ -2,7 +2,9 @@
 layout: post
 title: Eclipse乱码问题终极解决方案
 date: 2016-09-20 21:57:08
-categories: 工具
+categories: 
+- 技术
+- 工具
 tags: 
 - Eclipse
 ---

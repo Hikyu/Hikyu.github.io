@@ -1,7 +1,9 @@
 ---
 layout: post
 title:  "java中的ThreadLocal"
-categories: 编程
+categories: 
+- 技术
+- 编程
 tags: 
 - java
 - 多线程

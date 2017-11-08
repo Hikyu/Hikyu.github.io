@@ -2,6 +2,9 @@
 layout: post
 title: java异常的学习
 date: 2016-12-13 21:46:52
+categories:
+- 技术
+- 编程
 tags: java
 ---
 

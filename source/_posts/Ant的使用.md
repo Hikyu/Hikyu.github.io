@@ -2,7 +2,9 @@
 layout: post
 date:   2016-07-18 12:48:55
 title:  "ANT的使用"
-categories: 工具
+categories: 
+- 技术
+- 工具
 tags: 
 - java
 - ant

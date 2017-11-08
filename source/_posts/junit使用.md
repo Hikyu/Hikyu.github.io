@@ -2,7 +2,9 @@
 layout: post
 date:   2016-04-12 12:48:55
 title: "Junit的使用"
-categories: 工具
+categories: 
+- 技术
+- 工具
 tags: 
 - junit
 - 测试

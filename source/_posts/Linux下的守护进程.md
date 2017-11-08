@@ -2,7 +2,9 @@
 layout: post
 title: Linux下的守护进程
 date: 2017-10-01 08:47:51
-categories: 技术
+categories: 
+- 技术
+- 工具
 tags: linux
 ---
 

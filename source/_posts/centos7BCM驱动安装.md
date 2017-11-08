@@ -2,7 +2,9 @@
 layout: post
 title: centos7BCM驱动安装
 date: 2017-02-25 11:22:45
-categories: 工具
+categories: 
+- 技术
+- Linux
 tags: linux
 ---
 > 前段时间安装了centos后，一直使用网线上网。今天是周末，安装了一下无线驱动，可以愉快的使用无线wifi上网啦～

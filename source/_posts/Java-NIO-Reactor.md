@@ -2,7 +2,9 @@
 layout: post
 title: Java-NIO-Reactor
 date: 2017-09-13 09:53:08
-categories: 编程
+categories: 
+- 技术
+- 编程
 tags: 
 - java
 - NIO

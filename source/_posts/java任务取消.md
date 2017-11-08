@@ -2,7 +2,9 @@
 layout: post
 title: java任务取消
 date: 2017-05-02 19:45:14
-categories: 编程
+categories: 
+- 技术
+- 编程
 tags:
 - java
 - 多线程

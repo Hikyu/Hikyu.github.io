@@ -2,7 +2,9 @@
 layout: post
 title: Linux网络IO模型
 date: 2017-07-10 22:23:37
-categories: 技术
+categories:
+- 技术
+- Linux
 tags:
 - linux
 - java

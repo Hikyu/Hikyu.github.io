@@ -1,7 +1,9 @@
 ---
 layout: post
-title:  "java 中的int/byte转换"
-categories: 编程
+title:  "java中的int-byte转换"
+categories:
+- 技术
+- 编程
 tags: 
 - java
 date:   2016-11-24 22:48:55

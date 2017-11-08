@@ -2,7 +2,9 @@
 layout: post
 title: ssl使用总结
 date: 2016-09-25 10:09:10
-categories: 技术 
+categories: 
+- 技术
+- 加密
 tags: 
 - java
 - 加密

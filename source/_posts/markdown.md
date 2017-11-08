@@ -2,7 +2,9 @@
 layout: post
 title:  "Markdown"
 date:   2016-03-03 22:10:55
-categories: 工具
+categories: 
+- 技术
+- 工具
 tags: 
 - markdown
 ---

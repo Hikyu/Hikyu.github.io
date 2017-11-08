@@ -2,7 +2,9 @@
 layout: post
 title: java代理机制
 date: 2017-03-28 16:15:35
-categories: 编程
+categories:
+- 技术
+- 编程
 tags: java
 ---
 ## 代理模式

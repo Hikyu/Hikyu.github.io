@@ -2,7 +2,9 @@
 layout: post
 title: java国际化
 date: 2017-02-19 19:32:40
-categories: 技术
+categories: 
+- 技术
+- 编程
 tags: java
 ---
 

@@ -2,7 +2,9 @@
 layout: post
 title: java线程池的使用
 date: 2017-05-08 20:37:58
-categories: 编程
+categories:
+- 技术
+- 编程
 tags: 
 - java
 - 多线程

@@ -2,7 +2,9 @@
 layout: post
 title: Linux的五个查找命令
 date: 2017-02-26 09:17:33
-categories: 工具
+categories: 
+- 技术
+- Linux
 tags: linux
 ---
 > 最近一直在读[阮一峰老师的博客](http://www.ruanyifeng.com),今天读到一篇介绍Linux查找命令的文章。恰好最近在学习linux，所以转载过来，当作一篇备忘录。

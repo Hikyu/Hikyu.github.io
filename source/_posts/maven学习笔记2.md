@@ -2,7 +2,9 @@
 layout: post
 title: maven学习笔记(二)
 date: 2017-04-19 11:58:03
-categories: 工具
+categories: 
+- 技术
+- 工具
 tags: 
 - java
 - maven

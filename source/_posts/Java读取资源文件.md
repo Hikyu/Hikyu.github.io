@@ -2,7 +2,9 @@
 layout: post
 title: Java读取资源文件
 date: 2017-10-31 19:56:22
-categories: 编程
+categories: 
+- 技术
+- 编程
 tags:
 - java
 - 类加载

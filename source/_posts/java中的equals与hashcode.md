@@ -1,7 +1,9 @@
 ---
 layout: post
 title:  "通过HashMap认识equals与hashcode"
-categories: 编程
+categories: 
+- 技术
+- 编程
 tags: 
 - java
 date:   2016-04-28 12:48:55

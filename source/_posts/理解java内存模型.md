@@ -2,7 +2,9 @@
 layout: post
 title: 理解java内存模型
 date: 2016-09-10 10:32:40
-categories: 技术
+categories:
+- 技术
+- 编程
 tags: java
 ---
 

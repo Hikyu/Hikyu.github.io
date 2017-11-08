@@ -2,7 +2,9 @@
 layout: post
 title: java I/O总结
 date: 2017-03-19 17:09:19
-categories: 编程
+categories: 
+- 技术
+- 编程
 tags:
 - java
 - NIO

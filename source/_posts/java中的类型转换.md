@@ -1,7 +1,9 @@
 ---
 layout: post
 title:  "java中的类型转换"
-categories: 编程
+categories: 
+- 技术
+- 编程
 tags: 
 - java
 date:   2016-04-28 12:48:55

@@ -2,7 +2,9 @@
 layout: post
 title: ssh的两种用法
 date: 2017-02-23 20:05:03
-categories: 编程 
+categories: 
+- 技术
+- Linux
 tags:
 - linux
 ---

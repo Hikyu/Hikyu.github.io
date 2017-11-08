@@ -2,7 +2,9 @@
 layout: post
 title: java注解
 date: 2017-03-31 21:07:33
-categories: 编程
+categories: 
+- 技术
+- 编程
 tags: java
 ---
 > 在写java代码的过程中，经常会遇到注解，但是没有去理解注解背后的原理，也没有实现过注解。网上关于java注解的文章已经有很多了，参考了一些资料，整理一下注解这方面的知识~

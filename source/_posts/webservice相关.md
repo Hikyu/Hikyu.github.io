@@ -2,7 +2,9 @@
 layout: post
 title: webservice相关
 date: 2017-03-15 11:22:45
-categories: 技术
+categories: 
+- 技术
+- 编程
 tags: web
 ---
 > 上周最后三天去北京培训了Hadoop，了解了一些目前流行的分布式组件。在谈到这些组件的交互过程中，经常会提到RPC，webservice等关键词，所以简单了解了一下这些关键词的含义~

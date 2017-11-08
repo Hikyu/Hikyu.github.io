@@ -1,7 +1,10 @@
+---
 layout: post
 title: win7与centos7双系统安装
 date: 2017-02-18 21:10:00
-categories: 技术
+categories: 
+- 技术
+- Linux
 tags: linux
 ---
 > 之前会有同学让帮忙重装操作系统，正好计划重新装一下自己电脑的系统，折腾了win7与linux双系统，在此记录。以后就可以给他们看这篇笔记自己去装啦~

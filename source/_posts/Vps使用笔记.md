@@ -2,7 +2,9 @@
 layout: post
 title: Vps使用笔记
 date: 2017-02-07 21:34:16
-categories: 工具
+categories: 
+- 技术
+- Linux
 tags: linux
 ---
 > 今天折腾了一天，总算是把翻墙的梯子搭起来了，租了国外的vps，然后在上面搭建了shadowsocks服务，手机和电脑就可以使用shadowsocks客户端的方式科学上网了。

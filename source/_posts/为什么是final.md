@@ -2,7 +2,9 @@
 layout: post
 date:   2016-07-31 17:30:55
 title: "为什么是final"
-categories: 编程
+categories:
+- 技术
+- 编程
 tags: 
 - java
 ---

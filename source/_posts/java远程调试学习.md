@@ -2,7 +2,9 @@
 layout: post
 title: java远程调试学习
 date: 2016-12-07 21:55:48
-categories: 编程
+categories: 
+- 技术
+- 工具
 tags: 
 - java 
 - 调试

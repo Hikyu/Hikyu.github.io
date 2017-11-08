@@ -2,7 +2,9 @@
 layout: post
 title: VncServer的安装与使用
 date: 2017-10-01 08:49:00
-categories: 工具
+categories:
+- 技术
+- Linux
 tags: linux
 ---
 

@@ -2,7 +2,9 @@
 layout: post
 title: hexo博客备份方案
 date: 2017-04-11 21:40:40
-categories: 工具
+categories:
+- 技术
+- 工具
 tags: 
 - hexo
 ---

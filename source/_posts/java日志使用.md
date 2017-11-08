@@ -2,7 +2,9 @@
 layout: post
 date:   2017-02-21 12:48:55
 title:  "java日志框架的使用"
-categories: 工具
+categories: 
+- 技术
+- 工具
 tags: 
 - java
 ---

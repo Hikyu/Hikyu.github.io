@@ -2,7 +2,9 @@
 layout: post
 title: 认识MVCC
 date: 2017-11-02 20:18:07
-categories: 编程
+categories: 
+- 技术
+- 编程
 tags: 
 - 数据库
 ---

@@ -2,7 +2,9 @@
 layout: post
 title: 理解JavaScript作用域链
 date: 2017-09-16 09:59:34
-categories: 编程
+categories: 
+- 技术
+- 编程
 tags: javascript
 ---
 

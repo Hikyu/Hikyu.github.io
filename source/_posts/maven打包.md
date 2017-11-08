@@ -2,7 +2,9 @@
 layout: post
 title: 使用maven打包
 date: 2017-10-15 19:56:22
-categories: 工具
+categories: 
+- 技术
+- 工具
 tags:
 - maven
 ---

@@ -2,7 +2,9 @@
 layout: post
 title: Java-NIO-Buffer
 date: 2017-06-28 20:36:36
-categories: 编程
+categories:
+- 技术
+- 编程
 tags: 
 - java
 - NIO

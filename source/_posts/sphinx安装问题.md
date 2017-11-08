@@ -2,7 +2,9 @@
 layout: post
 date:   2016-03-30 12:48:55
 title: "sphinx安装问题"
-categories: 工具
+categories: 
+- 技术
+- 工具
 tags: 
 - python
 - 编码
