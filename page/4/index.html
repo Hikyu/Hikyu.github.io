@@ -66,6 +66,61 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-建造者模式的使用" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/05/29/建造者模式的使用/" class="article-date">
+  <time datetime="2017-05-29T12:29:50.000Z" itemprop="datePublished">2017-05-29</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/编程/">编程</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/05/29/建造者模式的使用/">建造者模式的使用</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>因为一个新项目的原因，去北京呆了半个多月，所以有好长时间没有写博客了。这段时间在写代码的过程中，学习到了建造者模式的一种用法，记录下来(设计模式在平时也会用到，网上文章多如牛毛，所以没怎么写关于设计模式这方面的日志)</p>
+</blockquote>
+<h2 id="建造者模式"><a href="#建造者模式" class="headerlink" title="建造者模式"></a>建造者模式</h2><p>建造者模式用来创建一个内部结构复杂的对象，拥有多个组成部分。建造者模式可以使用户无需知道这些组件的装配细节，只需要指定复杂对象的类型就可以得到该对象。</p>
+<p>有的复杂对象的组装还可能有一些限制条件，比如，某些属性必须存在，某些属性的初始化需要遵从一定的顺序等等。举一个修两层楼的比方：必须打好地基才能盖第一层楼，第一层盖好后才能盖第二层。</p>
+<p>复杂对象的创建过程被封装到一个建造者对象里面，用户可以直接使用建造者建造完毕的对象，而不必关心建造过程。</p>
+<img src="/2017/05/29/建造者模式的使用/builder.jpg" alt="builder" title="builder">
+        
+          <p class="article-more-link">
+            <a href="/2017/05/29/建造者模式的使用/#more">阅读全文 »</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yukai.space/2017/05/29/建造者模式的使用/" data-id="cj9qhw220006nhdnjn3txg60t" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/设计模式/">设计模式</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+ 
+
+
+  
     <article id="post-java线程池的使用" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2017/05/08/java线程池的使用/" class="article-date">
@@ -466,60 +521,6 @@
 
 
   
-    <article id="post-maven学习笔记" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2017/04/17/maven学习笔记/" class="article-date">
-  <time datetime="2017-04-17T12:51:25.000Z" itemprop="datePublished">2017-04-17</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/工具/">工具</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/04/17/maven学习笔记/">maven学习笔记(一)</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <blockquote>
-<p>上周末两天时间基本上将《Maven实战》这本书看完了。《Maven实战》是很棒的一本介绍maven相关知识的书籍。读完之后，对学到的maven相关的内容做一个梳理总结。</p>
-</blockquote>
-<h2 id="Maven基础"><a href="#Maven基础" class="headerlink" title="Maven基础"></a>Maven基础</h2><p>有关<a href="http://maven.apache.org/">Maven</a>如何安装和设置，不在这里啰嗦了，可以到<a href="http://maven.apache.org/">官网</a>下载最新版本然后安装。</p>
-<p>Maven是一个异常强大的构建工具，能够帮助我们自动化构建过程，从清理、编译、测试到生成报告，打包和部署。我们要做的只是使用Maven配置好项目，然后输入简单的命令，Maven会帮我们处理这些任务。</p>
-<p>Maven项目的核心是pom.xml。Pom定义了项目的基本信息，用于描述项目如何构建，声明项目依赖等。下面是一个例子：<br>
-        
-          <p class="article-more-link">
-            <a href="/2017/04/17/maven学习笔记/#more">阅读全文 »</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yukai.space/2017/04/17/maven学习笔记/" data-id="cj9qhw1zs0044hdnjtio5brrn" class="article-share-link">分享</a>
-      
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/maven/">maven</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
- 
-
-
-  
 
 
   <nav id="page-nav">
@@ -546,6 +547,10 @@
       <ul>
         
           <li>
+            <a href="/2017/11/15/从通信协议到装饰者模式/">从通信协议到装饰者模式</a>
+          </li>
+        
+          <li>
             <a href="/2017/11/05/大型网站技术架构/">大型网站技术架构</a>
           </li>
         
@@ -559,10 +564,6 @@
         
           <li>
             <a href="/2017/10/31/Java读取资源文件/">Java读取资源文件</a>
-          </li>
-        
-          <li>
-            <a href="/2017/10/15/maven打包/">使用maven打包</a>
           </li>
         
       </ul>

@@ -66,6 +66,72 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-java中的类型转换" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/04/28/java中的类型转换/" class="article-date">
+  <time datetime="2016-04-28T04:48:55.000Z" itemprop="datePublished">2016-04-28</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/编程/">编程</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/04/28/java中的类型转换/">java中的类型转换</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>以前一直对java中的类型转换了解的不是很清楚，因为平时写代码有IDE的帮助，所以往往忽略这一块的内容，但往往就是这样的小知识点不清楚，很有可能造成很大的错误。所以在闲暇时间总结一下这些可能被遗忘的知识点。网上已经有很多相关的介绍文章了，现在来梳理一番：</p>
+</blockquote>
+<h2 id="基本类型"><a href="#基本类型" class="headerlink" title="基本类型"></a><strong>基本类型</strong></h2><ul>
+<li><strong>基本类型优先级</strong></li>
+</ul>
+<p>首先来看java中的基本类型有哪些：</p>
+<p>byte：byte数据类型是一个8位有符号二进制补码整数。</p>
+<p>short：short数据类型为16位有符号二进制补码整数。</p>
+<p>int：int数据类型是一个32位有符号二进制补码整数</p>
+<p>long: long数据类型是一个64位二进制补码整数</p>
+<p>float: float数据类型是单精度、32位、符合IEEE 754标准的浮点数</p>
+<p>boolean: boolean数据类型只有两个可能的值：true和false</p>
+<p>double: double数据类型是双精度、64位、符合IEEE 754标准的浮点数；</p>
+<p>char: char数据类型是一个16位的Unicode字符</p>
+<p>基本类型优先级由低到高排序：</p>
+<p>(byte short char) int long float double</p>
+<p>其中，byte short char 平级</p>
+        
+          <p class="article-more-link">
+            <a href="/2016/04/28/java中的类型转换/#more">阅读全文 »</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yukai.space/2016/04/28/java中的类型转换/" data-id="cj9qhw1wj0024hdnjb1chsywg" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+ 
+
+
+  
     <article id="post-ant编译java工程jdk路径的设置" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2016/04/25/ant编译java工程jdk路径的设置/" class="article-date">
@@ -509,75 +575,6 @@
 
 
   
-    <article id="post-常用快捷键总结" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2016/03/22/常用快捷键总结/" class="article-date">
-  <time datetime="2016-03-22T08:31:55.000Z" itemprop="datePublished">2016-03-22</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/工具/">工具</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/03/22/常用快捷键总结/">常用快捷键总结</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <ul>
-<li><h2 id="ECLIPSE"><a href="#ECLIPSE" class="headerlink" title="ECLIPSE:"></a>ECLIPSE:</h2><p> <strong>查看代码</strong></p>
-<p> Ctrl+O 搜索当前类变量及方法</p>
-<p> Ctrl+H 打开搜索对话框</p>
-<p> Ctrl+Shift+G  搜索选中变量或方法的引用</p>
-<p> Ctrl+D 删除当前行</p>
-<p> Ctrl+Shift+F 格式化代码</p>
-<p> F4 查看当前类继承结构</p>
-<p> Ctrl+Shift+R 搜索类，文件等资源</p>
-<p> Ctrl+Shift+O 倒包</p>
-<p> Ctrl + 1 ：快速修复</p>
-<p> Ctrl + Shift + /(小键盘) ：收起左侧导航树或代码(依据当前焦点而定)</p>
-<p> Ctrl + *(小键盘) ：展开代码</p>
-<p> Shift + Enter ：在当前行下方插入一行空行</p>
-<p> Alt + 向上键 ：当前行与上方行交换</p>
-<p> Alt + 向下键 ：当前行与下方行交换</p>
-<p> Shift + Alt + R : 重命名</p>
-<p> Shift + Alt + L (表达式末尾)：为表达式赋值为局部变量</p>
-<p> Shift + 向上键/向下键 : 选中此行</p>
-<p> Shift + Alt + M : 提取选中代码为一个方法</p>
-<p> Ctrl + . : 下一个错误</p>
-        
-          <p class="article-more-link">
-            <a href="/2016/03/22/常用快捷键总结/#more">阅读全文 »</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yukai.space/2016/03/22/常用快捷键总结/" data-id="cj9qhw21w006fhdnjftpqcmh7" class="article-share-link">分享</a>
-      
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/快捷键/">快捷键</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
- 
-
-
-  
 
 
   <nav id="page-nav">
@@ -604,6 +601,10 @@
       <ul>
         
           <li>
+            <a href="/2017/11/15/从通信协议到装饰者模式/">从通信协议到装饰者模式</a>
+          </li>
+        
+          <li>
             <a href="/2017/11/05/大型网站技术架构/">大型网站技术架构</a>
           </li>
         
@@ -617,10 +618,6 @@
         
           <li>
             <a href="/2017/10/31/Java读取资源文件/">Java读取资源文件</a>
-          </li>
-        
-          <li>
-            <a href="/2017/10/15/maven打包/">使用maven打包</a>
           </li>
         
       </ul>

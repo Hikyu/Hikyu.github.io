@@ -66,6 +66,60 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-maven学习笔记" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/04/17/maven学习笔记/" class="article-date">
+  <time datetime="2017-04-17T12:51:25.000Z" itemprop="datePublished">2017-04-17</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/工具/">工具</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/04/17/maven学习笔记/">maven学习笔记(一)</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>上周末两天时间基本上将《Maven实战》这本书看完了。《Maven实战》是很棒的一本介绍maven相关知识的书籍。读完之后，对学到的maven相关的内容做一个梳理总结。</p>
+</blockquote>
+<h2 id="Maven基础"><a href="#Maven基础" class="headerlink" title="Maven基础"></a>Maven基础</h2><p>有关<a href="http://maven.apache.org/">Maven</a>如何安装和设置，不在这里啰嗦了，可以到<a href="http://maven.apache.org/">官网</a>下载最新版本然后安装。</p>
+<p>Maven是一个异常强大的构建工具，能够帮助我们自动化构建过程，从清理、编译、测试到生成报告，打包和部署。我们要做的只是使用Maven配置好项目，然后输入简单的命令，Maven会帮我们处理这些任务。</p>
+<p>Maven项目的核心是pom.xml。Pom定义了项目的基本信息，用于描述项目如何构建，声明项目依赖等。下面是一个例子：<br>
+        
+          <p class="article-more-link">
+            <a href="/2017/04/17/maven学习笔记/#more">阅读全文 »</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yukai.space/2017/04/17/maven学习笔记/" data-id="cj9qhw1zs0044hdnjtio5brrn" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/maven/">maven</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+ 
+
+
+  
     <article id="post-木耳炒山药" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2017/04/16/木耳炒山药/" class="article-date">
@@ -456,62 +510,6 @@
 
 
   
-    <article id="post-I-O总结" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2017/03/19/I-O总结/" class="article-date">
-  <time datetime="2017-03-19T09:09:19.000Z" itemprop="datePublished">2017-03-19</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/编程/">编程</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/03/19/I-O总结/">java I/O总结</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <blockquote>
-<p>在平时维护JDBC驱动的过程中，经常会接触到IO相关的代码。总结梳理一下java中的IO~</p>
-</blockquote>
-<h2 id="IO"><a href="#IO" class="headerlink" title="IO"></a>IO</h2><p>IO，即Input和Output。流可以理解为字节序列的流动，可以从其中读入字节序列的对象称为输入流，可以向其中写入字节序列的对象称为输出流。<br>这些字节序列的来源和目的地可以是文件，网络，或者内存等。</p>
-<p>java中的IO基本可以分为两大类：</p>
-<p>1.基于字节操作的 I/O 接口：InputStream 和 OutputStream</p>
-<p>2.基于字符操作的 I/O 接口：Writer 和 Reader</p>
-<p>不管是磁盘还是网络传输，最小的存储单元都是字节，而不是字符，所以 I/O 操作的都是字节而不是字符。但是我们的程序通常操作的数据都是以字符的形式存在，比如处理网页中的内容或者磁盘文件中的文本。<br>为了操作方便，提供了直接操作字符的接口。操作字符的接口底层还是基于字节的，只不过封装了一些例如编码和解码等操作。</p>
-        
-          <p class="article-more-link">
-            <a href="/2017/03/19/I-O总结/#more">阅读全文 »</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yukai.space/2017/03/19/I-O总结/" data-id="cj9qhw1ul0006hdnjpbf2z0k4" class="article-share-link">分享</a>
-      
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/NIO/">NIO</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
- 
-
-
-  
 
 
   <nav id="page-nav">
@@ -538,6 +536,10 @@
       <ul>
         
           <li>
+            <a href="/2017/11/15/从通信协议到装饰者模式/">从通信协议到装饰者模式</a>
+          </li>
+        
+          <li>
             <a href="/2017/11/05/大型网站技术架构/">大型网站技术架构</a>
           </li>
         
@@ -551,10 +553,6 @@
         
           <li>
             <a href="/2017/10/31/Java读取资源文件/">Java读取资源文件</a>
-          </li>
-        
-          <li>
-            <a href="/2017/10/15/maven打包/">使用maven打包</a>
           </li>
         
       </ul>

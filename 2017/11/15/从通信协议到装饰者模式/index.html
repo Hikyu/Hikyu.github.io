@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>从通信协议到装饰者模式 | YuKai&#39;s blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="背景最近有个新的需求，jdbc与后台的通信要求使用第三方提供的硬件加密卡进行加密。当前数据库与前台工具的通信有两种方式：分别是基于明文或基于ssl。
+基于明文的通信如下：
+
+在应用层定义了前后台交互协议，封装的数据包结构大致如下：">
+<meta property="og:type" content="article">
+<meta property="og:title" content="从通信协议到装饰者模式">
+<meta property="og:url" content="http://yukai.space/2017/11/15/从通信协议到装饰者模式/index.html">
+<meta property="og:site_name" content="YuKai's blog">
+<meta property="og:description" content="背景最近有个新的需求，jdbc与后台的通信要求使用第三方提供的硬件加密卡进行加密。当前数据库与前台工具的通信有两种方式：分别是基于明文或基于ssl。
+基于明文的通信如下：
+
+在应用层定义了前后台交互协议，封装的数据包结构大致如下：">
+<meta property="og:image" content="http://yukai.space/2017/11/15/从通信协议到装饰者模式/mingwen.png">
+<meta property="og:image" content="http://yukai.space/2017/11/15/从通信协议到装饰者模式/oscar.png">
+<meta property="og:image" content="http://yukai.space/2017/11/15/从通信协议到装饰者模式/ssl.png">
+<meta property="og:image" content="http://yukai.space/2017/11/15/从通信协议到装饰者模式/jiami.png">
+<meta property="og:image" content="http://yukai.space/2017/11/15/从通信协议到装饰者模式/jiamibao.png">
+<meta property="og:image" content="http://yukai.space/2017/11/15/从通信协议到装饰者模式/zhuangshi.jpg">
+<meta property="og:image" content="http://yukai.space/2017/11/15/从通信协议到装饰者模式/yasuo.png">
+<meta property="og:image" content="http://yukai.space/2017/11/15/从通信协议到装饰者模式/Proxy.jpg">
+<meta property="og:updated_time" content="2017-11-15T09:12:24.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="从通信协议到装饰者模式">
+<meta name="twitter:description" content="背景最近有个新的需求，jdbc与后台的通信要求使用第三方提供的硬件加密卡进行加密。当前数据库与前台工具的通信有两种方式：分别是基于明文或基于ssl。
+基于明文的通信如下：
+
+在应用层定义了前后台交互协议，封装的数据包结构大致如下：">
+<meta name="twitter:image" content="http://yukai.space/2017/11/15/从通信协议到装饰者模式/mingwen.png">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    
+    <div id="header-inner" class="inner">
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yukai.space"></form>
+      </div>
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/archives">归档</a>
+        
+          <a class="main-nav-link" href="/tools">工具</a>
+        
+          <a class="main-nav-link" href="/page">关于</a>
+        
+      </nav>
+      
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">YuKai&#39;s blog</a>
+      </h1>
+      
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-从通信协议到装饰者模式" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/11/15/从通信协议到装饰者模式/" class="article-date">
+  <time datetime="2017-11-15T14:03:16.000Z" itemprop="datePublished">2017-11-15</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/编程/">编程</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      从通信协议到装饰者模式
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>最近有个新的需求，jdbc与后台的通信要求使用第三方提供的硬件加密卡进行加密。当前数据库与前台工具的通信有两种方式：分别是基于明文或基于ssl。</p>
+<p>基于明文的通信如下：</p>
+<img src="/2017/11/15/从通信协议到装饰者模式/mingwen.png" alt="明文传输" title="明文传输">
+<p>在应用层定义了前后台交互协议，封装的数据包结构大致如下：</p>
+<img src="/2017/11/15/从通信协议到装饰者模式/oscar.png" alt="oscar数据包" title="oscar数据包">
+<a id="more"></a>
+<p>基于ssl的通信如下：</p>
+<img src="/2017/11/15/从通信协议到装饰者模式/ssl.png" alt="ssl加密通信" title="ssl加密通信">
+<p>在应用层和传输层之间新加了ssl加密层，对于应用层而言，整个加密过程都是<strong>透明的</strong>。代码上的表现为直接替换普通socket为sslsocket。</p>
+<p>现在的需求同样需要实现加密，方法是调用第三方提供的加密算法实现应用层数据的加密。第三方只提供了加密算法，所以需要从应用层入手，来实现数据加密。</p>
+<p>思考两种方式如下：</p>
+<ol>
+<li><p>对于现有的数据包，对其数据部分加密后传输。</p>
+<p>第一直觉可能会想到这种方式。但是仔细想想，这样的修改对于现有的应用层协议侵入性太大，每个类型的数据包均需要修改、测试，工作量也不小。同时，对于原有的明文传输方式兼容性不强。</p>
+</li>
+<li><p><code>对于计算机中遇到的问题，都可以通过&quot;加一层&quot;的方式解决。</code></p>
+<img src="/2017/11/15/从通信协议到装饰者模式/jiami.png" alt="加密通信" title="加密通信">
+<p>加密数据包结构如下：</p>
+<img src="/2017/11/15/从通信协议到装饰者模式/jiamibao.png" alt="加密数据包" title="加密数据包">
+<p>通过这种加一层的方式，可以做到对原有的协议零侵入性，同时使用tag标识位标识数据包是否是加密包还是明文包，兼容明文传输。修改量也最小，故采用这种方式实现前后台加密通讯。</p>
+</li>
+</ol>
+<p>大致的思路有了，那么在代码中如何实现呢？这就用到了<code>装饰者模式</code>。</p>
+<h2 id="装饰者模式"><a href="#装饰者模式" class="headerlink" title="装饰者模式"></a>装饰者模式</h2><img src="/2017/11/15/从通信协议到装饰者模式/zhuangshi.jpg" alt="装饰者模式" title="装饰者模式">
+<p>装饰者模式在<a href="http://yukai.space/2017/03/19/I-O%E6%80%BB%E7%BB%93/">Java IO总结</a>中也提到了:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div></pre></td><td class="code"><pre><div class="line">Component：</div><div class="line">定义一个对象接口，可以给这些对象动态地添加职责。</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Component</span></span></div><div class="line">&#123;</div><div class="line">	<span class="function"><span class="keyword">void</span> <span class="title">operation</span><span class="params">()</span></span>;</div><div class="line">&#125;</div><div class="line"> </div><div class="line">Concrete Component：</div><div class="line">定义一个对象，可以给这个对象添加一些职责。动作的具体实施者。</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ConcreteComponent</span> <span class="keyword">implements</span> <span class="title">Component</span></span></div><div class="line">&#123;</div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">operation</span><span class="params">()</span></span></div><div class="line">	&#123;</div><div class="line">		<span class="comment">// Write your code here</span></div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"> </div><div class="line">Decorator：</div><div class="line">维持一个指向Component对象的引用，并定义一个与 Component接口一致的接口。</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Decorator</span> <span class="keyword">implements</span> <span class="title">Component</span></span></div><div class="line">&#123;</div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="title">Decorator</span><span class="params">(Component component)</span></span></div><div class="line">	&#123;</div><div class="line">		<span class="keyword">this</span>.component = component;</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">operation</span><span class="params">()</span></span></div><div class="line">	&#123;</div><div class="line">		component.operation();</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	<span class="keyword">private</span> Component component;</div><div class="line">&#125;</div><div class="line"> </div><div class="line">Concrete Decorator：</div><div class="line">在Concrete Component的行为之前或之后，加上自己的行为，以“贴上”附加的职责。</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ConcreteDecorator</span> <span class="keyword">extends</span> <span class="title">Decorator</span></span></div><div class="line">&#123;</div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">operation</span><span class="params">()</span></span></div><div class="line">	&#123;</div><div class="line">		<span class="comment">//addBehavior也可以在前面</span></div><div class="line">		</div><div class="line">		<span class="keyword">super</span>.operation();</div><div class="line">		</div><div class="line">		addBehavior();</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	<span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">addBehavior</span><span class="params">()</span></span></div><div class="line">	&#123;</div><div class="line">		<span class="comment">//your code</span></div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>使用装饰模式来实现扩展比继承更加灵活，它以对客户透明的方式动态地给一个对象附加更多的责任。<br>装饰模式可以在不需要创造更多子类的情况下，将对象的功能加以扩展。</p>
+<p>Java中的流家族就是装饰者模式的典型案例。</p>
+<p>那么，与我们上面提到的加密层有什么联系呢？</p>
+<p>在session建立一开始，协议协商确定使用加密通信后，将明文通信使用的BufferedOutputStream与BufferedInputStream替换成我们自定义的装饰者流：EncryptedOutputStream和EncryptedInputStream。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">wrapEnprytedStream</span><span class="params">()</span> </span>&#123;</div><div class="line">    <span class="comment">//osr_input 是BufferedInputStream 实例</span></div><div class="line">    osr_input = <span class="keyword">new</span> EncryptedInputStream(osr_input, con);</div><div class="line">    <span class="comment">//osr_output 是 BufferedOutputStream 实例</span></div><div class="line">    osr_output = <span class="keyword">new</span> EncryptedOutputStream(osr_output, con);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>在EncryptedOutputStream.write方法和EncryptedInputStream.read方法中分别进行加密数据包的封包和拆包工作。把原有的应用层协议包封装在一个个加密数据包当中，相当于”加了一层”。</p>
+<p>贴出这两个装饰者类的实现：</p>
+<p>EncryptedInputStream.java</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div><div class="line">145</div><div class="line">146</div><div class="line">147</div><div class="line">148</div><div class="line">149</div><div class="line">150</div><div class="line">151</div><div class="line">152</div><div class="line">153</div><div class="line">154</div><div class="line">155</div><div class="line">156</div><div class="line">157</div><div class="line">158</div><div class="line">159</div><div class="line">160</div><div class="line">161</div><div class="line">162</div><div class="line">163</div><div class="line">164</div><div class="line">165</div><div class="line">166</div><div class="line">167</div><div class="line">168</div><div class="line">169</div><div class="line">170</div><div class="line">171</div><div class="line">172</div><div class="line">173</div><div class="line">174</div><div class="line">175</div><div class="line">176</div><div class="line">177</div><div class="line">178</div><div class="line">179</div><div class="line">180</div><div class="line">181</div><div class="line">182</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">EncryptedInputStream</span> <span class="keyword">extends</span> <span class="title">FilterInputStream</span> </span>&#123;</div><div class="line"></div><div class="line">	<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">byte</span> encryptedTag = (<span class="keyword">byte</span>) <span class="number">0xA4</span>;<span class="comment">// 加密数据包标识</span></div><div class="line"></div><div class="line">	<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">byte</span> unEncryptedTag = (<span class="keyword">byte</span>) <span class="number">0xA5</span>;<span class="comment">// 非加密数据包标识</span></div><div class="line"></div><div class="line">	<span class="keyword">private</span> <span class="keyword">byte</span>[] buffer;</div><div class="line"></div><div class="line">	<span class="keyword">private</span> InputStream in;</div><div class="line"></div><div class="line">	<span class="keyword">private</span> <span class="keyword">byte</span>[] packetHeaderBuffer = <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">3</span>];</div><div class="line"></div><div class="line">	<span class="keyword">private</span> <span class="keyword">int</span> pos = <span class="number">0</span>;</div><div class="line"></div><div class="line">	<span class="keyword">private</span> BaseConnection con;</div><div class="line"></div><div class="line">	<span class="keyword">private</span> <span class="keyword">byte</span>[] lock = <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">0</span>];</div><div class="line">	StringBuffer sb = <span class="keyword">new</span> StringBuffer();</div><div class="line">	<span class="keyword">boolean</span> logFlag = Driver.getLogLevel() &gt;= TrackLog.PROTOCOLDETAIL_LEVEL;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">protected</span> <span class="title">EncryptedInputStream</span><span class="params">(InputStream in, BaseConnection con)</span> </span>&#123;</div><div class="line">		<span class="keyword">super</span>(in);</div><div class="line">		<span class="keyword">this</span>.in = in;</div><div class="line">		<span class="keyword">this</span>.con = con;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">available</span><span class="params">()</span> <span class="keyword">throws</span> IOException </span>&#123;</div><div class="line">		<span class="keyword">if</span> (<span class="keyword">this</span>.buffer == <span class="keyword">null</span>) &#123;</div><div class="line">			<span class="keyword">return</span> <span class="keyword">this</span>.in.available();</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">return</span> <span class="keyword">this</span>.buffer.length - <span class="keyword">this</span>.pos + <span class="keyword">this</span>.in.available();</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">close</span><span class="params">()</span> <span class="keyword">throws</span> IOException </span>&#123;</div><div class="line">		<span class="keyword">this</span>.in.close();</div><div class="line">		<span class="keyword">this</span>.buffer = <span class="keyword">null</span>;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">getNextPacketFromServer</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</div><div class="line">		<span class="keyword">byte</span>[] decryptedData = <span class="keyword">null</span>;</div><div class="line">		<span class="comment">/**</span></div><div class="line">		 * 数据头 第一个字节存放是否进行了加密。 第二三个字节存放加密后的数据的长度</div><div class="line">		 */</div><div class="line">		<span class="keyword">int</span> lengthRead = readFully(<span class="keyword">this</span>.packetHeaderBuffer, <span class="number">0</span>, <span class="number">3</span>);</div><div class="line">		<span class="keyword">if</span> (lengthRead &lt; <span class="number">3</span>) &#123;</div><div class="line">			<span class="keyword">throw</span> <span class="keyword">new</span> IOException(<span class="string">"Unexpected end of input stream"</span>);</div><div class="line">		&#125;</div><div class="line">		<span class="comment">/**</span></div><div class="line">		 * 加密数据的长度</div><div class="line">		 */</div><div class="line">		<span class="keyword">int</span> encryptedPacketLength = ((<span class="keyword">int</span>) <span class="keyword">this</span>.packetHeaderBuffer[<span class="number">1</span>] &amp; <span class="number">0xff</span>) &lt;&lt; <span class="number">8</span></div><div class="line">				| (<span class="keyword">int</span>) <span class="keyword">this</span>.packetHeaderBuffer[<span class="number">2</span>] &amp; <span class="number">0xff</span>;</div><div class="line"></div><div class="line">		<span class="keyword">if</span> (encryptedPacketLength &lt; <span class="number">0</span>) &#123;</div><div class="line">			<span class="keyword">throw</span> <span class="keyword">new</span> Exception(<span class="string">"数据包长度为负值:"</span> + encryptedPacketLength + <span class="string">"----hb:"</span> + <span class="keyword">this</span>.packetHeaderBuffer[<span class="number">1</span>] + <span class="string">"---lb:"</span></div><div class="line">					+ <span class="keyword">this</span>.packetHeaderBuffer[<span class="number">2</span>]);</div><div class="line">		&#125;</div><div class="line">		<span class="comment">/**</span></div><div class="line">		 * 对数据进行了加密</div><div class="line">		 */</div><div class="line">		decryptedData = <span class="keyword">new</span> <span class="keyword">byte</span>[encryptedPacketLength];</div><div class="line">		readFully(decryptedData, <span class="number">0</span>, encryptedPacketLength);</div><div class="line"></div><div class="line">		<span class="keyword">if</span> (<span class="keyword">this</span>.packetHeaderBuffer[<span class="number">0</span>] == encryptedTag) &#123;</div><div class="line">			<span class="keyword">synchronized</span> (lock) &#123;</div><div class="line">				decryptedData = decryptData(con.getPublicKey(), decryptedData);</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">if</span> ((<span class="keyword">this</span>.buffer != <span class="keyword">null</span>) &amp;&amp; (<span class="keyword">this</span>.pos &lt; <span class="keyword">this</span>.buffer.length)) &#123;</div><div class="line"></div><div class="line">			<span class="keyword">int</span> remaining = <span class="keyword">this</span>.buffer.length - <span class="keyword">this</span>.pos;</div><div class="line">			<span class="keyword">byte</span>[] newBuffer = <span class="keyword">new</span> <span class="keyword">byte</span>[remaining + decryptedData.length];</div><div class="line"></div><div class="line">			<span class="keyword">int</span> newIndex = buffer.length - pos;</div><div class="line"></div><div class="line">			System.arraycopy(buffer, pos, newBuffer, <span class="number">0</span>, newIndex);</div><div class="line">			System.arraycopy(decryptedData, <span class="number">0</span>, newBuffer, newIndex, decryptedData.length);</div><div class="line"></div><div class="line">			decryptedData = newBuffer;</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">this</span>.pos = <span class="number">0</span>;</div><div class="line">		<span class="keyword">this</span>.buffer = decryptedData;</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	<span class="keyword">private</span> <span class="keyword">byte</span>[] decryptData(String publicKey, <span class="keyword">byte</span>[] src) &#123;</div><div class="line">		<span class="keyword">byte</span>[] data = DataEncryptUtil.instance.decryptDataByPublicKey(publicKey, src, src.length);</div><div class="line">		<span class="keyword">return</span> data;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">getNextPacketIfRequired</span><span class="params">(<span class="keyword">int</span> numBytes)</span> <span class="keyword">throws</span> Exception </span>&#123;</div><div class="line">		<span class="keyword">if</span> ((<span class="keyword">this</span>.buffer == <span class="keyword">null</span>) || ((<span class="keyword">this</span>.pos + numBytes) &gt; <span class="keyword">this</span>.buffer.length)) &#123;</div><div class="line">			getNextPacketFromServer();</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">synchronized</span> <span class="keyword">public</span> <span class="keyword">int</span> <span class="title">read</span><span class="params">()</span> <span class="keyword">throws</span> IOException </span>&#123;</div><div class="line">		<span class="keyword">try</span> &#123;</div><div class="line">			getNextPacketIfRequired(<span class="number">1</span>);</div><div class="line">		&#125; <span class="keyword">catch</span> (IOException ioEx) &#123;</div><div class="line">			<span class="keyword">return</span> -<span class="number">1</span>;</div><div class="line">		&#125; <span class="keyword">catch</span> (Exception e) &#123;</div><div class="line">			e.printStackTrace();</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">return</span> <span class="keyword">this</span>.buffer[<span class="keyword">this</span>.pos++] &amp; <span class="number">0xff</span>;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">read</span><span class="params">(<span class="keyword">byte</span>[] b)</span> <span class="keyword">throws</span> IOException </span>&#123;</div><div class="line">		<span class="keyword">return</span> read(b, <span class="number">0</span>, b.length);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">read</span><span class="params">(<span class="keyword">byte</span>[] b, <span class="keyword">int</span> off, <span class="keyword">int</span> len)</span> <span class="keyword">throws</span> IOException </span>&#123;</div><div class="line">		<span class="keyword">if</span> (b == <span class="keyword">null</span>) &#123;</div><div class="line">			<span class="keyword">throw</span> <span class="keyword">new</span> NullPointerException();</div><div class="line">		&#125; <span class="keyword">else</span> <span class="keyword">if</span> ((off &lt; <span class="number">0</span>) || (off &gt; b.length) || (len &lt; <span class="number">0</span>) || ((off + len) &gt; b.length) || ((off + len) &lt; <span class="number">0</span>)) &#123;</div><div class="line">			<span class="keyword">throw</span> <span class="keyword">new</span> IndexOutOfBoundsException();</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">if</span> (len &lt;= <span class="number">0</span>) &#123;</div><div class="line">			<span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">try</span> &#123;</div><div class="line">			getNextPacketIfRequired(len);</div><div class="line">		&#125; <span class="keyword">catch</span> (IOException ioEx) &#123;</div><div class="line">			<span class="keyword">return</span> -<span class="number">1</span>;</div><div class="line">		&#125; <span class="keyword">catch</span> (Exception e) &#123;</div><div class="line">			e.printStackTrace();</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">int</span> bufferLen = buffer.length;</div><div class="line">		<span class="keyword">if</span> (bufferLen &lt; len) &#123;</div><div class="line">			System.arraycopy(<span class="keyword">this</span>.buffer, <span class="keyword">this</span>.pos, b, off, bufferLen);</div><div class="line">			<span class="keyword">this</span>.pos += bufferLen;</div><div class="line">			<span class="keyword">return</span> bufferLen;</div><div class="line">		&#125; <span class="keyword">else</span> &#123;</div><div class="line">			System.arraycopy(<span class="keyword">this</span>.buffer, <span class="keyword">this</span>.pos, b, off, len);</div><div class="line">			<span class="keyword">this</span>.pos += len;</div><div class="line">			<span class="keyword">return</span> len;</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">int</span> <span class="title">readFully</span><span class="params">(<span class="keyword">byte</span>[] b, <span class="keyword">int</span> off, <span class="keyword">int</span> len)</span> <span class="keyword">throws</span> IOException </span>&#123;</div><div class="line">		<span class="keyword">if</span> (len &lt; <span class="number">0</span>) &#123;</div><div class="line">			<span class="keyword">throw</span> <span class="keyword">new</span> IndexOutOfBoundsException();</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">int</span> n = <span class="number">0</span>;</div><div class="line">		<span class="keyword">int</span> count = <span class="number">0</span>;</div><div class="line">		<span class="keyword">while</span> (n &lt; len) &#123;</div><div class="line">			count = <span class="keyword">this</span>.in.read(b, off + n, len - n);</div><div class="line"></div><div class="line">			<span class="keyword">if</span> (count &lt; <span class="number">0</span>) &#123;</div><div class="line">				<span class="keyword">throw</span> <span class="keyword">new</span> EOFException();</div><div class="line">			&#125;</div><div class="line"></div><div class="line">			n += count;</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">return</span> n;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">long</span> <span class="title">skip</span><span class="params">(<span class="keyword">long</span> n)</span> <span class="keyword">throws</span> IOException </span>&#123;</div><div class="line">		<span class="keyword">long</span> count = <span class="number">0</span>;</div><div class="line">		<span class="keyword">int</span> bytesRead = <span class="number">0</span>;</div><div class="line">		<span class="keyword">for</span> (<span class="keyword">long</span> i = <span class="number">0</span>; i &lt; n; i++) &#123;</div><div class="line">			bytesRead = read();</div><div class="line"></div><div class="line">			<span class="keyword">if</span> (bytesRead == -<span class="number">1</span>) &#123;</div><div class="line">				<span class="keyword">break</span>;</div><div class="line">			&#125;</div><div class="line"></div><div class="line">			count++;</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">return</span> count;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">append</span><span class="params">(StringBuffer sb, <span class="keyword">byte</span>[] value)</span> </span>&#123;</div><div class="line">		<span class="keyword">if</span> (value == <span class="keyword">null</span>) &#123;</div><div class="line">			sb.append(<span class="string">"null"</span>);</div><div class="line">		&#125; <span class="keyword">else</span> &#123;</div><div class="line">			<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; value.length; i++) &#123;</div><div class="line">				sb.append(value[i]).append(<span class="string">" "</span>);</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>EncryptedOutputStream.java</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">EncryptedOutputStream</span> <span class="keyword">extends</span> <span class="title">BufferedOutputStream</span> </span>&#123;</div><div class="line">	<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">byte</span> encryptedTag = (<span class="keyword">byte</span>) <span class="number">0xA4</span>;<span class="comment">// 加密数据包标识</span></div><div class="line">	<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">byte</span> unEncryptedTag = (<span class="keyword">byte</span>) <span class="number">0xA5</span>;<span class="comment">// 非加密数据包标识</span></div><div class="line">	<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> K = <span class="number">1024</span>;</div><div class="line">	<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> defaultBufferSize = <span class="number">128</span> * K;</div><div class="line">	<span class="comment">// 每个加密包的数据长度不超过48k</span></div><div class="line">	<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> slice = <span class="number">48</span> * K;</div><div class="line">	<span class="keyword">private</span> BaseConnection con;</div><div class="line">	<span class="keyword">private</span> OutputStream out;</div><div class="line">	<span class="keyword">private</span> <span class="keyword">byte</span>[] buffer;</div><div class="line">	<span class="comment">// buffer 当前写入位置</span></div><div class="line">	<span class="keyword">private</span> <span class="keyword">int</span> pos = <span class="number">0</span>;</div><div class="line">	<span class="comment">// 标志位 占一个字节</span></div><div class="line">	<span class="keyword">public</span> <span class="keyword">byte</span>[] singleBuf = <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">1</span>];</div><div class="line">	<span class="comment">// 长度 占两个字节</span></div><div class="line">	<span class="keyword">public</span> <span class="keyword">byte</span>[] integerBuf = <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">2</span>];</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="title">EncryptedOutputStream</span><span class="params">(OutputStream out, BaseConnection con)</span> </span>&#123;</div><div class="line">		<span class="keyword">this</span>(out, con, defaultBufferSize);</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="title">EncryptedOutputStream</span><span class="params">(OutputStream out, BaseConnection con, <span class="keyword">int</span> size)</span> </span>&#123;</div><div class="line">		<span class="keyword">super</span>(out);</div><div class="line">		<span class="keyword">this</span>.out = out;</div><div class="line">		<span class="keyword">this</span>.con = con;</div><div class="line">		<span class="keyword">this</span>.buffer = <span class="keyword">new</span> <span class="keyword">byte</span>[size];</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">write</span><span class="params">(<span class="keyword">byte</span>[] b, <span class="keyword">int</span> off, <span class="keyword">int</span> len)</span> <span class="keyword">throws</span> IOException </span>&#123;</div><div class="line">		<span class="keyword">if</span> (len &gt; buffer.length) &#123;</div><div class="line">			flushBuffer();</div><div class="line">			writeWithEncrypted(b, off, len);</div><div class="line">			<span class="keyword">return</span>;</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">if</span> (pos + len &gt; buffer.length) &#123;</div><div class="line">			flushBuffer();</div><div class="line">		&#125;</div><div class="line">		System.arraycopy(b, off, buffer, pos, len);</div><div class="line">		pos += len;</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	<span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">flushBuffer</span><span class="params">()</span> <span class="keyword">throws</span> IOException </span>&#123;</div><div class="line">		<span class="keyword">if</span> (pos &gt; <span class="number">0</span>) &#123;</div><div class="line">			writeWithEncrypted(buffer, <span class="number">0</span>, pos);</div><div class="line">			pos = <span class="number">0</span>;</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	<span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">writeWithEncrypted</span><span class="params">(<span class="keyword">byte</span>[] b, <span class="keyword">int</span> off, <span class="keyword">int</span> len)</span> <span class="keyword">throws</span> IOException </span>&#123;</div><div class="line">		<span class="keyword">int</span> remainLen = len;</div><div class="line">		<span class="keyword">int</span> offset = off;</div><div class="line">		<span class="keyword">byte</span>[] buf = <span class="keyword">new</span> <span class="keyword">byte</span>[slice];;</div><div class="line">		<span class="keyword">while</span> (remainLen &gt; slice) &#123;</div><div class="line">			System.arraycopy(b, offset, buf, <span class="number">0</span>, slice);</div><div class="line">			</div><div class="line">			sendSlice(buf);</div><div class="line">			</div><div class="line">			offset += slice;</div><div class="line">			remainLen -= slice;</div><div class="line">		&#125;</div><div class="line">		</div><div class="line">		<span class="keyword">if</span> (remainLen &gt; <span class="number">0</span>) &#123;</div><div class="line">			buf = <span class="keyword">new</span> <span class="keyword">byte</span>[remainLen];</div><div class="line">			System.arraycopy(b, offset, buf, <span class="number">0</span>, remainLen);</div><div class="line">			sendSlice(buf);</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	<span class="comment">/**</span></div><div class="line">	 * 发送一个加密数据包</div><div class="line">	 * <span class="doctag">@param</span> buf 原始数据</div><div class="line">	 * <span class="doctag">@throws</span> IOException</div><div class="line">	 */</div><div class="line">	<span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">sendSlice</span><span class="params">(<span class="keyword">byte</span>[] buf)</span> <span class="keyword">throws</span> IOException </span>&#123;</div><div class="line">		<span class="keyword">byte</span>[] encryptedData = DataEncryptUtil.instance.encryptDataByPublicKey(con.getPublicKey(), buf, buf.length);</div><div class="line">		<span class="keyword">int</span> encryptedDataLen = encryptedData.length;</div><div class="line">		writeChar(encryptedTag);</div><div class="line">		writeInteger(encryptedDataLen, <span class="number">2</span>);</div><div class="line">		out.write(encryptedData);</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	<span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">writeChar</span><span class="params">(<span class="keyword">int</span> c)</span> <span class="keyword">throws</span> IOException </span>&#123;</div><div class="line">        singleBuf[<span class="number">0</span>] = (<span class="keyword">byte</span>) c;</div><div class="line">        out.write(singleBuf);</div><div class="line">    &#125;</div><div class="line">	</div><div class="line">	<span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">writeInteger</span><span class="params">(<span class="keyword">int</span> val, <span class="keyword">int</span> size)</span> <span class="keyword">throws</span> IOException </span>&#123;</div><div class="line">        <span class="keyword">int</span> count = size;</div><div class="line">        <span class="keyword">while</span> (size-- &gt; <span class="number">0</span>) &#123;</div><div class="line">            integerBuf[size] = (<span class="keyword">byte</span>) (val &amp; <span class="number">0xff</span>);</div><div class="line">            val &gt;&gt;= <span class="number">8</span>;</div><div class="line">        &#125;</div><div class="line">        out.write(integerBuf, <span class="number">0</span>, count);</div><div class="line">    &#125;</div><div class="line">	</div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">write</span><span class="params">(<span class="keyword">byte</span>[] b)</span> <span class="keyword">throws</span> IOException </span>&#123;</div><div class="line">	    write(b, <span class="number">0</span>, b.length);</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">write</span><span class="params">(<span class="keyword">int</span> b)</span> <span class="keyword">throws</span> IOException </span>&#123;</div><div class="line">		<span class="keyword">byte</span>[] buf = <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">1</span>];</div><div class="line">		buf[<span class="number">0</span>] = (<span class="keyword">byte</span>) b;</div><div class="line">		write(buf);</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">flush</span><span class="params">()</span> <span class="keyword">throws</span> IOException </span>&#123;</div><div class="line">		flushBuffer();</div><div class="line">		out.flush();</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">close</span><span class="params">()</span> <span class="keyword">throws</span> IOException </span>&#123;</div><div class="line">		out.close();</div><div class="line">		buffer = <span class="keyword">null</span>;</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>可以看到，使用了装饰者模式后，很容易就解决了我们的问题。现在想一下，假如现在又有新的需求，要求实现通信数据的y压缩传输呢？</p>
+<img src="/2017/11/15/从通信协议到装饰者模式/yasuo.png" alt="压缩传输" title="压缩传输">
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">wrapEnprytedStream</span><span class="params">()</span> </span>&#123;</div><div class="line">    <span class="comment">//osr_input 是BufferedInputStream 实例</span></div><div class="line"></div><div class="line">    osr_input = <span class="keyword">new</span> EncryptedInputStream(<span class="keyword">new</span> CompressedInputStream(osr_input), con);</div><div class="line">    <span class="comment">//osr_output 是 BufferedOutputStream 实例</span></div><div class="line">    osr_output = <span class="keyword">new</span> EncryptedOutputStream(<span class="keyword">new</span> CompressedOutputStream(osr_output), con);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="装饰者与代理"><a href="#装饰者与代理" class="headerlink" title="装饰者与代理"></a>装饰者与代理</h2><p>读过上面的代码，是否觉得跟代理模式的代码长得很像？</p>
+<img src="/2017/11/15/从通信协议到装饰者模式/Proxy.jpg" alt="代理模式" title="代理模式">
+<blockquote>
+<p>代理模式（Proxy Pattern），为其它对象提供一种代理以控制对这个对象的访问。<br>装饰模式（Decorator Pattern），动态地给一个对象添加一些额外的职责。</p>
+</blockquote>
+<p>从语意上讲，代理模式的目标是控制对被代理对象的访问，而装饰模式是给原对象增加额外功能。</p>
+<p>比如，我们使用了某些远程RPC通讯的sdk，在我们的代码中调用一个方法的时候，实际上调用的是代理类提供的方法，在其内部封装了远程通信的细节，而这些对我们而言都是透明的。调用方直接调用代理而不需要直接操作被代理对象甚至都不需要知道被代理对象的存在。屏蔽了实际对象。</p>
+<p>上文提及的装饰者模式代码中，装饰类可装饰的类并不固定，并且被装饰对象是在使用时通过组合确定。</p>
+<p>装饰模式的本质是动态组合。动态是手段，组合是目的。每个装饰类可以只负责添加一项额外功能，然后通过组合为被装饰类添加复杂功能。由于每个装饰类的职责比较简单单一，增加了这些装饰类的可重用性，同时也更符合单一职责原则。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yukai.space/2017/11/15/从通信协议到装饰者模式/" data-id="cja0tpnul00003anjpsk3gtqo" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/设计模式/">设计模式</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+ <script src="/jquery/jquery.min.js"></script>
+  <div id="random_posts">
+    <h2>推荐文章</h2>
+    <div class="random_posts_ul">
+      <script>
+          var random_count =4
+          var site = {BASE_URI:'/'};
+          function load_random_posts(obj) {
+              var arr=site.posts;
+              if (!obj) return;
+              // var count = $(obj).attr('data-count') || 6;
+              for (var i, tmp, n = arr.length; n; i = Math.floor(Math.random() * n), tmp = arr[--n], arr[n] = arr[i], arr[i] = tmp);
+              arr = arr.slice(0, random_count);
+              var html = '<ul>';
+            
+              for(var j=0;j<arr.length;j++){
+                var item=arr[j];
+                html += '<li><strong>' + 
+                item.date + ':&nbsp;&nbsp;<a href="' + (site.BASE_URI+item.uri) + '">' + 
+                (item.title || item.uri) + '</a></strong>';
+                if(item.excerpt){
+                  html +='<div class="post-excerpt">'+item.excerpt+'</div>';
+                }
+                html +='</li>';
+                
+              }
+              $(obj).html(html + '</ul>');
+          }
+          $('.random_posts_ul').each(function () {
+              var c = this;
+              if (!site.posts || !site.posts.length){
+                  $.getJSON(site.BASE_URI + 'js/posts.js',function(json){site.posts = json;load_random_posts(c)});
+              } 
+               else{
+                load_random_posts(c);
+              }
+          });
+      </script>
+    </div>
+  </div>
+
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2017/11/05/大型网站技术架构/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">大型网站技术架构</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+ 
+     
+  <div class="comments" id="comments">
+    
+     
+       
+      <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+    
+       
+      
+      
+           <div id="gitment_comments"></div>
+    
+  </div>
+ 
+  
+
+</section>
+           
+    <aside id="sidebar">
+  
+    
+
+  
+    
+    <div class="widget-wrap">
+    
+      <div class="widget" id="toc-widget-fixed">
+      
+        <strong class="toc-title">文章目录</strong>
+        <div class="toc-widget-list">
+              <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#背景"><span class="toc-number">1.</span> <span class="toc-text">背景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#装饰者模式"><span class="toc-number">2.</span> <span class="toc-text">装饰者模式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#装饰者与代理"><span class="toc-number">3.</span> <span class="toc-text">装饰者与代理</span></a></li></ol>
+          </div>
+      </div>
+    </div>
+
+  
+    
+
+  
+    
+  
+    
+  
+    
+
+  
+</aside>
+
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-left">
+      &copy; 2014 - 2017 于凯&nbsp;|&nbsp;
+      主题 <a href="https://github.com/giscafer/hexo-theme-cafe/" target="_blank">Cafe</a>
+    </div>
+     <div id="footer-right">
+      联系方式&nbsp;|&nbsp;debiaoyu@gmail.com
+    </div>
+  </div>
+</footer>
+ <script src="/jquery/jquery.min.js"></script>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/archives" class="mobile-nav-link">归档</a>
+  
+    <a href="/tools" class="mobile-nav-link">工具</a>
+  
+    <a href="/page" class="mobile-nav-link">关于</a>
+  
+</nav>
+    <img class="back-to-top-btn" src="/images/fly-to-top.png"/>
+<script>
+// Elevator script included on the page, already.
+window.onload = function() {
+  var elevator = new Elevator({
+    selector:'.back-to-top-btn',
+    element: document.querySelector('.back-to-top-btn'),
+    duration: 1000 // milliseconds
+  });
+}
+</script>
+      
+
+  
+    <script>
+      var cloudTieConfig = {
+        url: document.location.href, 
+        sourceId: "",
+        productKey: "e2fb4051c49842688ce669e634bc983f",
+        target: "cloud-tie-wrapper"
+      };
+    </script>
+    <script src="https://img1.ws.126.net/f2e/tie/yun/sdk/loader.js"></script>
+    
+
+  
+
+
+
+
+
+
+
+<!-- author:forvoid begin -->
+<!-- author:forvoid begin -->
+
+  <link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+  <script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script> 
+  <script>
+  var gitment = new Gitment({
+    // id: '页面 ID', // 可选。默认为 location.href
+    owner: 'Hikyu',
+    repo: 'Hikyu.github.io',
+    oauth: {
+    client_id: '61886569157db60efa97',
+    client_secret: '6475bb7c8faaf44ff2e12c272a46505a0eecf46f',
+    }
+  })
+  gitment.render(document.getElementById("gitment_comments"))
+</script>
+
+
+<!-- author:forvoid end -->
+
+<!-- author:forvoid end -->
+
+
+
+ <script src="/js/is.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+<script src="/js/elevator.js"></script>
+  </div>
+</body>
+</html>
