@@ -66,6 +66,59 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-状态机与状态模式" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/08/10/状态机与状态模式/" class="article-date">
+  <time datetime="2017-08-10T13:29:46.000Z" itemprop="datePublished">2017-08-10</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/编程/">编程</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/08/10/状态机与状态模式/">状态机与状态模式</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>又是很长时间没有写博客了(一个月)…最近在做一个SpringBoot+Vue的项目，所以一直在看spring相关的东西。今天要学习的跟spring<br>没有关系，是我在之前维护的一个测试工具是遇到的一个知识点–状态机</p>
+<p>这个测试的一个功能就是解析自己定义的一套脚本语法规则，涉及到对输入的语句进行解析，然后下发到对应的执行器去执行。</p>
+<p>之前的解析逻辑是用一个while循环，对每一个字符判断，然后各种if…else和临时变量…总之读起来十分费劲，并且总容易出BUG，而且十分不容易修改，因为每一个修改都很容易影响到原来的解析结果。<br>于是我把这段解析的代码重构了一遍，就是使用了状态机的思想。</p>
+</blockquote>
+        
+          <p class="article-more-link">
+            <a href="/2017/08/10/状态机与状态模式/#more">阅读全文 »</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yukai.space/2017/08/10/状态机与状态模式/" data-id="cj9qhw22c0074hdnjruywc70e" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/设计模式/">设计模式</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+ 
+
+
+  
     <article id="post-springboot配置https" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2017/07/12/springboot配置https/" class="article-date">
@@ -483,57 +536,6 @@
 
 
   
-    <article id="post-如何从外网访问家里的电脑" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2017/06/05/如何从外网访问家里的电脑/" class="article-date">
-  <time datetime="2017-06-04T16:43:06.000Z" itemprop="datePublished">2017-06-05</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/工具/">工具</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/06/05/如何从外网访问家里的电脑/">如何从外网访问家里的电脑</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <blockquote>
-<p>今天逛论坛的时候偶然间看到了电信用户可以轻松获得公网IP的一条内容，于是看了下自己的(本人用电信)路由器ip，惊喜的发现竟然是公网ip…之前都没有注意到….<br>有了公网IP，就可以做一些好玩的事了。最直接的就是可以把自己的主机当服务器来用了，省去了购买VPS的费用，在公司或者其他地方也可以连到家里的主机，传东西什么的也很方便…</p>
-</blockquote>
-        
-          <p class="article-more-link">
-            <a href="/2017/06/05/如何从外网访问家里的电脑/#more">阅读全文 »</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yukai.space/2017/06/05/如何从外网访问家里的电脑/" data-id="cj9qhw21p0067hdnjj8c4xibj" class="article-share-link">分享</a>
-      
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/">linux</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
- 
-
-
-  
 
 
   <nav id="page-nav">
@@ -560,6 +562,10 @@
       <ul>
         
           <li>
+            <a href="/2017/11/20/如何执行一个延迟任务？/">如何执行一个延迟任务？</a>
+          </li>
+        
+          <li>
             <a href="/2017/11/15/从通信协议到装饰者模式/">从通信协议到装饰者模式</a>
           </li>
         
@@ -573,10 +579,6 @@
         
           <li>
             <a href="/2017/10/31/数据库事务浅析/">数据库事务浅析</a>
-          </li>
-        
-          <li>
-            <a href="/2017/10/31/Java读取资源文件/">Java读取资源文件</a>
           </li>
         
       </ul>

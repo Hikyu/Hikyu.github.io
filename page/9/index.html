@@ -66,6 +66,62 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-synchronized的一些用法" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/08/16/synchronized的一些用法/" class="article-date">
+  <time datetime="2016-08-16T07:31:44.000Z" itemprop="datePublished">2016-08-16</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/编程/">编程</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/08/16/synchronized的一些用法/">synchronized的用法</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>以前的工作过程中，偶尔会遇到synchronized的使用，比如<a href="http://yukai.space/2015/12/21/notify%E9%97%AE%E9%A2%98/">这篇总结</a>。今天来总结一下自己对synchronized的关键字的一些认识。</p>
+</blockquote>
+<h2 id="同步锁"><a href="#同步锁" class="headerlink" title="同步锁"></a>同步锁</h2><p>synchronized顾名思义，就是用来进行一些同步工作的，我们常常在多线程的环境中使用到它，实现互斥的效果。</p>
+<p>每一个java对象都可以当做一个同步锁，线程进入同步代码块或方法的时候会自动获得该锁，在退出同步代码块或方法时会释放该锁。获得锁的唯一途径就是进入这个锁的保护的同步代码块或方法。这里的同步代码块和同步方法，就是使用synchronized关键字标记的代码块和方法。比如：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">synchronized</span> (object) &#123;</div><div class="line">	<span class="comment">//doSomething...		</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>上面的 ‘{‘ ‘}’ 中间的内容，就是同步代码块，object可以认为是同步锁。同步锁实现了互斥的效果，这就是意味着最多只有一个线程能够获得该锁，当线程A尝试去获得线程B持有的锁时，线程A必须等待或者阻塞，知道线程B释放这个锁，如果B线程不释放这个锁，那么A线程将永远等待下去。</p>
+<h2 id="synchronized修饰代码块"><a href="#synchronized修饰代码块" class="headerlink" title="synchronized修饰代码块"></a>synchronized修饰代码块</h2><h3 id="synchronized同步锁为普通对象"><a href="#synchronized同步锁为普通对象" class="headerlink" title="synchronized同步锁为普通对象"></a>synchronized同步锁为普通对象</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">function</span><span class="params">()</span></span>&#123;</div><div class="line">	<span class="keyword">synchronized</span> (object) &#123;</div><div class="line">		<span class="comment">//doSomething...		</span></div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+        
+          <p class="article-more-link">
+            <a href="/2016/08/16/synchronized的一些用法/#more">阅读全文 »</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yukai.space/2016/08/16/synchronized的一些用法/" data-id="cj9qhw20f004xhdnjjphpcs9m" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/多线程/">多线程</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+ 
+
+
+  
     <article id="post-一些计划" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2016/08/15/一些计划/" class="article-date">
@@ -455,64 +511,6 @@
 
 
   
-    <article id="post-java中的equals与hashcode" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2016/04/28/java中的equals与hashcode/" class="article-date">
-  <time datetime="2016-04-28T04:48:55.000Z" itemprop="datePublished">2016-04-28</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/编程/">编程</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/04/28/java中的equals与hashcode/">通过HashMap认识equals与hashcode</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <blockquote>
-<p>最近读了HashMap的源码，对HashCode与equals有了一定的了解，总结一下，顺便理一下HashMap中的核心算法。</p>
-</blockquote>
-<h2 id="什么是hashcode-hashcode的作用是什么"><a href="#什么是hashcode-hashcode的作用是什么" class="headerlink" title="什么是hashcode,hashcode的作用是什么"></a>什么是hashcode,hashcode的作用是什么</h2><p>hashcode并不是java中独有的。设想一下，如果让你设计一个算法，根据关键码去得到一个集合中的某个值或者这个关键码所在的位置。普通的做法就是挨个比较，高级一点的使用二分检索或者树形检索等算法。但是以上的检索算法都跟集合的长度N有关，当问题规模N很大时，这些检索的效率可能十分低下。</p>
-<p>理想的情况是，根据关键码，我们就可以定位记录所在的位置，而不用去挨个进行比较。也就是说，在关键码与记录存放的位置之间做一种映射。这个映射的方法就是hash(哈希)函数，或者叫散列函数，也就是java中的hashCode()方法，他所返回的值就是hashcode，根据hashcode可以找到记录的位置。</p>
-<p>按照散列的存储方式构造的存储结构叫做散列表。散列表中的一个位置称之为一个槽。</p>
-<p>hashCode()方法存在于java.lang.Object类当中，任何类都可以继承修改这个方法。hashCode()方法返回调用它的实例的hashCode值，是个int值。</p>
-<p>注：以下代码均来自jdk1.7</p>
-<p>String中hashCode()方法的实现：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">hashCode</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">int</span> h = hash;</div><div class="line">        <span class="keyword">if</span> (h == <span class="number">0</span> &amp;&amp; value.length &gt; <span class="number">0</span>) &#123;</div><div class="line">            <span class="keyword">char</span> val[] = value;</div><div class="line"></div><div class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; value.length; i++) &#123;</div><div class="line">                h = <span class="number">31</span> * h + val[i];</div><div class="line">            &#125;</div><div class="line">            hash = h;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> h;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-        
-          <p class="article-more-link">
-            <a href="/2016/04/28/java中的equals与hashcode/#more">阅读全文 »</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yukai.space/2016/04/28/java中的equals与hashcode/" data-id="cj9qhw1vy001thdnjxulqvsrv" class="article-share-link">分享</a>
-      
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
- 
-
-
-  
 
 
   <nav id="page-nav">
@@ -539,6 +537,10 @@
       <ul>
         
           <li>
+            <a href="/2017/11/20/如何执行一个延迟任务？/">如何执行一个延迟任务？</a>
+          </li>
+        
+          <li>
             <a href="/2017/11/15/从通信协议到装饰者模式/">从通信协议到装饰者模式</a>
           </li>
         
@@ -552,10 +554,6 @@
         
           <li>
             <a href="/2017/10/31/数据库事务浅析/">数据库事务浅析</a>
-          </li>
-        
-          <li>
-            <a href="/2017/10/31/Java读取资源文件/">Java读取资源文件</a>
           </li>
         
       </ul>

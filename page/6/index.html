@@ -66,6 +66,59 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-java序列化与反序列化" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/03/22/java序列化与反序列化/" class="article-date">
+  <time datetime="2017-03-22T12:14:46.000Z" itemprop="datePublished">2017-03-22</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/编程/">编程</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/03/22/java序列化与反序列化/">java序列化与反序列化</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="什么是序列化"><a href="#什么是序列化" class="headerlink" title="什么是序列化"></a>什么是序列化</h2><p>所谓的序列化，即把java对象以二进制形式保存到内存、文件或者进行网络传输。从二进制的形式恢复成为java对象，即反序列化。</p>
+<p>通过序列化可以将对象持久化，或者从一个地方传输到另一个地方。这方面的应用有RMI，远程方法调用。</p>
+<p>java中实现序列化有两种方式，实现Serializable接口或者Externalizable接口。这篇总结只讨论Serializable的情况。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">public class SerializeTest implements Serializable&#123;</div><div class="line">	    private static final long serialVersionUID = 1L;</div><div class="line">		public String str;</div><div class="line">		public SerializeTest(String str) &#123;</div><div class="line">			   this.str = str;</div><div class="line">		&#125;</div><div class="line">		</div><div class="line">		public static void main(String[] args) throws IOException, ClassNotFoundException &#123;</div><div class="line">			   SerializeTest test = new SerializeTest(&quot;hello&quot;);</div><div class="line">			   ByteArrayOutputStream oStream = new ByteArrayOutputStream();</div><div class="line">			   ObjectOutputStream objectOutputStream = new ObjectOutputStream(oStream);</div><div class="line">			   objectOutputStream.writeObject(test);//序列化</div><div class="line">			   </div><div class="line">			   ObjectInputStream inputStream = new ObjectInputStream(new ByteArrayInputStream(oStream.toByteArray()));</div><div class="line">			   SerializeTest obj = (SerializeTest) inputStream.readObject();//反序列化</div><div class="line">			   System.out.println(obj.str);</div><div class="line">		&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>上面的代码演示了类SerializeTest实现序列化和反序列化的过程。</p>
+        
+          <p class="article-more-link">
+            <a href="/2017/03/22/java序列化与反序列化/#more">阅读全文 »</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yukai.space/2017/03/22/java序列化与反序列化/" data-id="cj9qhw1x7002whdnjvaithyyi" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+ 
+
+
+  
     <article id="post-I-O总结" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2017/03/19/I-O总结/" class="article-date">
@@ -469,62 +522,6 @@
 
 
   
-    <article id="post-java国际化" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2017/02/19/java国际化/" class="article-date">
-  <time datetime="2017-02-19T11:32:40.000Z" itemprop="datePublished">2017-02-19</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/编程/">编程</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/02/19/java国际化/">java国际化</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <blockquote>
-<p>使用java编写一个带GUI程序或者其他需要给用户传递文字信息的程序的时候，就很有可能需要用到国际化的知识，来总结一下。</p>
-</blockquote>
-<p>所谓的国际化，就是使编写的程序可以适应不同的语言环境，比如，在中文环境下，可以与用户使用中文交互，在英文环境下则切换为英文。而这个切换过程不需要修改代码或者仅仅修改少量的代码。java给我们提供了这样的实现。</p>
-<h2 id="java文件国际化"><a href="#java文件国际化" class="headerlink" title="java文件国际化"></a>java文件国际化</h2><p>我们通过将与界面显示有关系的资源提取出来到资源文件中，然后读取不同的资源文件来达到国际化的目的。在java中，这些是通过ResourceBundle这个类来实现的。</p>
-<p>ResourceBundle分为两种，一种是ListResourceBundle,另一种是PropertyResourceBundle。下面介绍这两种ResourceBundle的使用方法：</p>
-<p>首先列出demo工程的代码结构：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line">TestResourceBundle</div><div class="line">|</div><div class="line">|--src</div><div class="line">    |</div><div class="line">    |--kyu</div><div class="line">        |</div><div class="line">        |--bundle</div><div class="line">        |    |</div><div class="line">        |    |--ListResourceTranslator.java</div><div class="line">        |    |</div><div class="line">        |    |--PropertyResourceTranslator.java</div><div class="line">        |    |</div><div class="line">        |    |--ResourceTranslator.java</div><div class="line">        |</div><div class="line">        |--test</div><div class="line">        |   |</div><div class="line">        |   |--App.java</div><div class="line">        |</div><div class="line">        |--Errors_en_Us.java</div><div class="line">        |</div><div class="line">        |--Errors_zh_CN.java</div><div class="line">        |</div><div class="line">        |--Errors.java</div><div class="line">        |</div><div class="line">        |--Errors_en_Us.properties</div><div class="line">        |</div><div class="line">        |--Errors_zh_CN.properties</div><div class="line">        |</div><div class="line">        |--Errors.properties</div></pre></td></tr></table></figure>
-        
-          <p class="article-more-link">
-            <a href="/2017/02/19/java国际化/#more">阅读全文 »</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yukai.space/2017/02/19/java国际化/" data-id="cj9qhw1x5002shdnjlp7quhxs" class="article-share-link">分享</a>
-      
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
- 
-
-
-  
 
 
   <nav id="page-nav">
@@ -551,6 +548,10 @@
       <ul>
         
           <li>
+            <a href="/2017/11/20/如何执行一个延迟任务？/">如何执行一个延迟任务？</a>
+          </li>
+        
+          <li>
             <a href="/2017/11/15/从通信协议到装饰者模式/">从通信协议到装饰者模式</a>
           </li>
         
@@ -564,10 +565,6 @@
         
           <li>
             <a href="/2017/10/31/数据库事务浅析/">数据库事务浅析</a>
-          </li>
-        
-          <li>
-            <a href="/2017/10/31/Java读取资源文件/">Java读取资源文件</a>
           </li>
         
       </ul>
