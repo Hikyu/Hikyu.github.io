@@ -27,7 +27,7 @@
 对于软引用关联的对象，在系统将要发生内存溢出异常之前，会把这些对">
 <meta property="og:image" content="http://yukai.space/2017/11/21/理解Java-Reference/keda.jpg">
 <meta property="og:image" content="http://yukai.space/2017/11/21/理解Java-Reference/reachable.png">
-<meta property="og:updated_time" content="2017-11-21T01:33:24.000Z">
+<meta property="og:updated_time" content="2017-11-21T01:36:08.974Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="理解Java-Reference">
 <meta name="twitter:description" content="最近重读《深入理解Java虚拟机》，讲到Java中的几种引用类型，结合源码总结梳理一遍。
@@ -136,6 +136,7 @@
 <p>使用PhantomReference类实现虚引用</p>
 </li>
 </ul>
+<a id="more"></a>
 <h2 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h2><p>强引用代码中随处可见，对于其他几种引用则不太熟悉，他们有什么作用呢？</p>
 <p>假设有这样一个需求：每次创建一个数据库Connection的时候，需要将用户信息User与之关联。典型的用法就是在一个全局的Map中存储Connection和User的映射。</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ConnManager</span> </span>&#123;</div><div class="line">    <span class="keyword">private</span> Map&lt;Connection,User&gt; m = <span class="keyword">new</span> HashMap&lt;Connection,User&gt;();</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setUser</span><span class="params">(Connection s, User u)</span> </span>&#123;</div><div class="line">        m.put(s, u);</div><div class="line">    &#125;</div><div class="line">    <span class="function"><span class="keyword">public</span> User <span class="title">getUser</span><span class="params">(Connection s)</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> m.get(s);</div><div class="line">    &#125;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">removeUser</span><span class="params">(Connection s)</span> </span>&#123;</div><div class="line">        m.remove(s);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
