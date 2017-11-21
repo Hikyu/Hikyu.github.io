@@ -66,6 +66,66 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-VncServer的安装与使用" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/10/01/VncServer的安装与使用/" class="article-date">
+  <time datetime="2017-10-01T00:49:00.000Z" itemprop="datePublished">2017-10-01</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/Linux/">Linux</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/10/01/VncServer的安装与使用/">VncServer的安装与使用</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>因为新做的版本发布系统需要部署在内网，找了两台空闲的机器做了Centos7的系统，并搭建读写分离的环境。因为读写分离环境的搭建需要用到可视化工具，所以决定在这两台机器上搭一个vnc服务。</p>
+</blockquote>
+<p>centos7，IP 192.168.1.57</p>
+<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><ol>
+<li>安装VNCServer</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">yum install tigervnc-server -y</div></pre></td></tr></table></figure>
+<ol>
+<li>设置防火墙</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">sudo firewall-cmd --permanent --add-service vnc-server</div><div class="line">sudo systemctl restart firewalld.service</div></pre></td></tr></table></figure>
+        
+          <p class="article-more-link">
+            <a href="/2017/10/01/VncServer的安装与使用/#more">阅读全文 »</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yukai.space/2017/10/01/VncServer的安装与使用/" data-id="cj9qhw1v7000thdnj33jg2iyd" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/">linux</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+ 
+
+
+  
     <article id="post-Linux下的守护进程" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2017/10/01/Linux下的守护进程/" class="article-date">
@@ -458,69 +518,6 @@
 
 
   
-    <article id="post-红烧排骨" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2017/09/01/红烧排骨/" class="article-date">
-  <time datetime="2017-09-01T03:12:14.000Z" itemprop="datePublished">2017-09-01</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/生活/">生活</a>►<a class="article-category-link" href="/categories/生活/食物/">食物</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/09/01/红烧排骨/">红烧排骨</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="原料"><a href="#原料" class="headerlink" title="原料"></a>原料</h2><p>排骨、葱片、姜片、八角、花椒粒、料酒、生抽、蚝油、盐、白糖</p>
-<h2 id="做法"><a href="#做法" class="headerlink" title="做法"></a>做法</h2><ol>
-<li><p>锅中倒水，将剁好洗净的肋排放入，煮几分钟，撇去杂质后捞出</p>
-</li>
-<li><p>锅中放少许油烧热，放入葱花、姜片、八角、花椒炒香</p>
-</li>
-<li><p>放入肋排，翻炒至肉变色(注意时间不要太长，否则肉会变老)</p>
-</li>
-<li><p>倒入料酒、生抽、蚝油，翻炒几下</p>
-</li>
-<li><p>加入清水(高汤)刚好没过排骨，大火烧开</p>
-</li>
-<li><p>小火慢炖四十分钟左右，大火收汁出锅</p>
-</li>
-</ol>
-        
-          <p class="article-more-link">
-            <a href="/2017/09/01/红烧排骨/#more">阅读全文 »</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yukai.space/2017/09/01/红烧排骨/" data-id="cj9qhw22v007mhdnj1hannckh" class="article-share-link">分享</a>
-      
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/食物/">食物</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
- 
-
-
-  
 
 
   <nav id="page-nav">
@@ -547,6 +544,10 @@
       <ul>
         
           <li>
+            <a href="/2017/11/21/理解Java-Reference/">理解Java-Reference</a>
+          </li>
+        
+          <li>
             <a href="/2017/11/20/如何执行一个延迟任务？/">如何执行一个延迟任务？</a>
           </li>
         
@@ -560,10 +561,6 @@
         
           <li>
             <a href="/2017/11/02/认识MVCC/">认识MVCC</a>
-          </li>
-        
-          <li>
-            <a href="/2017/10/31/数据库事务浅析/">数据库事务浅析</a>
           </li>
         
       </ul>

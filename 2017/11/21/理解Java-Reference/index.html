@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>理解Java-Reference | YuKai&#39;s blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="最近重读《深入理解Java虚拟机》，讲到Java中的几种引用类型，结合源码总结梳理一遍。
+引用类型JDK1.2之后，Java扩充了引用的概念，将引用分为强引用、软引用、弱引用和虚引用四种。
+
+强引用
+类似于”Object a = new Object()”这类的引用，只要垃圾强引用存在，垃圾回收器就不会回收掉被引用的对象。
+
+软引用
+对于软引用关联的对象，在系统将要发生内存溢出异常之前，会把这些对">
+<meta property="og:type" content="article">
+<meta property="og:title" content="理解Java-Reference">
+<meta property="og:url" content="http://yukai.space/2017/11/21/理解Java-Reference/index.html">
+<meta property="og:site_name" content="YuKai's blog">
+<meta property="og:description" content="最近重读《深入理解Java虚拟机》，讲到Java中的几种引用类型，结合源码总结梳理一遍。
+引用类型JDK1.2之后，Java扩充了引用的概念，将引用分为强引用、软引用、弱引用和虚引用四种。
+
+强引用
+类似于”Object a = new Object()”这类的引用，只要垃圾强引用存在，垃圾回收器就不会回收掉被引用的对象。
+
+软引用
+对于软引用关联的对象，在系统将要发生内存溢出异常之前，会把这些对">
+<meta property="og:image" content="http://yukai.space/2017/11/21/理解Java-Reference/keda.jpg">
+<meta property="og:image" content="http://yukai.space/2017/11/21/理解Java-Reference/reachable.png">
+<meta property="og:updated_time" content="2017-11-21T01:33:24.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="理解Java-Reference">
+<meta name="twitter:description" content="最近重读《深入理解Java虚拟机》，讲到Java中的几种引用类型，结合源码总结梳理一遍。
+引用类型JDK1.2之后，Java扩充了引用的概念，将引用分为强引用、软引用、弱引用和虚引用四种。
+
+强引用
+类似于”Object a = new Object()”这类的引用，只要垃圾强引用存在，垃圾回收器就不会回收掉被引用的对象。
+
+软引用
+对于软引用关联的对象，在系统将要发生内存溢出异常之前，会把这些对">
+<meta name="twitter:image" content="http://yukai.space/2017/11/21/理解Java-Reference/keda.jpg">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    
+    <div id="header-inner" class="inner">
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yukai.space"></form>
+      </div>
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/archives">归档</a>
+        
+          <a class="main-nav-link" href="/tools">工具</a>
+        
+          <a class="main-nav-link" href="/page">关于</a>
+        
+      </nav>
+      
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">YuKai&#39;s blog</a>
+      </h1>
+      
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="posts-理解Java-Reference" class="article article-type-posts" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/11/21/理解Java-Reference/" class="article-date">
+  <time datetime="2017-11-21T01:28:46.000Z" itemprop="datePublished">2017-11-21</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/编程/">编程</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      理解Java-Reference
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <p>最近重读《深入理解Java虚拟机》，讲到Java中的几种引用类型，结合源码总结梳理一遍。</p>
+<h2 id="引用类型"><a href="#引用类型" class="headerlink" title="引用类型"></a>引用类型</h2><p>JDK1.2之后，Java扩充了引用的概念，将引用分为强引用、软引用、弱引用和虚引用四种。</p>
+<ul>
+<li><p>强引用</p>
+<p>类似于”Object a = new Object()”这类的引用，只要垃圾强引用存在，垃圾回收器就不会回收掉被引用的对象。</p>
+</li>
+<li><p>软引用</p>
+<p>对于软引用关联的对象，在系统将要发生内存溢出异常之前，会把这些对象列入垃圾回收范围中进行回收。如果这次回收还没有足够内存，则抛出内存异常。</p>
+<p>使用SoftReference类实现软引用</p>
+</li>
+<li><p>弱引用</p>
+<p>强度比软引用更弱，被弱引用关联的对象只能存活到下一次垃圾回收发生之前。当发生GC时，无论当前内存是否足够，都会回收掉只被弱引用关联的对象。</p>
+<p>使用WeakReference类实现弱引用</p>
+</li>
+<li><p>虚引用</p>
+<p>一个对象是否有虚引用的存在，完全不会对其生存时间构成影响，也无法通过虚引用取得一个对象的实例。为一个对象设置虚引用关联的唯一目的就是能够在这个对象被垃圾回收器回收掉后收到一个通知。</p>
+<p>使用PhantomReference类实现虚引用</p>
+</li>
+</ul>
+<h2 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h2><p>强引用代码中随处可见，对于其他几种引用则不太熟悉，他们有什么作用呢？</p>
+<p>假设有这样一个需求：每次创建一个数据库Connection的时候，需要将用户信息User与之关联。典型的用法就是在一个全局的Map中存储Connection和User的映射。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ConnManager</span> </span>&#123;</div><div class="line">    <span class="keyword">private</span> Map&lt;Connection,User&gt; m = <span class="keyword">new</span> HashMap&lt;Connection,User&gt;();</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setUser</span><span class="params">(Connection s, User u)</span> </span>&#123;</div><div class="line">        m.put(s, u);</div><div class="line">    &#125;</div><div class="line">    <span class="function"><span class="keyword">public</span> User <span class="title">getUser</span><span class="params">(Connection s)</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> m.get(s);</div><div class="line">    &#125;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">removeUser</span><span class="params">(Connection s)</span> </span>&#123;</div><div class="line">        m.remove(s);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这种方法的问题是User的生命周期与Connection挂钩，我们无法准确预支Connection在什么时候结束，所以需要在每个Connection关闭之后，手动从Map中移除键值对，否则Connection和User将一直被Map引用，即使Connection的生命周期已经结束了，GC也无法回收对应的Connection和User。这些对象留在内存中不受控制，可能会造成内存溢出。</p>
+<p>那么，如何避免手动的从Map中删除对象呢？</p>
+<p>利用 WeakHashMap 即可实现：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ConnManager</span> </span>&#123;</div><div class="line">    <span class="keyword">private</span> Map&lt;Connection,User&gt; m = <span class="keyword">new</span> WeakHashMap&lt;Connection,User&gt;();</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setUser</span><span class="params">(Connection s, User u)</span> </span>&#123;</div><div class="line">        m.put(s, u);</div><div class="line">    &#125;</div><div class="line">    <span class="function"><span class="keyword">public</span> User <span class="title">getUser</span><span class="params">(Connection s)</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> m.get(s);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>WeakHashMap 与 HashMap类似，但是在其内部，key是经过WeakReference包装的。使用WeakHashMap情况会变得怎样呢？</p>
+<p>每当垃圾回收发生时，那些已经结束生命周期的Connection对象(没有强引用指向它)不受WeakHashMap中key(WeakReference)的影响，可以直接回收掉。同时，WeakHashMap利用ReferenceQueue(下文会提到) 可以做到删除那些已经被回收的Connection对应的User。是不是做到了内存的自动管理呢？</p>
+<h2 id="可达性分析算法"><a href="#可达性分析算法" class="headerlink" title="可达性分析算法"></a>可达性分析算法</h2><p>Java执行GC时，需要判断对象是否存活。判断一个对象是否存活使用了”可达性分析算法”。</p>
+<p>基本思路就是通过一系列称为<code>GC Roots</code>的对象作为起点，从这些节点开始向下搜索，搜索所走过的路径称为引用链，当一个对象到GC Roots没有任何引用链相连，即从GC Roots到这个对象不可达时，证明此对象不可用。</p>
+<img src="/2017/11/21/理解Java-Reference/keda.jpg" alt="可达性分析算法" title="可达性分析算法">
+<p>可以作为GC Roots的对象包括：</p>
+<ul>
+<li><p>虚拟机栈中引用的对象</p>
+</li>
+<li><p>方法区中类静态属性引用的对象</p>
+</li>
+<li><p>方法区中常量引用的对象</p>
+</li>
+<li><p>本地方法栈JNI引用的对象</p>
+</li>
+</ul>
+<p>往往到达一个对象的引用链会存在多条，垃圾回收时会依据两个原则来判断对象的可达性：</p>
+<ul>
+<li><p>单一路径中，以最弱的引用为准</p>
+</li>
+<li><p>多路径中，以最强的引用为准</p>
+</li>
+</ul>
+<img src="/2017/11/21/理解Java-Reference/reachable.png" alt="可达性分析算法" title="可达性分析算法">
+<h2 id="Reference-amp-amp-ReferenceQueue"><a href="#Reference-amp-amp-ReferenceQueue" class="headerlink" title="Reference &amp;&amp; ReferenceQueue"></a>Reference &amp;&amp; ReferenceQueue</h2><p>SoftReference，WeakReference，PhantomReference拥有共同的父类Reference，看一下其内部实现：</p>
+<p>Reference的构造函数最多可以接受两个参数：<code>Reference(T referent, ReferenceQueue&lt;? super T&gt; queue)</code></p>
+<p>referent：即Reference所包装的引用对象</p>
+<p>queue：此Reference需要注册到的引用队列</p>
+<p>ReferenceQueue本身提供队列的功能，ReferenceQueue对象同时保存了一个Reference类型的head节点，Reference封装了next字段，这样就是可以组成一个单向链表。</p>
+<p>ReferenceQueue主要用来确认Reference的状态。Reference对象有四种状态：</p>
+<ul>
+<li><p>active</p>
+<p>GC会特殊对待此状态的引用，一旦被引用的对象的可达性发生变化（如失去强引用，只剩弱引用，可以被回收），GC会将引用放入pending队列并将其状态改为pending状态</p>
+</li>
+<li><p>pending</p>
+<p>位于pending队列，等待ReferenceHandler线程将引用入队queue</p>
+</li>
+<li><p>enqueue</p>
+<p>ReferenceHandler将引用入队queue</p>
+</li>
+<li><p>inactive</p>
+<p>引用从queue出队后的最终状态，该状态不可变</p>
+</li>
+</ul>
+<p>Reference与ReferenceQueue之间是如何工作的呢？</p>
+<p>Reference里有个静态字段pending，同时还通过静态代码块启动了Reference-handler thread。当一个Reference的referent被回收时，垃圾回收器会把reference添加到pending这个链表里，然后Reference-handler thread不断的读取pending中的reference，把它加入到对应的ReferenceQueue中。</p>
+<p>当reference与referenQueue联合使用的主要作用就是当reference指向的referent回收时，提供一种通知机制，通过queue取到这些reference，来做额外的处理工作。</p>
+<h2 id="PhantomReference的一个使用案例"><a href="#PhantomReference的一个使用案例" class="headerlink" title="PhantomReference的一个使用案例"></a>PhantomReference的一个使用案例</h2><p>上文提到 <strong>当reference与referenQueue联合使用的主要作用就是当reference指向的referent回收时，提供一种通知机制，通过queue取到这些reference，来做额外的处理工作</strong>。通过PhantomReference的一个例子来加深体会：用PhantomReference来自动关闭文件流</p>
+<p>使用PhantomReference封装引用</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ResourcePhantomReference</span>&lt;<span class="title">T</span>&gt; <span class="keyword">extends</span> <span class="title">PhantomReference</span>&lt;<span class="title">T</span>&gt; </span>&#123;</div><div class="line"></div><div class="line">    <span class="keyword">private</span> List&lt;Closeable&gt; closeables;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">ResourcePhantomReference</span><span class="params">(T referent, ReferenceQueue&lt;? <span class="keyword">super</span> T&gt; q, List&lt;Closeable&gt; resource)</span> </span>&#123;</div><div class="line">        <span class="keyword">super</span>(referent, q);</div><div class="line">        closeables = resource;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">cleanUp</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">if</span> (closeables == <span class="keyword">null</span> || closeables.size() == <span class="number">0</span>)</div><div class="line">            <span class="keyword">return</span>;</div><div class="line">        <span class="keyword">for</span> (Closeable closeable : closeables) &#123;</div><div class="line">            <span class="keyword">try</span> &#123;</div><div class="line">                closeable.close();</div><div class="line">                System.out.println(<span class="string">"clean up:"</span>+closeable);</div><div class="line">            &#125; <span class="keyword">catch</span> (IOException e) &#123;</div><div class="line">                e.printStackTrace();</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>守护者线程利用ReferenceQueue做自动清理</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ResourceCloseDeamon</span> <span class="keyword">extends</span> <span class="title">Thread</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="keyword">private</span> <span class="keyword">static</span> ReferenceQueue QUEUE = <span class="keyword">new</span> ReferenceQueue();</div><div class="line"></div><div class="line">    <span class="comment">//保持对reference的引用,防止reference本身被回收</span></div><div class="line">    <span class="keyword">private</span> <span class="keyword">static</span> List&lt;Reference&gt; references=<span class="keyword">new</span> ArrayList&lt;&gt;();</div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.setName(<span class="string">"ResourceCloseDeamon"</span>);</div><div class="line">        <span class="keyword">while</span> (<span class="keyword">true</span>) &#123;</div><div class="line">            <span class="keyword">try</span> &#123;</div><div class="line">                ResourcePhantomReference reference = (ResourcePhantomReference) QUEUE.remove();</div><div class="line">                reference.cleanUp();</div><div class="line">                references.remove(reference);</div><div class="line">            &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</div><div class="line">                e.printStackTrace();</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">register</span><span class="params">(Object referent, List&lt;Closeable&gt; closeables)</span> </span>&#123;</div><div class="line">        references.add(<span class="keyword">new</span> ResourcePhantomReference(referent,QUEUE,closeables));</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>封装的文件操作</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">FileOperation</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="keyword">private</span> FileOutputStream outputStream;</div><div class="line"></div><div class="line">    <span class="keyword">private</span> FileInputStream inputStream;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">FileOperation</span><span class="params">(FileInputStream inputStream, FileOutputStream outputStream)</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.outputStream = outputStream;</div><div class="line">        <span class="keyword">this</span>.inputStream = inputStream;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">operate</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">try</span> &#123;</div><div class="line">            inputStream.getChannel().transferTo(<span class="number">0</span>, inputStream.getChannel().size(), outputStream.getChannel());</div><div class="line">        &#125; <span class="keyword">catch</span> (IOException e) &#123;</div><div class="line">            e.printStackTrace();</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>测试</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div></pre></td><td class="code"><pre><div class="line">ublic <span class="class"><span class="keyword">class</span> <span class="title">PhantomTest</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception </span>&#123;</div><div class="line">        <span class="comment">//打开回收</span></div><div class="line">        ResourceCloseDeamon deamon = <span class="keyword">new</span> ResourceCloseDeamon();</div><div class="line">        deamon.setDaemon(<span class="keyword">true</span>);</div><div class="line">        deamon.start();</div><div class="line"></div><div class="line">        <span class="comment">// touch a.txt b.txt</span></div><div class="line">        <span class="comment">// echo "hello" &gt; a.txt</span></div><div class="line"></div><div class="line">        <span class="comment">//保留对象,防止gc把stream回收掉,其不到演示效果</span></div><div class="line">        List&lt;Closeable&gt; all=<span class="keyword">new</span> ArrayList&lt;&gt;();</div><div class="line">        FileInputStream inputStream;</div><div class="line">        FileOutputStream outputStream;</div><div class="line"></div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">100000</span>; i++) &#123;</div><div class="line">            inputStream = <span class="keyword">new</span> FileInputStream(<span class="string">"/Users/robin/a.txt"</span>);</div><div class="line">            outputStream = <span class="keyword">new</span> FileOutputStream(<span class="string">"/Users/robin/b.txt"</span>);</div><div class="line">            FileOperation operation = <span class="keyword">new</span> FileOperation(inputStream, outputStream);</div><div class="line">            operation.operate();</div><div class="line">            TimeUnit.MILLISECONDS.sleep(<span class="number">100</span>);</div><div class="line"></div><div class="line">            List&lt;Closeable&gt;closeables=<span class="keyword">new</span> ArrayList&lt;&gt;();</div><div class="line">            closeables.add(inputStream);</div><div class="line">            closeables.add(outputStream);</div><div class="line">            all.addAll(closeables);</div><div class="line">            ResourceCloseDeamon.register(operation,closeables);</div><div class="line">            <span class="comment">//用下面命令查看文件句柄,如果把上面register注释掉,就会发现句柄数量不断上升</span></div><div class="line">            <span class="comment">//jps | grep PhantomTest | awk '&#123;print $1&#125;' |head -1 | xargs  lsof -p  | grep /User/robin</span></div><div class="line">            System.gc();</div><div class="line"></div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>参考自<a href="https://my.oschina.net/robinyao/blog/829983" target="_blank" rel="external">Java Reference详解</a></p>
+<h2 id="WeakHashMap"><a href="#WeakHashMap" class="headerlink" title="WeakHashMap"></a>WeakHashMap</h2><p>WeakHashMap实现原理很简单，它除了实现标准的Map接口，里面的机制也和HashMap的实现类似。从它entry子类中可以看出，它的key是用WeakReference封装的。</p>
+<p>WeakHashMap里声明了一个queue，Entry继承WeakReference,构造函数中用key和queue关联构造一个weakReference。当key所封装的对象被GC回收后，GC自动将key注册到queue中。</p>
+<p>WeakHashMap中有代码检测这个queue，取出其中的元素，找到WeakHashMap中相应的键值对进行remove。这部分代码就是expungeStaleEntries方法：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">expungeStaleEntries</span><span class="params">()</span> </span>&#123;</div><div class="line">    <span class="keyword">for</span> (Object x; (x = queue.poll()) != <span class="keyword">null</span>; ) &#123;</div><div class="line">        <span class="keyword">synchronized</span> (queue) &#123;</div><div class="line">            <span class="meta">@SuppressWarnings</span>(<span class="string">"unchecked"</span>)</div><div class="line">                Entry&lt;K,V&gt; e = (Entry&lt;K,V&gt;) x;</div><div class="line">            <span class="keyword">int</span> i = indexFor(e.hash, table.length);</div><div class="line">            Entry&lt;K,V&gt; prev = table[i];</div><div class="line">            Entry&lt;K,V&gt; p = prev;</div><div class="line">            <span class="keyword">while</span> (p != <span class="keyword">null</span>) &#123;</div><div class="line">                Entry&lt;K,V&gt; next = p.next;</div><div class="line">                <span class="keyword">if</span> (p == e) &#123;</div><div class="line">                    <span class="keyword">if</span> (prev == e)</div><div class="line">                        table[i] = next;</div><div class="line">                    <span class="keyword">else</span></div><div class="line">                        prev.next = next;</div><div class="line">                    <span class="comment">// Must not null out e.next;</span></div><div class="line">                    <span class="comment">// stale entries may be in use by a HashIterator</span></div><div class="line">                    e.value = <span class="keyword">null</span>; <span class="comment">// Help GC</span></div><div class="line">                    size--;</div><div class="line">                    <span class="keyword">break</span>;</div><div class="line">                &#125;</div><div class="line">                prev = p;</div><div class="line">                p = next;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这段代码会在resize,getTable,size里执行，清除失效的entry。</p>
+<h2 id="FinalReference"><a href="#FinalReference" class="headerlink" title="FinalReference"></a>FinalReference</h2><p>在Reference的子类中，还有一个名为FinalReference的类，这个类用来做什么呢？</p>
+<p>FinalReference仅仅继承了Reference，没有做其他的逻辑，只是将访问权限声明为package，所以我们不能够直接使用它。</p>
+<p>需要关注的是其子类 Finalizer，看一下他的实现：</p>
+<p>首先，哪些类对象是Finalizer reference类型的referent呢？ 只要类覆写了Object 上的finalize方法，方法体非空。那么这个类的实例都会被Finalizer引用类型引用。这个工作是由虚拟机完成的，对于我们来说是透明的。</p>
+<p>Finalizer 中有两个字段需要关注：</p>
+<p>queue：<code>private static ReferenceQueue queue = new ReferenceQueue()</code> 即上文提到的ReferenceQueue，用来实现通知</p>
+<p>unfinalized：<code>private static Finalizer unfinalized</code> 维护了一个未执行finalize方法的reference列表。维护静态字段unfinalized的目的是为了一直保持对未未执行finalize方法的reference的强引用，防止被gc回收掉。</p>
+<p>在Finalizer的构造函数中通过add()方法把Finalizer引用本身加入到unfinalized列表中，同时关联finalizee和queue,实现通知机制。</p>
+<p>Finalizer静态代码块里启动了一个deamon线程 FinalizerThread，FinalizerThread run方法不断的从queue中去取Finalizer类型的reference，然后调用Finalizer的runFinalizer方法，该方法最后执行了referent所重写的finalize方法。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">runFinalizer</span><span class="params">(JavaLangAccess jla)</span> </span>&#123;</div><div class="line">    <span class="keyword">synchronized</span> (<span class="keyword">this</span>) &#123;</div><div class="line">        <span class="keyword">if</span> (hasBeenFinalized()) <span class="keyword">return</span>;</div><div class="line">        remove();</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">try</span> &#123;</div><div class="line">        Object finalizee = <span class="keyword">this</span>.get();</div><div class="line">        <span class="keyword">if</span> (finalizee != <span class="keyword">null</span> &amp;&amp; !(finalizee <span class="keyword">instanceof</span> java.lang.Enum)) &#123;</div><div class="line">            jla.invokeFinalize(finalizee);</div><div class="line">            <span class="comment">/* Clear stack slot containing this variable, to decrease</span></div><div class="line">               the chances of false retention with a conservative GC */</div><div class="line">            finalizee = <span class="keyword">null</span>;</div><div class="line">        &#125;</div><div class="line">    &#125; <span class="keyword">catch</span> (Throwable x) &#123; &#125;</div><div class="line">    <span class="keyword">super</span>.clear();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>观察上面的代码，<code>hasBeenFinalized()</code>判断了finalize是否已经执行，如果执行，则把这个referent从unfinalized队列中移除。<strong>所以，任何一个对象的finalize方法只会被系统自动调用一次。</strong>当下一次GC发生时，由于unfinalized已经不再持有该对象的referent，故该对象被直接回收掉。</p>
+<p>从上面的过程也可以看出，覆盖了finalize方法的对象至少需要两次GC才可能被回收。第一次GC把覆盖了finalize方法的对象对应的Finalizer reference加入referenceQueue等待FinalizerThread来执行finalize方法。第二次GC才有可能释放finalizee对象本身，前提是FinalizerThread已经执行完finalize方法了，并把Finalizer reference从Finalizer静态unfinalized链表中剔除，因为这个链表和Finalizer reference对finalizee构成的是一个强引用。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://my.oschina.net/robinyao/blog/829983" target="_blank" rel="external">Java Reference详解</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yukai.space/2017/11/21/理解Java-Reference/" data-id="cja8y5f5o0000b8njiuaam4gl" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+ <script src="/jquery/jquery.min.js"></script>
+  <div id="random_posts">
+    <h2>推荐文章</h2>
+    <div class="random_posts_ul">
+      <script>
+          var random_count =4
+          var site = {BASE_URI:'/'};
+          function load_random_posts(obj) {
+              var arr=site.posts;
+              if (!obj) return;
+              // var count = $(obj).attr('data-count') || 6;
+              for (var i, tmp, n = arr.length; n; i = Math.floor(Math.random() * n), tmp = arr[--n], arr[n] = arr[i], arr[i] = tmp);
+              arr = arr.slice(0, random_count);
+              var html = '<ul>';
+            
+              for(var j=0;j<arr.length;j++){
+                var item=arr[j];
+                html += '<li><strong>' + 
+                item.date + ':&nbsp;&nbsp;<a href="' + (site.BASE_URI+item.uri) + '">' + 
+                (item.title || item.uri) + '</a></strong>';
+                if(item.excerpt){
+                  html +='<div class="post-excerpt">'+item.excerpt+'</div>';
+                }
+                html +='</li>';
+                
+              }
+              $(obj).html(html + '</ul>');
+          }
+          $('.random_posts_ul').each(function () {
+              var c = this;
+              if (!site.posts || !site.posts.length){
+                  $.getJSON(site.BASE_URI + 'js/posts.js',function(json){site.posts = json;load_random_posts(c)});
+              } 
+               else{
+                load_random_posts(c);
+              }
+          });
+      </script>
+    </div>
+  </div>
+
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2017/11/20/如何执行一个延迟任务？/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">如何执行一个延迟任务？</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+ 
+     
+  <div class="comments" id="comments">
+    
+     
+       
+      <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+    
+       
+      
+      
+           <div id="gitment_comments"></div>
+    
+  </div>
+ 
+  
+
+</section>
+           
+    <aside id="sidebar">
+  
+    
+
+  
+    
+    <div class="widget-wrap">
+    
+      <div class="widget" id="toc-widget-fixed">
+      
+        <strong class="toc-title">文章目录</strong>
+        <div class="toc-widget-list">
+              <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#引用类型"><span class="toc-number">1.</span> <span class="toc-text">引用类型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用场景"><span class="toc-number">2.</span> <span class="toc-text">使用场景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#可达性分析算法"><span class="toc-number">3.</span> <span class="toc-text">可达性分析算法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Reference-amp-amp-ReferenceQueue"><span class="toc-number">4.</span> <span class="toc-text">Reference && ReferenceQueue</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#PhantomReference的一个使用案例"><span class="toc-number">5.</span> <span class="toc-text">PhantomReference的一个使用案例</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#WeakHashMap"><span class="toc-number">6.</span> <span class="toc-text">WeakHashMap</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#FinalReference"><span class="toc-number">7.</span> <span class="toc-text">FinalReference</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">8.</span> <span class="toc-text">参考</span></a></li></ol>
+          </div>
+      </div>
+    </div>
+
+  
+    
+
+  
+    
+  
+    
+  
+    
+
+  
+</aside>
+
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-left">
+      &copy; 2014 - 2017 于凯&nbsp;|&nbsp;
+      主题 <a href="https://github.com/giscafer/hexo-theme-cafe/" target="_blank">Cafe</a>
+    </div>
+     <div id="footer-right">
+      联系方式&nbsp;|&nbsp;debiaoyu@gmail.com
+    </div>
+  </div>
+</footer>
+ <script src="/jquery/jquery.min.js"></script>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/archives" class="mobile-nav-link">归档</a>
+  
+    <a href="/tools" class="mobile-nav-link">工具</a>
+  
+    <a href="/page" class="mobile-nav-link">关于</a>
+  
+</nav>
+    <img class="back-to-top-btn" src="/images/fly-to-top.png"/>
+<script>
+// Elevator script included on the page, already.
+window.onload = function() {
+  var elevator = new Elevator({
+    selector:'.back-to-top-btn',
+    element: document.querySelector('.back-to-top-btn'),
+    duration: 1000 // milliseconds
+  });
+}
+</script>
+      
+
+  
+    <script>
+      var cloudTieConfig = {
+        url: document.location.href, 
+        sourceId: "",
+        productKey: "e2fb4051c49842688ce669e634bc983f",
+        target: "cloud-tie-wrapper"
+      };
+    </script>
+    <script src="https://img1.ws.126.net/f2e/tie/yun/sdk/loader.js"></script>
+    
+
+  
+
+
+
+
+
+
+
+<!-- author:forvoid begin -->
+<!-- author:forvoid begin -->
+
+  <link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+  <script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script> 
+  <script>
+  var gitment = new Gitment({
+    // id: '页面 ID', // 可选。默认为 location.href
+    owner: 'Hikyu',
+    repo: 'Hikyu.github.io',
+    oauth: {
+    client_id: '61886569157db60efa97',
+    client_secret: '6475bb7c8faaf44ff2e12c272a46505a0eecf46f',
+    }
+  })
+  gitment.render(document.getElementById("gitment_comments"))
+</script>
+
+
+<!-- author:forvoid end -->
+
+<!-- author:forvoid end -->
+
+
+
+ <script src="/js/is.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+<script src="/js/elevator.js"></script>
+  </div>
+</body>
+</html>

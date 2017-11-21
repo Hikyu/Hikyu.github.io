@@ -66,6 +66,69 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-土豆烧肉" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/04/19/土豆烧肉/" class="article-date">
+  <time datetime="2017-04-19T04:01:30.000Z" itemprop="datePublished">2017-04-19</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/生活/">生活</a>►<a class="article-category-link" href="/categories/生活/食物/">食物</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/04/19/土豆烧肉/">土豆烧肉</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="原料"><a href="#原料" class="headerlink" title="原料"></a>原料</h2><p>土豆、五花肉、姜片、葱、酱油、料酒、盐、青椒、白糖、胡椒面</p>
+<h2 id="做法"><a href="#做法" class="headerlink" title="做法"></a>做法</h2><ol>
+<li><p>五花肉切块洗净，土豆洗净、去皮，然后切块放到水中备用。青椒切片、葱切段、姜切片备用。</p>
+</li>
+<li><p>锅中水烧开，放两片姜片，倒入洗净的肉块，汆烫两分钟(注意时间不要太长)，捞出肉块沥干备用</p>
+</li>
+<li><p>锅中倒油，油七成热后加入加入姜片、葱段、胡椒面爆香，然后倒入肉块煸炒(注意时间不要太长，否则肉会变老)</p>
+</li>
+<li><p>倒入酱油、精盐、料酒，倒入土豆青椒和肉块一起翻炒几下</p>
+</li>
+<li><p>加入清水(高汤)刚好没过肉块，加入两小勺盐，适当的撒一点白糖，煮沸后转小火，盖上锅盖烧20分钟</p>
+</li>
+<li><p>汤锅中汤汁差不多的时候，大火收汁，撒点葱末装盘</p>
+</li>
+</ol>
+        
+          <p class="article-more-link">
+            <a href="/2017/04/19/土豆烧肉/#more">阅读全文 »</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yukai.space/2017/04/19/土豆烧肉/" data-id="cj9qhw21l005zhdnjk4d1wjig" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/食物/">食物</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+ 
+
+
+  
     <article id="post-maven学习笔记2" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2017/04/19/maven学习笔记2/" class="article-date">
@@ -452,61 +515,6 @@
 
 
   
-    <article id="post-java代理机制" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2017/03/28/java代理机制/" class="article-date">
-  <time datetime="2017-03-28T08:15:35.000Z" itemprop="datePublished">2017-03-28</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/编程/">编程</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/03/28/java代理机制/">java代理机制</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="代理模式"><a href="#代理模式" class="headerlink" title="代理模式"></a>代理模式</h2><p>代理模式，顾名思义，即一个客户不想或者不能直接访问一个对象，需要通过一个称为代理的第三方对象来实现间接引用。代理对象的作用就是客户端和目标对象<br>之间的一个中介，通过代理对象可以隐藏不让用户看到的内容或实现额外的服务。</p>
-<p>代理机制应用的场景有很多：比如在代理对象中实现缓存，验证，权限控制等功能，真正的业务逻辑封装在真实对象中。RMI远程方法调用也用到了代理。当你调用一个远程方法的时候，相当于调用这个方法的代理对象，<br>在代理对象中封装了网络请求等部分，真实对象存在于另一个进程上。重构老旧代码的时候也常常会用到代理模式。</p>
-<p>代理分两种：静态代理和动态代理</p>
-<h2 id="静态代理"><a href="#静态代理" class="headerlink" title="静态代理"></a>静态代理</h2><p>静态代理即在代码中手动实现代理模式。代理模式涉及到三个角色：</p>
-<p>真实对象RealSubject、抽象主题Subject、代理对象Proxy</p>
-<img src="/2017/03/28/java代理机制/Proxy.jpg" alt="Proxy" title="Proxy">
-<img src="/2017/03/28/java代理机制/seq_Proxy.jpg" alt="seq_Proxy" title="seq_Proxy">
-        
-          <p class="article-more-link">
-            <a href="/2017/03/28/java代理机制/#more">阅读全文 »</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yukai.space/2017/03/28/java代理机制/" data-id="cj9qhw1ww002ghdnjyu6yzhso" class="article-share-link">分享</a>
-      
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
- 
-
-
-  
 
 
   <nav id="page-nav">
@@ -533,6 +541,10 @@
       <ul>
         
           <li>
+            <a href="/2017/11/21/理解Java-Reference/">理解Java-Reference</a>
+          </li>
+        
+          <li>
             <a href="/2017/11/20/如何执行一个延迟任务？/">如何执行一个延迟任务？</a>
           </li>
         
@@ -546,10 +558,6 @@
         
           <li>
             <a href="/2017/11/02/认识MVCC/">认识MVCC</a>
-          </li>
-        
-          <li>
-            <a href="/2017/10/31/数据库事务浅析/">数据库事务浅析</a>
           </li>
         
       </ul>

@@ -66,6 +66,61 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-java代理机制" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/03/28/java代理机制/" class="article-date">
+  <time datetime="2017-03-28T08:15:35.000Z" itemprop="datePublished">2017-03-28</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/编程/">编程</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/03/28/java代理机制/">java代理机制</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="代理模式"><a href="#代理模式" class="headerlink" title="代理模式"></a>代理模式</h2><p>代理模式，顾名思义，即一个客户不想或者不能直接访问一个对象，需要通过一个称为代理的第三方对象来实现间接引用。代理对象的作用就是客户端和目标对象<br>之间的一个中介，通过代理对象可以隐藏不让用户看到的内容或实现额外的服务。</p>
+<p>代理机制应用的场景有很多：比如在代理对象中实现缓存，验证，权限控制等功能，真正的业务逻辑封装在真实对象中。RMI远程方法调用也用到了代理。当你调用一个远程方法的时候，相当于调用这个方法的代理对象，<br>在代理对象中封装了网络请求等部分，真实对象存在于另一个进程上。重构老旧代码的时候也常常会用到代理模式。</p>
+<p>代理分两种：静态代理和动态代理</p>
+<h2 id="静态代理"><a href="#静态代理" class="headerlink" title="静态代理"></a>静态代理</h2><p>静态代理即在代码中手动实现代理模式。代理模式涉及到三个角色：</p>
+<p>真实对象RealSubject、抽象主题Subject、代理对象Proxy</p>
+<img src="/2017/03/28/java代理机制/Proxy.jpg" alt="Proxy" title="Proxy">
+<img src="/2017/03/28/java代理机制/seq_Proxy.jpg" alt="seq_Proxy" title="seq_Proxy">
+        
+          <p class="article-more-link">
+            <a href="/2017/03/28/java代理机制/#more">阅读全文 »</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yukai.space/2017/03/28/java代理机制/" data-id="cj9qhw1ww002ghdnjyu6yzhso" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+ 
+
+
+  
     <article id="post-java序列化与反序列化" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2017/03/22/java序列化与反序列化/" class="article-date">
@@ -467,61 +522,6 @@
 
 
   
-    <article id="post-java日志使用" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2017/02/21/java日志使用/" class="article-date">
-  <time datetime="2017-02-21T04:48:55.000Z" itemprop="datePublished">2017-02-21</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/工具/">工具</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/02/21/java日志使用/">java日志框架的使用</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <blockquote>
-<p>之前在web项目中用到了日志，日志在web应用中很重要，特别是对于程序员追查bug而言。但是由于对混乱的日志框架体系不是十分清楚，导致各种jar包冲突和日志不正常输出。今天来总结一下日志框架的使用<br>主要介绍日志门面slf4j结合日志实现log4j。关于其他的日志框架介绍和使用，参考链接里列出了前辈总结的很好的资料，相信读完之后一定会有收获。</p>
-</blockquote>
-<h2 id="日志门面和实际日志框架"><a href="#日志门面和实际日志框架" class="headerlink" title="日志门面和实际日志框架"></a>日志门面和实际日志框架</h2><p>日志框架有：jdk自带的logging(jul)，log4j1、log4j2、logback<br>日志门面有：apache commons-logging、slf4j</p>
-<p>日志框架很好理解，就是提供日志api，使我们可以很轻易的，有组织有规范的输出日志。日志门面的作用是在日志记录实现的基础上提供一个封装的 API 层次，<br>对日志记录 API 的使用者提供一个统一的接口，使得可以自由切换不同的日志记录实现。日志门面就好比java中的jdbc规范接口，各个数据库厂家实现的jdbc驱动程序就是实际的日志框架，<br>他们遵循了这个规范，使得我们在编写java程序时不用考虑底层驱动的不同，只需调用jdbc规范接口即可。这是典型的面向对象思想。</p>
-<h2 id="slf4j的使用"><a href="#slf4j的使用" class="headerlink" title="slf4j的使用"></a>slf4j的使用</h2><h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><p><img src="https://www.slf4j.org/images/concrete-bindings.png" alt="slf4j使用"></p>
-<p>上图来自slf4j官网</p>
-        
-          <p class="article-more-link">
-            <a href="/2017/02/21/java日志使用/#more">阅读全文 »</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yukai.space/2017/02/21/java日志使用/" data-id="cj9qhw1xd0038hdnjusy71asq" class="article-share-link">分享</a>
-      
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
- 
-
-
-  
 
 
   <nav id="page-nav">
@@ -548,6 +548,10 @@
       <ul>
         
           <li>
+            <a href="/2017/11/21/理解Java-Reference/">理解Java-Reference</a>
+          </li>
+        
+          <li>
             <a href="/2017/11/20/如何执行一个延迟任务？/">如何执行一个延迟任务？</a>
           </li>
         
@@ -561,10 +565,6 @@
         
           <li>
             <a href="/2017/11/02/认识MVCC/">认识MVCC</a>
-          </li>
-        
-          <li>
-            <a href="/2017/10/31/数据库事务浅析/">数据库事务浅析</a>
           </li>
         
       </ul>
