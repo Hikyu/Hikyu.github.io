@@ -236,11 +236,11 @@ Maven的核心仅仅定义了抽象的生命周期，具体的任务是由插件
 
   比如，clean生命周期有pre-clean、clean、post-clean三个阶段，clean生命周期阶段与插件目标的绑定关系如下：
 
-  生命周期阶段 | 插件目标
-  ------------|-----------
-  pre-clean   |
-  clean       |maven-clean-plugin:clean
-  post-clean  |
+| 生命周期阶段     | 插件目标                     |
+|------------|--------------------------|
+| pre-clean  |                          |
+| clean      | maven-clean-plugin:clean |
+| post-clean |                          |
 
   执行命令`mvn post-clean`，输出如下：
 
