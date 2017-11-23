@@ -66,6 +66,62 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-maven打包" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/10/15/maven打包/" class="article-date">
+  <time datetime="2017-10-15T11:56:22.000Z" itemprop="datePublished">2017-10-15</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/工具/">工具</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/10/15/maven打包/">使用maven打包</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>前段时间做的web项目涉及到了打包的问题，记录一下使用maven打包的过程…</p>
+</blockquote>
+<h2 id="项目打包为fatjar"><a href="#项目打包为fatjar" class="headerlink" title="项目打包为fatjar"></a>项目打包为fatjar</h2><p>什么是fatjar？做过java项目的都知道，一个项目从开发到部署，一般需要经过打包，把一些资源文件和类文件压缩到一块，形成一个单独的文件，叫做jar（或者war）。如果这个项目依赖了一些第三方的jar包，在最终的部署阶段，这些jar有两种存在方式：</p>
+<ul>
+<li>一种是单独放到一个与项目jar包并行的文件夹中（一般叫做lib），然后使用<code>-classpath</code>将这个文件夹下的jar加入到classpath</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">---</div><div class="line">  |--VersionManager.jar</div><div class="line">  |</div><div class="line">  |--lib</div><div class="line">      |</div><div class="line">      |--a.jar</div><div class="line">      |</div><div class="line">      |--b.jar</div></pre></td></tr></table></figure>
+        
+          <p class="article-more-link">
+            <a href="/2017/10/15/maven打包/#more">阅读全文 »</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yukai.space/2017/10/15/maven打包/" data-id="cj9qhw1zx004bhdnj80u0lfca" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/maven/">maven</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+ 
+
+
+  
     <article id="post-VncServer的安装与使用" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2017/10/01/VncServer的安装与使用/" class="article-date">
@@ -465,60 +521,6 @@
 
 
   
-    <article id="post-git服务器的配置" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2017/09/06/git服务器的配置/" class="article-date">
-  <time datetime="2017-09-06T01:46:49.000Z" itemprop="datePublished">2017-09-06</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/工具/">工具</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/09/06/git服务器的配置/">git服务器的配置</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <blockquote>
-<p>公司一直在使用Starteam作版本控制，这是个很古老的工具，也有不少的BUG…最近为公司搭建了Git服务器试用，把搭建的过程记录下来…</p>
-</blockquote>
-<h2 id="ssh配置"><a href="#ssh配置" class="headerlink" title="ssh配置"></a>ssh配置</h2><p>可以使用ssh协议搭建ssh服务，适合于几个人的小团队，每个人都拥有读写的权限。</p>
-<h3 id="配置git服务器"><a href="#配置git服务器" class="headerlink" title="配置git服务器"></a>配置git服务器</h3><p>通过创建一个专门的git用户，作为访问git服务的账户</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">$ ssh root@192.168.1.110</div><div class="line">$ sudo adduser git</div><div class="line">$ su git</div><div class="line">$ cd</div><div class="line">$ mkdir .ssh &amp;&amp; chmod 700 .ssh</div><div class="line">$ touch .ssh/authorized_keys &amp;&amp; chmod 600 .ssh/authorized_keys</div></pre></td></tr></table></figure>
-        
-          <p class="article-more-link">
-            <a href="/2017/09/06/git服务器的配置/#more">阅读全文 »</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yukai.space/2017/09/06/git服务器的配置/" data-id="cj9qhw1vi0018hdnjurqtorjj" class="article-share-link">分享</a>
-      
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/git/">git</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
- 
-
-
-  
 
 
   <nav id="page-nav">
@@ -545,6 +547,10 @@
       <ul>
         
           <li>
+            <a href="/2017/11/23/Java基础-字节/">Java基础-字节</a>
+          </li>
+        
+          <li>
             <a href="/2017/11/21/理解Java-Reference/">理解Java-Reference</a>
           </li>
         
@@ -558,10 +564,6 @@
         
           <li>
             <a href="/2017/11/05/大型网站技术架构/">大型网站技术架构</a>
-          </li>
-        
-          <li>
-            <a href="/2017/11/02/认识MVCC/">认识MVCC</a>
           </li>
         
       </ul>

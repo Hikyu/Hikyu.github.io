@@ -66,6 +66,62 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-关于加密的一点总结" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/08/22/关于加密的一点总结/" class="article-date">
+  <time datetime="2016-08-22T12:59:00.000Z" itemprop="datePublished">2016-08-22</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/加密/">加密</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/08/22/关于加密的一点总结/">关于加密的一点总结</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>前两天了解了一下数据库JDBC创建Connection的过程，其中验证用户密码的过程使用了加密算法，研究之。</p>
+<h2 id="信息摘要算法"><a href="#信息摘要算法" class="headerlink" title="信息摘要算法"></a>信息摘要算法</h2><h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><p>验证用户名密码的整个过程主要使用了MD5算法。严格来说，<a href="https://zh.wikipedia.org/wiki/MD5">MD5</a>不是一种加密算法，而是一种信息摘要算法。</p>
+<p>所谓的信息摘要算法，其实就是一种特殊的散列算法。关于散列，之前在<a href="http://yukai.space/2016/04/28/java%E4%B8%AD%E7%9A%84equals%E4%B8%8Ehashcode/">这篇</a>总结中提到过。简单来说，就是把给出的”信息”经过哈希之后得到的值，就是这些内容的”摘要”。</p>
+<h3 id="特点"><a href="#特点" class="headerlink" title="特点"></a>特点</h3><p>信息摘要算法有这样几个特点：</p>
+<p>1.生成固定长度的摘要。以MD5为例，无论信息有多大，经过MD5哈希之后，得到的是一个128bit的值。</p>
+<p>2.算法不可逆。也就是说，不能通过摘要得到信息。可以参考一下知乎上的这个<a href="http://www.zhihu.com/question/22651987">提问</a>.</p>
+<p>3.一般来说，信息不同，摘要也不同。虽然说冲突是一定存在的(无限多可能的信息映射到2的128次方这么大的集合当中)，但是好的摘要算法，要求无法找到两条消息，使他们的摘要相同。</p>
+<p>满足了以上几点的散列算法，就是一种消息摘要算法。那么消息摘要又有什么作用呢？</p>
+        
+          <p class="article-more-link">
+            <a href="/2016/08/22/关于加密的一点总结/#more">阅读全文 »</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yukai.space/2016/08/22/关于加密的一点总结/" data-id="cj9qhw21b005nhdnjfkixd5ar" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/加密/">加密</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+ 
+
+
+  
     <article id="post-Java集合框架学习总结" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2016/08/16/Java集合框架学习总结/" class="article-date">
@@ -452,61 +508,6 @@
 
 
   
-    <article id="post-java中的枚举" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2016/06/30/java中的枚举/" class="article-date">
-  <time datetime="2016-06-30T04:48:55.000Z" itemprop="datePublished">2016-06-30</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/编程/">编程</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/06/30/java中的枚举/">java中的枚举</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <blockquote>
-<p>已经好久没有动博客了，毕业之后的第一篇。下班了单开一篇，把毕业照补上。</p>
-</blockquote>
-<p>Java中的枚举是在JDK1.5以后出现的。之前的开发过程中并没有用过，但是有碰到过关于枚举的代码。貌似是一种更为简单有效的常量定义方式。学习之，希望以后的写代码过程中可以熟悉并掌握枚举的用法。</p>
-<h2 id="使用场景："><a href="#使用场景：" class="headerlink" title="使用场景："></a>使用场景：</h2><p>每当需要一组固定的常量的时候，如一周的天数、一年四季等。或者是在我们编译前就知道其包含的所有值的集合，比如定义了一些状态等等。这个时候就有可能需要使用枚举了。</p>
-<h2 id="与-public-static-final-的常量定义方式进行比较："><a href="#与-public-static-final-的常量定义方式进行比较：" class="headerlink" title="与 public static final 的常量定义方式进行比较："></a>与 public static final 的常量定义方式进行比较：</h2><p>在以上的场景中，回顾以往的做法，比如我们定义这样一些状态：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">State</span> </span>&#123;</div><div class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> Normal = <span class="number">0</span>;<span class="comment">//正常</span></div><div class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> Update = <span class="number">1</span>;<span class="comment">//已更新</span></div><div class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> Delete = <span class="number">2</span>;<span class="comment">//已删除</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
-        
-          <p class="article-more-link">
-            <a href="/2016/06/30/java中的枚举/#more">阅读全文 »</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yukai.space/2016/06/30/java中的枚举/" data-id="cj9qhw1wh0020hdnjj91b39e0" class="article-share-link">分享</a>
-      
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
- 
-
-
-  
 
 
   <nav id="page-nav">
@@ -533,6 +534,10 @@
       <ul>
         
           <li>
+            <a href="/2017/11/23/Java基础-字节/">Java基础-字节</a>
+          </li>
+        
+          <li>
             <a href="/2017/11/21/理解Java-Reference/">理解Java-Reference</a>
           </li>
         
@@ -546,10 +551,6 @@
         
           <li>
             <a href="/2017/11/05/大型网站技术架构/">大型网站技术架构</a>
-          </li>
-        
-          <li>
-            <a href="/2017/11/02/认识MVCC/">认识MVCC</a>
           </li>
         
       </ul>

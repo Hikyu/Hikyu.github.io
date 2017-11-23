@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Java基础-字节 | YuKai&#39;s blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="这两天在实施一个加密通信方案时，涉及到了字节的读写和转换，有一些知识点需要学习和记录下来…
+原码 反码 补码原码：第一位表示符号，其余位表示数值。比如8位2进制：
+[+1]原 = 0000 0001
+[-1]原 = 1000 0001
+第一位是符号位，8位2进制的取值范围：
+[11111111, 01111111] = [-127, 127]
+反码：正数的反码是等于原码，负数的反码是在其原码的基础">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java基础-字节">
+<meta property="og:url" content="http://yukai.space/2017/11/23/Java基础-字节/index.html">
+<meta property="og:site_name" content="YuKai's blog">
+<meta property="og:description" content="这两天在实施一个加密通信方案时，涉及到了字节的读写和转换，有一些知识点需要学习和记录下来…
+原码 反码 补码原码：第一位表示符号，其余位表示数值。比如8位2进制：
+[+1]原 = 0000 0001
+[-1]原 = 1000 0001
+第一位是符号位，8位2进制的取值范围：
+[11111111, 01111111] = [-127, 127]
+反码：正数的反码是等于原码，负数的反码是在其原码的基础">
+<meta property="og:updated_time" content="2017-11-23T01:34:19.961Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java基础-字节">
+<meta name="twitter:description" content="这两天在实施一个加密通信方案时，涉及到了字节的读写和转换，有一些知识点需要学习和记录下来…
+原码 反码 补码原码：第一位表示符号，其余位表示数值。比如8位2进制：
+[+1]原 = 0000 0001
+[-1]原 = 1000 0001
+第一位是符号位，8位2进制的取值范围：
+[11111111, 01111111] = [-127, 127]
+反码：正数的反码是等于原码，负数的反码是在其原码的基础">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    
+    <div id="header-inner" class="inner">
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yukai.space"></form>
+      </div>
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/archives">归档</a>
+        
+          <a class="main-nav-link" href="/tools">工具</a>
+        
+          <a class="main-nav-link" href="/page">关于</a>
+        
+      </nav>
+      
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">YuKai&#39;s blog</a>
+      </h1>
+      
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-Java基础-字节" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/11/23/Java基础-字节/" class="article-date">
+  <time datetime="2017-11-23T01:32:34.000Z" itemprop="datePublished">2017-11-23</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/编程/">编程</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Java基础-字节
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <p>这两天在实施一个加密通信方案时，涉及到了字节的读写和转换，有一些知识点需要学习和记录下来…</p>
+<h2 id="原码-反码-补码"><a href="#原码-反码-补码" class="headerlink" title="原码 反码 补码"></a>原码 反码 补码</h2><p>原码：第一位表示符号，其余位表示数值。比如8位2进制：</p>
+<p>[+1]原 = 0000 0001</p>
+<p>[-1]原 = 1000 0001</p>
+<p>第一位是符号位，8位2进制的取值范围：</p>
+<p>[11111111, 01111111] = [-127, 127]</p>
+<p>反码：正数的反码是等于原码，负数的反码是在其原码的基础上，符号位不变，其余位取反：</p>
+<p>[+1] = [00000001]原 = [00000001]反</p>
+<p>[-1] = [10000001]原 = [11111110]反</p>
+<p>补码：正数的补码等于原码，负数的补码是在其原码的基础上，符号位不变，其余位取反，然后加1：</p>
+<p>[+1] = [00000001]原 = [00000001]反 = [00000001]补</p>
+<p>[-1] = [10000001]原 = [11111110]反 = [11111111]补</p>
+<p>在Java中，存储的数值都是有符号的，同时也是使用补码存储的。</p>
+<a id="more"></a>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line">	<span class="keyword">int</span> a = -<span class="number">1</span>;</div><div class="line">	System.out.println(Integer.toBinaryString(a));</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>输出：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">11111111111111111111111111111111</div></pre></td></tr></table></figure>
+<p><a href="https://docs.oracle.com/javase/tutorial/java/nutsandbolts/datatypes.html" target="_blank" rel="external">Primitive Data Types</a>:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">byte: The byte data type is an 8-bit signed two&apos;s complement integer. It has a minimum value of -128 and a maximum value of 127 (inclusive). The byte data type can be useful for saving memory in large arrays, where the memory savings actually matters. They can also be used in place of int where their limits help to clarify your code; the fact that a variable&apos;s range is limited can serve as a form of documentation.</div><div class="line"></div><div class="line">short: The short data type is a 16-bit signed two&apos;s complement integer. It has a minimum value of -32,768 and a maximum value of 32,767 (inclusive). As with byte, the same guidelines apply: you can use a short to save memory in large arrays, in situations where the memory savings actually matters.</div><div class="line"></div><div class="line">int: By default, the int data type is a 32-bit signed two&apos;s complement integer, which has a minimum value of -231 and a maximum value of 231-1. In Java SE 8 and later, you can use the int data type to represent an unsigned 32-bit integer, which has a minimum value of 0 and a maximum value of 232-1. Use the Integer class to use int data type as an unsigned integer. See the section The Number Classes for more information. Static methods like compareUnsigned, divideUnsigned etc have been added to the Integer class to support the arithmetic operations for unsigned integers.</div><div class="line"></div><div class="line">long: The long data type is a 64-bit two&apos;s complement integer. The signed long has a minimum value of -263 and a maximum value of 263-1. In Java SE 8 and later, you can use the long data type to represent an unsigned 64-bit long, which has a minimum value of 0 and a maximum value of 264-1. Use this data type when you need a range of values wider than those provided by int. The Long class also contains methods like compareUnsigned, divideUnsigned etc to support arithmetic operations for unsigned long.</div><div class="line"></div><div class="line">float: The float data type is a single-precision 32-bit IEEE 754 floating point. Its range of values is beyond the scope of this discussion, but is specified in the Floating-Point Types, Formats, and Values section of the Java Language Specification. As with the recommendations for byte and short, use a float (instead of double) if you need to save memory in large arrays of floating point numbers. This data type should never be used for precise values, such as currency. For that, you will need to use the java.math.BigDecimal class instead. Numbers and Strings covers BigDecimal and other useful classes provided by the Java platform.</div><div class="line"></div><div class="line">double: The double data type is a double-precision 64-bit IEEE 754 floating point. Its range of values is beyond the scope of this discussion, but is specified in the Floating-Point Types, Formats, and Values section of the Java Language Specification. For decimal values, this data type is generally the default choice. As mentioned above, this data type should never be used for precise values, such as currency.</div><div class="line"></div><div class="line">boolean: The boolean data type has only two possible values: true and false. Use this data type for simple flags that track true/false conditions. This data type represents one bit of information, but its &quot;size&quot; isn&apos;t something that&apos;s precisely defined.</div><div class="line"></div><div class="line">char: The char data type is a single 16-bit Unicode character. It has a minimum value of &apos;\u0000&apos; (or 0) and a maximum value of &apos;\uffff&apos; (or 65,535 inclusive).</div></pre></td></tr></table></figure>
+<h2 id="有符号-无符号"><a href="#有符号-无符号" class="headerlink" title="有符号 无符号"></a>有符号 无符号</h2><p>上文可以看出，Java 中的 byte 是 1 字节，short 是 2 字节，int 是 4 字节，long 是 8 字节。他们都是有符号的数值。</p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>最小值</th>
+<th>最大值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>byte</td>
+<td>-2^7</td>
+<td>2^7-1</td>
+</tr>
+<tr>
+<td>short</td>
+<td>-2^15</td>
+<td>2^15-1</td>
+</tr>
+<tr>
+<td>int</td>
+<td>-2^31</td>
+<td>2^31-1</td>
+</tr>
+<tr>
+<td>long</td>
+<td>-2^63</td>
+<td>2^63-1</td>
+</tr>
+</tbody>
+</table>
+<p>发现byte类型跟上文所说的取值范围[-127, 127]不太一样，这是因为使用了补码的缘故。查看<a href="https://www.cnblogs.com/zhangziqiu/archive/2011/03/30/ComputerCode.html" target="_blank" rel="external">原码, 反码, 补码 详解</a>了解。</p>
+<p>C 语言中的整数类型都提供了对应的”无符号”版本，第一位不再表示符号位。比如C语言中的无符号类型byte，其取值范围为[0, 256]。</p>
+<p>所以，当C程序向Java程序通过网络传递了一个无符号数时，我们需要怎么存他呢？</p>
+<p>答案就是：使用比要用的无符号类型更大的有符号类型。</p>
+<p>比如：使用 short 来处理无符号的字节，使用 long 来处理无符号整数等。下面看一个例子，使用int(4字节)存储一个无符号byte(1字节)：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line">	<span class="keyword">int</span> a = <span class="number">250</span>;<span class="comment">// 无符号byte的取值范围[0, 256]</span></div><div class="line">	<span class="keyword">byte</span> b = (<span class="keyword">byte</span>) a; <span class="comment">// 强制转换，直接截取int低8位</span></div><div class="line">    <span class="comment">// b 相当于C后台发来的无符号数</span></div><div class="line">	<span class="keyword">int</span>  c = b &amp; <span class="number">0xff</span>; </div><div class="line">	System.out.println(c);<span class="comment">// 250</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>上面的程序中，b 当做C后台发来的无符号数，最后我们使用int存下了这个无符号的byte。为什么需要 <code>b &amp; 0xff</code>这步操作呢？</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line">	<span class="keyword">int</span> a = <span class="number">250</span>;<span class="comment">// 无符号byte的取值范围[0, 256]</span></div><div class="line">	<span class="keyword">byte</span> b = (<span class="keyword">byte</span>) a; <span class="comment">// 强制转换，直接截取int低8位</span></div><div class="line">    <span class="comment">// b 相当于C后台发来的无符号数</span></div><div class="line">	<span class="keyword">int</span>  c = b; </div><div class="line">	System.out.println(c);<span class="comment">// -6</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>可以看到，无符号byte直接转为int，丢失了原本的数值。为什么执行 <code>b &amp; 0xff</code>这步操作就可以了呢？ 看下文</p>
+<h2 id="符号位扩展"><a href="#符号位扩展" class="headerlink" title="符号位扩展"></a>符号位扩展</h2><p>上文中，b直接转换为 int，丢失了无符号byte原本的数值。是因为，byte在向int转换的过程中，发生了符号位扩展：</p>
+<p>[250]无符号 = 1111 1010</p>
+<p>转为4字节int：</p>
+<p>1111 1111 1111 1111 1111 1111 1111 1010 = [-6]补</p>
+<p>在Java中，当较窄的整型扩展为较宽的整型时，发生符号位扩展：</p>
+<p><strong>对于正数而言，将需要扩展的高位全部赋为0；</strong></p>
+<p><strong>对于负数而言，将需要扩展的高位全部赋为1。</strong></p>
+<p>观察下面的代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">System.out.println((<span class="keyword">int</span>)(<span class="keyword">char</span>)(<span class="keyword">byte</span>)-<span class="number">1</span>); <span class="comment">//65535</span></div></pre></td></tr></table></figure>
+<p>为什么没有输出-1呢？</p>
+<p>因为<strong>如果最初的类型是char，那么不管他将要被提升成什么类型，都执行0扩展，即需要扩展的高位全部赋0。</strong></p>
+<p>byte是有符号的类型，所以在将byte数值-1（二进制为：11111111）提升到char时，会发生符号位扩展，又符号位为1，所以就补8个1，最后为16个1；然后从char到int的提升时，由于是<br>char型提升到其他类型，所以采用零扩展而不是符号扩展，结果int数值就成了65535。</p>
+<p>总结：</p>
+<blockquote>
+<p>窄的整型转换成较宽的整型时符号扩展规则：如果最初的数值类型是有符号的，那么就执行符号扩展（即如果符号位<br>为1，则扩展为1，如果为零，则扩展为0）；如果它是char，那么不管它将要被提升成什么类型，都执行零扩展。</p>
+</blockquote>
+<p>回顾上文提到的<code>0xff</code>问题：int  c = b &amp; 0xff;</p>
+<p>对于0xff，是Java中的字面常量，本身是个int值。0xff 表示为 11111111 ，Java对于这种字面常量，不把他前面的1看做符号位，当发生符号位扩展时，扩展成的是”000…ff”。</p>
+<p>当 执行 b &amp; 0xff 时，b发生符号位扩展：</p>
+<p>1111 1111 1111 1111 1111 1111 1111 1010<br>&amp;<br>0000 0000 0000 0000 0000 0000 1111 1111<br>=<br>0000 0000 0000 0000 0000 0000 1111 1010<br>= [250]补</p>
+<h2 id="逻辑右移-算数右移"><a href="#逻辑右移-算数右移" class="headerlink" title="逻辑右移 算数右移"></a>逻辑右移 算数右移</h2><p>Java中有三种移位操作：左移、算数右移、逻辑右移</p>
+<p>注意： short, byte,char 在移位之前首先将数据转换为int，然后再移位</p>
+<p>算数右移：&gt;&gt;，有符号的移位操作，右移之后的空位用符号位补充，如果是正数用 0 补充，负数用1补充。</p>
+<p>-4&gt;&gt;1</p>
+<p>[-4]原= 10000000 00000000 00000000 00000100<br>[-4]补= 11111111 11111111 11111111 11111100<br>0 向右移出 1 位后 11111111 11111111 11111111 11111110 = [-2]补</p>
+<p>逻辑右移：&gt;&gt;&gt;，不管正数、负数，左端都用0补充。</p>
+<p>-1&gt;&gt;&gt;1<br>[-1]原= 10000000 00000000 00000000 00000001<br>[-1]补= 11111111 11111111 11111111 11111111<br>1 向右移出1位 01111111 11111111 11111111 11111111 = [2^31-1]补</p>
+<p>算数左移：&lt;&lt;，左移后右端用0补充。</p>
+<h2 id="字节序"><a href="#字节序" class="headerlink" title="字节序"></a>字节序</h2><p>字节顺序是指占用内存多于一个字节类型的数据在内存中的存放顺序，有小端、大端两种顺序。</p>
+<ul>
+<li><p>小端字节序（little endian）：低字节数据存放在内存低地址处，高字节数据存放在内存高地址处；</p>
+</li>
+<li><p>大端字节序（bigendian）：高字节数据存放在低地址处，低字节数据存放在高地址处。</p>
+</li>
+</ul>
+<p>int value = 0x01020304;采用不同的字节序，在内存中的存储情况如下：</p>
+<p>小端字节序：</p>
+<table>
+<thead>
+<tr>
+<th>内存地址编号</th>
+<th>字节内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0x00001000</td>
+<td>04</td>
+</tr>
+<tr>
+<td>0x00001001</td>
+<td>03</td>
+</tr>
+<tr>
+<td>0x00001002</td>
+<td>02</td>
+</tr>
+<tr>
+<td>0x00001003</td>
+<td>01</td>
+</tr>
+</tbody>
+</table>
+<p>大端字节序：</p>
+<table>
+<thead>
+<tr>
+<th>内存地址编号</th>
+<th>字节内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0x00001000</td>
+<td>01</td>
+</tr>
+<tr>
+<td>0x00001001</td>
+<td>02</td>
+</tr>
+<tr>
+<td>0x00001002</td>
+<td>03</td>
+</tr>
+<tr>
+<td>0x00001003</td>
+<td>04</td>
+</tr>
+</tbody>
+</table>
+<p>显然大字节序，比较符合人类思维习惯。</p>
+<p>JAVA字节序都为大端字节序，所谓JAVA字节序，是指在JAVA虚拟机中多字节类型数据的存放顺序。</p>
+<p>java.nio包中提供了 <code>ByteOrder.nativeOrder()</code>方法来查看主机的字节序。</p>
+<p>还可以指定ByteBuffer读写操作时的字节序：<code>byteBuffer.order(ByteOrder.LITTLE_ENDIAN)</code></p>
+<h2 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h2><p>byte 数组 转为 int （默认为大端字节序）</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 第一种方法</span></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">convertByteToInt</span><span class="params">(<span class="keyword">byte</span>[] b)</span></span>&#123;           </div><div class="line">    <span class="keyword">int</span> value= <span class="number">0</span>;</div><div class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;b.length; i++)</div><div class="line">       value = (value &lt;&lt; <span class="number">8</span>) | b[i];     </div><div class="line">    <span class="keyword">return</span> value;       </div><div class="line">&#125;</div><div class="line"><span class="comment">// 第二种方法</span></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">byteArrayToInt</span><span class="params">(<span class="keyword">byte</span>[] b)</span> </span>&#123;  </div><div class="line">    <span class="keyword">return</span>   b[<span class="number">3</span>] &amp; <span class="number">0xFF</span> |  </div><div class="line">            (b[<span class="number">2</span>] &amp; <span class="number">0xFF</span>) &lt;&lt; <span class="number">8</span> |  </div><div class="line">            (b[<span class="number">1</span>] &amp; <span class="number">0xFF</span>) &lt;&lt; <span class="number">16</span> |  </div><div class="line">            (b[<span class="number">0</span>] &amp; <span class="number">0xFF</span>) &lt;&lt; <span class="number">24</span>;  </div><div class="line">&#125;</div><div class="line"><span class="comment">// 第三种方法</span></div><div class="line">ByteBuffer.wrap(byteBarray).getInt();</div></pre></td></tr></table></figure>
+<p>int 转为 byte 数组 （默认为大端字节序）</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 第一种方法</span></div><div class="line"><span class="keyword">private</span> <span class="keyword">byte</span>[] intToByteArray ( <span class="keyword">final</span> <span class="keyword">int</span> i ) <span class="keyword">throws</span> IOException &#123;</div><div class="line">    ByteArrayOutputStream bos = <span class="keyword">new</span> ByteArrayOutputStream();</div><div class="line">    DataOutputStream dos = <span class="keyword">new</span> DataOutputStream(bos);</div><div class="line">    dos.writeInt(i);</div><div class="line">    dos.flush();</div><div class="line">    <span class="keyword">return</span> bos.toByteArray();</div><div class="line">&#125;</div><div class="line"><span class="comment">// 第二种方法</span></div><div class="line"><span class="keyword">public</span> <span class="keyword">byte</span>[] intToBytes( <span class="keyword">final</span> <span class="keyword">int</span> i ) &#123;</div><div class="line">    ByteBuffer bb = ByteBuffer.allocate(<span class="number">4</span>);</div><div class="line">    bb.putInt(i);</div><div class="line">    <span class="keyword">return</span> bb.array();</div><div class="line">&#125;</div><div class="line"><span class="comment">// 第三种方法</span></div><div class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">byte</span>[] intToByteArray(<span class="keyword">int</span> a) &#123;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="keyword">byte</span>[] &#123;</div><div class="line">        (<span class="keyword">byte</span>) ((a &gt;&gt; <span class="number">24</span>) &amp; <span class="number">0xFF</span>),</div><div class="line">        (<span class="keyword">byte</span>) ((a &gt;&gt; <span class="number">16</span>) &amp; <span class="number">0xFF</span>),</div><div class="line">        (<span class="keyword">byte</span>) ((a &gt;&gt; <span class="number">8</span>) &amp; <span class="number">0xFF</span>),</div><div class="line">        (<span class="keyword">byte</span>) (a &amp; <span class="number">0xFF</span>)</div><div class="line">    &#125;;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>从流中读取指定长度的整数：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"> <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">ReceiveIntegerR</span><span class="params">(InputStream input, <span class="keyword">int</span> siz)</span> <span class="keyword">throws</span> IOException </span>&#123;</div><div class="line">    <span class="keyword">int</span> n = <span class="number">0</span>;</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; siz; i++) &#123;</div><div class="line">        <span class="keyword">int</span> b = input.read();</div><div class="line">        <span class="keyword">if</span> (b &lt; <span class="number">0</span>)</div><div class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IOException();</div><div class="line">        n = b | (n &lt;&lt; <span class="number">8</span>);</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> n;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>向流中写入指定长度的整数：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">SendInteger</span><span class="params">(OutputStream output, <span class="keyword">int</span> val, <span class="keyword">int</span> siz)</span> <span class="keyword">throws</span> IOException </span>&#123;</div><div class="line">    <span class="keyword">byte</span>[] buf = <span class="keyword">new</span> <span class="keyword">byte</span>[siz];</div><div class="line">    <span class="keyword">while</span> (siz-- &gt; <span class="number">0</span>) &#123;</div><div class="line">        buf[siz] = (<span class="keyword">byte</span>) (val &amp; <span class="number">0xff</span>);</div><div class="line">        val &gt;&gt;= <span class="number">8</span>;</div><div class="line">    &#125;</div><div class="line">    output.write(buf);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yukai.space/2017/11/23/Java基础-字节/" data-id="cjabt263t0000osnjlj70yv27" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+ <script src="/jquery/jquery.min.js"></script>
+  <div id="random_posts">
+    <h2>推荐文章</h2>
+    <div class="random_posts_ul">
+      <script>
+          var random_count =4
+          var site = {BASE_URI:'/'};
+          function load_random_posts(obj) {
+              var arr=site.posts;
+              if (!obj) return;
+              // var count = $(obj).attr('data-count') || 6;
+              for (var i, tmp, n = arr.length; n; i = Math.floor(Math.random() * n), tmp = arr[--n], arr[n] = arr[i], arr[i] = tmp);
+              arr = arr.slice(0, random_count);
+              var html = '<ul>';
+            
+              for(var j=0;j<arr.length;j++){
+                var item=arr[j];
+                html += '<li><strong>' + 
+                item.date + ':&nbsp;&nbsp;<a href="' + (site.BASE_URI+item.uri) + '">' + 
+                (item.title || item.uri) + '</a></strong>';
+                if(item.excerpt){
+                  html +='<div class="post-excerpt">'+item.excerpt+'</div>';
+                }
+                html +='</li>';
+                
+              }
+              $(obj).html(html + '</ul>');
+          }
+          $('.random_posts_ul').each(function () {
+              var c = this;
+              if (!site.posts || !site.posts.length){
+                  $.getJSON(site.BASE_URI + 'js/posts.js',function(json){site.posts = json;load_random_posts(c)});
+              } 
+               else{
+                load_random_posts(c);
+              }
+          });
+      </script>
+    </div>
+  </div>
+
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2017/11/21/理解Java-Reference/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">理解Java-Reference</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+ 
+     
+  <div class="comments" id="comments">
+    
+     
+       
+      <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+    
+       
+      
+      
+           <div id="gitment_comments"></div>
+    
+  </div>
+ 
+  
+
+</section>
+           
+    <aside id="sidebar">
+  
+    
+
+  
+    
+    <div class="widget-wrap">
+    
+      <div class="widget" id="toc-widget-fixed">
+      
+        <strong class="toc-title">文章目录</strong>
+        <div class="toc-widget-list">
+              <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#原码-反码-补码"><span class="toc-number">1.</span> <span class="toc-text">原码 反码 补码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#有符号-无符号"><span class="toc-number">2.</span> <span class="toc-text">有符号 无符号</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#符号位扩展"><span class="toc-number">3.</span> <span class="toc-text">符号位扩展</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#逻辑右移-算数右移"><span class="toc-number">4.</span> <span class="toc-text">逻辑右移 算数右移</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#字节序"><span class="toc-number">5.</span> <span class="toc-text">字节序</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#例子"><span class="toc-number">6.</span> <span class="toc-text">例子</span></a></li></ol>
+          </div>
+      </div>
+    </div>
+
+  
+    
+
+  
+    
+  
+    
+  
+    
+
+  
+</aside>
+
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-left">
+      &copy; 2014 - 2017 于凯&nbsp;|&nbsp;
+      主题 <a href="https://github.com/giscafer/hexo-theme-cafe/" target="_blank">Cafe</a>
+    </div>
+     <div id="footer-right">
+      联系方式&nbsp;|&nbsp;debiaoyu@gmail.com
+    </div>
+  </div>
+</footer>
+ <script src="/jquery/jquery.min.js"></script>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/archives" class="mobile-nav-link">归档</a>
+  
+    <a href="/tools" class="mobile-nav-link">工具</a>
+  
+    <a href="/page" class="mobile-nav-link">关于</a>
+  
+</nav>
+    <img class="back-to-top-btn" src="/images/fly-to-top.png"/>
+<script>
+// Elevator script included on the page, already.
+window.onload = function() {
+  var elevator = new Elevator({
+    selector:'.back-to-top-btn',
+    element: document.querySelector('.back-to-top-btn'),
+    duration: 1000 // milliseconds
+  });
+}
+</script>
+      
+
+  
+    <script>
+      var cloudTieConfig = {
+        url: document.location.href, 
+        sourceId: "",
+        productKey: "e2fb4051c49842688ce669e634bc983f",
+        target: "cloud-tie-wrapper"
+      };
+    </script>
+    <script src="https://img1.ws.126.net/f2e/tie/yun/sdk/loader.js"></script>
+    
+
+  
+
+
+
+
+
+
+
+<!-- author:forvoid begin -->
+<!-- author:forvoid begin -->
+
+  <link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+  <script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script> 
+  <script>
+  var gitment = new Gitment({
+    // id: '页面 ID', // 可选。默认为 location.href
+    owner: 'Hikyu',
+    repo: 'Hikyu.github.io',
+    oauth: {
+    client_id: '61886569157db60efa97',
+    client_secret: '6475bb7c8faaf44ff2e12c272a46505a0eecf46f',
+    }
+  })
+  gitment.render(document.getElementById("gitment_comments"))
+</script>
+
+
+<!-- author:forvoid end -->
+
+<!-- author:forvoid end -->
+
+
+
+ <script src="/js/is.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+<script src="/js/elevator.js"></script>
+  </div>
+</body>
+</html>

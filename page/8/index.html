@@ -66,6 +66,102 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-java中的int-byte转换" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/11/24/java中的int-byte转换/" class="article-date">
+  <time datetime="2016-11-24T14:48:55.000Z" itemprop="datePublished">2016-11-24</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/编程/">编程</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/11/24/java中的int-byte转换/">java中的int-byte转换</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>好久没有动博客了，看了下，将近两个月了吧。最近的两个月里面变懒了，没有了记录的动力。。。最近好像也没啥收获，惭愧。之前电脑中病毒之后(cryptolcker)，还好没有神马重要的东西，索性把硬盘重新格式化一遍，重做了系统。保留一套windows（实在受不了win10的自动更新了…）,又装了一套opensuse的系统。希望可以坚持学点linux。</p>
+<p>这段时间没有怎么看书，说一下读书情况。《重构》这本还是没有看完，读了大半。《深入理解jvm虚拟机》这本算是大致上浏览了一遍，发现确实是一本挺好的java书籍，日后还需多加翻阅理解。《大话设计模式》也是浏览了一遍，其中比较常见的模式有时候也可以用到，需要的时候再看吧。双十一买了一本《java并发编程实战》，看了大半，似懂非懂，但也是有收获的。不得不吐槽一下该书的翻译，实在是不敢恭维，但是想想自己的英语水平，目前还是忍了。。</p>
+<p>必须要振作起精神来了，总觉得自己每天无所事事呢。接下来的计划…..还是把并发编程这块看完吧，虽然没有什么实战的机会，总比不看强。要多写总结了，不然看了跟不看差不多。异常、反射、动态代理、注解等等这些也要学习然后做一个记录。网络、io、并发这三块，并发还在看，也要做好记录，然后网络这部分把大学课本重读一遍，至于io不知道有什么好的书籍，放到最后规划学习把。</p>
+<p>嗯，又想起来最近还写了一个自动打卡的程序，增加了短信通知的功能。总觉得有些不诚信的感觉呢，但是没有迟到早退过呀，好玩罢了。读了webmagic的core部分的源码，感觉理解起来轻松许多。记得大学那会看这个的时候还是一头雾水，结果现在两个小时就把代码搞清楚了（主要是代码量也不大拉）。嗯，说明自己还是在进步的麻，哈哈哈。下载了junit的源码都没有看过，有空研究把。</p>
+<p>终于要进入正题了。这次的记录很短很简单，是关于java中int和byte之间的转换的。虽然简单，但是以前就是拿来即用，没有搞清楚其中的原理，在byte这块就很纠结（只能说基础比较差），今天来学习一下。</p>
+<hr>
+<h2 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h2><p>java中:</p>
+<p>byte: 1字节    int: 4字节</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">int</span> i = -<span class="number">123</span></div><div class="line"><span class="keyword">byte</span> x = (<span class="keyword">byte</span>)i; <span class="comment">//-123</span></div></pre></td></tr></table></figure>
+<p>ps：([]代表几进制，()代表前面的内容重复几次)</p>
+<p>ps:</p>
+<p>-123[2] = 11111111(3)10000101</p>
+<p>int 强转为 byte，直接截取低8位即10000101</p>
+<p>java把byte当做有符号处理，故此时x=-123</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">int</span> j = (<span class="keyword">int</span>)x; <span class="comment">//-123</span></div></pre></td></tr></table></figure>
+<p>ps:</p>
+<p>byte强转为int，高24位补1(自动扩展)</p>
+<p>此时，j[2]=11111111(3)11101010</p>
+<p>即，j=-123</p>
+<p>负数似乎没有问题…</p>
+<hr>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">int</span> i = <span class="number">234</span>;</div><div class="line"><span class="keyword">byte</span> x = (<span class="keyword">byte</span>)i; <span class="comment">//-22</span></div></pre></td></tr></table></figure>
+<p>ps:</p>
+<p>234[2] = 00000000(3)11101010</p>
+<p>int 强转为 byte，直接截取低8位即11101010</p>
+<p>java把byte当做有符号处理，故此时x=-22</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">int</span> j = (<span class="keyword">int</span>)x; <span class="comment">//-22</span></div></pre></td></tr></table></figure>
+<p>ps:</p>
+<p>byte强转为int，高24位补1（自动扩展）</p>
+<p>此时，j[2]=11111111(3)11101010</p>
+<p>即，j=-22</p>
+<p>可见，byte单纯的强转为int是行不通的。(注意，示例中int强转为一个byte,如果int值超过255,发生数据丢失，正确的int转为4字节byte方法见下文)</p>
+<hr>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">int</span> i = <span class="number">234</span>;</div><div class="line"><span class="keyword">byte</span> x = (<span class="keyword">byte</span>)i; <span class="comment">//-22</span></div><div class="line"><span class="keyword">int</span> j = x &amp; <span class="number">0xFF</span>; <span class="comment">//j=234</span></div></pre></td></tr></table></figure>
+<p>ps:</p>
+<p>x &amp; 0xFF = 00000000(3)11101010</p>
+<p>即，j=234</p>
+<p>可见0xFF的作用…</p>
+<hr>
+<ul>
+<li><a href="http://yukai.space/2016/04/28/java%E4%B8%AD%E7%9A%84%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2/">http://yukai.space/2016/04/28/java%E4%B8%AD%E7%9A%84%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2/</a></li>
+</ul>
+<p>byte short char 他们三者在计算时，首先会转换为int类型,故下面几个表达式进行|运算时，是int类型之间的|运算，存在自动扩展(移位操作也会出现这种情况,即int转byte的时候),不进行&amp; 0xFF的运算，则有可能造成第一种情况的出现。</p>
+<ul>
+<li>java字节序</li>
+</ul>
+<p>java为大端字节序（bigendian）：高字节数据存放在低地址处，低字节数据存放在高地址处。</p>
+<p>0x01020304</p>
+<p>故b[0]=0x01,b[1]=0x02,b[2]=0x03,b[3]=0x04</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//byte 数组与 int 的相互转换  </span></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">byteArrayToInt</span><span class="params">(<span class="keyword">byte</span>[] b)</span> </span>&#123;  </div><div class="line">    <span class="keyword">return</span>   b[<span class="number">3</span>] &amp; <span class="number">0xFF</span> |  </div><div class="line">            (b[<span class="number">2</span>] &amp; <span class="number">0xFF</span>) &lt;&lt; <span class="number">8</span> |  </div><div class="line">            (b[<span class="number">1</span>] &amp; <span class="number">0xFF</span>) &lt;&lt; <span class="number">16</span> |  </div><div class="line">            (b[<span class="number">0</span>] &amp; <span class="number">0xFF</span>) &lt;&lt; <span class="number">24</span>;  </div><div class="line">&#125;  </div><div class="line">  </div><div class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">byte</span>[] intToByteArray(<span class="keyword">int</span> a) &#123;  </div><div class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="keyword">byte</span>[] &#123;  </div><div class="line">        (<span class="keyword">byte</span>) ((a &gt;&gt; <span class="number">24</span>) &amp; <span class="number">0xFF</span>),  </div><div class="line">        (<span class="keyword">byte</span>) ((a &gt;&gt; <span class="number">16</span>) &amp; <span class="number">0xFF</span>),     </div><div class="line">        (<span class="keyword">byte</span>) ((a &gt;&gt; <span class="number">8</span>) &amp; <span class="number">0xFF</span>),     </div><div class="line">        (<span class="keyword">byte</span>) (a &amp; <span class="number">0xFF</span>)  </div><div class="line">    &#125;;  </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yukai.space/2016/11/24/java中的int-byte转换/" data-id="cj9qhw1we001whdnjyx1yyfy7" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+ 
+
+
+  
     <article id="post-java泛型学习" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2016/10/10/java泛型学习/" class="article-date">
@@ -478,62 +574,6 @@
 
 
   
-    <article id="post-关于加密的一点总结" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2016/08/22/关于加密的一点总结/" class="article-date">
-  <time datetime="2016-08-22T12:59:00.000Z" itemprop="datePublished">2016-08-22</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/加密/">加密</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/08/22/关于加密的一点总结/">关于加密的一点总结</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>前两天了解了一下数据库JDBC创建Connection的过程，其中验证用户密码的过程使用了加密算法，研究之。</p>
-<h2 id="信息摘要算法"><a href="#信息摘要算法" class="headerlink" title="信息摘要算法"></a>信息摘要算法</h2><h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><p>验证用户名密码的整个过程主要使用了MD5算法。严格来说，<a href="https://zh.wikipedia.org/wiki/MD5">MD5</a>不是一种加密算法，而是一种信息摘要算法。</p>
-<p>所谓的信息摘要算法，其实就是一种特殊的散列算法。关于散列，之前在<a href="http://yukai.space/2016/04/28/java%E4%B8%AD%E7%9A%84equals%E4%B8%8Ehashcode/">这篇</a>总结中提到过。简单来说，就是把给出的”信息”经过哈希之后得到的值，就是这些内容的”摘要”。</p>
-<h3 id="特点"><a href="#特点" class="headerlink" title="特点"></a>特点</h3><p>信息摘要算法有这样几个特点：</p>
-<p>1.生成固定长度的摘要。以MD5为例，无论信息有多大，经过MD5哈希之后，得到的是一个128bit的值。</p>
-<p>2.算法不可逆。也就是说，不能通过摘要得到信息。可以参考一下知乎上的这个<a href="http://www.zhihu.com/question/22651987">提问</a>.</p>
-<p>3.一般来说，信息不同，摘要也不同。虽然说冲突是一定存在的(无限多可能的信息映射到2的128次方这么大的集合当中)，但是好的摘要算法，要求无法找到两条消息，使他们的摘要相同。</p>
-<p>满足了以上几点的散列算法，就是一种消息摘要算法。那么消息摘要又有什么作用呢？</p>
-        
-          <p class="article-more-link">
-            <a href="/2016/08/22/关于加密的一点总结/#more">阅读全文 »</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yukai.space/2016/08/22/关于加密的一点总结/" data-id="cj9qhw21b005nhdnjfkixd5ar" class="article-share-link">分享</a>
-      
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/加密/">加密</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
- 
-
-
-  
 
 
   <nav id="page-nav">
@@ -560,6 +600,10 @@
       <ul>
         
           <li>
+            <a href="/2017/11/23/Java基础-字节/">Java基础-字节</a>
+          </li>
+        
+          <li>
             <a href="/2017/11/21/理解Java-Reference/">理解Java-Reference</a>
           </li>
         
@@ -573,10 +617,6 @@
         
           <li>
             <a href="/2017/11/05/大型网站技术架构/">大型网站技术架构</a>
-          </li>
-        
-          <li>
-            <a href="/2017/11/02/认识MVCC/">认识MVCC</a>
           </li>
         
       </ul>

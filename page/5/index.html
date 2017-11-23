@@ -66,6 +66,58 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-线程池异常处理方案" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/04/26/线程池异常处理方案/" class="article-date">
+  <time datetime="2017-04-26T12:07:01.000Z" itemprop="datePublished">2017-04-26</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/编程/">编程</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/04/26/线程池异常处理方案/">线程池异常处理方案</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>最近一直在看《java并发编程实战》这本书，之前看过一点，放弃了，现在重新拿过来学习一下。这本书是老外写的，我买的是翻译版。不得不吐槽这本书的翻译，句子晦涩难懂，而且已经读到有好几处错误，差不多跟谷歌翻译一个水平…但是没办法，谁让咱英语差呢？多读几遍，结合jdk源码也能看个大概…</p>
+<p>执行多线程并发任务的时候，如果任务类型相同，一般会考虑使用线程池，一方面利用了并发的优势，一方面避免创建大量线程得不偿失。使用线程池执行的任务一般是我们自己的代码，或者第三方的代码，有没有想过，如果这些代码抛出异常时，线程池会怎么处理呢？如果不处理又会有什么影响？</p>
+</blockquote>
+        
+          <p class="article-more-link">
+            <a href="/2017/04/26/线程池异常处理方案/#more">阅读全文 »</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yukai.space/2017/04/26/线程池异常处理方案/" data-id="cj9qhw22w007phdnjwe4zmlgz" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/多线程/">多线程</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+ 
+
+
+  
     <article id="post-土豆烧肉" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2017/04/19/土豆烧肉/" class="article-date">
@@ -449,72 +501,6 @@
 
 
   
-    <article id="post-java注解" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2017/03/31/java注解/" class="article-date">
-  <time datetime="2017-03-31T13:07:33.000Z" itemprop="datePublished">2017-03-31</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/编程/">编程</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/03/31/java注解/">java注解</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <blockquote>
-<p>在写java代码的过程中，经常会遇到注解，但是没有去理解注解背后的原理，也没有实现过注解。网上关于java注解的文章已经有很多了，参考了一些资料，整理一下注解这方面的知识~</p>
-</blockquote>
-<h2 id="什么是注解"><a href="#什么是注解" class="headerlink" title="什么是注解"></a>什么是注解</h2><p>注解其实很常见。比如@override、Deprecated等。在使用Junit或Spring boot等一些框架的时候，注解更是无处不在了。那么，到底什么是注解呢？</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Annotations, a form of metadata, provide data about a program that is not part of the program itself. </div><div class="line">Annotations have no direct effect on the operation of the code they annotate.   </div><div class="line">&gt;&gt;[https://docs.oracle.com/javase/tutorial/java/annotations/]</div></pre></td></tr></table></figure>
-<p>注解是元数据的一种，提供了关于程序的一些描述信息，但这些信息并不属于这个程序本身的一部分。注解并不会直接影响到代码的执行。</p>
-<p>翻译起来有点拗口。实际上，注解是那些插入到源代码中用于某种工具进行处理的标签。注解不会改变对编写的程序的编译方式，对于包含和不包含注解的代码，java编译器都会生成相同的虚拟机指令。</p>
-<p>一句话来说，注解只是描述代码的标签。注解本身不会做什么事情，为了使注解起到作用来实现一些黑科技，我们还需要用于处理注解的工具(编写代码处理这些注解)。</p>
-<p>我们使用注解可以：</p>
-<ul>
-<li><p>生成文档</p>
-</li>
-<li><p>在编译时进行检查。比如@override</p>
-</li>
-<li><p>替代配置文件，实现自动配置。比如 Springboot</p>
-</li>
-</ul>
-<p>注解Annotation是在jdk1.5之后引进的，jdk1.8之后又增加了一些新的特性。接下来的讨论基于jdk1.7。</p>
-        
-          <p class="article-more-link">
-            <a href="/2017/03/31/java注解/#more">阅读全文 »</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yukai.space/2017/03/31/java注解/" data-id="cj9qhw1xm003ghdnjhtlm7i2i" class="article-share-link">分享</a>
-      
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
- 
-
-
-  
 
 
   <nav id="page-nav">
@@ -541,6 +527,10 @@
       <ul>
         
           <li>
+            <a href="/2017/11/23/Java基础-字节/">Java基础-字节</a>
+          </li>
+        
+          <li>
             <a href="/2017/11/21/理解Java-Reference/">理解Java-Reference</a>
           </li>
         
@@ -554,10 +544,6 @@
         
           <li>
             <a href="/2017/11/05/大型网站技术架构/">大型网站技术架构</a>
-          </li>
-        
-          <li>
-            <a href="/2017/11/02/认识MVCC/">认识MVCC</a>
           </li>
         
       </ul>
