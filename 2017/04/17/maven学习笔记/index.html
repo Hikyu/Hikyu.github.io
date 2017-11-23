@@ -18,7 +18,7 @@ Maven是一个异常强大的构建工具，能够帮助我们自动化构建过
 Maven基础有关Maven如何安装和设置，不在这里啰嗦了，可以到官网下载最新版本然后安装。
 Maven是一个异常强大的构建工具，能够帮助我们自动化构建过程，从清理、编译、测试到生成报告，打包和部署。我们要做的只是使用Mave">
 <meta property="og:image" content="http://yukai.space/2017/04/17/maven学习笔记/mvn.png">
-<meta property="og:updated_time" content="2017-11-08T03:25:18.691Z">
+<meta property="og:updated_time" content="2017-11-23T05:52:46.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="maven学习笔记(一)">
 <meta name="twitter:description" content="上周末两天时间基本上将《Maven实战》这本书看完了。《Maven实战》是很棒的一本介绍maven相关知识的书籍。读完之后，对学到的maven相关的内容做一个梳理总结。
@@ -187,11 +187,33 @@ Maven是一个异常强大的构建工具，能够帮助我们自动化构建过
 <li><p>内置绑定</p>
 <p>Maven核心已经对一些主要的生命周期阶段绑定了很多插件目标，当用户通过命令行调用生命周期的时候，对应的插件目标就会执行相应的任务。</p>
 <p>比如，clean生命周期有pre-clean、clean、post-clean三个阶段，clean生命周期阶段与插件目标的绑定关系如下：</p>
-<p>生命周期阶段 | 插件目标<br>————|———–<br>pre-clean   |<br>clean       |maven-clean-plugin:clean<br>post-clean  |</p>
-<p>执行命令<code>mvn post-clean</code>，输出如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">[INFO] ------------------------------------------------------------------------</div><div class="line">[INFO] Building space.yukai 0.0.1-SNAPSHOT</div><div class="line">[INFO] ------------------------------------------------------------------------</div><div class="line">[INFO] </div><div class="line">[INFO] --- maven-clean-plugin:2.5:clean (default-clean) @ space.yukai ---</div><div class="line">[INFO] ------------------------------------------------------------------------</div><div class="line">[INFO] BUILD SUCCESS</div><div class="line">[INFO] ------------------------------------------------------------------------</div><div class="line">[INFO] Total time: 0.409 s</div><div class="line">[INFO] Finished at: 2017-04-17T16:37:08+08:00</div><div class="line">[INFO] Final Memory: 7M/106M</div><div class="line">[INFO] ------------------------------------------------------------------------</div></pre></td></tr></table></figure>
-<p>从输出中可以看到，执行的插件目标仅为<code>maven-clean-plugin:clean</code></p>
 </li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>生命周期阶段</th>
+<th>插件目标</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>pre-clean</td>
+<td></td>
+</tr>
+<tr>
+<td>clean</td>
+<td>maven-clean-plugin:clean</td>
+</tr>
+<tr>
+<td>post-clean</td>
+</tr>
+</tbody>
+</table>
+<p>  执行命令<code>mvn post-clean</code>，输出如下：</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">[INFO] ------------------------------------------------------------------------</div><div class="line">[INFO] Building space.yukai 0.0.1-SNAPSHOT</div><div class="line">[INFO] ------------------------------------------------------------------------</div><div class="line">[INFO] </div><div class="line">[INFO] --- maven-clean-plugin:2.5:clean (default-clean) @ space.yukai ---</div><div class="line">[INFO] ------------------------------------------------------------------------</div><div class="line">[INFO] BUILD SUCCESS</div><div class="line">[INFO] ------------------------------------------------------------------------</div><div class="line">[INFO] Total time: 0.409 s</div><div class="line">[INFO] Finished at: 2017-04-17T16:37:08+08:00</div><div class="line">[INFO] Final Memory: 7M/106M</div><div class="line">[INFO] ------------------------------------------------------------------------</div></pre></td></tr></table></figure>
+<p>  从输出中可以看到，执行的插件目标仅为<code>maven-clean-plugin:clean</code></p>
+<ul>
 <li><p>自定义绑定</p>
 <p>除了内置绑定之外，用户可以自己选择将某个插件目标绑定到生命周期的某个阶段。</p>
 <p>比如，我们可以自行配置创建项目的源码jar包。maven-source-plugin的jar-no-fork目标可以将项目的主代码打包成jar文件。我们将其绑定到clean生命周期的post-clean阶段测试一下：</p>
