@@ -11,9 +11,9 @@ comments: false
 
 # 博客基础
 
-[Hexo](https://hexo.io/) 一款轻量级的静态博客框架
-[hexo-theme-next](https://github.com/iissnan/hexo-theme-next) 简洁的Hexo主题
-[Markdown](https://www.gitbook.com/book/noahsoft/-makedown/details) 一款轻量级的标记语言
+[Hexo](https://hexo.io/) 轻量级的静态博客框架
+[hexo-theme-cafe](https://github.com/giscafer/hexo-theme-cafe/) 简约的Hexo主题
+[Markdown](https://www.gitbook.com/book/noahsoft/-makedown/details) 轻量级的标记语言
 
 # 技能栈
 
@@ -28,6 +28,8 @@ Linux
 Eclipse RCP
 
 Docker
+
+Python
 
 # 书单
 

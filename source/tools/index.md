@@ -27,6 +27,8 @@ OS : Centos 7
 
 命令行错误修复: [thefuck](https://github.com/nvbn/thefuck)
 
+会话控制：tmux
+
 ## chrome插件
 ---
 
