@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 简单学习Java-Fork/Join框架
+title: Java-ForkJoin框架
 date: 2017-11-30 16:20:27
 categories:
 - 技术
@@ -9,7 +9,6 @@ tags:
 - java
 - 多线程 
 ---
-# Fork/Join
 
 ## 分治思想
 
