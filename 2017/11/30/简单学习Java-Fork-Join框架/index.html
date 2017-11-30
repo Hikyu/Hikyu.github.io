@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>简单学习Java-Fork/Join框架 | YuKai&#39;s blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Fork/Join分治思想分治法的设计思想是：将一个难以直接解决的大问题，分割成一些规模较小的相同问题，以便各个击破，分而治之。
+分治策略是：对于一个规模为n的问题，若该问题可以容易地解决（比如说规模n较小）则直接解决，否则将其分解为k个规模较小的子问题，这些子问题互相独立且与原问题形式相同，递归地解这些子问题，然后将各子问题的解合并得到原问题的解。这种算法设计策略叫做分治法。
+分治法在每一层递归">
+<meta property="og:type" content="article">
+<meta property="og:title" content="简单学习Java-Fork/Join框架">
+<meta property="og:url" content="http://yukai.space/2017/11/30/简单学习Java-Fork-Join框架/index.html">
+<meta property="og:site_name" content="YuKai's blog">
+<meta property="og:description" content="Fork/Join分治思想分治法的设计思想是：将一个难以直接解决的大问题，分割成一些规模较小的相同问题，以便各个击破，分而治之。
+分治策略是：对于一个规模为n的问题，若该问题可以容易地解决（比如说规模n较小）则直接解决，否则将其分解为k个规模较小的子问题，这些子问题互相独立且与原问题形式相同，递归地解这些子问题，然后将各子问题的解合并得到原问题的解。这种算法设计策略叫做分治法。
+分治法在每一层递归">
+<meta property="og:image" content="http://yukai.space/2017/11/30/简单学习Java-Fork-Join框架/gui.jpg">
+<meta property="og:image" content="http://yukai.space/2017/11/30/简单学习Java-Fork-Join框架/fork.png">
+<meta property="og:image" content="http://yukai.space/2017/11/30/简单学习Java-Fork-Join框架/join.png">
+<meta property="og:image" content="http://yukai.space/2017/11/30/简单学习Java-Fork-Join框架/work.png">
+<meta property="og:updated_time" content="2017-11-30T08:25:24.624Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="简单学习Java-Fork/Join框架">
+<meta name="twitter:description" content="Fork/Join分治思想分治法的设计思想是：将一个难以直接解决的大问题，分割成一些规模较小的相同问题，以便各个击破，分而治之。
+分治策略是：对于一个规模为n的问题，若该问题可以容易地解决（比如说规模n较小）则直接解决，否则将其分解为k个规模较小的子问题，这些子问题互相独立且与原问题形式相同，递归地解这些子问题，然后将各子问题的解合并得到原问题的解。这种算法设计策略叫做分治法。
+分治法在每一层递归">
+<meta name="twitter:image" content="http://yukai.space/2017/11/30/简单学习Java-Fork-Join框架/gui.jpg">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    
+    <div id="header-inner" class="inner">
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yukai.space"></form>
+      </div>
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/archives">归档</a>
+        
+          <a class="main-nav-link" href="/tools">工具</a>
+        
+          <a class="main-nav-link" href="/page">关于</a>
+        
+      </nav>
+      
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">YuKai&#39;s blog</a>
+      </h1>
+      
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-简单学习Java-Fork-Join框架" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/11/30/简单学习Java-Fork-Join框架/" class="article-date">
+  <time datetime="2017-11-30T08:20:27.000Z" itemprop="datePublished">2017-11-30</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/编程/">编程</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      简单学习Java-Fork/Join框架
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <h1 id="Fork-Join"><a href="#Fork-Join" class="headerlink" title="Fork/Join"></a>Fork/Join</h1><h2 id="分治思想"><a href="#分治思想" class="headerlink" title="分治思想"></a>分治思想</h2><p>分治法的设计思想是：将一个难以直接解决的大问题，分割成一些规模较小的相同问题，以便各个击破，分而治之。</p>
+<p>分治策略是：对于一个规模为n的问题，若该问题可以容易地解决（比如说规模n较小）则直接解决，否则将其分解为k个规模较小的子问题，这些子问题互相独立且与原问题形式相同，递归地解这些子问题，然后将各子问题的解合并得到原问题的解。这种算法设计策略叫做分治法。</p>
+<p>分治法在每一层递归上都有三个步骤：</p>
+<ul>
+<li><p>分解：将原问题分解为若干个规模较小，相互独立，与原问题形式相同的子问题；</p>
+</li>
+<li><p>解决：若子问题规模较小而容易被解决则直接解，否则递归地解各个子问题</p>
+</li>
+<li><p>合并：将各个子问题的解合并为原问题的解。</p>
+</li>
+</ul>
+<a id="more"></a>
+<p>归并排序运用了分治思想：</p>
+<img src="/2017/11/30/简单学习Java-Fork-Join框架/gui.jpg" alt="归并排序" title="归并排序">
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MergeSort</span> </span>&#123;</div><div class="line">	<span class="keyword">static</span> <span class="keyword">int</span> number = <span class="number">0</span>;</div><div class="line">	<span class="keyword">int</span>[] arr;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line">		<span class="keyword">int</span>[] a = &#123; <span class="number">26</span>, <span class="number">5</span>, <span class="number">98</span>, <span class="number">108</span>, <span class="number">28</span>, <span class="number">99</span>, <span class="number">100</span>, <span class="number">56</span>, <span class="number">34</span>, <span class="number">1</span> &#125;;</div><div class="line">		printArray(<span class="string">"排序前："</span>, a);</div><div class="line">		MergeSort mergeSort = <span class="keyword">new</span> MergeSort(a);</div><div class="line">		mergeSort.sort();</div><div class="line">		printArray(<span class="string">"排序后："</span>, a);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">printArray</span><span class="params">(String pre, <span class="keyword">int</span>[] a)</span> </span>&#123;</div><div class="line">		System.out.print(pre + <span class="string">"\n"</span>);</div><div class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; a.length; i++)</div><div class="line">			System.out.print(a[i] + <span class="string">"\t"</span>);</div><div class="line">		System.out.println();</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="title">MergeSort</span><span class="params">(<span class="keyword">int</span>[] a)</span> </span>&#123;</div><div class="line">		<span class="keyword">this</span>.arr = a;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">sort</span><span class="params">()</span> </span>&#123;</div><div class="line">		sort(arr, <span class="number">0</span>, arr.length - <span class="number">1</span>);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">sort</span><span class="params">(<span class="keyword">int</span>[] a, <span class="keyword">int</span> left, <span class="keyword">int</span> right)</span> </span>&#123;</div><div class="line">		<span class="keyword">if</span> (left &gt;= right)</div><div class="line">			<span class="keyword">return</span>;</div><div class="line"></div><div class="line">		<span class="keyword">int</span> mid = (left + right) / <span class="number">2</span>;</div><div class="line">		sort(a, left, mid);</div><div class="line">		sort(a, mid + <span class="number">1</span>, right);</div><div class="line">		merge(a, left, mid, right);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">merge</span><span class="params">(<span class="keyword">int</span>[] a, <span class="keyword">int</span> left, <span class="keyword">int</span> mid, <span class="keyword">int</span> right)</span> </span>&#123;</div><div class="line"></div><div class="line">		<span class="keyword">int</span>[] tmp = <span class="keyword">new</span> <span class="keyword">int</span>[a.length];</div><div class="line">		<span class="keyword">int</span> r1 = mid + <span class="number">1</span>;</div><div class="line">		<span class="keyword">int</span> tIndex = left;</div><div class="line">		<span class="keyword">int</span> cIndex = left;</div><div class="line">		<span class="comment">// 逐个归并</span></div><div class="line">		<span class="keyword">while</span> (left &lt;= mid &amp;&amp; r1 &lt;= right) &#123;</div><div class="line">			<span class="keyword">if</span> (a[left] &lt;= a[r1])</div><div class="line">				tmp[tIndex++] = a[left++];</div><div class="line">			<span class="keyword">else</span></div><div class="line">				tmp[tIndex++] = a[r1++];</div><div class="line">		&#125;</div><div class="line">		<span class="comment">// 将左边剩余的归并</span></div><div class="line">		<span class="keyword">while</span> (left &lt;= mid) &#123;</div><div class="line">			tmp[tIndex++] = a[left++];</div><div class="line">		&#125;</div><div class="line">		<span class="comment">// 将右边剩余的归并</span></div><div class="line">		<span class="keyword">while</span> (r1 &lt;= right) &#123;</div><div class="line">			tmp[tIndex++] = a[r1++];</div><div class="line">		&#125;</div><div class="line">		System.out.println(<span class="string">"第"</span> + (++number) + <span class="string">"趟排序:\t"</span>);</div><div class="line">		<span class="comment">// 从临时数组拷贝到原数组</span></div><div class="line">		<span class="keyword">while</span> (cIndex &lt;= right) &#123;</div><div class="line">			a[cIndex] = tmp[cIndex];</div><div class="line">			<span class="comment">// 输出中间归并排序结果</span></div><div class="line">			System.out.print(a[cIndex] + <span class="string">"\t"</span>);</div><div class="line">			cIndex++;</div><div class="line">		&#125;</div><div class="line">		System.out.println();</div><div class="line">	&#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="fork-join"><a href="#fork-join" class="headerlink" title="fork/join"></a>fork/join</h2><p>Java1.7 提供的fork/join框架运用了上面提到的分治思想。</p>
+<img src="/2017/11/30/简单学习Java-Fork-Join框架/fork.png" alt="fork" title="fork">
+<img src="/2017/11/30/简单学习Java-Fork-Join框架/join.png" alt="join" title="join">
+<p>fork/join框架由两部分组成：</p>
+<ul>
+<li><p>ForkJoinTask：我们要使用ForkJoin框架，必须首先创建一个ForkJoin任务。它提供在任务中执行fork()和join()操作的机制，通常情况下我们不需要直接继承ForkJoinTask类，而只需要继承它的子类，Fork/Join框架提供了以下两个子类：</p>
+<p>  RecursiveAction：用于没有返回结果的任务。</p>
+<p>  RecursiveTask ：用于有返回结果的任务。</p>
+</li>
+<li><p>ForkJoinPool ：ForkJoinTask需要通过ForkJoinPool来执行，任务分割出的子任务会添加到当前工作线程(ForkJoinWorkerThread)所维护的双端队列中，进入队列的头部。</p>
+<p>  ForkJoinPool提供了三种接口来提交任务：</p>
+<p>  execute(ForkJoinTask): Arrange asynchronous execution</p>
+<p>  invoke(ForkJoinTask): Await and obtain result</p>
+<p>  submit(ForkJoinTask): Arrange exec and obtain Future</p>
+</li>
+</ul>
+<p>fork/join框架还运用到了一个技术：工作窃取</p>
+<p>每个工作线程都有一个工作队列，这个队列是双端队列。对于该线程，新的任务进入队列头部，执行任务则从头部取出。若该线程的工作队列为空，也就是没有任务可以执行，则从其他线程的工作队列的尾部窃取任务执行。这样做很大程度上减少了对队列的访问冲突。</p>
+<img src="/2017/11/30/简单学习Java-Fork-Join框架/work.png" alt="工作窃取" title="工作窃取">
+<p>下面分别参考两个使用了fork/join框架的例子，针对RecursiveAction和RecursiveTask：</p>
+<p>网络爬虫</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">WebCrawer</span> <span class="keyword">implements</span> <span class="title">LinkHandler</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="keyword">private</span> <span class="keyword">final</span> Collection&lt;String&gt; visitedLinks = Collections.synchronizedSet(<span class="keyword">new</span> HashSet&lt;String&gt;());</div><div class="line">    <span class="keyword">private</span> String url;</div><div class="line">    <span class="keyword">private</span> ForkJoinPool mainPool;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">WebCrawer</span><span class="params">(String startingURL, <span class="keyword">int</span> maxThreads)</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.url = startingURL;</div><div class="line">        mainPool = <span class="keyword">new</span> ForkJoinPool(maxThreads);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">startCrawling</span><span class="params">()</span> </span>&#123;</div><div class="line">        mainPool.invoke(<span class="keyword">new</span> LinkFinderAction(<span class="keyword">this</span>.url, <span class="keyword">this</span>));</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">size</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> visitedLinks.size();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addVisited</span><span class="params">(String s)</span> </span>&#123;</div><div class="line">        visitedLinks.add(s);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">visited</span><span class="params">(String s)</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> visitedLinks.contains(s);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">/**</span></div><div class="line">     * <span class="doctag">@param</span> args the command line arguments</div><div class="line">     */</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception </span>&#123;</div><div class="line">        <span class="keyword">new</span> WebCrawer(<span class="string">"http://www.baidu.com"</span>, <span class="number">8</span>).startCrawling();</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">interface</span> <span class="title">LinkHandler</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="comment">/**</span></div><div class="line">     * Returns the number of visited links</div><div class="line">     * <span class="doctag">@return</span></div><div class="line">     */</div><div class="line">    <span class="function"><span class="keyword">int</span> <span class="title">size</span><span class="params">()</span></span>;</div><div class="line"></div><div class="line">    <span class="comment">/**</span></div><div class="line">     * Checks if the link was already visited</div><div class="line">     * <span class="doctag">@param</span> link</div><div class="line">     * <span class="doctag">@return</span></div><div class="line">     */</div><div class="line">    <span class="function"><span class="keyword">boolean</span> <span class="title">visited</span><span class="params">(String link)</span></span>;</div><div class="line"></div><div class="line">    <span class="comment">/**</span></div><div class="line">     * Marks this link as visited</div><div class="line">     * <span class="doctag">@param</span> link</div><div class="line">     */</div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">addVisited</span><span class="params">(String link)</span></span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">LinkFinderAction</span> <span class="keyword">extends</span> <span class="title">RecursiveAction</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="keyword">private</span> String url;</div><div class="line">    <span class="keyword">private</span> LinkHandler cr;</div><div class="line">    <span class="comment">/**</span></div><div class="line">     * Used for statistics</div><div class="line">     */</div><div class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">long</span> t0 = System.nanoTime();</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">LinkFinderAction</span><span class="params">(String url, LinkHandler cr)</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.url = url;</div><div class="line">        <span class="keyword">this</span>.cr = cr;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">compute</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">if</span> (!cr.visited(url)) &#123;</div><div class="line">            System.out.println(url);</div><div class="line">            <span class="keyword">try</span> &#123;</div><div class="line">                List&lt;RecursiveAction&gt; actions = <span class="keyword">new</span> ArrayList&lt;RecursiveAction&gt;();</div><div class="line">                URL uriLink = <span class="keyword">new</span> URL(url);</div><div class="line">                Parser parser = <span class="keyword">new</span> Parser(uriLink.openConnection());</div><div class="line">                NodeList list = parser.extractAllNodesThatMatch(<span class="keyword">new</span> NodeClassFilter(LinkTag.class));</div><div class="line"></div><div class="line">                <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; list.size(); i++) &#123;</div><div class="line">                    LinkTag extracted = (LinkTag) list.elementAt(i);</div><div class="line"></div><div class="line">                    <span class="keyword">if</span> (!extracted.extractLink().isEmpty()</div><div class="line">                            &amp;&amp; !cr.visited(extracted.extractLink())) &#123;</div><div class="line"></div><div class="line">                        actions.add(<span class="keyword">new</span> LinkFinderAction(extracted.extractLink(), cr));</div><div class="line">                    &#125;</div><div class="line">                &#125;</div><div class="line">                cr.addVisited(url);</div><div class="line"></div><div class="line">                <span class="keyword">if</span> (cr.size() == <span class="number">1500</span>) &#123;</div><div class="line">                    System.out.println(<span class="string">"Time for visit 1500 distinct links= "</span> + (System.nanoTime() - t0));</div><div class="line">                &#125;</div><div class="line"></div><div class="line">                <span class="comment">//invoke recursively</span></div><div class="line">                invokeAll(actions);</div><div class="line">            &#125; <span class="keyword">catch</span> (Exception e) &#123;</div><div class="line">                <span class="comment">//ignore 404, unknown protocol or other server errors</span></div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>词频统计</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div><div class="line">145</div><div class="line">146</div><div class="line">147</div><div class="line">148</div><div class="line">149</div><div class="line">150</div><div class="line">151</div><div class="line">152</div><div class="line">153</div><div class="line">154</div><div class="line">155</div><div class="line">156</div><div class="line">157</div><div class="line">158</div><div class="line">159</div><div class="line">160</div><div class="line">161</div><div class="line">162</div><div class="line">163</div><div class="line">164</div><div class="line">165</div><div class="line">166</div><div class="line">167</div><div class="line">168</div><div class="line">169</div><div class="line">170</div><div class="line">171</div><div class="line">172</div><div class="line">173</div><div class="line">174</div><div class="line">175</div><div class="line">176</div><div class="line">177</div><div class="line">178</div><div class="line">179</div><div class="line">180</div><div class="line">181</div><div class="line">182</div><div class="line">183</div><div class="line">184</div><div class="line">185</div><div class="line">186</div><div class="line">187</div><div class="line">188</div><div class="line">189</div><div class="line">190</div><div class="line">191</div><div class="line">192</div><div class="line">193</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Document</span> </span>&#123;</div><div class="line">    <span class="keyword">private</span> <span class="keyword">final</span> List&lt;String&gt; lines;</div><div class="line">    </div><div class="line">    Document(List&lt;String&gt; lines) &#123;</div><div class="line">        <span class="keyword">this</span>.lines = lines;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="function">List&lt;String&gt; <span class="title">getLines</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.lines;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="function"><span class="keyword">static</span> Document <span class="title">fromFile</span><span class="params">(File file)</span> <span class="keyword">throws</span> IOException </span>&#123;</div><div class="line">        List&lt;String&gt; lines = <span class="keyword">new</span> LinkedList&lt;&gt;();</div><div class="line">        <span class="keyword">try</span>(BufferedReader reader = <span class="keyword">new</span> BufferedReader(<span class="keyword">new</span> FileReader(file))) &#123;</div><div class="line">            String line = reader.readLine();</div><div class="line">            <span class="keyword">while</span> (line != <span class="keyword">null</span>) &#123;</div><div class="line">                lines.add(line);</div><div class="line">                line = reader.readLine();</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> <span class="keyword">new</span> Document(lines);</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">/* ......................................................................................... */</span></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Folder</span> </span>&#123;</div><div class="line">    <span class="keyword">private</span> <span class="keyword">final</span> List&lt;Folder&gt; subFolders;</div><div class="line">    <span class="keyword">private</span> <span class="keyword">final</span> List&lt;Document&gt; documents;</div><div class="line">    </div><div class="line">    Folder(List&lt;Folder&gt; subFolders, List&lt;Document&gt; documents) &#123;</div><div class="line">        <span class="keyword">this</span>.subFolders = subFolders;</div><div class="line">        <span class="keyword">this</span>.documents = documents;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="function">List&lt;Folder&gt; <span class="title">getSubFolders</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.subFolders;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="function">List&lt;Document&gt; <span class="title">getDocuments</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.documents;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="function"><span class="keyword">static</span> Folder <span class="title">fromDirectory</span><span class="params">(File dir)</span> <span class="keyword">throws</span> IOException </span>&#123;</div><div class="line">        List&lt;Document&gt; documents = <span class="keyword">new</span> LinkedList&lt;&gt;();</div><div class="line">        List&lt;Folder&gt; subFolders = <span class="keyword">new</span> LinkedList&lt;&gt;();</div><div class="line">        <span class="keyword">for</span> (File entry : dir.listFiles()) &#123;</div><div class="line">            <span class="keyword">if</span> (entry.isDirectory()) &#123;</div><div class="line">                subFolders.add(Folder.fromDirectory(entry));</div><div class="line">            &#125; <span class="keyword">else</span> &#123;</div><div class="line">                documents.add(Document.fromFile(entry));</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> <span class="keyword">new</span> Folder(subFolders, documents);</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">/* ......................................................................................... */</span></div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">WordCounter</span> </span>&#123;    </div><div class="line"></div><div class="line"><span class="comment">/* ......................................................................................... */</span></div><div class="line"></div><div class="line">    String[] wordsIn(String line) &#123;</div><div class="line">        <span class="keyword">return</span> line.trim().split(<span class="string">"(\\s|\\p&#123;Punct&#125;)+"</span>);</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="function">Long <span class="title">occurrencesCount</span><span class="params">(Document document, String searchedWord)</span> </span>&#123;</div><div class="line">        <span class="keyword">long</span> count = <span class="number">0</span>;</div><div class="line">        <span class="keyword">for</span> (String line : document.getLines()) &#123;</div><div class="line">            <span class="keyword">for</span> (String word : wordsIn(line)) &#123;</div><div class="line">                <span class="keyword">if</span> (searchedWord.equals(word)) &#123;</div><div class="line">                    count = count + <span class="number">1</span>;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> count;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line"><span class="comment">/* ......................................................................................... */</span></div><div class="line">    </div><div class="line">    <span class="function">Long <span class="title">countOccurrencesOnSingleThread</span><span class="params">(Folder folder, String searchedWord)</span> </span>&#123;</div><div class="line">        <span class="keyword">long</span> count = <span class="number">0</span>;</div><div class="line">        <span class="keyword">for</span> (Folder subFolder : folder.getSubFolders()) &#123;</div><div class="line">            count = count + countOccurrencesOnSingleThread(subFolder, searchedWord);</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">for</span> (Document document : folder.getDocuments()) &#123;</div><div class="line">            count = count + occurrencesCount(document, searchedWord);</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> count;</div><div class="line">    &#125;</div><div class="line"></div><div class="line"><span class="comment">/* ......................................................................................... */</span></div><div class="line"></div><div class="line">    <span class="class"><span class="keyword">class</span> <span class="title">DocumentSearchTask</span> <span class="keyword">extends</span> <span class="title">RecursiveTask</span>&lt;<span class="title">Long</span>&gt; </span>&#123;</div><div class="line">        <span class="keyword">private</span> <span class="keyword">final</span> Document document;</div><div class="line">        <span class="keyword">private</span> <span class="keyword">final</span> String searchedWord;</div><div class="line">        </div><div class="line">        DocumentSearchTask(Document document, String searchedWord) &#123;</div><div class="line">            <span class="keyword">super</span>();</div><div class="line">            <span class="keyword">this</span>.document = document;</div><div class="line">            <span class="keyword">this</span>.searchedWord = searchedWord;</div><div class="line">        &#125;</div><div class="line">        </div><div class="line">        <span class="meta">@Override</span></div><div class="line">        <span class="function"><span class="keyword">protected</span> Long <span class="title">compute</span><span class="params">()</span> </span>&#123;</div><div class="line">            <span class="keyword">return</span> occurrencesCount(document, searchedWord);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line"><span class="comment">/* ......................................................................................... */</span></div><div class="line"></div><div class="line">    <span class="class"><span class="keyword">class</span> <span class="title">FolderSearchTask</span> <span class="keyword">extends</span> <span class="title">RecursiveTask</span>&lt;<span class="title">Long</span>&gt; </span>&#123;</div><div class="line">        <span class="keyword">private</span> <span class="keyword">final</span> Folder folder;</div><div class="line">        <span class="keyword">private</span> <span class="keyword">final</span> String searchedWord;</div><div class="line">        </div><div class="line">        FolderSearchTask(Folder folder, String searchedWord) &#123;</div><div class="line">            <span class="keyword">super</span>();</div><div class="line">            <span class="keyword">this</span>.folder = folder;</div><div class="line">            <span class="keyword">this</span>.searchedWord = searchedWord;</div><div class="line">        &#125;</div><div class="line">        </div><div class="line">        <span class="meta">@Override</span></div><div class="line">        <span class="function"><span class="keyword">protected</span> Long <span class="title">compute</span><span class="params">()</span> </span>&#123;</div><div class="line">            <span class="keyword">long</span> count = <span class="number">0L</span>;</div><div class="line">            List&lt;RecursiveTask&lt;Long&gt;&gt; forks = <span class="keyword">new</span> LinkedList&lt;&gt;();</div><div class="line">            <span class="keyword">for</span> (Folder subFolder : folder.getSubFolders()) &#123;</div><div class="line">                FolderSearchTask task = <span class="keyword">new</span> FolderSearchTask(subFolder, searchedWord);</div><div class="line">                forks.add(task);</div><div class="line">                task.fork();</div><div class="line">            &#125;</div><div class="line">            <span class="keyword">for</span> (Document document : folder.getDocuments()) &#123;</div><div class="line">                DocumentSearchTask task = <span class="keyword">new</span> DocumentSearchTask(document, searchedWord);</div><div class="line">                forks.add(task);</div><div class="line">                task.fork();</div><div class="line">            &#125;</div><div class="line">            <span class="keyword">for</span> (RecursiveTask&lt;Long&gt; task : forks) &#123;</div><div class="line">                count = count + task.join();</div><div class="line">            &#125;</div><div class="line">            <span class="keyword">return</span> count;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">        </div><div class="line"><span class="comment">/* ......................................................................................... */</span></div><div class="line">    </div><div class="line">    <span class="keyword">private</span> <span class="keyword">final</span> ForkJoinPool forkJoinPool = <span class="keyword">new</span> ForkJoinPool();</div><div class="line">    </div><div class="line">    <span class="function">Long <span class="title">countOccurrencesInParallel</span><span class="params">(Folder folder, String searchedWord)</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> forkJoinPool.invoke(<span class="keyword">new</span> FolderSearchTask(folder, searchedWord));</div><div class="line">    &#125;</div><div class="line"></div><div class="line"><span class="comment">/* ......................................................................................... */</span></div><div class="line">    </div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> IOException </span>&#123;</div><div class="line">    	args = <span class="keyword">new</span> String[<span class="number">3</span>];</div><div class="line">    	args[<span class="number">0</span>] = <span class="string">"D:\\code\\driver"</span>;</div><div class="line">    	args[<span class="number">1</span>] = <span class="string">"java"</span>;</div><div class="line">        WordCounter wordCounter = <span class="keyword">new</span> WordCounter();</div><div class="line">        Folder folder = Folder.fromDirectory(<span class="keyword">new</span> File(args[<span class="number">0</span>]));</div><div class="line">        </div><div class="line"><span class="comment">//        int repeatCount = Integer.decode(args[2]);</span></div><div class="line">        <span class="keyword">int</span> repeatCount = <span class="number">1</span>;</div><div class="line">        <span class="keyword">long</span> counts;</div><div class="line">        <span class="keyword">long</span> startTime;</div><div class="line">        <span class="keyword">long</span> stopTime;</div><div class="line">        </div><div class="line">        <span class="keyword">long</span>[] singleThreadTimes = <span class="keyword">new</span> <span class="keyword">long</span>[repeatCount];</div><div class="line">        <span class="keyword">long</span>[] forkedThreadTimes = <span class="keyword">new</span> <span class="keyword">long</span>[repeatCount];</div><div class="line">        </div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; repeatCount; i++) &#123;</div><div class="line">            startTime = System.currentTimeMillis();</div><div class="line">            counts = wordCounter.countOccurrencesOnSingleThread(folder, args[<span class="number">1</span>]);</div><div class="line">            stopTime = System.currentTimeMillis();</div><div class="line">            singleThreadTimes[i] = (stopTime - startTime);</div><div class="line">            System.out.println(counts + <span class="string">" , single thread search took "</span> + singleThreadTimes[i] + <span class="string">"ms"</span>);</div><div class="line">        &#125;</div><div class="line">        </div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; repeatCount; i++) &#123;</div><div class="line">            startTime = System.currentTimeMillis();</div><div class="line">            counts = wordCounter.countOccurrencesInParallel(folder, args[<span class="number">1</span>]);</div><div class="line">            stopTime = System.currentTimeMillis();</div><div class="line">            forkedThreadTimes[i] = (stopTime - startTime);</div><div class="line">            System.out.println(counts + <span class="string">" , fork / join search took "</span> + forkedThreadTimes[i] + <span class="string">"ms"</span>);</div><div class="line">        &#125;</div><div class="line">        </div><div class="line">        System.out.println(<span class="string">"\nCSV Output:\n"</span>);</div><div class="line">        System.out.println(<span class="string">"Single thread,Fork/Join"</span>);        </div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; repeatCount; i++) &#123;</div><div class="line">            System.out.println(singleThreadTimes[i] + <span class="string">","</span> + forkedThreadTimes[i]);</div><div class="line">        &#125;</div><div class="line">        System.out.println();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>上面的代码分别参考自<a href="https://www.javaworld.com/article/2078440/enterprise-java/java-tip-when-to-use-forkjoinpool-vs-executorservice.html" target="_blank" rel="external">Java Tip: When to use ForkJoinPool vs ExecutorService</a>和<a href="http://www.oracle.com/technetwork/articles/java/fork-join-422606.html" target="_blank" rel="external">Fork and Join: Java Can Excel at Painless Parallel Programming Too!</a></p>
+<p>fork/join框架适用于以下几种场景：</p>
+<ol>
+<li><p>可以通过将任务分割-合并得到结果，fork/join可以并行处理子问题，提高处理效率。</p>
+</li>
+<li><p>fork/join善于处理并行问题。可并行处理问题要么是彼此完全独立的问题，要么是可分解单独处理的问题。可分解单独处理的问题即1中提到的，彼此完全独立的问题譬如 事件类型（不需要join）的任务（<a href="https://doc.akka.io/docs/akka/2.5.6/scala/dispatchers.html" target="_blank" rel="external">akka</a>）。</p>
+</li>
+<li><p>fork/join应该用于处理cup密集型的计算任务。fork/join不适用于执行包含阻塞io的任务类型。</p>
+</li>
+</ol>
+<p>ForkJoin与MapReduce很类似，都是基于分治思想，用于执行并行任务。他们之间的差异在于：</p>
+<ul>
+<li><p>MapReduce用于分布式环境(利用很多机器做分布式计算)，ForkJoin用于单机多核(充分利用多处理器)。</p>
+</li>
+<li><p>MapReduce一开始就先切分好任务然后再执行，并且彼此间在最后合并之前不需要通信，而ForkJoin任务自己知道该如何切分自己，递归地切分到一组合适大小的子任务来执行。</p>
+</li>
+</ul>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://www.java-success.com/10-%E2%99%A6-executorservice-vs-forkjoin-future-vs-completablefuture-interview-qa/" target="_blank" rel="external">10: ♦ ExecutorService Vs Fork/Join &amp; Future Vs CompletableFuture Interview Q&amp;As</a></p>
+<p><a href="http://www.oracle.com/technetwork/articles/java/fork-join-422606.html" target="_blank" rel="external">Fork and Join: Java Can Excel at Painless Parallel Programming Too!</a></p>
+<p><a href="https://www.javaworld.com/article/2078440/enterprise-java/java-tip-when-to-use-forkjoinpool-vs-executorservice.html" target="_blank" rel="external">Java Tip: When to use ForkJoinPool vs ExecutorService</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yukai.space/2017/11/30/简单学习Java-Fork-Join框架/" data-id="cjam7yuat000076njmhssyn7a" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/多线程/">多线程</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+ <script src="/jquery/jquery.min.js"></script>
+  <div id="random_posts">
+    <h2>推荐文章</h2>
+    <div class="random_posts_ul">
+      <script>
+          var random_count =4
+          var site = {BASE_URI:'/'};
+          function load_random_posts(obj) {
+              var arr=site.posts;
+              if (!obj) return;
+              // var count = $(obj).attr('data-count') || 6;
+              for (var i, tmp, n = arr.length; n; i = Math.floor(Math.random() * n), tmp = arr[--n], arr[n] = arr[i], arr[i] = tmp);
+              arr = arr.slice(0, random_count);
+              var html = '<ul>';
+            
+              for(var j=0;j<arr.length;j++){
+                var item=arr[j];
+                html += '<li><strong>' + 
+                item.date + ':&nbsp;&nbsp;<a href="' + (site.BASE_URI+item.uri) + '">' + 
+                (item.title || item.uri) + '</a></strong>';
+                if(item.excerpt){
+                  html +='<div class="post-excerpt">'+item.excerpt+'</div>';
+                }
+                html +='</li>';
+                
+              }
+              $(obj).html(html + '</ul>');
+          }
+          $('.random_posts_ul').each(function () {
+              var c = this;
+              if (!site.posts || !site.posts.length){
+                  $.getJSON(site.BASE_URI + 'js/posts.js',function(json){site.posts = json;load_random_posts(c)});
+              } 
+               else{
+                load_random_posts(c);
+              }
+          });
+      </script>
+    </div>
+  </div>
+
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2017/11/23/Java基础-字节/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">Java基础-字节</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+ 
+     
+  <div class="comments" id="comments">
+    
+     
+       
+      <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+    
+       
+      
+      
+           <div id="gitment_comments"></div>
+    
+  </div>
+ 
+  
+
+</section>
+           
+    <aside id="sidebar">
+  
+    
+
+  
+    
+    <div class="widget-wrap">
+    
+      <div class="widget" id="toc-widget-fixed">
+      
+        <strong class="toc-title">文章目录</strong>
+        <div class="toc-widget-list">
+              <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Fork-Join"><span class="toc-number">1.</span> <span class="toc-text">Fork/Join</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#分治思想"><span class="toc-number">1.1.</span> <span class="toc-text">分治思想</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#fork-join"><span class="toc-number">1.2.</span> <span class="toc-text">fork/join</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-number">1.3.</span> <span class="toc-text">参考</span></a></li></ol></li></ol>
+          </div>
+      </div>
+    </div>
+
+  
+    
+
+  
+    
+  
+    
+  
+    
+
+  
+</aside>
+
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-left">
+      &copy; 2014 - 2017 于凯&nbsp;|&nbsp;
+      主题 <a href="https://github.com/giscafer/hexo-theme-cafe/" target="_blank">Cafe</a>
+    </div>
+     <div id="footer-right">
+      联系方式&nbsp;|&nbsp;debiaoyu@gmail.com
+    </div>
+  </div>
+</footer>
+ <script src="/jquery/jquery.min.js"></script>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/archives" class="mobile-nav-link">归档</a>
+  
+    <a href="/tools" class="mobile-nav-link">工具</a>
+  
+    <a href="/page" class="mobile-nav-link">关于</a>
+  
+</nav>
+    <img class="back-to-top-btn" src="/images/fly-to-top.png"/>
+<script>
+// Elevator script included on the page, already.
+window.onload = function() {
+  var elevator = new Elevator({
+    selector:'.back-to-top-btn',
+    element: document.querySelector('.back-to-top-btn'),
+    duration: 1000 // milliseconds
+  });
+}
+</script>
+      
+
+  
+    <script>
+      var cloudTieConfig = {
+        url: document.location.href, 
+        sourceId: "",
+        productKey: "e2fb4051c49842688ce669e634bc983f",
+        target: "cloud-tie-wrapper"
+      };
+    </script>
+    <script src="https://img1.ws.126.net/f2e/tie/yun/sdk/loader.js"></script>
+    
+
+  
+
+
+
+
+
+
+
+<!-- author:forvoid begin -->
+<!-- author:forvoid begin -->
+
+  <link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+  <script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script> 
+  <script>
+  var gitment = new Gitment({
+    // id: '页面 ID', // 可选。默认为 location.href
+    owner: 'Hikyu',
+    repo: 'Hikyu.github.io',
+    oauth: {
+    client_id: '61886569157db60efa97',
+    client_secret: '6475bb7c8faaf44ff2e12c272a46505a0eecf46f',
+    }
+  })
+  gitment.render(document.getElementById("gitment_comments"))
+</script>
+
+
+<!-- author:forvoid end -->
+
+<!-- author:forvoid end -->
+
+
+
+ <script src="/js/is.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+<script src="/js/elevator.js"></script>
+  </div>
+</body>
+</html>

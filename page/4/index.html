@@ -66,6 +66,64 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-Java-NIO-MappedByteBuffer" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/07/04/Java-NIO-MappedByteBuffer/" class="article-date">
+  <time datetime="2017-07-03T23:56:08.000Z" itemprop="datePublished">2017-07-04</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/编程/">编程</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/07/04/Java-NIO-MappedByteBuffer/">Java-NIO-MappedByteBuffer</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>java nio 学习第二篇–内存映射文件</p>
+</blockquote>
+<h2 id="内核空间与用户空间"><a href="#内核空间与用户空间" class="headerlink" title="内核空间与用户空间"></a>内核空间与用户空间</h2><p>Kernel space 是 Linux 内核的运行空间，User space 是用户程序的运行空间。为了安全，它们是隔离的，即使用户的程序崩溃了，内核也不受影响。</p>
+<p>内核空间中存放的是内核代码和数据。内核空间是操作系统所在区域。内核代码有特别的权力：它能与设备控制器通讯，控制着用户区域进程的运行状态，等等。最重要的是，所有 I/O 都直接或间接通过内核空间。</p>
+<p>用户空间是常规进程所在区域，进程的用户空间中存放的是用户程序的代码和数据。</p>
+<p>Linux使用两级保护机制：0级供内核使用，3级供用户程序使用。</p>
+<p>当一个任务（进程）执行系统调用而陷入内核代码中执行时，我们就称进程处于内核运行态（内核态）。此时处理器处于特权级最高的（0级）内核代码中执行，CPU可执行任何指令。当进程在执行用户自己的代码时，则称其处于用户运行态（用户态）。</p>
+<p>32位Linux的虚拟地址空间为0～4G。Linux内核将这4G字节的空间分为两部分。将最高的1G字节（从虚拟地址0xC0000000到0xFFFFFFFF），供内核使用，称为“内核空间”。而将较低的3G字节（从虚拟地址 0x00000000到0xBFFFFFFF），供各个进程使用，称为“用户空间）。每个进程有各自的私有用户空间（0～3G），这个空间对系统中的其他进程是不可见的。最高的1GB字节虚拟内核空间则为所有进程以及内核所共享。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">str = <span class="string">"my string"</span> <span class="comment">// 用户空间</span></div><div class="line">x = x + <span class="number">2</span></div><div class="line">file.write(str) <span class="comment">// 切换到内核空间</span></div><div class="line"> </div><div class="line">y = x + <span class="number">4</span> <span class="comment">// 切换回用户空间</span></div></pre></td></tr></table></figure>
+        
+          <p class="article-more-link">
+            <a href="/2017/07/04/Java-NIO-MappedByteBuffer/#more">阅读全文 »</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yukai.space/2017/07/04/Java-NIO-MappedByteBuffer/" data-id="cj9qhw1up000bhdnj0z7mwouq" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/NIO/">NIO</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+ 
+
+
+  
     <article id="post-java-NIO-Buffer" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2017/06/28/java-NIO-Buffer/" class="article-date">
@@ -466,58 +524,6 @@
 
 
   
-    <article id="post-java任务取消" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2017/05/02/java任务取消/" class="article-date">
-  <time datetime="2017-05-02T11:45:14.000Z" itemprop="datePublished">2017-05-02</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/编程/">编程</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/05/02/java任务取消/">java任务取消</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <blockquote>
-<p>最近在用思维导图做读书笔记，虽然感觉没有网上所说的那么神奇，但是用来做笔记还是可以的。总结梳理了一下java取消任务执方面的一些内容，也是《java并发编程实战》的读书笔记。</p>
-</blockquote>
-<img src="/2017/05/02/java任务取消/java.png" alt="任务取消" title="任务取消">
-        
-          <p class="article-more-link">
-            <a href="/2017/05/02/java任务取消/#more">阅读全文 »</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yukai.space/2017/05/02/java任务取消/" data-id="cj9qhw1wx002khdnjs1kanfyu" class="article-share-link">分享</a>
-      
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/多线程/">多线程</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
- 
-
-
-  
 
 
   <nav id="page-nav">
@@ -544,6 +550,10 @@
       <ul>
         
           <li>
+            <a href="/2017/11/30/简单学习Java-Fork-Join框架/">简单学习Java-Fork/Join框架</a>
+          </li>
+        
+          <li>
             <a href="/2017/11/23/Java基础-字节/">Java基础-字节</a>
           </li>
         
@@ -557,10 +567,6 @@
         
           <li>
             <a href="/2017/11/15/从通信协议到装饰者模式/">从通信协议到装饰者模式</a>
-          </li>
-        
-          <li>
-            <a href="/2017/11/05/大型网站技术架构/">大型网站技术架构</a>
           </li>
         
       </ul>

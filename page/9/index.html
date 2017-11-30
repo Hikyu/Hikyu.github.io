@@ -66,6 +66,75 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-理解notify notifyall sleep" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/08/31/理解notify notifyall sleep/" class="article-date">
+  <time datetime="2016-08-31T13:27:09.000Z" itemprop="datePublished">2016-08-31</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/编程/">编程</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/08/31/理解notify notifyall sleep/">理解notify notifyall sleep</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>今天下班时和同事偶尔谈起了锁的一些问题，发现自己对这些基本一无所知。只是会使用synchronized关键字来进行简单的同步。之前也想把java并发包的源码看一下，但是最近一直没有时间，阅读源码计划也搁置了一段时间了，等重构完JDBC就先把java IO部分理一下吧。晚上回来翻了一下操作系统的书，总结一下java中基础的notify、notifyall、sleep。网上关于这三个关键字的文章有很多，理解一下，记下来。</p>
+<h2 id="从线程状态说起"><a href="#从线程状态说起" class="headerlink" title="从线程状态说起"></a>从线程状态说起</h2><p>一般的操作系统中，线程的状态大概有这么几个：</p>
+<ol>
+<li><p>执行：线程获得cpu，程序正在执行</p>
+</li>
+<li><p>就绪：线程已经准备好运行，只要获得cpu，便立即执行</p>
+</li>
+<li><p>阻塞：线程等待某些资源，暂时无法执行。这时该线程放弃cpu，引起线程调度</p>
+</li>
+<li><p>挂起：由于某种原因，线程被挂起，线程处于静止状态。若此时线程正在执行，挂起后暂停执行，让出cpu;若原本处于就绪状态，则暂不接受调度。</p>
+</li>
+<li><p>激活：把一个挂起的线程激活</p>
+</li>
+</ol>
+<p>着重理解一下几个关键状态的转换：</p>
+<p>活动就绪–&gt;静止就绪：当线程处于未被挂起的就绪状态时，称为活动就绪，此时线程接收调度。当该线程被挂起后，转变为静止就绪，暂不接受调度。</p>
+<p>活动阻塞–&gt;静止阻塞：当线程处于未被挂起的阻塞状态时，称为活动阻塞。当该线程被挂起后，转变为静止阻塞。当线程等待的事件出现后，从静止阻塞转变为静止就绪。</p>
+<p>注意：挂起和阻塞均会使线程让出cpu，不同就在于阻塞一旦获得等待事件，就转变为就绪状态，接受调度；挂起需要激活操作后，转变为就绪状态，接收调度。</p>
+<p>画个图理解一下：</p>
+<img src="/2016/08/31/理解notify%20notifyall%20sleep/线程状态.png" alt="线程状态.png" title="">
+<p>线程创建和终止状态不再讨论。</p>
+        
+          <p class="article-more-link">
+            <a href="/2016/08/31/理解notify notifyall sleep/#more">阅读全文 »</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yukai.space/2016/08/31/理解notify notifyall sleep/" data-id="cj9qhw22s007fhdnjd4cxhqmh" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/多线程/">多线程</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+ 
+
+
+  
     <article id="post-关于加密的一点总结" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2016/08/22/关于加密的一点总结/" class="article-date">
@@ -460,54 +529,6 @@
 
 
   
-    <article id="post-毕业了" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2016/06/30/毕业了/" class="article-date">
-  <time datetime="2016-06-30T15:48:55.000Z" itemprop="datePublished">2016-06-30</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/生活/">生活</a>►<a class="article-category-link" href="/categories/生活/随笔/">随笔</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/06/30/毕业了/">毕业了</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><iframe 
-    frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="http://music.163.com/outchain/player?type=2&id=27759600&auto=1&height=66"><br></iframe><br>毕业的日子真的过的很快。原来以为很遥远的事情，现在回头看，好像是一个瞬间。</p>
-        
-          <p class="article-more-link">
-            <a href="/2016/06/30/毕业了/#more">阅读全文 »</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yukai.space/2016/06/30/毕业了/" data-id="cj9qhw225006xhdnjqx8v28qr" class="article-share-link">分享</a>
-      
-      
-      
-    </footer>
-  </div>
-  
-</article>
- 
-
-
-  
 
 
   <nav id="page-nav">
@@ -534,6 +555,10 @@
       <ul>
         
           <li>
+            <a href="/2017/11/30/简单学习Java-Fork-Join框架/">简单学习Java-Fork/Join框架</a>
+          </li>
+        
+          <li>
             <a href="/2017/11/23/Java基础-字节/">Java基础-字节</a>
           </li>
         
@@ -547,10 +572,6 @@
         
           <li>
             <a href="/2017/11/15/从通信协议到装饰者模式/">从通信协议到装饰者模式</a>
-          </li>
-        
-          <li>
-            <a href="/2017/11/05/大型网站技术架构/">大型网站技术架构</a>
           </li>
         
       </ul>
