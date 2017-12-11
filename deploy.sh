@@ -20,9 +20,9 @@ echo "博客发布..."
 cd "$folder"
 git add --all .
 git commit -m 'update'
-git push origin master
+git push --force origin master
 echo "备份博客源码到hexo分支..."
 cd "$blog"
 git add --all .
 git commit -m 'update'
-git push origin hexo
+git push --force origin hexo
