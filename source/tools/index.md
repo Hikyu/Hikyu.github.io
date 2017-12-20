@@ -74,6 +74,8 @@ diff 在线对比 : [diffchecker](https://www.diffchecker.com/)
 
 编辑器 : vscode notepad++(打开大文件)
 
+markdown编辑：[MDPUB](http://md.phodal.com/)
+
 命令行浏览器 : curl(测试用的着)
 
 浏览器 : Chrome
@@ -82,7 +84,7 @@ diff 在线对比 : [diffchecker](https://www.diffchecker.com/)
 
 思维导图 : [XMind](http://www.xmindchina.net/)
 
-画图 : [Processon](https://www.processon.com/)
+画图 : [Processon](https://www.processon.com/)、graphviz
 
 微信公众号编辑器 : 135编辑器
 
@@ -103,7 +105,7 @@ diff 在线对比 : [diffchecker](https://www.diffchecker.com/)
 ## 网站资源
 ---
 
-[免费图片](https://pixabay.com/): 免费图片
+免费图片：[unsplash](https://unsplash.com/)、[免费图片](https://pixabay.com/)
 
 [github](www.github.com): 源代码
 
