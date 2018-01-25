@@ -66,6 +66,59 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-读懂Java-Thread-Dump" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/09/23/读懂Java-Thread-Dump/" class="article-date">
+  <time datetime="2017-09-23T00:30:09.000Z" itemprop="datePublished">2017-09-23</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/编程/">编程</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/09/23/读懂Java-Thread-Dump/">读懂Java_Thread_Dump</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>前段时间有现场发现死锁的问题，查看发回来的jstack dump文件，发现虽然大致看懂，但是不是很透彻。从网上看了一些介绍jstack的文章，大部分复制粘贴，讲解的也不够透彻，现在有时间来自己整理一下jstack的知识，记录一下~</p>
+</blockquote>
+<h2 id="获取Dump"><a href="#获取Dump" class="headerlink" title="获取Dump"></a>获取Dump</h2><p>java 提供了查看<strong>当前用户启动的java进程</strong>的工具 JPS：<code>jps</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="number">5008</span> org.eclipse.equinox.launcher_1.3.201.v20161025-<span class="number">1711</span>.jar</div><div class="line"><span class="number">10712</span> Main</div><div class="line"><span class="number">888</span> App</div><div class="line"><span class="number">15804</span> Jps</div><div class="line"><span class="number">34300</span> SynchronizedTest</div></pre></td></tr></table></figure>
+        
+          <p class="article-more-link">
+            <a href="/2017/09/23/读懂Java-Thread-Dump/#more">阅读全文 »</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yukai.space/2017/09/23/读懂Java-Thread-Dump/" data-id="cj9qhw23a0083hdnj90idysjl" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+ 
+
+
+  
     <article id="post-理解JavaScript作用域链" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2017/09/16/理解JavaScript作用域链/" class="article-date">
@@ -469,73 +522,6 @@
 
 
   
-    <article id="post-springboot配置https" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2017/07/12/springboot配置https/" class="article-date">
-  <time datetime="2017-07-12T14:19:17.000Z" itemprop="datePublished">2017-07-12</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/加密/">加密</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/07/12/springboot配置https/">springboot配置https</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <blockquote>
-<p>这两天打算在组内做个培训，关于Https方面的。于是一直在查资料，理解，顺便把今天了解的内容总结一下。</p>
-<p>之前已经写过两篇有关ssl方面的笔记：<a href="http://yukai.space/2016/08/22/%E5%85%B3%E4%BA%8E%E5%8A%A0%E5%AF%86%E7%9A%84%E4%B8%80%E7%82%B9%E6%80%BB%E7%BB%93/">关于加密的一点总结</a>，<a href="http://yukai.space/2016/09/25/ssl%E6%80%BB%E7%BB%93/">ssl总结</a>。当时的理解现在看来还有一些欠缺的地方，温故而知新嘛！</p>
-</blockquote>
-<h2 id="数字签名"><a href="#数字签名" class="headerlink" title="数字签名"></a>数字签名</h2><blockquote>
-<p>数字签名是一种类似写在纸上的普通的物理签名，但是使用了公钥加密领域的技术实现，用于鉴别数字信息的方法。(很空洞有木有~)</p>
-</blockquote>
-<p>数字签名的作用：<strong>身份认证与完整性检验</strong></p>
-<p>下面模拟一个场景，小明给小红写一封信。</p>
-<ol>
-<li><p>首先将摘要信息用发送者小明的私钥加密，生成数字签名，与原始信息一起传送给接收者小红。(什么是摘要信息，公钥私钥在前面的笔记中提到了，不再赘述)</p>
-</li>
-<li><p>小红使用小明的公钥对小明私钥加密后的摘要信息进行解密，如果解密成功，则说明接收到的内容确实由小明发出。这就完成了发送者小明的身份认证。</p>
-</li>
-<li><p>小红对收到的原始信息使用信息摘要算法得到其哈希值，与2中解密后的摘要信息进行比较，如果一致，证明原始信息未经篡改。保证了信息完整性（完整性检验）。</p>
-</li>
-</ol>
-<img src="/2017/07/12/springboot配置https/1.png" alt="小明写信" title="小明写信">
-<img src="/2017/07/12/springboot配置https/2.png" alt="小红写信" title="小红写信">
-        
-          <p class="article-more-link">
-            <a href="/2017/07/12/springboot配置https/#more">阅读全文 »</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yukai.space/2017/07/12/springboot配置https/" data-id="cj9qhw209004lhdnjysnd11yu" class="article-share-link">分享</a>
-      
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/加密/">加密</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
- 
-
-
-  
 
 
   <nav id="page-nav">
@@ -562,6 +548,10 @@
       <ul>
         
           <li>
+            <a href="/2018/01/25/安装Gitlab-Development-Kit/">安装Gitlab-Development-Kit</a>
+          </li>
+        
+          <li>
             <a href="/2018/01/17/Gitlab调研/">Gitlab调研</a>
           </li>
         
@@ -575,10 +565,6 @@
         
           <li>
             <a href="/2017/11/30/简单学习Java-ForkJoin框架/">Java-ForkJoin框架</a>
-          </li>
-        
-          <li>
-            <a href="/2017/11/23/Java基础-字节/">Java基础-字节</a>
           </li>
         
       </ul>

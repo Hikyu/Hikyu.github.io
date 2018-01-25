@@ -66,6 +66,59 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-从通信协议到装饰者模式" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/11/15/从通信协议到装饰者模式/" class="article-date">
+  <time datetime="2017-11-15T14:03:16.000Z" itemprop="datePublished">2017-11-15</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/编程/">编程</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/11/15/从通信协议到装饰者模式/">从通信协议到装饰者模式</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>最近有个新的需求，jdbc与后台的通信要求使用第三方提供的硬件加密卡进行加密。当前数据库与前台工具的通信有两种方式：分别是基于明文或基于ssl。</p>
+<p>基于明文的通信如下：</p>
+<img src="/2017/11/15/从通信协议到装饰者模式/mingwen.png" alt="明文传输" title="明文传输">
+<p>在应用层定义了前后台交互协议，封装的数据包结构大致如下：</p>
+<img src="/2017/11/15/从通信协议到装饰者模式/oscar.png" alt="oscar数据包" title="oscar数据包">
+        
+          <p class="article-more-link">
+            <a href="/2017/11/15/从通信协议到装饰者模式/#more">阅读全文 »</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yukai.space/2017/11/15/从通信协议到装饰者模式/" data-id="cja0tpnul00003anjpsk3gtqo" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/设计模式/">设计模式</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+ 
+
+
+  
     <article id="post-大型网站技术架构" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2017/11/05/大型网站技术架构/" class="article-date">
@@ -478,59 +531,6 @@
 
 
   
-    <article id="post-读懂Java-Thread-Dump" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2017/09/23/读懂Java-Thread-Dump/" class="article-date">
-  <time datetime="2017-09-23T00:30:09.000Z" itemprop="datePublished">2017-09-23</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/编程/">编程</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/09/23/读懂Java-Thread-Dump/">读懂Java_Thread_Dump</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <blockquote>
-<p>前段时间有现场发现死锁的问题，查看发回来的jstack dump文件，发现虽然大致看懂，但是不是很透彻。从网上看了一些介绍jstack的文章，大部分复制粘贴，讲解的也不够透彻，现在有时间来自己整理一下jstack的知识，记录一下~</p>
-</blockquote>
-<h2 id="获取Dump"><a href="#获取Dump" class="headerlink" title="获取Dump"></a>获取Dump</h2><p>java 提供了查看<strong>当前用户启动的java进程</strong>的工具 JPS：<code>jps</code></p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="number">5008</span> org.eclipse.equinox.launcher_1.3.201.v20161025-<span class="number">1711</span>.jar</div><div class="line"><span class="number">10712</span> Main</div><div class="line"><span class="number">888</span> App</div><div class="line"><span class="number">15804</span> Jps</div><div class="line"><span class="number">34300</span> SynchronizedTest</div></pre></td></tr></table></figure>
-        
-          <p class="article-more-link">
-            <a href="/2017/09/23/读懂Java-Thread-Dump/#more">阅读全文 »</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yukai.space/2017/09/23/读懂Java-Thread-Dump/" data-id="cj9qhw23a0083hdnj90idysjl" class="article-share-link">分享</a>
-      
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
- 
-
-
-  
 
 
   <nav id="page-nav">
@@ -557,6 +557,10 @@
       <ul>
         
           <li>
+            <a href="/2018/01/25/安装Gitlab-Development-Kit/">安装Gitlab-Development-Kit</a>
+          </li>
+        
+          <li>
             <a href="/2018/01/17/Gitlab调研/">Gitlab调研</a>
           </li>
         
@@ -570,10 +574,6 @@
         
           <li>
             <a href="/2017/11/30/简单学习Java-ForkJoin框架/">Java-ForkJoin框架</a>
-          </li>
-        
-          <li>
-            <a href="/2017/11/23/Java基础-字节/">Java基础-字节</a>
           </li>
         
       </ul>
