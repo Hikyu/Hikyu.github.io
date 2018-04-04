@@ -9,10 +9,10 @@ tags:
 - git
 ---
 
-{% asset_img git.jpg git %}
-
 > 最近在看 gitlab 的源码，因为公司希望把 gitlab-ee 的 merge squash 功能集成到 gitlab-ce 上来，供公司内部使用....
 > 这个任务交给了我，现在这个功能已经改的差不多了，中间也了解了一些可能会用到的 git 技巧，现在记录下来
+
+{% asset_img git.jpg git %}
 
 ## git cherry-pick
 
@@ -24,7 +24,7 @@ tags:
 
 ```
 git checkout stable
-git cherry-pick <commit id>
+git cherry-pick commit_id
 ``` 
 
 首先我们需要在 feature 分支上通过 `git log` 查询得到我们需要的提交的 commitID，比如 41e59d4(这个提交位于 feature 分支当中)。
