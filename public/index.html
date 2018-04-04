@@ -66,6 +66,112 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-可能会用到的Git技巧2" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/03/29/可能会用到的Git技巧2/" class="article-date">
+  <time datetime="2018-03-29T06:56:57.000Z" itemprop="datePublished">2018-03-29</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/工具/">工具</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/03/29/可能会用到的Git技巧2/">可能会用到的Git技巧(2)</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="git-worktree"><a href="#git-worktree" class="headerlink" title="git worktree"></a>git worktree</h2><p>我们知道如果工作目录修改到一半的话，是不能随便切换 branch 的。解决方法可以通过 <code>git stash</code> 先暂存起来，随后执行 <code>git stash apply</code> 恢复。</p>
+<p>但是，如果我们想同时修改两个分支呢？或者同时测试两个分支。能想到的方法就是单独再 clone 一份代码到其他目录。但是这种方法不仅麻烦，而且形成了两个独立的 git 目录，双方的同步也比较费劲。</p>
+<p>git 为我们提供了一个命令来解决这个问题，那就是 <code>git worktree add -b &lt;新分支名&gt; &lt;新路径&gt; &lt;从此分支创建&gt;</code>。</p>
+<p>比如，我们正在某个 feature 分支开发，现在希望从 master 分出一个分支来解决某个紧急的 BUG：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git worktree add -b hotfix ../hotfix master</div></pre></td></tr></table></figure>
+        
+          <p class="article-more-link">
+            <a href="/2018/03/29/可能会用到的Git技巧2/#more">阅读全文 »</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yukai.space/2018/03/29/可能会用到的Git技巧2/" data-id="cjfkrdf7t006n008204qxmbud" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/git/">git</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+ 
+
+
+  
+    <article id="post-可能会用到的Git技巧1" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/03/01/可能会用到的Git技巧1/" class="article-date">
+  <time datetime="2018-03-01T06:56:57.000Z" itemprop="datePublished">2018-03-01</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/工具/">工具</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/03/01/可能会用到的Git技巧1/">可能会用到的Git技巧(1)</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <img src="/2018/03/01/可能会用到的Git技巧1/git.jpg" alt="git" title="git">
+<blockquote>
+<p>最近在看 gitlab 的源码，因为公司希望把 gitlab-ee 的 merge squash 功能集成到 gitlab-ce 上来，供公司内部使用….<br>这个任务交给了我，现在这个功能已经改的差不多了，中间也了解了一些可能会用到的 git 技巧，现在记录下来</p>
+</blockquote>
+<h2 id="git-cherry-pick"><a href="#git-cherry-pick" class="headerlink" title="git cherry-pick"></a>git cherry-pick</h2><p><a href="https://git-scm.com/docs/git-cherry-pick">git cherry-pick</a> 可以应用某个分支的某些提交到另一个分支上去。</p>
+        
+          <p class="article-more-link">
+            <a href="/2018/03/01/可能会用到的Git技巧1/#more">阅读全文 »</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yukai.space/2018/03/01/可能会用到的Git技巧1/" data-id="cjfkrdf7q006j0082hunv83pt" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/git/">git</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+ 
+
+
+  
     <article id="post-安装Gitlab-Development-Kit" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2018/01/25/安装Gitlab-Development-Kit/" class="article-date">
@@ -93,8 +199,14 @@
     <div class="article-entry" itemprop="articleBody">
       
         <blockquote>
-<p>Gitlab-CE是开源项目，意味着我们可以针对官方的Gitlab源码进行二次开发，从而定制出符合自己的开发习惯或开发流程的代码管理工具。<br>一般来说只要把Gitlab-CE的代码仓库clone到本地，就可以在上面修改代码了。Gitlab-CE的地址：<a href="https://gitlab.com/gitlab-org/gitlab-ce/">https://gitlab.com/gitlab-org/gitlab-ce/</a> 。但是，只有源代码是不能够直接在本地上跑起来的，整个开发环境还需要安装很多依赖，以及配置数据库。Gitlab为了方便开发者，提供了一个Gitlab开发工具Gitlab-Development-Kit，其地址是：<a href="https://gitlab.com/gitlab-org/gitlab-development-kit">https://gitlab.com/gitlab-org/gitlab-development-kit</a> 。Gitlab-Development-Kit可以帮助开发者很方便地在本地搭建起开发环境，并且把Gitlab运行起来。</p>
+<p>Gitlab-CE是开源项目，意味着我们可以针对官方的Gitlab源码进行二次开发，从而定制出符合自己的开发习惯或开发流程的代码管理工具。</p>
+<p>一般来说只要把Gitlab-CE的代码仓库clone到本地，就可以在上面修改代码了。Gitlab-CE的地址：<a href="https://gitlab.com/gitlab-org/gitlab-ce/">https://gitlab.com/gitlab-org/gitlab-ce/</a> 。但是，只有源代码是不能够直接在本地上跑起来的，整个开发环境还需要安装很多依赖，以及配置数据库。Gitlab为了方便开发者，提供了一个Gitlab开发工具Gitlab-Development-Kit，其地址是：<a href="https://gitlab.com/gitlab-org/gitlab-development-kit">https://gitlab.com/gitlab-org/gitlab-development-kit</a> 。Gitlab-Development-Kit可以帮助开发者很方便地在本地搭建起开发环境，并且把Gitlab运行起来。</p>
 </blockquote>
+<ul>
+<li><p>系统环境</p>
+<p>ubuntu-16.04.3-desktop-amd64</p>
+</li>
+</ul>
         
           <p class="article-more-link">
             <a href="/2018/01/25/安装Gitlab-Development-Kit/#more">阅读全文 »</a>
@@ -103,7 +215,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2018/01/25/安装Gitlab-Development-Kit/" data-id="cjcu5f18z0000ejnjqh9n8b7j" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2018/01/25/安装Gitlab-Development-Kit/" data-id="cjfkrdf8b00790082ylhrzga0" class="article-share-link">分享</a>
       
       
       
@@ -159,7 +271,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2018/01/17/Gitlab调研/" data-id="cjciepi010000shnjb7efldh4" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2018/01/17/Gitlab调研/" data-id="cjfkrdf1n00070082lj2630aw" class="article-share-link">分享</a>
       
       
       
@@ -218,7 +330,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2017/12/20/Java同步工具类/" data-id="cjbew2f4d0000a9nj4gacndx2" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2017/12/20/Java同步工具类/" data-id="cjfkrdf2f000i008246n5gvff" class="article-share-link">分享</a>
       
       
       
@@ -268,7 +380,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2017/12/10/Java阻塞队列/" data-id="cjb1imfae00003knj2i4f7sy3" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2017/12/10/Java阻塞队列/" data-id="cjfkrdf2m000p00828acwdjw1" class="article-share-link">分享</a>
       
       
       
@@ -327,7 +439,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2017/11/30/简单学习Java-ForkJoin框架/" data-id="cjam86gt80000eqnjioq8aa8o" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2017/11/30/简单学习Java-ForkJoin框架/" data-id="cjfkrdf9a008l0082x1kbkzgk" class="article-share-link">分享</a>
       
       
       
@@ -388,138 +500,11 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2017/11/23/Java基础-字节/" data-id="cjabt263t0000osnjlj70yv27" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2017/11/23/Java基础-字节/" data-id="cjfkrdf2h000k0082onu46s0e" class="article-share-link">分享</a>
       
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
- 
-
-
-  
-    <article id="posts-理解Java-Reference" class="article article-type-posts" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2017/11/21/理解Java-Reference/" class="article-date">
-  <time datetime="2017-11-21T01:28:46.000Z" itemprop="datePublished">2017-11-21</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/编程/">编程</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/11/21/理解Java-Reference/">理解Java-Reference</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>最近重读《深入理解Java虚拟机》，讲到Java中的几种引用类型，结合源码总结梳理一遍。</p>
-<h2 id="引用类型"><a href="#引用类型" class="headerlink" title="引用类型"></a>引用类型</h2><p>JDK1.2之后，Java扩充了引用的概念，将引用分为强引用、软引用、弱引用和虚引用四种。</p>
-<ul>
-<li><p>强引用</p>
-<p>类似于”Object a = new Object()”这类的引用，只要垃圾强引用存在，垃圾回收器就不会回收掉被引用的对象。</p>
-</li>
-<li><p>软引用</p>
-<p>对于软引用关联的对象，在系统将要发生内存溢出异常之前，会把这些对象列入垃圾回收范围中进行回收。如果这次回收还没有足够内存，则抛出内存异常。</p>
-<p>使用SoftReference类实现软引用</p>
-</li>
-<li><p>弱引用</p>
-<p>强度比软引用更弱，被弱引用关联的对象只能存活到下一次垃圾回收发生之前。当发生GC时，无论当前内存是否足够，都会回收掉只被弱引用关联的对象。</p>
-<p>使用WeakReference类实现弱引用</p>
-</li>
-<li><p>虚引用</p>
-<p>一个对象是否有虚引用的存在，完全不会对其生存时间构成影响，也无法通过虚引用取得一个对象的实例。为一个对象设置虚引用关联的唯一目的就是能够在这个对象被垃圾回收器回收掉后收到一个通知。</p>
-<p>使用PhantomReference类实现虚引用</p>
-</li>
-</ul>
-        
-          <p class="article-more-link">
-            <a href="/2017/11/21/理解Java-Reference/#more">阅读全文 »</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yukai.space/2017/11/21/理解Java-Reference/" data-id="cja8y5f5o0000b8njiuaam4gl" class="article-share-link">分享</a>
-      
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
- 
-
-
-  
-    <article id="posts-如何执行一个延迟任务？" class="article article-type-posts" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2017/11/20/如何执行一个延迟任务？/" class="article-date">
-  <time datetime="2017-11-20T02:57:45.000Z" itemprop="datePublished">2017-11-20</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/编程/">编程</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/11/20/如何执行一个延迟任务？/">如何执行一个延迟任务？</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>前段时间做到临时版本管理系统的项目中有这样一个需求：</p>
-<p>最新发布的版本发布记录状态为<code>未处理</code>，用户手动确认后状态修改为<code>已处理</code>。超过七天后状态为未处理的记录状态自动修改为<code>过期提醒</code>，同时向用户发送一封邮件。</p>
-<p>“修改状态为过期提醒” 的任务就是一个延迟任务，如何执行这样一个任务呢？思考了两种方案：</p>
-<h2 id="轮询"><a href="#轮询" class="headerlink" title="轮询"></a>轮询</h2><p>启动一个定时任务，每隔一天执行一次，执行的内容如下：</p>
-<ol>
-<li><p>select id from release where status = 2 and release_time &gt; 7days</p>
-</li>
-<li><p>update release set status = 3 where id in (…) </p>
-</li>
-<li><p>向用户发送过期通知邮件(可以交给专门的线程去做)</p>
-</li>
-</ol>
-        
-          <p class="article-more-link">
-            <a href="/2017/11/20/如何执行一个延迟任务？/#more">阅读全文 »</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yukai.space/2017/11/20/如何执行一个延迟任务？/" data-id="cja7ltppd0000tsnj39iygka0" class="article-share-link">分享</a>
-      
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/多线程/">多线程</a></li></ul>
 
     </footer>
   </div>
@@ -565,7 +550,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title categories">分类</h3>
     <div class="widget" id="categories">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/技术/">技术</a><span class="category-list-count">82</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/技术/Linux/">Linux</a><span class="category-list-count">9</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/技术/加密/">加密</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/技术/工具/">工具</a><span class="category-list-count">17</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/技术/编程/">编程</a><span class="category-list-count">53</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/生活/">生活</a><span class="category-list-count">10</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/生活/随笔/">随笔</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/生活/食物/">食物</a><span class="category-list-count">7</span></li></ul></li></ul>
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/技术/">技术</a><span class="category-list-count">84</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/技术/Linux/">Linux</a><span class="category-list-count">9</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/技术/加密/">加密</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/技术/工具/">工具</a><span class="category-list-count">19</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/技术/编程/">编程</a><span class="category-list-count">53</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/生活/">生活</a><span class="category-list-count">10</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/生活/随笔/">随笔</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/生活/食物/">食物</a><span class="category-list-count">7</span></li></ul></li></ul>
     </div>
   </div>
 
@@ -575,7 +560,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title tagcloud">标签云</h3>
     <div class="widget tagcloud">
-      <a href="/tags/Eclipse/" style="font-size: 14px;">Eclipse</a> <a href="/tags/NIO/" style="font-size: 20.29px;">NIO</a> <a href="/tags/ant/" style="font-size: 15.57px;">ant</a> <a href="/tags/curl/" style="font-size: 14px;">curl</a> <a href="/tags/git/" style="font-size: 17.14px;">git</a> <a href="/tags/hexo/" style="font-size: 14px;">hexo</a> <a href="/tags/java/" style="font-size: 25px;">java</a> <a href="/tags/javascript/" style="font-size: 14px;">javascript</a> <a href="/tags/junit/" style="font-size: 14px;">junit</a> <a href="/tags/linux/" style="font-size: 21.86px;">linux</a> <a href="/tags/markdown/" style="font-size: 14px;">markdown</a> <a href="/tags/maven/" style="font-size: 17.14px;">maven</a> <a href="/tags/python/" style="font-size: 14px;">python</a> <a href="/tags/spring/" style="font-size: 15.57px;">spring</a> <a href="/tags/web/" style="font-size: 15.57px;">web</a> <a href="/tags/加密/" style="font-size: 17.14px;">加密</a> <a href="/tags/多线程/" style="font-size: 23.43px;">多线程</a> <a href="/tags/快捷键/" style="font-size: 14px;">快捷键</a> <a href="/tags/数据库/" style="font-size: 15.57px;">数据库</a> <a href="/tags/服务器/" style="font-size: 14px;">服务器</a> <a href="/tags/测试/" style="font-size: 14px;">测试</a> <a href="/tags/源码/" style="font-size: 14px;">源码</a> <a href="/tags/类加载/" style="font-size: 15.57px;">类加载</a> <a href="/tags/编码/" style="font-size: 15.57px;">编码</a> <a href="/tags/设计模式/" style="font-size: 18.71px;">设计模式</a> <a href="/tags/调试/" style="font-size: 14px;">调试</a> <a href="/tags/食物/" style="font-size: 20.29px;">食物</a>
+      <a href="/tags/Eclipse/" style="font-size: 14px;">Eclipse</a> <a href="/tags/NIO/" style="font-size: 20.88px;">NIO</a> <a href="/tags/ant/" style="font-size: 15.38px;">ant</a> <a href="/tags/curl/" style="font-size: 14px;">curl</a> <a href="/tags/git/" style="font-size: 19.5px;">git</a> <a href="/tags/hexo/" style="font-size: 14px;">hexo</a> <a href="/tags/java/" style="font-size: 25px;">java</a> <a href="/tags/javascript/" style="font-size: 14px;">javascript</a> <a href="/tags/junit/" style="font-size: 14px;">junit</a> <a href="/tags/linux/" style="font-size: 22.25px;">linux</a> <a href="/tags/markdown/" style="font-size: 14px;">markdown</a> <a href="/tags/maven/" style="font-size: 16.75px;">maven</a> <a href="/tags/python/" style="font-size: 14px;">python</a> <a href="/tags/spring/" style="font-size: 15.38px;">spring</a> <a href="/tags/web/" style="font-size: 15.38px;">web</a> <a href="/tags/加密/" style="font-size: 16.75px;">加密</a> <a href="/tags/多线程/" style="font-size: 23.63px;">多线程</a> <a href="/tags/快捷键/" style="font-size: 14px;">快捷键</a> <a href="/tags/数据库/" style="font-size: 15.38px;">数据库</a> <a href="/tags/服务器/" style="font-size: 14px;">服务器</a> <a href="/tags/测试/" style="font-size: 14px;">测试</a> <a href="/tags/源码/" style="font-size: 14px;">源码</a> <a href="/tags/类加载/" style="font-size: 15.38px;">类加载</a> <a href="/tags/编码/" style="font-size: 15.38px;">编码</a> <a href="/tags/设计模式/" style="font-size: 18.13px;">设计模式</a> <a href="/tags/调试/" style="font-size: 14px;">调试</a> <a href="/tags/食物/" style="font-size: 20.88px;">食物</a>
     </div>
   </div>
 
@@ -585,6 +570,14 @@
     <h3 class="widget-title recent-posts">最新文章</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2018/03/29/可能会用到的Git技巧2/">可能会用到的Git技巧(2)</a>
+          </li>
+        
+          <li>
+            <a href="/2018/03/01/可能会用到的Git技巧1/">可能会用到的Git技巧(1)</a>
+          </li>
         
           <li>
             <a href="/2018/01/25/安装Gitlab-Development-Kit/">安装Gitlab-Development-Kit</a>
@@ -598,14 +591,6 @@
             <a href="/2017/12/20/Java同步工具类/">Java同步工具类</a>
           </li>
         
-          <li>
-            <a href="/2017/12/10/Java阻塞队列/">Java阻塞队列</a>
-          </li>
-        
-          <li>
-            <a href="/2017/11/30/简单学习Java-ForkJoin框架/">Java-ForkJoin框架</a>
-          </li>
-        
       </ul>
     </div>
   </div>
@@ -615,7 +600,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title archive">归档</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">十一月 2017</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">十月 2017</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">九月 2017</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">八月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">七月 2017</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">六月 2017</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">四月 2017</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">三月 2017</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">十二月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">十一月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">十月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">九月 2016</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">八月 2016</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">七月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">六月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">四月 2016</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">三月 2016</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">十二月 2015</a><span class="archive-list-count">2</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">三月 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">十一月 2017</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">十月 2017</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">九月 2017</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">八月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">七月 2017</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">六月 2017</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">四月 2017</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">三月 2017</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">十二月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">十一月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">十月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">九月 2016</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">八月 2016</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">七月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">六月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">四月 2016</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">三月 2016</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">十二月 2015</a><span class="archive-list-count">2</span></li></ul>
     </div>
   </div>
 

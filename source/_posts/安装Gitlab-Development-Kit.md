@@ -10,13 +10,15 @@ tags:
 ---
 
 > Gitlab-CE是开源项目，意味着我们可以针对官方的Gitlab源码进行二次开发，从而定制出符合自己的开发习惯或开发流程的代码管理工具。
+
 > 一般来说只要把Gitlab-CE的代码仓库clone到本地，就可以在上面修改代码了。Gitlab-CE的地址：https://gitlab.com/gitlab-org/gitlab-ce/ 。但是，只有源代码是不能够直接在本地上跑起来的，整个开发环境还需要安装很多依赖，以及配置数据库。Gitlab为了方便开发者，提供了一个Gitlab开发工具Gitlab-Development-Kit，其地址是：https://gitlab.com/gitlab-org/gitlab-development-kit 。Gitlab-Development-Kit可以帮助开发者很方便地在本地搭建起开发环境，并且把Gitlab运行起来。
 
-<!-- more -->
 
 - 系统环境
   
   ubuntu-16.04.3-desktop-amd64
+
+<!-- more -->
 
 > The preferred way to use GitLab Development Kit is to install Ruby and dependencies on your 'native' OS. We strongly recommend the native install since it is much faster than a virtualized one. Due to heavy IO operations a virtualized installation will be much slower running the app and the tests.
 
