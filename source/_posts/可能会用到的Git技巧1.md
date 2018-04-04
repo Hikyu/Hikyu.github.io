@@ -25,7 +25,7 @@ tags:
 ```
 git checkout stable
 git cherry-pick commit_id
-``` 
+```
 
 首先我们需要在 feature 分支上通过 `git log` 查询得到我们需要的提交的 commitID，比如 41e59d4(这个提交位于 feature 分支当中)。
 
