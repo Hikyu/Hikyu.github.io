@@ -15,7 +15,7 @@
 <meta property="og:description" content="今天测试那边在做压力测试的时候，发现新版本的Jdbc占用CPU很高，导致并发量降低，研究半天，发现出问题的地方在于每条语句执行过后都会调用ThreadLocal的get方法。研究一番ThreadLocal…
 
 问题背景：每次sql语句执行结束之后，最后都会接受后台传回的ReadyForQueryPacket包，标记语句执行完毕。在新版本的协议当中，针对读写分离的功能，在这个包中增加了一些要接收的">
-<meta property="og:updated_time" content="2018-04-04T06:12:08.056Z">
+<meta property="og:updated_time" content="2018-04-30T11:35:10.949Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="java中的ThreadLocal">
 <meta name="twitter:description" content="今天测试那边在做压力测试的时候，发现新版本的Jdbc占用CPU很高，导致并发量降低，研究半天，发现出问题的地方在于每条语句执行过后都会调用ThreadLocal的get方法。研究一番ThreadLocal…
@@ -150,7 +150,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2016/06/21/java中的ThreadLocal/" data-id="cjfkrdf4600260082m9kp6og0" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2016/06/21/java中的ThreadLocal/" data-id="cjgmcab5f00269nxc80gzf328" class="article-share-link">分享</a>
       
       
       
