@@ -1,0 +1,90 @@
+---
+title: VirtualBox设置共享文件夹
+date: 2018-05-02 20:50:30
+categories: 
+- 技术
+- Linux
+tags: linux
+---
+
+> 最近在做 Gitlab 备份，Gitlab本身运行在虚拟机当中，备份策略是使用 Rsync 备份到远程主机一份；同时在宿主机备份一份。宿主机使用了windows，想到了一个较为简单的办法，即设置共享文件夹，将需要备份的内容定时复制到共享文件夹即可。在设置共享文件夹的过程中遇到一些问题，在此记录下来。
+
+## 虚拟机安装增强功能
+
+- 安装 linux-headers
+
+   有两种解决办法：
+
+   <!-- more -->
+
+   1. 安装与当前 kernel 相同版本的 kernel-headers 和 kernel-devel 
+
+   ```
+   yum remove kernel-headers -y
+   yum install kernel-headers-$(uname -r) kernel-devel-$( uname -r) -y
+   yum install gcc make -y
+   ```
+
+   2. 升级到最新内核版本
+
+   ```
+   yum update kernel -y
+   yum install kernel-headers kernel-devel gcc make -y
+   # 重启虚拟机
+   # 查看安装的内核版本和kernel-headers版本
+   rpm -qa|grep -e  kernel-devel  -e  kernel-headers 
+   uname -r
+   ```
+
+- 添加虚拟光驱
+
+  在虚拟机关闭状态下，右键虚拟机->设置->存储->添加虚拟光驱：
+
+  选择 VirtualBox 安装目录，默认为 `C:\Program Files\Oracle\VirtualBox`，选择光  盘映像文件 VBoxGuestAdditions.iso。
+
+ {% asset_img iso.png 添加虚拟光驱 %}
+
+- 安装增强功能
+
+   启动虚拟机，挂载刚刚添加的虚拟光驱：
+     
+   ```
+    sudo mkdir /winshare
+    sudo mount /dev/cdrom /winshare
+    cd /winshare
+    sudo ./VBoxLinuxAdditions.run
+
+    # 输出如下
+    # Verifying archive integrity... All good.
+    # Uncompressing VirtualBox 5.2.6 Guest Additions for Linux........
+    # VirtualBox Guest Additions installer
+    # Removing installed version 5.2.6 of VirtualBox Guest Additions...
+    # Copying additional installer modules ...
+    # Installing additional modules ...
+    # VirtualBox Guest Additions: Building the VirtualBox Guest Additions kernel modules.
+    # VirtualBox Guest Additions: Running kernel modules will not be replaced until the system    restarted
+    # VirtualBox Guest Additions: Starting.
+   ```
+
+## 设置共享文件夹
+
+右键虚拟机->设置->共享文件夹：
+
+{% asset_img share.png 设置共享文件夹 %}
+
+配置共享文件夹路径和名称。
+
+进入虚拟机，执行：
+
+```
+sudo mkdir /gitlabwin
+sudo mount -t vboxsf gitlabwin /gitlabwin
+```
+
+此时，共享文件夹配置完毕，/gitlabwin 映射到宿主机 E:\gitlab
+
+可以在 /gitlabwin 下面新建文件，然后查看宿主机 E:\gitlab 是否存在对应的文件。
+
+## 开机自动挂载
+
+目前还没有找到好的解决办法，参考[这里](https://segmentfault.com/q/1010000005600781/a-1020000005616990)
