@@ -66,10 +66,295 @@
       <div class="outer">
         <section id="main">
   
-    <article id="post-毕业了" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-理解java内存模型" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2016/06/30/毕业了/" class="article-date">
-  <time datetime="2016-06-30T15:48:55.000Z" itemprop="datePublished">2016-06-30</time>
+    <a href="/2016/09/10/理解java内存模型/" class="article-date">
+  <time datetime="2016-09-10T02:32:40.000Z" itemprop="datePublished">2016-09-10</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/编程/">编程</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/09/10/理解java内存模型/">理解java内存模型</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>最近一直在看周志明所著的《深入理解Java虚拟机》，看到java内存模型这一章。自己从网上也查了一些资料，算是对java内存模型有了一个大概的认识，对理解和编写java并发有很大的帮助。有一段时间没再写博客了，正好利用周末的时间把自己学到的java内存模型的知识总结一下。Have a nice day~</p>
+<h2 id="并发为啥会出现问题"><a href="#并发为啥会出现问题" class="headerlink" title="并发为啥会出现问题"></a>并发为啥会出现问题</h2><p>PS：2016/9/13更新：今天在地铁上看到这篇文章：<a href="http://toutiao.io/posts/493923/app_preview">Java 并发原理无废话指南</a>,感觉跟我这一小节要说明的问题比较相似，参考一下。</p>
+<h3 id="原子性"><a href="#原子性" class="headerlink" title="原子性"></a>原子性</h3><p>其实去了解java内存模型主要是为java并发打下基础。我刚学编程接触多线程的时候，关于多线程并发为什么会有并发问题有过一些思考，老师或者网上的例子都会给出一个类似这样的例子：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BankAccount</span> </span>&#123;</div><div class="line">	<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> accountBalance = <span class="number">10000</span>;</div><div class="line"></div><div class="line">	<span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Save</span> <span class="keyword">implements</span> <span class="title">Runnable</span> </span>&#123;</div><div class="line">		<span class="keyword">private</span> <span class="keyword">int</span> money;</div><div class="line"></div><div class="line">		<span class="function"><span class="keyword">public</span> <span class="title">Save</span><span class="params">(<span class="keyword">int</span> money)</span> </span>&#123;</div><div class="line">			<span class="keyword">this</span>.money = money;</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		<span class="meta">@Override</span></div><div class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</div><div class="line">			<span class="comment">//存钱</span></div><div class="line">			<span class="keyword">int</span> tempAccount = accountBalance + money;</div><div class="line">			<span class="comment">//设置余额</span></div><div class="line">			accountBalance = tempAccount;</div><div class="line">			System.out.println(<span class="string">"此次存入："</span> + money);</div><div class="line">			System.out.println(<span class="string">"当前余额："</span> + accountBalance);</div><div class="line">		&#125;</div><div class="line"></div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Obtain</span> <span class="keyword">implements</span> <span class="title">Runnable</span> </span>&#123;</div><div class="line"></div><div class="line">		<span class="keyword">private</span> <span class="keyword">int</span> money;</div><div class="line"></div><div class="line">		<span class="function"><span class="keyword">public</span> <span class="title">Obtain</span><span class="params">(<span class="keyword">int</span> money)</span> </span>&#123;</div><div class="line">			<span class="keyword">this</span>.money = money;</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		<span class="meta">@Override</span></div><div class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</div><div class="line">			<span class="keyword">if</span> (money &gt; accountBalance) &#123;</div><div class="line">				System.out.println(<span class="string">"余额不足"</span>);</div><div class="line">				<span class="keyword">return</span>;</div><div class="line">			&#125;</div><div class="line">			<span class="comment">//取钱</span></div><div class="line">			<span class="keyword">int</span> tempAccount = accountBalance - money;</div><div class="line">			<span class="keyword">try</span> &#123;</div><div class="line">				Thread.sleep(<span class="number">1000</span>);<span class="comment">//艾玛，卡了一秒</span></div><div class="line">			&#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</div><div class="line">				e.printStackTrace();</div><div class="line">			&#125;</div><div class="line">			<span class="comment">//设置余额</span></div><div class="line">			accountBalance = tempAccount;</div><div class="line">			System.out.println(<span class="string">"此次取出："</span> + money);</div><div class="line">			System.out.println(<span class="string">"当前余额："</span> + accountBalance);</div><div class="line">		&#125;</div><div class="line"></div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String args[])</span> </span>&#123;</div><div class="line">		<span class="keyword">int</span> saveMoney = <span class="number">10000</span>;</div><div class="line">		<span class="keyword">int</span> obtainMoney = <span class="number">10000</span>;</div><div class="line">		<span class="comment">//自己取钱</span></div><div class="line">		Thread obtain = <span class="keyword">new</span> Thread(<span class="keyword">new</span> Obtain(obtainMoney));</div><div class="line">		<span class="comment">//老婆存钱</span></div><div class="line">		Thread save = <span class="keyword">new</span> Thread(<span class="keyword">new</span> Save(saveMoney));</div><div class="line">		obtain.start();</div><div class="line">		save.start();</div><div class="line">	&#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+        
+          <p class="article-more-link">
+            <a href="/2016/09/10/理解java内存模型/#more">阅读全文 »</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yukai.space/2016/09/10/理解java内存模型/" data-id="cjgp4npu10082m2xcw3n4erh9" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+ 
+
+
+  
+    <article id="post-理解notify notifyall sleep" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/08/31/理解notify notifyall sleep/" class="article-date">
+  <time datetime="2016-08-31T13:27:09.000Z" itemprop="datePublished">2016-08-31</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/编程/">编程</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/08/31/理解notify notifyall sleep/">理解notify notifyall sleep</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>今天下班时和同事偶尔谈起了锁的一些问题，发现自己对这些基本一无所知。只是会使用synchronized关键字来进行简单的同步。之前也想把java并发包的源码看一下，但是最近一直没有时间，阅读源码计划也搁置了一段时间了，等重构完JDBC就先把java IO部分理一下吧。晚上回来翻了一下操作系统的书，总结一下java中基础的notify、notifyall、sleep。网上关于这三个关键字的文章有很多，理解一下，记下来。</p>
+<h2 id="从线程状态说起"><a href="#从线程状态说起" class="headerlink" title="从线程状态说起"></a>从线程状态说起</h2><p>一般的操作系统中，线程的状态大概有这么几个：</p>
+<ol>
+<li><p>执行：线程获得cpu，程序正在执行</p>
+</li>
+<li><p>就绪：线程已经准备好运行，只要获得cpu，便立即执行</p>
+</li>
+<li><p>阻塞：线程等待某些资源，暂时无法执行。这时该线程放弃cpu，引起线程调度</p>
+</li>
+<li><p>挂起：由于某种原因，线程被挂起，线程处于静止状态。若此时线程正在执行，挂起后暂停执行，让出cpu;若原本处于就绪状态，则暂不接受调度。</p>
+</li>
+<li><p>激活：把一个挂起的线程激活</p>
+</li>
+</ol>
+<p>着重理解一下几个关键状态的转换：</p>
+<p>活动就绪–&gt;静止就绪：当线程处于未被挂起的就绪状态时，称为活动就绪，此时线程接收调度。当该线程被挂起后，转变为静止就绪，暂不接受调度。</p>
+<p>活动阻塞–&gt;静止阻塞：当线程处于未被挂起的阻塞状态时，称为活动阻塞。当该线程被挂起后，转变为静止阻塞。当线程等待的事件出现后，从静止阻塞转变为静止就绪。</p>
+<p>注意：挂起和阻塞均会使线程让出cpu，不同就在于阻塞一旦获得等待事件，就转变为就绪状态，接受调度；挂起需要激活操作后，转变为就绪状态，接收调度。</p>
+<p>画个图理解一下：</p>
+<img src="/2016/08/31/理解notify%20notifyall%20sleep/线程状态.png" alt="线程状态.png" title="">
+<p>线程创建和终止状态不再讨论。</p>
+        
+          <p class="article-more-link">
+            <a href="/2016/08/31/理解notify notifyall sleep/#more">阅读全文 »</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yukai.space/2016/08/31/理解notify notifyall sleep/" data-id="cjgp4npu30086m2xczekaegwp" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/多线程/">多线程</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+ 
+
+
+  
+    <article id="post-关于加密的一点总结" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/08/22/关于加密的一点总结/" class="article-date">
+  <time datetime="2016-08-22T12:59:00.000Z" itemprop="datePublished">2016-08-22</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/加密/">加密</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/08/22/关于加密的一点总结/">关于加密的一点总结</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>前两天了解了一下数据库JDBC创建Connection的过程，其中验证用户密码的过程使用了加密算法，研究之。</p>
+<h2 id="信息摘要算法"><a href="#信息摘要算法" class="headerlink" title="信息摘要算法"></a>信息摘要算法</h2><h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><p>验证用户名密码的整个过程主要使用了MD5算法。严格来说，<a href="https://zh.wikipedia.org/wiki/MD5">MD5</a>不是一种加密算法，而是一种信息摘要算法。</p>
+<p>所谓的信息摘要算法，其实就是一种特殊的散列算法。关于散列，之前在<a href="http://yukai.space/2016/04/28/java%E4%B8%AD%E7%9A%84equals%E4%B8%8Ehashcode/">这篇</a>总结中提到过。简单来说，就是把给出的”信息”经过哈希之后得到的值，就是这些内容的”摘要”。</p>
+<h3 id="特点"><a href="#特点" class="headerlink" title="特点"></a>特点</h3><p>信息摘要算法有这样几个特点：</p>
+<p>1.生成固定长度的摘要。以MD5为例，无论信息有多大，经过MD5哈希之后，得到的是一个128bit的值。</p>
+<p>2.算法不可逆。也就是说，不能通过摘要得到信息。可以参考一下知乎上的这个<a href="http://www.zhihu.com/question/22651987">提问</a>.</p>
+<p>3.一般来说，信息不同，摘要也不同。虽然说冲突是一定存在的(无限多可能的信息映射到2的128次方这么大的集合当中)，但是好的摘要算法，要求无法找到两条消息，使他们的摘要相同。</p>
+<p>满足了以上几点的散列算法，就是一种消息摘要算法。那么消息摘要又有什么作用呢？</p>
+        
+          <p class="article-more-link">
+            <a href="/2016/08/22/关于加密的一点总结/#more">阅读全文 »</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yukai.space/2016/08/22/关于加密的一点总结/" data-id="cjgp4npst006bm2xcx8zpo470" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/加密/">加密</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+ 
+
+
+  
+    <article id="post-Java集合框架学习总结" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/08/16/Java集合框架学习总结/" class="article-date">
+  <time datetime="2016-08-16T14:50:16.000Z" itemprop="datePublished">2016-08-16</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/编程/">编程</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/08/16/Java集合框架学习总结/">Java集合框架学习总结</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>看Jdk的源码有大概一个月时间了，中间零零散散算是把<a href="https://docs.oracle.com/javase/7/docs/technotes/guides/collections/index.html">Java的集合</a>看了个大概。源码还有很多地方不甚明白，但对java集合框架总体上有了个认识。总结一下，以后有时间再把源码理一遍。下一步的Jdk源码阅读计划是：<a href="https://docs.oracle.com/javase/7/docs/api/java/io/package-summary.html#package_description">Java IO</a></p>
+<h2 id="框架"><a href="#框架" class="headerlink" title="框架"></a>框架</h2><img src="/2016/08/16/Java集合框架学习总结/collection.png" alt="集合框架" title="集合框架">
+<p>上图并没有把所有的接口和类都列出来，只是把我认为最常用和最核心的几个类和接口的继承关系表示出来。</p>
+<p>通过上图可以看出，java集合框架主要分为两棵树，一棵继承自Collection，一棵继承自Map。接下来分四个部分总结一下。</p>
+        
+          <p class="article-more-link">
+            <a href="/2016/08/16/Java集合框架学习总结/#more">阅读全文 »</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yukai.space/2016/08/16/Java集合框架学习总结/" data-id="cjgp4npnd000tm2xc5h9ojmvl" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/源码/">源码</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+ 
+
+
+  
+    <article id="post-synchronized的一些用法" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/08/16/synchronized的一些用法/" class="article-date">
+  <time datetime="2016-08-16T07:31:44.000Z" itemprop="datePublished">2016-08-16</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/编程/">编程</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/08/16/synchronized的一些用法/">synchronized的用法</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>以前的工作过程中，偶尔会遇到synchronized的使用，比如<a href="http://yukai.space/2015/12/21/notify%E9%97%AE%E9%A2%98/">这篇总结</a>。今天来总结一下自己对synchronized的关键字的一些认识。</p>
+</blockquote>
+<h2 id="同步锁"><a href="#同步锁" class="headerlink" title="同步锁"></a>同步锁</h2><p>synchronized顾名思义，就是用来进行一些同步工作的，我们常常在多线程的环境中使用到它，实现互斥的效果。</p>
+<p>每一个java对象都可以当做一个同步锁，线程进入同步代码块或方法的时候会自动获得该锁，在退出同步代码块或方法时会释放该锁。获得锁的唯一途径就是进入这个锁的保护的同步代码块或方法。这里的同步代码块和同步方法，就是使用synchronized关键字标记的代码块和方法。比如：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">synchronized</span> (object) &#123;</div><div class="line">	<span class="comment">//doSomething...		</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>上面的 ‘{‘ ‘}’ 中间的内容，就是同步代码块，object可以认为是同步锁。同步锁实现了互斥的效果，这就是意味着最多只有一个线程能够获得该锁，当线程A尝试去获得线程B持有的锁时，线程A必须等待或者阻塞，知道线程B释放这个锁，如果B线程不释放这个锁，那么A线程将永远等待下去。</p>
+<h2 id="synchronized修饰代码块"><a href="#synchronized修饰代码块" class="headerlink" title="synchronized修饰代码块"></a>synchronized修饰代码块</h2><h3 id="synchronized同步锁为普通对象"><a href="#synchronized同步锁为普通对象" class="headerlink" title="synchronized同步锁为普通对象"></a>synchronized同步锁为普通对象</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">function</span><span class="params">()</span></span>&#123;</div><div class="line">	<span class="keyword">synchronized</span> (object) &#123;</div><div class="line">		<span class="comment">//doSomething...		</span></div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+        
+          <p class="article-more-link">
+            <a href="/2016/08/16/synchronized的一些用法/#more">阅读全文 »</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yukai.space/2016/08/16/synchronized的一些用法/" data-id="cjgp4nps7005dm2xcoha6pihf" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/多线程/">多线程</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+ 
+
+
+  
+    <article id="post-一些计划" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/08/15/一些计划/" class="article-date">
+  <time datetime="2016-08-15T06:54:55.000Z" itemprop="datePublished">2016-08-15</time>
 </a>
     
   <div class="article-category">
@@ -84,7 +369,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2016/06/30/毕业了/">毕业了</a>
+      <a class="article-title" href="/2016/08/15/一些计划/">一些计划</a>
     </h1>
   
 
@@ -92,17 +377,32 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p><iframe 
-    frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="http://music.163.com/outchain/player?type=2&id=27759600&auto=1&height=66"><br></iframe><br>毕业的日子真的过的很快。原来以为很遥远的事情，现在回头看，好像是一个瞬间。</p>
+        <p><iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="http://music.163.com/outchain/player?type=2&id=168153&auto=1&height=66"></iframe><br>转眼之间毕业已有整整两个月。这两个月里，大家各奔东西，找工作的找工作，考研的继续考研。跟我一起工作了一个多月的哥们也要辞职去考研了，直接原因是刚发的工资让我们都很失望，房价的飞速上涨又让我们这些刚刚步入工作岗位的年轻人感到一阵恐慌。最后或许考研是个不错的解决方案，起码三年内不用考虑这些烂事了，而且据说考研后薪资与本科生大大的不同，具体情况因人而异吧。生活就是这样，真的猛士，敢于直面这操蛋的人生。是时候来点正能量了，无论如何生活都是要继续的。砖，还是要搬的。</p>
+<p>上周末把博客从Jekyll迁移到了Hexo，使用了PacMan的模板。在此要感谢模板的<a href="https://github.com/A-limon/pacman">作者</a>，使我这样一个对前端一窍不通的菜鸟也能整出另自己满意的博客效果。花了61大洋买了五年的域名<a href="www.yukai.space">www.yukai.space</a>作为博客的新域名。域名是从阿里云上买的，我认为是相当便宜了。希望有一个新的开始。在此作出一些生活和学习上的计划，让自己能有所改变吧。</p>
+<h2 id="关于学习"><a href="#关于学习" class="headerlink" title="关于学习"></a>关于学习</h2><p>程序员的价值在于不断学习，工作中我也发现自己真的是太菜了，专业水平有待提高，从以下几个方面开始吧：</p>
+<h3 id="java"><a href="#java" class="headerlink" title="java"></a>java</h3><p>吃饭的家伙，必须得用好了。虽然用java写过不少”小DEMO”,但是java中的很多东西自己并没有涉及，或者只是知道怎么用。说白了就是基础上还要下功夫。这点上决定从读JDK源代码开始，现在在读java中的集合类。前段时间在重构JDBC的过程中，发现自己对面向对象好像理解的较之前更为深刻了。面向对象和设计模式也是我接下来要重点关注的地方。毕竟是要励志成为架构师的男人，哈哈哈。下面列出读书清单：</p>
+<ul>
+<li><p>Thinking In Java</p>
+</li>
+<li><p>Effect Java</p>
+</li>
+<li><p>大话设计模式</p>
+</li>
+<li><p>深入理解Jvm虚拟机</p>
+</li>
+<li><p>重构：改善既有的代码</p>
+</li>
+</ul>
+<p>前两本书可以作为工具书来使用。后三本计划在今年之前读一遍。</p>
         
           <p class="article-more-link">
-            <a href="/2016/06/30/毕业了/#more">阅读全文 »</a>
+            <a href="/2016/08/15/一些计划/#more">阅读全文 »</a>
           </p>
         
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2016/06/30/毕业了/" data-id="cj9qhw225006xhdnjqx8v28qr" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2016/08/15/一些计划/" data-id="cjgp4npsd005pm2xcg4pej3ac" class="article-share-link">分享</a>
       
       
       
@@ -114,10 +414,10 @@
 
 
   
-    <article id="post-java中的枚举" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-为什么是final" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2016/06/30/java中的枚举/" class="article-date">
-  <time datetime="2016-06-30T04:48:55.000Z" itemprop="datePublished">2016-06-30</time>
+    <a href="/2016/07/31/为什么是final/" class="article-date">
+  <time datetime="2016-07-31T09:30:55.000Z" itemprop="datePublished">2016-07-31</time>
 </a>
     
   <div class="article-category">
@@ -132,7 +432,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2016/06/30/java中的枚举/">java中的枚举</a>
+      <a class="article-title" href="/2016/07/31/为什么是final/">为什么是final</a>
     </h1>
   
 
@@ -141,21 +441,20 @@
     <div class="article-entry" itemprop="articleBody">
       
         <blockquote>
-<p>已经好久没有动博客了，毕业之后的第一篇。下班了单开一篇，把毕业照补上。</p>
+<p>之前一直知道这样一个事实：在java中，匿名内部类或局部内部类访问包含自己的函数的局部变量或形参时，该变量或形参必须声明为final类型的。今天逛博客时偶尔看到有人提问：为什么必须是final呢？？？对啊，为什么必须是final呢？翻了很多资料，网上关于这个问题的总结还挺多，但是都不懂他们在说什么（可能是自己理解不到位），所以自己总结一下。</p>
 </blockquote>
-<p>Java中的枚举是在JDK1.5以后出现的。之前的开发过程中并没有用过，但是有碰到过关于枚举的代码。貌似是一种更为简单有效的常量定义方式。学习之，希望以后的写代码过程中可以熟悉并掌握枚举的用法。</p>
-<h2 id="使用场景："><a href="#使用场景：" class="headerlink" title="使用场景："></a>使用场景：</h2><p>每当需要一组固定的常量的时候，如一周的天数、一年四季等。或者是在我们编译前就知道其包含的所有值的集合，比如定义了一些状态等等。这个时候就有可能需要使用枚举了。</p>
-<h2 id="与-public-static-final-的常量定义方式进行比较："><a href="#与-public-static-final-的常量定义方式进行比较：" class="headerlink" title="与 public static final 的常量定义方式进行比较："></a>与 public static final 的常量定义方式进行比较：</h2><p>在以上的场景中，回顾以往的做法，比如我们定义这样一些状态：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">State</span> </span>&#123;</div><div class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> Normal = <span class="number">0</span>;<span class="comment">//正常</span></div><div class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> Update = <span class="number">1</span>;<span class="comment">//已更新</span></div><div class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> Delete = <span class="number">2</span>;<span class="comment">//已删除</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>注：以下提到的局部变量和形参，都是指产生这个匿名内部类的函数的局部变量和形参。</p>
+<p>例子是这样的：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Outer</span> </span>&#123;</div><div class="line">	<span class="keyword">private</span> <span class="keyword">int</span> outerVar=<span class="number">0</span>;</div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testInner</span><span class="params">(<span class="keyword">final</span> String paramVal)</span></span>&#123;</div><div class="line">		<span class="keyword">final</span> Integer localVal = <span class="number">1</span>;</div><div class="line">		Inner inner = <span class="keyword">new</span> Inner()&#123;</div><div class="line">			<span class="meta">@Override</span></div><div class="line">			<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doSomething</span><span class="params">()</span> </span>&#123;</div><div class="line">				System.out.println(localVal+paramVal);</div><div class="line">			&#125;</div><div class="line">			</div><div class="line">		&#125;;</div><div class="line">		</div><div class="line">		<span class="keyword">final</span> <span class="keyword">int</span> localVal1 = <span class="number">2</span>;</div><div class="line">		<span class="class"><span class="keyword">class</span> <span class="title">Inner2</span></span>&#123;</div><div class="line">			<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testInner2</span><span class="params">()</span></span>&#123;</div><div class="line">				System.out.println(localVal1);</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">	<span class="class"><span class="keyword">interface</span> <span class="title">Inner</span></span>&#123;</div><div class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doSomething</span><span class="params">()</span></span>;</div><div class="line">	&#125;</div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String args[])</span></span>&#123;</div><div class="line">		Outer outer = <span class="keyword">new</span> Outer();</div><div class="line">		outer.testInner(<span class="string">"hello"</span>);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
         
           <p class="article-more-link">
-            <a href="/2016/06/30/java中的枚举/#more">阅读全文 »</a>
+            <a href="/2016/07/31/为什么是final/#more">阅读全文 »</a>
           </p>
         
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2016/06/30/java中的枚举/" data-id="cj9qhw1wh0020hdnjj91b39e0" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2016/07/31/为什么是final/" data-id="cjgp4npsf005sm2xc6q2iskoh" class="article-share-link">分享</a>
       
       
       
@@ -169,10 +468,10 @@
 
 
   
-    <article id="post-java中的ThreadLocal" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-java_Tips" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2016/06/21/java中的ThreadLocal/" class="article-date">
-  <time datetime="2016-06-21T04:48:55.000Z" itemprop="datePublished">2016-06-21</time>
+    <a href="/2016/07/24/java_Tips/" class="article-date">
+  <time datetime="2016-07-24T04:48:55.000Z" itemprop="datePublished">2016-07-24</time>
 </a>
     
   <div class="article-category">
@@ -187,7 +486,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2016/06/21/java中的ThreadLocal/">java中的ThreadLocal</a>
+      <a class="article-title" href="/2016/07/24/java_Tips/">java编程技巧</a>
     </h1>
   
 
@@ -196,342 +495,21 @@
     <div class="article-entry" itemprop="articleBody">
       
         <blockquote>
-<p>今天测试那边在做压力测试的时候，发现新版本的Jdbc占用CPU很高，导致并发量降低，研究半天，发现出问题的地方在于每条语句执行过后都会调用ThreadLocal的get方法。研究一番ThreadLocal…</p>
+<p>突然想到把自己平时用到的，网上看到的java编程过程中的小技巧总结下来~~</p>
 </blockquote>
-<h2 id="问题背景："><a href="#问题背景：" class="headerlink" title="问题背景："></a><strong>问题背景</strong>：</h2><p>每次sql语句执行结束之后，最后都会接受后台传回的ReadyForQueryPacket包，标记语句执行完毕。在新版本的协议当中，针对读写分离的功能，在这个包中增加了一些要接收的数据：标记数据库主机状态的lsn。这个lsn标志着主备机之间的数据是否存在差异。每次执行完sql语句之后，都要将数据库后台传回来的lsn与当前主机的lsn进行比较，从而决定下一步的读写过程。每次取本机的lsn操作长这样：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">LsnVo lv = ((LsnVo)DispatchConnection.threadLocalLsn.get());</div></pre></td></tr></table></figure>
-<p>其中，threadLocalLsn是DispatchConnection中的一个ThreadLocal类的静态对象。由于每次执行sql语句之后都会执行它的get方法，导致不必要的cpu浪费。这就是cpu异常的原因。</p>
-<p>遂改之：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">LsnVo lv = ((DispatchConnection) conn).getLsnVo();</div></pre></td></tr></table></figure>
+<p> <strong>1</strong>. 循环中尽量不要使用try..catch 代码块，应该将其放在最外层</p>
+<p> <strong>2</strong>. if语句中,判断条件尽量不要使用if(!…)的形式，这样只会使代码更加难以理解</p>
+<p> <strong>3</strong>. 循环内不要不断创建对象引用，而应该：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">Object obj = <span class="keyword">null</span>;</div><div class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt;= count; i++) &#123; </div><div class="line"> obj = <span class="keyword">new</span> Object(); </div><div class="line">&#125;</div></pre></td></tr></table></figure>
         
           <p class="article-more-link">
-            <a href="/2016/06/21/java中的ThreadLocal/#more">阅读全文 »</a>
+            <a href="/2016/07/24/java_Tips/#more">阅读全文 »</a>
           </p>
         
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2016/06/21/java中的ThreadLocal/" data-id="cj9qhw1vw001ohdnjt9zxzpzs" class="article-share-link">分享</a>
-      
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/多线程/">多线程</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
- 
-
-
-  
-    <article id="post-java中的equals与hashcode" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2016/04/28/java中的equals与hashcode/" class="article-date">
-  <time datetime="2016-04-28T04:48:55.000Z" itemprop="datePublished">2016-04-28</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/编程/">编程</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/04/28/java中的equals与hashcode/">通过HashMap认识equals与hashcode</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <blockquote>
-<p>最近读了HashMap的源码，对HashCode与equals有了一定的了解，总结一下，顺便理一下HashMap中的核心算法。</p>
-</blockquote>
-<h2 id="什么是hashcode-hashcode的作用是什么"><a href="#什么是hashcode-hashcode的作用是什么" class="headerlink" title="什么是hashcode,hashcode的作用是什么"></a>什么是hashcode,hashcode的作用是什么</h2><p>hashcode并不是java中独有的。设想一下，如果让你设计一个算法，根据关键码去得到一个集合中的某个值或者这个关键码所在的位置。普通的做法就是挨个比较，高级一点的使用二分检索或者树形检索等算法。但是以上的检索算法都跟集合的长度N有关，当问题规模N很大时，这些检索的效率可能十分低下。</p>
-<p>理想的情况是，根据关键码，我们就可以定位记录所在的位置，而不用去挨个进行比较。也就是说，在关键码与记录存放的位置之间做一种映射。这个映射的方法就是hash(哈希)函数，或者叫散列函数，也就是java中的hashCode()方法，他所返回的值就是hashcode，根据hashcode可以找到记录的位置。</p>
-<p>按照散列的存储方式构造的存储结构叫做散列表。散列表中的一个位置称之为一个槽。</p>
-<p>hashCode()方法存在于java.lang.Object类当中，任何类都可以继承修改这个方法。hashCode()方法返回调用它的实例的hashCode值，是个int值。</p>
-<p>注：以下代码均来自jdk1.7</p>
-<p>String中hashCode()方法的实现：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">hashCode</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">int</span> h = hash;</div><div class="line">        <span class="keyword">if</span> (h == <span class="number">0</span> &amp;&amp; value.length &gt; <span class="number">0</span>) &#123;</div><div class="line">            <span class="keyword">char</span> val[] = value;</div><div class="line"></div><div class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; value.length; i++) &#123;</div><div class="line">                h = <span class="number">31</span> * h + val[i];</div><div class="line">            &#125;</div><div class="line">            hash = h;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> h;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-        
-          <p class="article-more-link">
-            <a href="/2016/04/28/java中的equals与hashcode/#more">阅读全文 »</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yukai.space/2016/04/28/java中的equals与hashcode/" data-id="cj9qhw1vy001thdnjxulqvsrv" class="article-share-link">分享</a>
-      
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
- 
-
-
-  
-    <article id="post-java中的类型转换" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2016/04/28/java中的类型转换/" class="article-date">
-  <time datetime="2016-04-28T04:48:55.000Z" itemprop="datePublished">2016-04-28</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/编程/">编程</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/04/28/java中的类型转换/">java中的类型转换</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <blockquote>
-<p>以前一直对java中的类型转换了解的不是很清楚，因为平时写代码有IDE的帮助，所以往往忽略这一块的内容，但往往就是这样的小知识点不清楚，很有可能造成很大的错误。所以在闲暇时间总结一下这些可能被遗忘的知识点。网上已经有很多相关的介绍文章了，现在来梳理一番：</p>
-</blockquote>
-<h2 id="基本类型"><a href="#基本类型" class="headerlink" title="基本类型"></a><strong>基本类型</strong></h2><ul>
-<li><strong>基本类型优先级</strong></li>
-</ul>
-<p>首先来看java中的基本类型有哪些：</p>
-<p>byte：byte数据类型是一个8位有符号二进制补码整数。</p>
-<p>short：short数据类型为16位有符号二进制补码整数。</p>
-<p>int：int数据类型是一个32位有符号二进制补码整数</p>
-<p>long: long数据类型是一个64位二进制补码整数</p>
-<p>float: float数据类型是单精度、32位、符合IEEE 754标准的浮点数</p>
-<p>boolean: boolean数据类型只有两个可能的值：true和false</p>
-<p>double: double数据类型是双精度、64位、符合IEEE 754标准的浮点数；</p>
-<p>char: char数据类型是一个16位的Unicode字符</p>
-<p>基本类型优先级由低到高排序：</p>
-<p>(byte short char) int long float double</p>
-<p>其中，byte short char 平级</p>
-        
-          <p class="article-more-link">
-            <a href="/2016/04/28/java中的类型转换/#more">阅读全文 »</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yukai.space/2016/04/28/java中的类型转换/" data-id="cj9qhw1wj0024hdnjb1chsywg" class="article-share-link">分享</a>
-      
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
- 
-
-
-  
-    <article id="post-ant编译java工程jdk路径的设置" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2016/04/25/ant编译java工程jdk路径的设置/" class="article-date">
-  <time datetime="2016-04-25T04:48:55.000Z" itemprop="datePublished">2016-04-25</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/工具/">工具</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/04/25/ant编译java工程jdk路径的设置/">ANT编译java工程经jdk路径的设置</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <blockquote>
-<p>今天工作的时候涉及到使用ant对项目进行编译，打包。此前只知道ant是一个构建工具（当然，现在也是），也基本上没有接触过。但是build.xml是从仓库下载的已经配置好的文件。本来想着只要在eclipse轻轻一点Ant Build 就万事大吉，但是这个打包却折腾了我两个小时。</p>
-</blockquote>
-<p>打包过程中总是报：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">[javac] 警告: [options] 未与 -source <span class="number">1.5</span> 一起设置引导类路径</div><div class="line">[javac] E:\doc\oscartools\driver\oscarJavaDriver\jdbc\V1.0\build\com\oscar\Driver.java:<span class="number">50</span>: 错误: com.oscar.Driver不是抽象的, 并且未覆盖java.sql.Driver中的抽象方法getParentLogger()</div><div class="line">[javac] <span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Driver</span> <span class="keyword">implements</span> <span class="title">java</span>.<span class="title">sql</span>.<span class="title">Driver</span> </span>&#123;</div><div class="line">....</div></pre></td></tr></table></figure>
-<p>类似这样的一堆错误。</p>
-<p>没有过多的思考，百度之…出现了一堆没用的资料和争论。80%的时间花在了看这些人扯淡上面（或许正真的大神并不关注这些问题）。</p>
-<p>严重的浪费时间和影响心情，遂放弃。</p>
-<p>静下来想想，工程的java build path使用1.5，java compiler 使用1.5，没什么问题啊。。。</p>
-<p>后来灵光一现，build.xml中的javac难道与java home有关（原谅我现在才想到）？java home使用jdk为1.7，遂改为1.5。</p>
-<p>重启eclipse，悲催，eclipse要求jdk必须大于等于1.7。</p>
-<p>等等，如果不同的工程依赖不同的jdk的话，修改java home并不是一个明智的解决方案，一定可以针对某个工程修改它所依赖的javac，谷歌之 ‘ant set java_home in build.xml’</p>
-<p>果然，stackoverflow拯救了我，只需要在build.xml文件中javac标签下添加</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">executable=<span class="string">"C:\Program Files\Java\jdk1.5.0_22/bin/javac"</span></div><div class="line">fork=<span class="string">"yes"</span></div></pre></td></tr></table></figure>
-        
-          <p class="article-more-link">
-            <a href="/2016/04/25/ant编译java工程jdk路径的设置/#more">阅读全文 »</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yukai.space/2016/04/25/ant编译java工程jdk路径的设置/" data-id="cj9qhw1vd0010hdnj80va4ob4" class="article-share-link">分享</a>
-      
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ant/">ant</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
- 
-
-
-  
-    <article id="post-java中的编码问题" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2016/04/20/java中的编码问题/" class="article-date">
-  <time datetime="2016-04-20T04:48:55.000Z" itemprop="datePublished">2016-04-20</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/编程/">编程</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/04/20/java中的编码问题/">java中的编码问题</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <blockquote>
-<p>最近在工作过程中总是被编码困扰，出现了很多意想不到的情况。故上网查看资料，总结一番。</p>
-</blockquote>
-<p>2016/9/11 更新：今天在网上看到一篇讲解有关编码的文章 <a href="http://blog.csdn.net/zklth/article/details/7016886">Java中字符编码和字符串所占字节数</a>,个人认为作者写的十分清晰明了。把文章中的例子看懂的话再遇到乱码的情况解决起来应该不难！</p>
-<h2 id="编码"><a href="#编码" class="headerlink" title="编码"></a>编码</h2><p>什么是编码？程序员应该都知道计算机能够识别的只是1和0，我们看到的文字、图片、视频等在计算机的 世界里都是以二进制的形式存在的。包括你的硬盘或者网络上传输的字节序列，都是无数个0和1组成的。英文字母，数字，汉字等都是字符。不同字符对应二进制数的规则，也就是说不同的字符翻译为不同的0、1组合，就是字符的编码。这个过程的逆过程，就是解码。</p>
-<ul>
-<li><h4 id="Ascii编码"><a href="#Ascii编码" class="headerlink" title="Ascii编码"></a><strong><a href="http://baike.baidu.com/view/15482.htm?fromtitle=ascii%E7%A0%81&amp;fromid=99077&amp;type=syn">Ascii编码</a></strong></h4></li>
-</ul>
-<p>标准的ASCII编码使用的是7（2^7 = 128）位二进制数来表示所有的大小写字母、数字和标点符号已经一些特殊的控制字符，最前面的一位统一规定为0。(一个字节8位)。缺点是只能显示128个字符，显示的字符十分有限，比如对中文就无能为力了。</p>
-<ul>
-<li><h4 id="GB2312"><a href="#GB2312" class="headerlink" title="GB2312"></a><strong><a href="http://baike.baidu.com/view/443268.htm?fromtitle=GB2312&amp;fromid=483170&amp;type=syn">GB2312</a></strong></h4></li>
-</ul>
-<p>GB2312编码适用于汉字处理、汉字通信等系统之间的信息交换，通行于中国大陆；新加坡等地也采用此编码。中国大陆几乎所有的中文系统和国际化的软件都支持GB 2312。</p>
-<ul>
-<li><h4 id="UTF-8"><a href="#UTF-8" class="headerlink" title="UTF-8"></a><strong><a href="http://baike.baidu.com/view/25412.htm">UTF-8</a></strong></h4></li>
-</ul>
-<p>事实上世界上那么多国家，存在更多的字符是前面的编码所不能表示的。不同国家的不同编码之间也不能够兼容。所以就需要一套通用的编码能够表示世界上所有的符号，这就是<a href="http://baike.baidu.com/item/unicode">Unicode编码</a><br>事实上，Unicode也是一套字符集。</p>
-        
-          <p class="article-more-link">
-            <a href="/2016/04/20/java中的编码问题/#more">阅读全文 »</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yukai.space/2016/04/20/java中的编码问题/" data-id="cj9qhw1ws0028hdnjybc7o32u" class="article-share-link">分享</a>
-      
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/编码/">编码</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
- 
-
-
-  
-    <article id="post-关于抽象类和接口" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2016/04/15/关于抽象类和接口/" class="article-date">
-  <time datetime="2016-04-15T14:48:55.000Z" itemprop="datePublished">2016-04-15</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/编程/">编程</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/04/15/关于抽象类和接口/">关于抽象类和接口</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="抽象类："><a href="#抽象类：" class="headerlink" title="抽象类："></a>抽象类：</h2><blockquote>
-<p>使用了关键词abstract声明的类叫作“抽象类”。如果一个类里包含了一个或多个抽象方法，类就必须指定成abstract（抽象）.</p>
-</blockquote>
-<ul>
-<li><p>抽象类不能被实例化</p>
-</li>
-<li><p>如果一个类继承了抽象类，则该类必须实现所继承抽象类的所有抽象方法，否则该类也必须声明为abstract类</p>
-</li>
-<li><p>抽象方法必须为public或者protected，缺省情况是public。若声明为private，则子类无法实现该方法。</p>
-</li>
-<li><p>可以有抽象的构造方法，但该方法不能被用来实例化对象，只能由继承该类的子类通过super()调用。</p>
-</li>
-<li><p>不可以有抽象的静态方法。因为在java中，静态方法是不可以被继承的，与抽象类的定义矛盾。</p>
-</li>
-<li><p>抽象类不一定必须包含抽象方法，但包含抽象方法的类一定是抽象类。</p>
-</li>
-<li><p>子类中的抽象方法不能与父类的抽象方法同名</p>
-</li>
-<li><p>其余情况抽象类与普通类相同。</p>
-</li>
-</ul>
-        
-          <p class="article-more-link">
-            <a href="/2016/04/15/关于抽象类和接口/#more">阅读全文 »</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yukai.space/2016/04/15/关于抽象类和接口/" data-id="cj9qhw21h005rhdnjcyy06yzl" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2016/07/24/java_Tips/" data-id="cjgp4nppl002ym2xc4nhoent9" class="article-share-link">分享</a>
       
       
       
@@ -548,7 +526,7 @@
 
 
   <nav id="page-nav">
-    <a class="extend prev" rel="prev" href="/page/9/">&laquo; 上一页</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><a class="page-number" href="/page/9/">9</a><span class="page-number current">10</span><a class="page-number" href="/page/11/">11</a><a class="extend next" rel="next" href="/page/11/">下一页&raquo;</a>
+    <a class="extend prev" rel="prev" href="/page/9/">&laquo; 上一页</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><a class="page-number" href="/page/9/">9</a><span class="page-number current">10</span><a class="page-number" href="/page/11/">11</a><a class="page-number" href="/page/12/">12</a><a class="page-number" href="/page/13/">13</a><a class="extend next" rel="next" href="/page/11/">下一页&raquo;</a>
   </nav>
 </section>
            
@@ -571,23 +549,23 @@
       <ul>
         
           <li>
-            <a href="/2017/11/30/简单学习Java-ForkJoin框架/">Java-ForkJoin框架</a>
+            <a href="/2018/05/02/VirtualBox共享文件夹/">VirtualBox设置共享文件夹</a>
           </li>
         
           <li>
-            <a href="/2017/11/23/Java基础-字节/">Java基础-字节</a>
+            <a href="/2018/05/01/Centos7美化/">Centos7美化</a>
           </li>
         
           <li>
-            <a href="/2017/11/21/理解Java-Reference/">理解Java-Reference</a>
+            <a href="/2018/04/30/联通华为HG8347R设置桥接模式/">联通华为HG8347R设置桥接模式</a>
           </li>
         
           <li>
-            <a href="/2017/11/20/如何执行一个延迟任务？/">如何执行一个延迟任务？</a>
+            <a href="/2018/03/29/可能会用到的Git技巧2/">可能会用到的Git技巧(2)</a>
           </li>
         
           <li>
-            <a href="/2017/11/15/从通信协议到装饰者模式/">从通信协议到装饰者模式</a>
+            <a href="/2018/03/01/可能会用到的Git技巧1/">可能会用到的Git技巧(1)</a>
           </li>
         
       </ul>
@@ -605,7 +583,7 @@
   
   <div class="outer">
     <div id="footer-left">
-      &copy; 2014 - 2017 于凯&nbsp;|&nbsp;
+      &copy; 2014 - 2018 于凯&nbsp;|&nbsp;
       主题 <a href="https://github.com/giscafer/hexo-theme-cafe/" target="_blank">Cafe</a>
     </div>
      <div id="footer-right">

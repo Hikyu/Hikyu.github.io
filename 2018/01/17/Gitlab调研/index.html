@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Gitlab调研 | YuKai&#39;s blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="最近公司想要替换原来的代码管理工具Starteam，一方面是这个 Starteam bug不少，用起来有不少问题，随着开发团队的扩大，工具跟不上现在的开发节奏了；另一方面近几年 Git 已经成为趋势，作为开发人员，总应该顺应潮流…所以调研了一下 Gitlab 这个开源的项目管理工具。我觉得有必要把一些理解记下来，以备不时之需。
+
+Gitlab Github Git
+Github
+
+提起开源，我们">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Gitlab调研">
+<meta property="og:url" content="http://yukai.space/2018/01/17/Gitlab调研/index.html">
+<meta property="og:site_name" content="YuKai's blog">
+<meta property="og:description" content="最近公司想要替换原来的代码管理工具Starteam，一方面是这个 Starteam bug不少，用起来有不少问题，随着开发团队的扩大，工具跟不上现在的开发节奏了；另一方面近几年 Git 已经成为趋势，作为开发人员，总应该顺应潮流…所以调研了一下 Gitlab 这个开源的项目管理工具。我觉得有必要把一些理解记下来，以备不时之需。
+
+Gitlab Github Git
+Github
+
+提起开源，我们">
+<meta property="og:image" content="http://yukai.space/2018/01/17/Gitlab调研/merge_request.png">
+<meta property="og:image" content="http://yukai.space/2018/01/17/Gitlab调研/reviewer.png">
+<meta property="og:image" content="http://yukai.space/2018/01/17/Gitlab调研/ff_merge_rebase_locally.png">
+<meta property="og:image" content="http://yukai.space/2018/01/17/Gitlab调研/ff_merge_rebase.png">
+<meta property="og:updated_time" content="2018-04-30T11:35:10.917Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Gitlab调研">
+<meta name="twitter:description" content="最近公司想要替换原来的代码管理工具Starteam，一方面是这个 Starteam bug不少，用起来有不少问题，随着开发团队的扩大，工具跟不上现在的开发节奏了；另一方面近几年 Git 已经成为趋势，作为开发人员，总应该顺应潮流…所以调研了一下 Gitlab 这个开源的项目管理工具。我觉得有必要把一些理解记下来，以备不时之需。
+
+Gitlab Github Git
+Github
+
+提起开源，我们">
+<meta name="twitter:image" content="http://yukai.space/2018/01/17/Gitlab调研/merge_request.png">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    
+    <div id="header-inner" class="inner">
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yukai.space"></form>
+      </div>
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/archives">归档</a>
+        
+          <a class="main-nav-link" href="/tools">工具</a>
+        
+          <a class="main-nav-link" href="/page">关于</a>
+        
+      </nav>
+      
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">YuKai&#39;s blog</a>
+      </h1>
+      
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-Gitlab调研" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/01/17/Gitlab调研/" class="article-date">
+  <time datetime="2018-01-17T01:37:57.000Z" itemprop="datePublished">2018-01-17</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/工具/">工具</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Gitlab调研
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <blockquote>
+<p>最近公司想要替换原来的代码管理工具Starteam，一方面是这个 Starteam bug不少，用起来有不少问题，随着开发团队的扩大，工具跟不上现在的开发节奏了；另一方面近几年 Git 已经成为趋势，作为开发人员，总应该顺应潮流…所以调研了一下 Gitlab 这个开源的项目管理工具。我觉得有必要把一些理解记下来，以备不时之需。</p>
+</blockquote>
+<h2 id="Gitlab-Github-Git"><a href="#Gitlab-Github-Git" class="headerlink" title="Gitlab Github Git"></a>Gitlab Github Git</h2><ul>
+<li>Github</li>
+</ul>
+<p>提起开源，我们总能想到鼎鼎有名的 <a href="https://github.com/" target="_blank" rel="external">Github</a>。Github 是一个代码托管网站，提供源代码托管服务。简单点来说，就是你可以把自己的代码上传到 Github 进行保存，然后在别的地方下载下来进行修改。当然，Github 不仅仅可以托管代码，你可以把他类比成网盘，存放你想存的任何东西，Github 还提供了一些其他的服务，比如写文档、生成电子书、托管博客等等。</p>
+<p>GitHub 同时提供付费账户和免费账户。这两种账户都可以创建公开的代码仓库，但是付费账户还可以创建私有的代码仓库。</p>
+<a id="more"></a>
+<ul>
+<li>Gitlab</li>
+</ul>
+<p>Gitlab 则是跟 Github 十分类似的网站。<a href="https://gitlab.com/" target="_blank" rel="external">Gitlub</a> 几乎提供了 Github 所拥有的一切功能。Gitlab 也提供付费账户和免费账户，与 Github 不同之处在于， Gitlab  的免费账户也可以创建私有代码仓库。</p>
+<p>与 Github 不同之处在于，Gitlab 同时也是提供了自托管服务，即 Gitlab 也是一款应用程序。你可以下载 Gitlab 的源代码，在你本地的环境编译安装，生成与 gitlab.com 一样的网站。这意味着你可以在公司内部使用这款工具，而不用把代码上传到 Gitlab 或 Github 上面，保证了代码的私密性。</p>
+<p>Gitlab 提供了社区版本和企业版本。 社区版本是免费的，企业版本是付费的。 与社区版本相比，企业版本提供了一些额外的功能。但是对于大多数小公司来说，免费版本已经足够使用了。</p>
+<p>在<a href="http://yukai.space/2017/09/06/git%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84%E9%85%8D%E7%BD%AE/">git服务器的配置</a> 这篇总结中，已经提到了如何在本地搭建 Gitlab 的社区版本。</p>
+<ul>
+<li>Git</li>
+</ul>
+<p>Gitlab 与 Github 都是围绕 Git 展开的。 Git 是一款分布式版本控制系统，用来进行版本控制。 Git 与 SVN 是一个层次的概念(VCS)，而 SVN 属于集中式的版本控制，Git 属于分布式的版本控制。</p>
+<p>Gitlab 和 Github 以 Git 为核心，提供了远程代码托管的服务，同时展开了一些别的服务，比如项目管理、BUG 追踪等等。</p>
+<h2 id="几种工作流"><a href="#几种工作流" class="headerlink" title="几种工作流"></a>几种工作流</h2><p>随着 Git 的流行，出现了几种工作流。</p>
+<blockquote>
+<p>Git 作为一个源码管理系统，不可避免涉及到多人协作。<br>协作必须有一个规范的工作流程，让大家有效地合作，使得项目井井有条地发展下去。”工作流程”在英语里，叫做”workflow”或者”flow”，原意是水流，比喻项目像水流那样，顺畅、自然地向前流动，不会发生冲击、对撞、甚至漩涡。</p>
+</blockquote>
+<p>大致上有这样几种工作流：</p>
+<ul>
+<li><p>集中式</p>
+</li>
+<li><p>Git工作流</p>
+</li>
+<li><p>Github工作流</p>
+</li>
+<li><p>Gitlab工作流</p>
+</li>
+</ul>
+<p>目前公司采用的就是 集中式 的工作流。也是SVN的代码提交方式，即多人协作开发同一个主分支代码，所有的代码都提交到同一个分支。</p>
+<p>这几种工作流的详细介绍可以参考下面的链接：</p>
+<p><a href="http://www.ruanyifeng.com/blog/2015/12/git-workflow.html" target="_blank" rel="external">Git 工作流程</a></p>
+<p><a href="https://github.com/oldratlee/translations/blob/master/git-workflows-and-tutorials/README.md" target="_blank" rel="external">git-workflows-and-tutorials</a></p>
+<h2 id="Code-review"><a href="#Code-review" class="headerlink" title="Code review"></a>Code review</h2><p>多人协作，免不了要进行 Code review，即代码审查。Gitlab 提供了 Code review 的功能。</p>
+<p>Gitlab 提供的 Code review 通过 <a href="https://docs.gitlab.com/ee/user/project/merge_requests/" target="_blank" rel="external">Merge requests</a> 来做。 你可能听过 Pull request ，这是 Github 提供的 Code review 手段，他俩的流程是一样的，只不过名字不同而已。</p>
+<p>简单介绍一下 Gitlab Code review 流程：(假设我们现在针对master分支进行修改)</p>
+<p>在此之前，先介绍一下<a href="https://docs.gitlab.com/ce/user/project/protected_branches.html" target="_blank" rel="external">保护分支</a>。</p>
+<p>所谓的保护分支即给某个分支设立一些操作权限，包括 push、merge 的权限。你可以将权限分配给 <a href="https://docs.gitlab.com/ee/user/permissions.html" target="_blank" rel="external">主程序员 或者 开发者</a>。比如，我们现在设置 master 的保护权限为 <strong>禁止任何人进行push</strong>， <strong>只允许主程序员进行merge</strong>。这样设置意味着任何人都不能通过 push 的方式修改 Gitlab 远程仓库 master 分支的代码，同时所有人的修改都需要提交 merge request 给主程序员，由他将修改合并到主分支。</p>
+<p>通过给 master 分支设置权限，可以起到杜绝恶意代码提交或滥提交的作用。</p>
+<hr>
+<ol>
+<li>新建远程分支</li>
+</ol>
+<p>首先，你需要在 Gitlab 服务器上建立一个master分支的拷贝，有两种方式：fork到你自己的账户下(类似于Github协作的方式)，或者在 master 分支的基础上新建一个 分支。</p>
+<p>我们采用第二种，新建一个bug修改的分支：bug_No1</p>
+<ol>
+<li>克隆远程分支到本地，并进行修改</li>
+</ol>
+<p>我们将项目克隆(git clone)到自己的机器上。切换到 bug_No1 分支，开始修改bug。</p>
+<p>过程大概是这样：git add -&gt; git commit 、git add -&gt; git commit、git add -&gt; git commit…</p>
+<ol>
+<li>压缩提交，推送到远程分支</li>
+</ol>
+<p>此时代码修改的差不多了，可以进行 Code review 了。但是在此之前，我们应该进行一个操作：压缩提交。这个不是必须的，但是是一个好的习惯：</p>
+<p>在第2步中，我们进行了多次提交，这些提交反应了你修改 bug 过程的细节。这些细节是否有必要推送出去呢？有可能我们只是修改了一个分号也会进行一次提交，这些提交只会造成 review 人员的迷惑，所以在推送代码之前，有必要整理一下这些 commit，即使用<a href="https://segmentfault.com/a/1190000007748862" target="_blank" rel="external">Git交互式变基</a>的功能(git rebase -i)。</p>
+<p>然后，将本地 bug_No1 分支push到 远程 bug_No1 分支。</p>
+<ol>
+<li>提交 merge request</li>
+</ol>
+<p>登录 Gitlab，在项目中选择 <code>Merge Requests</code> 标签页，点击 New merge request:</p>
+<img src="/2018/01/17/Gitlab调研/merge_request.png" alt="merge_request" title="merge_request">
+<p>选择source branch为 bug_No1， target branch为 master，点击Compare branches and continue</p>
+<p>可以添加一些描述，比如 <code>close #1</code>，表示如果这个merge request 被合并，就更新 issue #1 的状态为关闭。或者还可以在描述中 @别的开发人员，进行多人review。</p>
+<p>选择reviewer，提交 merge request。</p>
+<ol>
+<li>reviewer 查看 merge request</li>
+</ol>
+<p>reviewer 和你@过的开发人员 会收到merge request的提醒，然后到 Gitlab 查看你的 merge request：</p>
+<img src="/2018/01/17/Gitlab调研/reviewer.png" alt="review" title="review">
+<p>他可以选择 点击 Merge，表示合并此次提交到 master，或者在评论里评论你的代码，可以具体到某行，指出一些错误和建议。</p>
+<ol>
+<li>再次修改代码</li>
+</ol>
+<p>你的 merge request 被别人评论之后，你就会收到邮件。根据评论，你可以在本地再次修改你 bug_No1上面的代码，git add -&gt; git commit …</p>
+<p>然后再次push。注意，这次的push不要再进行压缩提交了，因为此时你的代码已经被分享到远端，你在本地修改了提交历史，是无法再次提交到远程仓库的。如果需要push到远程仓库，则需要强制推送，这样的话远程仓库的提交历史也改变了。这样会造成 reviewer 的疑惑，因为原先的一些提交已经不再了，会使review历史变得不清晰。</p>
+<ol>
+<li>再次 review</li>
+</ol>
+<p>当你第二次push了你的代码之后，不再需要点击merge request了。Gitlab 会自动将此次的推送绑定到之前的 merge request 上。此时 reviewer 会收到邮件提醒，再次查看你的代码，并决定是否 merge。</p>
+<p>6，7步可以多次进行。</p>
+<ol>
+<li>merge </li>
+</ol>
+<p>reviewer 通过了此次 merge request，点击 merge，将 bug_No1 的代码合并到 master。如果有冲突(别人已经合并过了)，则需要解决冲突。</p>
+<hr>
+<p>以上就是一次代码 review 的流程，其中还有一些问题：</p>
+<ol>
+<li><p>因为只有主程序员拥有 merge 的权限，那么主程序员需要解决每一次的 merge 冲突，有点蛋疼</p>
+<p>你可以为开发者也分配 merge 权限，但是这样显得不是那么严谨。自己给自己 review？</p>
+</li>
+<li><p>每次 review-&gt;修改-&gt;review 造成了很多commit，这些commit也会随着 merge 被合并到master中</p>
+<p>我们在第一次推送 bug_No1 到远程仓库的时候，压缩了提交。但是一旦你的代码已经分享到远程仓库，那么再进行变基是不明智的。</p>
+<p>这样的话，每次review之后再 git add -&gt; git commit ，我们对这些 commit 就无能为力了。一旦代码被 merge 到 master 非分支，你再查看 master 的 commits 时就会发现很多这样 review 代码之后的提交，是不是很蛋疼(这有点强迫症的意味)？</p>
+</li>
+</ol>
+<p>对于这两点问题，我想到了一个解决方案：<a href="https://docs.gitlab.com/ee/user/project/merge_requests/fast_forward_merge.html" target="_blank" rel="external">Fast-forward merge requests </a></p>
+<p>简单来说，就是 master 分支只接受 Fast-forward 的方式合并的代码。什么是快速推进(Fast-forward)？参考<a href="http://yanhaijing.com/git/2017/07/14/four-method-for-git-merge/" target="_blank" rel="external">图解4种git合并分支方法</a></p>
+<p>当你的代码 bug_No1 不能以快速推进的方式合并到 master 分支的时候，意味着可能出现了冲突：</p>
+<img src="/2018/01/17/Gitlab调研/ff_merge_rebase_locally.png" alt="冲突" title="冲突">
+<p>注意上面图片中的提醒：To merge this request, first rebase locally.</p>
+<p>需要你在本地执行<a href="https://git-scm.com/book/zh/v2/Git-%E5%88%86%E6%94%AF-%E5%8F%98%E5%9F%BA" target="_blank" rel="external">变基</a>。什么是变基(rebase)？还是参考<a href="http://yanhaijing.com/git/2017/07/14/four-method-for-git-merge/" target="_blank" rel="external">图解4种git合并分支方法</a></p>
+<p>此时，提交 merge request 的开发者就有责任解决这个冲突：在本地执行下面的指令</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">git checkout bug_No1</div><div class="line">// 之前提到的交互式变基也是变基的一种，我们现在在变基master的同时执行压缩提交，就能解决上面的第二个问题</div><div class="line">git rebase -i master</div><div class="line">git push --force</div></pre></td></tr></table></figure>
+<p>因为执行了变基，本地分支 bug_No1 的提交历史已经发生了改变，想要推送到远程仓库 bug_No1 分支时，就需要执行强制推送。</p>
+<img src="/2018/01/17/Gitlab调研/ff_merge_rebase.png" alt="冲突解决" title="冲突解决">
+<p>此时，主程序员只需要点一下 Rebase 按钮即可，不再会有合并冲突了。</p>
+<p>这种解决方案其实也不是完美的，原因之前也提到了，使用了变基之后，提交历史改变了，而且需要强制推送，<code>--force</code> 总是让人嗅到危险的味道。此外，对于使用变基还是合并，一直有一些争议，使用变基的缺点大致有两个：1.回滚的时候可能比较麻烦 2.无法反应真实的合并历史</p>
+<hr>
+<p>对于上面提到的第二个问题，<code>Gitlab 企业版</code>提供了解决方案：<a href="https://www.google.com/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=1&amp;ved=0ahUKEwjb_bqNz9zYAhVIxlQKHSXYCQUQFggrMAA&amp;url=https%3A%2F%2Fdocs.gitlab.com%2Fee%2Fuser%2Fproject%2Fmerge_requests%2Fsquash_and_merge.html&amp;usg=AOvVaw3-4GTewcTnmjCxe5eM3MF1" target="_blank" rel="external">Squash and merge</a></p>
+<p>实际上就是在 bug_No1 Merge 到 master 分支时，使用了<code>git merge –squash bug_No1</code>命令。什么是squash？还是参考[图解4种git合并分支方法]</p>
+<p>这个功能其实是比较常用的一个功能点，<a href="https://gitlab.com/gitlab-org/gitlab-ce/issues/34591" target="_blank" rel="external">Gitlab issue</a> 上有针对这个的讨论。很可惜社区版本并不支持这个功能。</p>
+<h2 id="Gitlab-与-Redmine"><a href="#Gitlab-与-Redmine" class="headerlink" title="Gitlab 与 Redmine"></a>Gitlab 与 Redmine</h2><p>Gitlab 本身的 issue 功能已经很强大了，但是还有一些瑕疵，比如 issue 状态不够多(只有新建和关闭)并且无法自定义(虽然可以使用Label，但是Label之间并不具有状态那样的互斥关系)。另外，公司原本使用 TD 作为bug追踪工具，TD 的bug序列号是全局唯一的，而 Gitlab issue 的序列号是与项目绑定的，并不是全局唯一，造成了从 T D迁移到 Gitlab issue 变得十分困难。</p>
+<p>综上，决定使用 <a href="https://www.redmine.org/" target="_blank" rel="external">Redmine</a> 作为 bug 追踪工具。</p>
+<h4 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h4><p>安装 Redmine 可以使用两种方式：原生安装 或 使用 bitnami 一键安装。</p>
+<p>原生安装比较繁琐，这里直接选择 bitnami 的方式安装。</p>
+<p>下载 bitnami redmine 安装包 <a href="https://bitnami.com/stack/redmine/installer#linux" target="_blank" rel="external">Redmine Installers</a>，双击，根据GUI提示安装即可。</p>
+<p>Redmine 与 Gitlab 集成分为两部分，如下：</p>
+<h4 id="配置-Gitlab-Redmine-Service"><a href="#配置-Gitlab-Redmine-Service" class="headerlink" title="配置 Gitlab Redmine Service"></a>配置 <a href="https://docs.gitlab.com/ce/user/project/integrations/redmine.html" target="_blank" rel="external">Gitlab Redmine Service</a></h4><p>Gitlab 项目与 Redmine 项目是一一对应的。</p>
+<p>进入 Gitlab 的项目服务设置页面：settings-&gt;integrations，找到 redmine 的设置：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">Active：True</div><div class="line">Trigger：Push</div><div class="line">Project url：Redmine 中相关的项目地址，例如 http://192.168.1.100:8888/redmine/projects/test</div><div class="line">Issues url：一般是 Project url + issues，例如 http://192.168.1.100:8888/redmine/issues/:id</div><div class="line">New issue url：通常是 Issues url + new，例如 http://192.168.1.100:8888/redmine/projects/test/issues/new</div></pre></td></tr></table></figure>
+<p>保存设置，这样的话当你点击 merge request 等描述或者评论中 #number 时，就会自动跳转到redmine相关issue页面。</p>
+<h4 id="配置-Gitlab-Redmine-Webhook"><a href="#配置-Gitlab-Redmine-Webhook" class="headerlink" title="配置 Gitlab Redmine Webhook"></a>配置 Gitlab Redmine Webhook</h4><p>这个配置是要做到 Redmine 中的本地版本仓库自动同步 Gitlab 远程仓库，同时能够识别commit中的关键字，比如<code>fixed #1</code>，从而自动管理issue状态。</p>
+<ul>
+<li><p>Redmine 配置 Git</p>
+<p>管理员身份登录 Redmine，进入 管理-&gt;配置-&gt;版本库</p>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">Enabled SCM 中，我们要使用的 Gitlab，因此需要启用 Git 。如果 Git 不可选，则需要确认是否安装了 git，并在   Redmine 的 configuuration.yml 中进行设置</div><div class="line">Fetch commits automatically：True，这个选项只是在用户打开仓库页面时候会获取仓库内容</div><div class="line">Enable WS for repository management：True</div><div class="line">Repository management WS API key：这里需要生成一个 API Key，用于后面的 WebHook 触发</div></pre></td></tr></table></figure>
+<p>  页面下方还可以配置一些关键字和对应的状态。</p>
+<ul>
+<li><p>配置 Git 本地仓库</p>
+<p>在 Redmine 所在的服务器上，Redmine可以访问到的路径中(一定要确定权限)，使用 git 克隆对应Gitlab项目的远程仓库：  <code>git clone --mirror git@192.168.1.100:java/test.git</code></p>
+<p>进入项目的仓库设置页面：配置-&gt;版本库-&gt;新建版本库；</p>
+<p>库路径指向刚才克隆的本地仓库的位置，使用绝对路径；</p>
+<p>在 项目-&gt;版本库 中，现在就可以看到版本库和文件了。</p>
+</li>
+<li><p>安装 redmine_gitlab_hook 插件</p>
+<p>Github地址：<a href="https://github.com/phlegx/redmine_gitlab_hook" target="_blank" rel="external">https://github.com/phlegx/redmine_gitlab_hook</a></p>
+<p>使用 git clone 下载该插件到Redmine插件目录，比如 redmine-3.4.4-1/apps/redmine/htdocs/plugins；</p>
+<p>重启 Redmine 完成安装：在 redmine 安装目录下运行 <code>./ctlscript.sh restart apache</code></p>
+<p>在 Redmine 的 管理-&gt;插件 中可以看到这一新安装的插件，此时配置 redmine_gitlab_hook，选中 All branches。</p>
+</li>
+<li><p>配置 Gitlab Webhook</p>
+</li>
+</ul>
+<p>Webhook 是 Gitlab 的事件触发系统，这里我们借助这一功能，同 Redmine 的 Gitlab 插件协作，触发 Redmine 的自动更新。</p>
+<p>浏览项目的 Webhook 页面：settings-&gt;integrations，新建一个Webhook，URL 栏目填写 <a href="http://redmine-url/gitlab_hook?project_id=[project-id]&amp;key=[repository-token]，key" target="_blank" rel="external">http://redmine-url/gitlab_hook?project_id=[project-id]&amp;key=[repository-token]，key</a> 部分就是前文中提到的<code>Repository management WS API key</code>。比如 <a href="http://192.168.1.100:8888/redmine/gitlab_hook?project_id=test&amp;key=ntMQb9TedYR49MXXfN93" target="_blank" rel="external">http://192.168.1.100:8888/redmine/gitlab_hook?project_id=test&amp;key=ntMQb9TedYR49MXXfN93</a></p>
+<ul>
+<li>测试</li>
+</ul>
+<p>提交一个新的提交到 Gitlab 项目分支，在提交信息中写入 <code>fixed #1</code>，观察Redmine 中的这一 Issue 是否发生更新(需要在Redmine中预先建好这个issue)。</p>
+<p>同时也可以观察 Redmine 事件日志：进入 Redmine 安装目录，执行 <code>tail -f apps/redmine/htdocs/log/production.log</code></p>
+<h2 id="结尾"><a href="#结尾" class="headerlink" title="结尾"></a>结尾</h2><p>以上就是 Gitlab 对于 Code Review 和 issue 追踪这两个重要功能的调研。还有一个在开发过程中用到的比较重要的功能没有提到：CI(持续集成)，目前的想法是 Gitlab 与 Jenkins 进行集成，等实际操作之后再来更新吧。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yukai.space/2018/01/17/Gitlab调研/" data-id="cjgp4nplz0007m2xcr9b5wlf7" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/git/">git</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+ <script src="/jquery/jquery.min.js"></script>
+  <div id="random_posts">
+    <h2>推荐文章</h2>
+    <div class="random_posts_ul">
+      <script>
+          var random_count =4
+          var site = {BASE_URI:'/'};
+          function load_random_posts(obj) {
+              var arr=site.posts;
+              if (!obj) return;
+              // var count = $(obj).attr('data-count') || 6;
+              for (var i, tmp, n = arr.length; n; i = Math.floor(Math.random() * n), tmp = arr[--n], arr[n] = arr[i], arr[i] = tmp);
+              arr = arr.slice(0, random_count);
+              var html = '<ul>';
+            
+              for(var j=0;j<arr.length;j++){
+                var item=arr[j];
+                html += '<li><strong>' + 
+                item.date + ':&nbsp;&nbsp;<a href="' + (site.BASE_URI+item.uri) + '">' + 
+                (item.title || item.uri) + '</a></strong>';
+                if(item.excerpt){
+                  html +='<div class="post-excerpt">'+item.excerpt+'</div>';
+                }
+                html +='</li>';
+                
+              }
+              $(obj).html(html + '</ul>');
+          }
+          $('.random_posts_ul').each(function () {
+              var c = this;
+              if (!site.posts || !site.posts.length){
+                  $.getJSON(site.BASE_URI + 'js/posts.js',function(json){site.posts = json;load_random_posts(c)});
+              } 
+               else{
+                load_random_posts(c);
+              }
+          });
+      </script>
+    </div>
+  </div>
+
+    
+<nav id="article-nav">
+  
+    <a href="/2018/01/25/安装Gitlab-Development-Kit/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
+        
+          安装Gitlab-Development-Kit
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/12/20/Java同步工具类/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">Java同步工具类</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+ 
+     
+  <div class="comments" id="comments">
+    
+     
+       
+      <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+    
+       
+      
+      
+           <div id="gitment_comments"></div>
+    
+  </div>
+ 
+  
+
+</section>
+           
+    <aside id="sidebar">
+  
+    
+
+  
+    
+    <div class="widget-wrap">
+    
+      <div class="widget" id="toc-widget-fixed">
+      
+        <strong class="toc-title">文章目录</strong>
+        <div class="toc-widget-list">
+              <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Gitlab-Github-Git"><span class="toc-number">1.</span> <span class="toc-text">Gitlab Github Git</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#几种工作流"><span class="toc-number">2.</span> <span class="toc-text">几种工作流</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Code-review"><span class="toc-number">3.</span> <span class="toc-text">Code review</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Gitlab-与-Redmine"><span class="toc-number">4.</span> <span class="toc-text">Gitlab 与 Redmine</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#安装"><span class="toc-number">4.0.1.</span> <span class="toc-text">安装</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#配置-Gitlab-Redmine-Service"><span class="toc-number">4.0.2.</span> <span class="toc-text">配置 Gitlab Redmine Service</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#配置-Gitlab-Redmine-Webhook"><span class="toc-number">4.0.3.</span> <span class="toc-text">配置 Gitlab Redmine Webhook</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#结尾"><span class="toc-number">5.</span> <span class="toc-text">结尾</span></a></li></ol>
+          </div>
+      </div>
+    </div>
+
+  
+    
+
+  
+    
+  
+    
+  
+    
+
+  
+</aside>
+
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-left">
+      &copy; 2014 - 2018 于凯&nbsp;|&nbsp;
+      主题 <a href="https://github.com/giscafer/hexo-theme-cafe/" target="_blank">Cafe</a>
+    </div>
+     <div id="footer-right">
+      联系方式&nbsp;|&nbsp;debiaoyu@gmail.com
+    </div>
+  </div>
+</footer>
+ <script src="/jquery/jquery.min.js"></script>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/archives" class="mobile-nav-link">归档</a>
+  
+    <a href="/tools" class="mobile-nav-link">工具</a>
+  
+    <a href="/page" class="mobile-nav-link">关于</a>
+  
+</nav>
+    <img class="back-to-top-btn" src="/images/fly-to-top.png"/>
+<script>
+// Elevator script included on the page, already.
+window.onload = function() {
+  var elevator = new Elevator({
+    selector:'.back-to-top-btn',
+    element: document.querySelector('.back-to-top-btn'),
+    duration: 1000 // milliseconds
+  });
+}
+</script>
+      
+
+  
+    <script>
+      var cloudTieConfig = {
+        url: document.location.href, 
+        sourceId: "",
+        productKey: "e2fb4051c49842688ce669e634bc983f",
+        target: "cloud-tie-wrapper"
+      };
+    </script>
+    <script src="https://img1.ws.126.net/f2e/tie/yun/sdk/loader.js"></script>
+    
+
+  
+
+
+
+
+
+
+
+<!-- author:forvoid begin -->
+<!-- author:forvoid begin -->
+
+  <link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+  <script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script> 
+  <script>
+  var gitment = new Gitment({
+    // id: '页面 ID', // 可选。默认为 location.href
+    owner: 'Hikyu',
+    repo: 'Hikyu.github.io',
+    oauth: {
+    client_id: '61886569157db60efa97',
+    client_secret: '6475bb7c8faaf44ff2e12c272a46505a0eecf46f',
+    }
+  })
+  gitment.render(document.getElementById("gitment_comments"))
+</script>
+
+
+<!-- author:forvoid end -->
+
+<!-- author:forvoid end -->
+
+
+
+ <script src="/js/is.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+<script src="/js/elevator.js"></script>
+  </div>
+</body>
+</html>

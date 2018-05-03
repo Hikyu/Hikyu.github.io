@@ -66,14 +66,14 @@
       <div class="outer">
         <section id="main">
   
-    <article id="post-简单学习Java-ForkJoin框架" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-VirtualBox共享文件夹" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2017/11/30/简单学习Java-ForkJoin框架/" class="article-date">
-  <time datetime="2017-11-30T08:20:27.000Z" itemprop="datePublished">2017-11-30</time>
+    <a href="/2018/05/02/VirtualBox共享文件夹/" class="article-date">
+  <time datetime="2018-05-02T12:50:30.000Z" itemprop="datePublished">2018-05-02</time>
 </a>
     
   <div class="article-category">
-    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/编程/">编程</a>
+    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/Linux/">Linux</a>
   </div>
 
   </div>
@@ -84,307 +84,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2017/11/30/简单学习Java-ForkJoin框架/">Java-ForkJoin框架</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="分治思想"><a href="#分治思想" class="headerlink" title="分治思想"></a>分治思想</h2><p>分治法的设计思想是：将一个难以直接解决的大问题，分割成一些规模较小的相同问题，以便各个击破，分而治之。</p>
-<p>分治策略是：对于一个规模为n的问题，若该问题可以容易地解决（比如说规模n较小）则直接解决，否则将其分解为k个规模较小的子问题，这些子问题互相独立且与原问题形式相同，递归地解这些子问题，然后将各子问题的解合并得到原问题的解。这种算法设计策略叫做分治法。</p>
-<p>分治法在每一层递归上都有三个步骤：</p>
-<ul>
-<li><p>分解：将原问题分解为若干个规模较小，相互独立，与原问题形式相同的子问题；</p>
-</li>
-<li><p>解决：若子问题规模较小而容易被解决则直接解，否则递归地解各个子问题</p>
-</li>
-<li><p>合并：将各个子问题的解合并为原问题的解。</p>
-</li>
-</ul>
-        
-          <p class="article-more-link">
-            <a href="/2017/11/30/简单学习Java-ForkJoin框架/#more">阅读全文 »</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yukai.space/2017/11/30/简单学习Java-ForkJoin框架/" data-id="cjam86gt80000eqnjioq8aa8o" class="article-share-link">分享</a>
-      
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/多线程/">多线程</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
- 
-
-
-  
-    <article id="post-Java基础-字节" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2017/11/23/Java基础-字节/" class="article-date">
-  <time datetime="2017-11-23T01:32:34.000Z" itemprop="datePublished">2017-11-23</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/编程/">编程</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/11/23/Java基础-字节/">Java基础-字节</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>这两天在实施一个加密通信方案时，涉及到了字节的读写和转换，有一些知识点需要学习和记录下来…</p>
-<h2 id="原码-反码-补码"><a href="#原码-反码-补码" class="headerlink" title="原码 反码 补码"></a>原码 反码 补码</h2><p>原码：第一位表示符号，其余位表示数值。比如8位2进制：</p>
-<p>[+1]原 = 0000 0001</p>
-<p>[-1]原 = 1000 0001</p>
-<p>第一位是符号位，8位2进制的取值范围：</p>
-<p>[11111111, 01111111] = [-127, 127]</p>
-<p>反码：正数的反码是等于原码，负数的反码是在其原码的基础上，符号位不变，其余位取反：</p>
-<p>[+1] = [00000001]原 = [00000001]反</p>
-<p>[-1] = [10000001]原 = [11111110]反</p>
-<p>补码：正数的补码等于原码，负数的补码是在其原码的基础上，符号位不变，其余位取反，然后加1：</p>
-<p>[+1] = [00000001]原 = [00000001]反 = [00000001]补</p>
-<p>[-1] = [10000001]原 = [11111110]反 = [11111111]补</p>
-<p>在Java中，存储的数值都是有符号的，同时也是使用补码存储的。</p>
-        
-          <p class="article-more-link">
-            <a href="/2017/11/23/Java基础-字节/#more">阅读全文 »</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yukai.space/2017/11/23/Java基础-字节/" data-id="cjabt263t0000osnjlj70yv27" class="article-share-link">分享</a>
-      
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
- 
-
-
-  
-    <article id="posts-理解Java-Reference" class="article article-type-posts" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2017/11/21/理解Java-Reference/" class="article-date">
-  <time datetime="2017-11-21T01:28:46.000Z" itemprop="datePublished">2017-11-21</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/编程/">编程</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/11/21/理解Java-Reference/">理解Java-Reference</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>最近重读《深入理解Java虚拟机》，讲到Java中的几种引用类型，结合源码总结梳理一遍。</p>
-<h2 id="引用类型"><a href="#引用类型" class="headerlink" title="引用类型"></a>引用类型</h2><p>JDK1.2之后，Java扩充了引用的概念，将引用分为强引用、软引用、弱引用和虚引用四种。</p>
-<ul>
-<li><p>强引用</p>
-<p>类似于”Object a = new Object()”这类的引用，只要垃圾强引用存在，垃圾回收器就不会回收掉被引用的对象。</p>
-</li>
-<li><p>软引用</p>
-<p>对于软引用关联的对象，在系统将要发生内存溢出异常之前，会把这些对象列入垃圾回收范围中进行回收。如果这次回收还没有足够内存，则抛出内存异常。</p>
-<p>使用SoftReference类实现软引用</p>
-</li>
-<li><p>弱引用</p>
-<p>强度比软引用更弱，被弱引用关联的对象只能存活到下一次垃圾回收发生之前。当发生GC时，无论当前内存是否足够，都会回收掉只被弱引用关联的对象。</p>
-<p>使用WeakReference类实现弱引用</p>
-</li>
-<li><p>虚引用</p>
-<p>一个对象是否有虚引用的存在，完全不会对其生存时间构成影响，也无法通过虚引用取得一个对象的实例。为一个对象设置虚引用关联的唯一目的就是能够在这个对象被垃圾回收器回收掉后收到一个通知。</p>
-<p>使用PhantomReference类实现虚引用</p>
-</li>
-</ul>
-        
-          <p class="article-more-link">
-            <a href="/2017/11/21/理解Java-Reference/#more">阅读全文 »</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yukai.space/2017/11/21/理解Java-Reference/" data-id="cja8y5f5o0000b8njiuaam4gl" class="article-share-link">分享</a>
-      
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
- 
-
-
-  
-    <article id="posts-如何执行一个延迟任务？" class="article article-type-posts" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2017/11/20/如何执行一个延迟任务？/" class="article-date">
-  <time datetime="2017-11-20T02:57:45.000Z" itemprop="datePublished">2017-11-20</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/编程/">编程</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/11/20/如何执行一个延迟任务？/">如何执行一个延迟任务？</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>前段时间做到临时版本管理系统的项目中有这样一个需求：</p>
-<p>最新发布的版本发布记录状态为<code>未处理</code>，用户手动确认后状态修改为<code>已处理</code>。超过七天后状态为未处理的记录状态自动修改为<code>过期提醒</code>，同时向用户发送一封邮件。</p>
-<p>“修改状态为过期提醒” 的任务就是一个延迟任务，如何执行这样一个任务呢？思考了两种方案：</p>
-<h2 id="轮询"><a href="#轮询" class="headerlink" title="轮询"></a>轮询</h2><p>启动一个定时任务，每隔一天执行一次，执行的内容如下：</p>
-<ol>
-<li><p>select id from release where status = 2 and release_time &gt; 7days</p>
-</li>
-<li><p>update release set status = 3 where id in (…) </p>
-</li>
-<li><p>向用户发送过期通知邮件(可以交给专门的线程去做)</p>
-</li>
-</ol>
-        
-          <p class="article-more-link">
-            <a href="/2017/11/20/如何执行一个延迟任务？/#more">阅读全文 »</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yukai.space/2017/11/20/如何执行一个延迟任务？/" data-id="cja7ltppd0000tsnj39iygka0" class="article-share-link">分享</a>
-      
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/多线程/">多线程</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
- 
-
-
-  
-    <article id="post-从通信协议到装饰者模式" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2017/11/15/从通信协议到装饰者模式/" class="article-date">
-  <time datetime="2017-11-15T14:03:16.000Z" itemprop="datePublished">2017-11-15</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/编程/">编程</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/11/15/从通信协议到装饰者模式/">从通信协议到装饰者模式</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>最近有个新的需求，jdbc与后台的通信要求使用第三方提供的硬件加密卡进行加密。当前数据库与前台工具的通信有两种方式：分别是基于明文或基于ssl。</p>
-<p>基于明文的通信如下：</p>
-<img src="/2017/11/15/从通信协议到装饰者模式/mingwen.png" alt="明文传输" title="明文传输">
-<p>在应用层定义了前后台交互协议，封装的数据包结构大致如下：</p>
-<img src="/2017/11/15/从通信协议到装饰者模式/oscar.png" alt="oscar数据包" title="oscar数据包">
-        
-          <p class="article-more-link">
-            <a href="/2017/11/15/从通信协议到装饰者模式/#more">阅读全文 »</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yukai.space/2017/11/15/从通信协议到装饰者模式/" data-id="cja0tpnul00003anjpsk3gtqo" class="article-share-link">分享</a>
-      
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/设计模式/">设计模式</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
- 
-
-
-  
-    <article id="post-大型网站技术架构" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2017/11/05/大型网站技术架构/" class="article-date">
-  <time datetime="2017-11-05T13:35:13.000Z" itemprop="datePublished">2017-11-05</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/编程/">编程</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/11/05/大型网站技术架构/">大型网站技术架构</a>
+      <a class="article-title" href="/2018/05/02/VirtualBox共享文件夹/">VirtualBox设置共享文件夹</a>
     </h1>
   
 
@@ -393,23 +93,31 @@
     <div class="article-entry" itemprop="articleBody">
       
         <blockquote>
-<p>最近在读李智慧所著的《大型网站技术架构》，这是我第二遍读这本书，很好的一本书，让人开拓了视野。</p>
-<p>原著分为四部分，分别包括大型网站架构演进、大型网站架构模式、大型网站核心要素以及大型网站案例。我把第二三部分做成了思维导图，就当做是读书笔记好了。<br>点击图片下方的链接可以查看大图，思维导图工具使用XMind.</p>
+<p>最近在做 Gitlab 备份，Gitlab本身运行在虚拟机当中，备份策略是使用 Rsync 备份到远程主机一份；同时在宿主机备份一份。宿主机使用了windows，想到了一个较为简单的办法，即设置共享文件夹，将需要备份的内容定时复制到共享文件夹即可。在设置共享文件夹的过程中遇到一些问题，在此记录下来。</p>
 </blockquote>
-<img src="/2017/11/05/大型网站技术架构/大型网站架构模式.png" alt="大型网站架构模式" title="大型网站架构模式">
+<p>因为虚拟机所在的 IP 无法访问外网，只能访问公司内部网络。所以在进行下面的操作之前，需要配置一下 yum 的代理：</p>
+<p>我在本机开启了 shadowsocks 服务，ip：192.168.1.70，port：1090</p>
+<p>虚拟机内执行：</p>
+<p><code>sudo vim /etc/yum.conf</code></p>
+<p>增加下面内容：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">proxy=socks5h://192.168.1.70:1090</div></pre></td></tr></table></figure>
+<p>保存，退出。yum代理设置成功。</p>
+<h2 id="虚拟机安装增强功能"><a href="#虚拟机安装增强功能" class="headerlink" title="虚拟机安装增强功能"></a>虚拟机安装增强功能</h2><ul>
+<li><p>安装 linux-headers</p>
+<p> 有两种解决办法：</p>
         
           <p class="article-more-link">
-            <a href="/2017/11/05/大型网站技术架构/#more">阅读全文 »</a>
+            <a href="/2018/05/02/VirtualBox共享文件夹/#more">阅读全文 »</a>
           </p>
         
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2017/11/05/大型网站技术架构/" data-id="cj9qhw21n0063hdnj1gt63bx7" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2018/05/02/VirtualBox共享文件夹/" data-id="cjgp4npnr0012m2xcrgy8h6t2" class="article-share-link">分享</a>
       
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/web/">web</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/">linux</a></li></ul>
 
     </footer>
   </div>
@@ -419,14 +127,14 @@
 
 
   
-    <article id="post-认识MVCC" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-Centos7美化" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2017/11/02/认识MVCC/" class="article-date">
-  <time datetime="2017-11-02T12:18:07.000Z" itemprop="datePublished">2017-11-02</time>
+    <a href="/2018/05/01/Centos7美化/" class="article-date">
+  <time datetime="2018-05-01T09:43:23.000Z" itemprop="datePublished">2018-05-01</time>
 </a>
     
   <div class="article-category">
-    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/编程/">编程</a>
+    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/Linux/">Linux</a>
   </div>
 
   </div>
@@ -437,7 +145,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2017/11/02/认识MVCC/">认识MVCC</a>
+      <a class="article-title" href="/2018/05/01/Centos7美化/">Centos7美化</a>
     </h1>
   
 
@@ -445,41 +153,236 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>前一篇总结提到了数据库事务的隔离性可以由锁机制来实现。锁是传统数据库控制事务并发的主要手段，这里提到的锁(S锁和X锁)可以认为是悲观锁，在对数据实现读写之前加上相应的锁，实现了独占访问机制，从而控制并发行为。神通数据库7.0主要使用了锁来实现事务并发控制。</p>
-<p>那么数据库事务的并发控制还有其他的实现方式吗？当然是有的。去年刚推出的神通数据库8.0，就使用了MVCC(Multiversion Concurrency Control) 即多版本控制来控制事务的并发行为。</p>
-<p>研究一下什么是MVCC…</p>
-<h2 id="MVCC"><a href="#MVCC" class="headerlink" title="MVCC"></a>MVCC</h2><blockquote>
-<p>多版本并发控制技术,它使得大部分支持行锁的事务引擎,不再单纯的使用行锁来进行数据库的并发控制,取而代之的是,把数据库的行锁与行的多个版本结合起来,只需要很小的开销,就可以实现非锁定读,从而大大提高数据库系统的并发性能.</p>
+        <p>五一假期比较闲，把我自己PC上的Centos7美化了一下，能够让自己看着舒服点。</p>
+<p>先上一张效果图：</p>
+<img src="/2018/05/01/Centos7美化/1.png" alt="桌面" title="桌面">
+        
+          <p class="article-more-link">
+            <a href="/2018/05/01/Centos7美化/#more">阅读全文 »</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yukai.space/2018/05/01/Centos7美化/" data-id="cjgp4npll0003m2xcgrwoncw3" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/">linux</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+ 
+
+
+  
+    <article id="post-联通华为HG8347R设置桥接模式" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/04/30/联通华为HG8347R设置桥接模式/" class="article-date">
+  <time datetime="2018-04-30T11:43:12.000Z" itemprop="datePublished">2018-04-30</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/工具/">工具</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/04/30/联通华为HG8347R设置桥接模式/">联通华为HG8347R设置桥接模式</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><a href="http://yukai.space/2017/06/05/%E5%A6%82%E4%BD%95%E4%BB%8E%E5%A4%96%E7%BD%91%E8%AE%BF%E9%97%AE%E5%AE%B6%E9%87%8C%E7%9A%84%E7%94%B5%E8%84%91/">前面的笔记</a>中有提到如何通过外网访问家里的服务。在某些场景下可能会用到，比如想要在单位ssh家里的电脑，或者访问家里的NAS等设备等等。之前用的电信的宽带，是通过自己的路由器拨号上网，并且外网IP也是直接分配好的，配一下DDNS和端口映射即可。前一段时间换了联通的宽带。</p>
+<p>更换宽带的时候，联通提供了一个光猫，华为HG8347R。这个光猫取代了之前的路由器，拨号也由他进行。通过该光猫的无线功能就可以直接连接WIFI上网了。但是这个光猫的无线性能较差，于是在 Lan1 口接了一个自己的TP-link路由器，通过该路由器提供的wifi信号可以正常上网。此时出现了两个WIFI信号，一个是光猫提供的，一个是TP-link路由器提供的。家里的终端设备都使用TP-link提供的WIFI上网。此时的网络拓扑大致如下：</p>
+<img src="/2018/04/30/联通华为HG8347R设置桥接模式/route.png" alt="拓扑" title="拓扑">
+        
+          <p class="article-more-link">
+            <a href="/2018/04/30/联通华为HG8347R设置桥接模式/#more">阅读全文 »</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yukai.space/2018/04/30/联通华为HG8347R设置桥接模式/" data-id="cjgp4npun008ym2xcv4hp5x54" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/">linux</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+ 
+
+
+  
+    <article id="post-可能会用到的Git技巧2" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/03/29/可能会用到的Git技巧2/" class="article-date">
+  <time datetime="2018-03-29T06:56:57.000Z" itemprop="datePublished">2018-03-29</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/工具/">工具</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/03/29/可能会用到的Git技巧2/">可能会用到的Git技巧(2)</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="git-worktree"><a href="#git-worktree" class="headerlink" title="git worktree"></a>git worktree</h2><p>我们知道如果工作目录修改到一半的话，是不能随便切换 branch 的。解决方法可以通过 <code>git stash</code> 先暂存起来，随后执行 <code>git stash apply</code> 恢复。</p>
+<p>但是，如果我们想同时修改两个分支呢？或者同时测试两个分支。能想到的方法就是单独再 clone 一份代码到其他目录。但是这种方法不仅麻烦，而且形成了两个独立的 git 目录，双方的同步也比较费劲。</p>
+<p>git 为我们提供了一个命令来解决这个问题，那就是 <code>git worktree add -b &lt;新分支名&gt; &lt;新路径&gt; &lt;从此分支创建&gt;</code>。</p>
+<p>比如，我们正在某个 feature 分支开发，现在希望从 master 分出一个分支来解决某个紧急的 BUG：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git worktree add -b hotfix ../hotfix master</div></pre></td></tr></table></figure>
+        
+          <p class="article-more-link">
+            <a href="/2018/03/29/可能会用到的Git技巧2/#more">阅读全文 »</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yukai.space/2018/03/29/可能会用到的Git技巧2/" data-id="cjgp4npt3006nm2xcauh14jwi" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/git/">git</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+ 
+
+
+  
+    <article id="post-可能会用到的Git技巧1" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/03/01/可能会用到的Git技巧1/" class="article-date">
+  <time datetime="2018-03-01T06:56:57.000Z" itemprop="datePublished">2018-03-01</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/工具/">工具</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/03/01/可能会用到的Git技巧1/">可能会用到的Git技巧(1)</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>最近在看 gitlab 的源码，因为公司希望把 gitlab-ee 的 merge squash 功能集成到 gitlab-ce 上来，供公司内部使用….<br>这个任务交给了我，现在这个功能已经改的差不多了，中间也了解了一些可能会用到的 git 技巧，现在记录下来</p>
 </blockquote>
-<p>多版本并发控制，意味着同一时刻看到的相同行的数据可能是不一样的,即一个行可能有多个版本.有点平行宇宙的意思。要实现这种效果，需要做一些操作：</p>
+<img src="/2018/03/01/可能会用到的Git技巧1/git.jpg" alt="git" title="git">
+<h2 id="git-cherry-pick"><a href="#git-cherry-pick" class="headerlink" title="git cherry-pick"></a>git cherry-pick</h2><p><a href="https://git-scm.com/docs/git-cherry-pick">git cherry-pick</a> 可以应用某个分支的某些提交到另一个分支上去。</p>
+        
+          <p class="article-more-link">
+            <a href="/2018/03/01/可能会用到的Git技巧1/#more">阅读全文 »</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yukai.space/2018/03/01/可能会用到的Git技巧1/" data-id="cjgp4npsz006jm2xcaj11ac20" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/git/">git</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+ 
+
+
+  
+    <article id="post-安装Gitlab-Development-Kit" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/01/25/安装Gitlab-Development-Kit/" class="article-date">
+  <time datetime="2018-01-25T06:56:57.000Z" itemprop="datePublished">2018-01-25</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/工具/">工具</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/01/25/安装Gitlab-Development-Kit/">安装Gitlab-Development-Kit</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>Gitlab-CE是开源项目，意味着我们可以针对官方的Gitlab源码进行二次开发，从而定制出符合自己的开发习惯或开发流程的代码管理工具。</p>
+<p>一般来说只要把Gitlab-CE的代码仓库clone到本地，就可以在上面修改代码了。Gitlab-CE的地址：<a href="https://gitlab.com/gitlab-org/gitlab-ce/">https://gitlab.com/gitlab-org/gitlab-ce/</a> 。但是，只有源代码是不能够直接在本地上跑起来的，整个开发环境还需要安装很多依赖，以及配置数据库。Gitlab为了方便开发者，提供了一个Gitlab开发工具Gitlab-Development-Kit，其地址是：<a href="https://gitlab.com/gitlab-org/gitlab-development-kit">https://gitlab.com/gitlab-org/gitlab-development-kit</a> 。Gitlab-Development-Kit可以帮助开发者很方便地在本地搭建起开发环境，并且把Gitlab运行起来。</p>
+</blockquote>
 <ul>
-<li><p>对于每一行记录，新增两个隐藏列：</p>
-<p>行的更新时间(创建版本号)</p>
-<p>行的删除时间(删除版本号)</p>
-</li>
-<li><p>数据版本</p>
-<p>同一行数据，在同一时刻对于不同的事务，可能看到不同的版本。即同一行数据有多个版本同时存在。</p>
-</li>
-<li><p>事务版本</p>
-<p>每个事务有其唯一的事务版本号</p>
-</li>
-<li><p>版本有序</p>
-<p>无论是数据版本，还是事务版本，其版本号随时间增长而增长，即版本号是递增的。</p>
+<li><p>系统环境</p>
+<p>ubuntu-16.04.3-desktop-amd64</p>
 </li>
 </ul>
         
           <p class="article-more-link">
-            <a href="/2017/11/02/认识MVCC/#more">阅读全文 »</a>
+            <a href="/2018/01/25/安装Gitlab-Development-Kit/#more">阅读全文 »</a>
           </p>
         
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2017/11/02/认识MVCC/" data-id="cj9qhw231007whdnjgl7nym4n" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2018/01/25/安装Gitlab-Development-Kit/" data-id="cjgp4nptj007cm2xcuapd7dvz" class="article-share-link">分享</a>
       
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/数据库/">数据库</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/git/">git</a></li></ul>
 
     </footer>
   </div>
@@ -489,10 +392,66 @@
 
 
   
-    <article id="post-数据库事务浅析" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-Gitlab调研" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2017/10/31/数据库事务浅析/" class="article-date">
-  <time datetime="2017-10-31T12:07:23.000Z" itemprop="datePublished">2017-10-31</time>
+    <a href="/2018/01/17/Gitlab调研/" class="article-date">
+  <time datetime="2018-01-17T01:37:57.000Z" itemprop="datePublished">2018-01-17</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/工具/">工具</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/01/17/Gitlab调研/">Gitlab调研</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>最近公司想要替换原来的代码管理工具Starteam，一方面是这个 Starteam bug不少，用起来有不少问题，随着开发团队的扩大，工具跟不上现在的开发节奏了；另一方面近几年 Git 已经成为趋势，作为开发人员，总应该顺应潮流…所以调研了一下 Gitlab 这个开源的项目管理工具。我觉得有必要把一些理解记下来，以备不时之需。</p>
+</blockquote>
+<h2 id="Gitlab-Github-Git"><a href="#Gitlab-Github-Git" class="headerlink" title="Gitlab Github Git"></a>Gitlab Github Git</h2><ul>
+<li>Github</li>
+</ul>
+<p>提起开源，我们总能想到鼎鼎有名的 <a href="https://github.com/">Github</a>。Github 是一个代码托管网站，提供源代码托管服务。简单点来说，就是你可以把自己的代码上传到 Github 进行保存，然后在别的地方下载下来进行修改。当然，Github 不仅仅可以托管代码，你可以把他类比成网盘，存放你想存的任何东西，Github 还提供了一些其他的服务，比如写文档、生成电子书、托管博客等等。</p>
+<p>GitHub 同时提供付费账户和免费账户。这两种账户都可以创建公开的代码仓库，但是付费账户还可以创建私有的代码仓库。</p>
+        
+          <p class="article-more-link">
+            <a href="/2018/01/17/Gitlab调研/#more">阅读全文 »</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yukai.space/2018/01/17/Gitlab调研/" data-id="cjgp4nplz0007m2xcr9b5wlf7" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/git/">git</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+ 
+
+
+  
+    <article id="post-Java同步工具类" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/12/20/Java同步工具类/" class="article-date">
+  <time datetime="2017-12-20T09:53:23.000Z" itemprop="datePublished">2017-12-20</time>
 </a>
     
   <div class="article-category">
@@ -507,7 +466,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2017/10/31/数据库事务浅析/">数据库事务浅析</a>
+      <a class="article-title" href="/2017/12/20/Java同步工具类/">Java同步工具类</a>
     </h1>
   
 
@@ -515,38 +474,30 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="ACID"><a href="#ACID" class="headerlink" title="ACID"></a>ACID</h2><blockquote>
-<p>一个数据库事务通常包含了一个序列的对数据库的读/写操作。它的存在包含有以下两个目的：</p>
-<ol>
-<li>为数据库操作序列提供了一个从失败中恢复到正常状态的方法，同时提供了数据库即使在异常状态下仍能保持一致性的方法。</li>
-<li>当多个应用程序在并发访问数据库时，可以在这些应用程序之间提供一个隔离方法，以防止彼此的操作互相干扰。</li>
-</ol>
-</blockquote>
-<p>上面对数据库事务的定义摘自维基百科。先不用着急的去理解这个定义的具体含义，我们从事务的四个特性来逐步了解什么是事务。</p>
-<p>数据库事务拥有以下四个特性，习惯上被称之为ACID特性。</p>
-<ol>
-<li><p>原子性（Atomicity）：事务作为一个整体被执行，包含在其中的对数据库的操作要么全部被执行，要么都不执行。</p>
+        <h2 id="CountDownLatch"><a href="#CountDownLatch" class="headerlink" title="CountDownLatch"></a>CountDownLatch</h2><p>CountDownLatch(闭锁)的用法：</p>
+<p>CountDownLatch在实例化的时候需要传入一个int类型的计数器，表示需要等待事件的数量。CountDownLatch.countDown()方法递减这个计数器，表示一个事件已经发生了；而调用了CountDownLatch.await()方法的线程等待计数器值达到零，表示所有需要等待的事件已经发生了。若计数器值非零，那么await()方法会一直阻塞到计数器的值为零，或者等待超时。</p>
+<p>CountDownLatch的应用场景：</p>
+<ul>
+<li><p>确保某个计算在其所需要的所有资源都已经初始化后再继续执行。</p>
 </li>
-<li><p>一致性（Consistency）：事务应确保数据库的状态从一个一致状态转变为另一个一致状态。一致状态的含义是数据库中的数据应满足完整性约束。</p>
+<li><p>确保某个服务在其依赖的所有其他服务都已经启动之后再启动。</p>
 </li>
-<li><p>隔离性（Isolation）：多个事务并发执行时，一个事务的执行不应影响其他事务的执行。</p>
+<li><p>等待某个操作的所有参与者都就绪后再执行。比如《荒野行动》，小队所有玩家点击“准备”之后房主才可以开始游戏。</p>
 </li>
-<li><p>持久性（Durability）：已被提交的事务对数据库的修改应该永久保存在数据库中。</p>
-</li>
-</ol>
+</ul>
         
           <p class="article-more-link">
-            <a href="/2017/10/31/数据库事务浅析/#more">阅读全文 »</a>
+            <a href="/2017/12/20/Java同步工具类/#more">阅读全文 »</a>
           </p>
         
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2017/10/31/数据库事务浅析/" data-id="cj9qhw222006qhdnjtwu2hsgj" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2017/12/20/Java同步工具类/" data-id="cjgp4npmu000im2xcarhhwmx9" class="article-share-link">分享</a>
       
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/数据库/">数据库</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/多线程/">多线程</a></li></ul>
 
     </footer>
   </div>
@@ -559,7 +510,7 @@
 
 
   <nav id="page-nav">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/11/">11</a><a class="extend next" rel="next" href="/page/2/">下一页&raquo;</a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/13/">13</a><a class="extend next" rel="next" href="/page/2/">下一页&raquo;</a>
   </nav>
 </section>
            
@@ -592,7 +543,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title categories">分类</h3>
     <div class="widget" id="categories">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/技术/">技术</a><span class="category-list-count">78</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/技术/Linux/">Linux</a><span class="category-list-count">9</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/技术/加密/">加密</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/技术/工具/">工具</a><span class="category-list-count">15</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/技术/编程/">编程</a><span class="category-list-count">51</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/生活/">生活</a><span class="category-list-count">10</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/生活/随笔/">随笔</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/生活/食物/">食物</a><span class="category-list-count">7</span></li></ul></li></ul>
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/技术/">技术</a><span class="category-list-count">87</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/技术/Linux/">Linux</a><span class="category-list-count">11</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/技术/加密/">加密</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/技术/工具/">工具</a><span class="category-list-count">20</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/技术/编程/">编程</a><span class="category-list-count">53</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/生活/">生活</a><span class="category-list-count">10</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/生活/随笔/">随笔</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/生活/食物/">食物</a><span class="category-list-count">7</span></li></ul></li></ul>
     </div>
   </div>
 
@@ -602,7 +553,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title tagcloud">标签云</h3>
     <div class="widget tagcloud">
-      <a href="/tags/Eclipse/" style="font-size: 14px;">Eclipse</a> <a href="/tags/NIO/" style="font-size: 20.29px;">NIO</a> <a href="/tags/ant/" style="font-size: 15.57px;">ant</a> <a href="/tags/curl/" style="font-size: 14px;">curl</a> <a href="/tags/git/" style="font-size: 14px;">git</a> <a href="/tags/hexo/" style="font-size: 14px;">hexo</a> <a href="/tags/java/" style="font-size: 25px;">java</a> <a href="/tags/javascript/" style="font-size: 14px;">javascript</a> <a href="/tags/junit/" style="font-size: 14px;">junit</a> <a href="/tags/linux/" style="font-size: 21.86px;">linux</a> <a href="/tags/markdown/" style="font-size: 14px;">markdown</a> <a href="/tags/maven/" style="font-size: 17.14px;">maven</a> <a href="/tags/python/" style="font-size: 14px;">python</a> <a href="/tags/spring/" style="font-size: 15.57px;">spring</a> <a href="/tags/web/" style="font-size: 15.57px;">web</a> <a href="/tags/加密/" style="font-size: 17.14px;">加密</a> <a href="/tags/多线程/" style="font-size: 23.43px;">多线程</a> <a href="/tags/快捷键/" style="font-size: 14px;">快捷键</a> <a href="/tags/数据库/" style="font-size: 15.57px;">数据库</a> <a href="/tags/服务器/" style="font-size: 14px;">服务器</a> <a href="/tags/测试/" style="font-size: 14px;">测试</a> <a href="/tags/源码/" style="font-size: 14px;">源码</a> <a href="/tags/类加载/" style="font-size: 15.57px;">类加载</a> <a href="/tags/编码/" style="font-size: 15.57px;">编码</a> <a href="/tags/设计模式/" style="font-size: 18.71px;">设计模式</a> <a href="/tags/调试/" style="font-size: 14px;">调试</a> <a href="/tags/食物/" style="font-size: 20.29px;">食物</a>
+      <a href="/tags/Eclipse/" style="font-size: 14px;">Eclipse</a> <a href="/tags/NIO/" style="font-size: 21.86px;">NIO</a> <a href="/tags/ant/" style="font-size: 15.57px;">ant</a> <a href="/tags/curl/" style="font-size: 14px;">curl</a> <a href="/tags/git/" style="font-size: 20.29px;">git</a> <a href="/tags/hexo/" style="font-size: 14px;">hexo</a> <a href="/tags/java/" style="font-size: 25px;">java</a> <a href="/tags/javascript/" style="font-size: 14px;">javascript</a> <a href="/tags/junit/" style="font-size: 14px;">junit</a> <a href="/tags/linux/" style="font-size: 23.43px;">linux</a> <a href="/tags/markdown/" style="font-size: 14px;">markdown</a> <a href="/tags/maven/" style="font-size: 17.14px;">maven</a> <a href="/tags/python/" style="font-size: 14px;">python</a> <a href="/tags/spring/" style="font-size: 15.57px;">spring</a> <a href="/tags/web/" style="font-size: 15.57px;">web</a> <a href="/tags/加密/" style="font-size: 17.14px;">加密</a> <a href="/tags/多线程/" style="font-size: 23.43px;">多线程</a> <a href="/tags/快捷键/" style="font-size: 14px;">快捷键</a> <a href="/tags/数据库/" style="font-size: 15.57px;">数据库</a> <a href="/tags/服务器/" style="font-size: 14px;">服务器</a> <a href="/tags/测试/" style="font-size: 14px;">测试</a> <a href="/tags/源码/" style="font-size: 14px;">源码</a> <a href="/tags/类加载/" style="font-size: 15.57px;">类加载</a> <a href="/tags/编码/" style="font-size: 15.57px;">编码</a> <a href="/tags/设计模式/" style="font-size: 18.71px;">设计模式</a> <a href="/tags/调试/" style="font-size: 14px;">调试</a> <a href="/tags/食物/" style="font-size: 21.86px;">食物</a>
     </div>
   </div>
 
@@ -614,23 +565,23 @@
       <ul>
         
           <li>
-            <a href="/2017/11/30/简单学习Java-ForkJoin框架/">Java-ForkJoin框架</a>
+            <a href="/2018/05/02/VirtualBox共享文件夹/">VirtualBox设置共享文件夹</a>
           </li>
         
           <li>
-            <a href="/2017/11/23/Java基础-字节/">Java基础-字节</a>
+            <a href="/2018/05/01/Centos7美化/">Centos7美化</a>
           </li>
         
           <li>
-            <a href="/2017/11/21/理解Java-Reference/">理解Java-Reference</a>
+            <a href="/2018/04/30/联通华为HG8347R设置桥接模式/">联通华为HG8347R设置桥接模式</a>
           </li>
         
           <li>
-            <a href="/2017/11/20/如何执行一个延迟任务？/">如何执行一个延迟任务？</a>
+            <a href="/2018/03/29/可能会用到的Git技巧2/">可能会用到的Git技巧(2)</a>
           </li>
         
           <li>
-            <a href="/2017/11/15/从通信协议到装饰者模式/">从通信协议到装饰者模式</a>
+            <a href="/2018/03/01/可能会用到的Git技巧1/">可能会用到的Git技巧(1)</a>
           </li>
         
       </ul>
@@ -642,7 +593,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title archive">归档</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">十一月 2017</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">十月 2017</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">九月 2017</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">八月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">七月 2017</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">六月 2017</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">四月 2017</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">三月 2017</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">十二月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">十一月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">十月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">九月 2016</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">八月 2016</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">七月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">六月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">四月 2016</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">三月 2016</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">十二月 2015</a><span class="archive-list-count">2</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">五月 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">四月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">三月 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">十一月 2017</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">十月 2017</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">九月 2017</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">八月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">七月 2017</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">六月 2017</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">四月 2017</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">三月 2017</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">十二月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">十一月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">十月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">九月 2016</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">八月 2016</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">七月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">六月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">四月 2016</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">三月 2016</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">十二月 2015</a><span class="archive-list-count">2</span></li></ul>
     </div>
   </div>
 
@@ -655,7 +606,7 @@
   
   <div class="outer">
     <div id="footer-left">
-      &copy; 2014 - 2017 于凯&nbsp;|&nbsp;
+      &copy; 2014 - 2018 于凯&nbsp;|&nbsp;
       主题 <a href="https://github.com/giscafer/hexo-theme-cafe/" target="_blank">Cafe</a>
     </div>
      <div id="footer-right">

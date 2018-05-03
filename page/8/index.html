@@ -66,14 +66,14 @@
       <div class="outer">
         <section id="main">
   
-    <article id="post-java中的路径" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-Linux的五个查找命令" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2016/12/04/java中的路径/" class="article-date">
-  <time datetime="2016-12-04T11:03:00.000Z" itemprop="datePublished">2016-12-04</time>
+    <a href="/2017/02/26/Linux的五个查找命令/" class="article-date">
+  <time datetime="2017-02-26T01:17:33.000Z" itemprop="datePublished">2017-02-26</time>
 </a>
     
   <div class="article-category">
-    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/编程/">编程</a>
+    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/Linux/">Linux</a>
   </div>
 
   </div>
@@ -84,7 +84,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2016/12/04/java中的路径/">java中的路径</a>
+      <a class="article-title" href="/2017/02/26/Linux的五个查找命令/">Linux的五个查找命令</a>
     </h1>
   
 
@@ -93,35 +93,29 @@
     <div class="article-entry" itemprop="articleBody">
       
         <blockquote>
-<p>每次写java代码的时候，免不了需要加载一些外部资源，比如配置文件等等。每当需要读取这些文件时，都是去网上谷歌，写过就忘。于是今天来总结一些java中有关路径的一些用法。</p>
+<p>最近一直在读<a href="http://www.ruanyifeng.com">阮一峰老师的博客</a>,今天读到一篇介绍Linux查找命令的文章。恰好最近在学习linux，所以转载过来，当作一篇备忘录。</p>
+<p>原文链接：<a href="http://www.ruanyifeng.com/blog/2009/10/5_ways_to_search_for_files_using_the_terminal.html">Linux的五个查找命令</a></p>
 </blockquote>
-<h2 id="绝对路径"><a href="#绝对路径" class="headerlink" title="绝对路径"></a>绝对路径</h2><p>无论是在linux还是windows中，路径都分为绝对路径和相对路径两种。</p>
-<p>绝对路径就是系统中唯一能够定位资源的某个URI，即完整的描述文件的路径就是绝对路径。比如：</p>
-<p>linux中的绝对路径：/home/yukai/test.txt</p>
-<p>windows中的绝对路径：E:\yukai\test.txt</p>
-<p>绝对路径都是以根目录起始的。</p>
-<h2 id="相对路径"><a href="#相对路径" class="headerlink" title="相对路径"></a>相对路径</h2><p>相对路径即目标文件相对与某个基准目录的路径。比如:</p>
-<p>存在文件： </p>
-<p>A: /home/yukai/test.txt </p>
-<p>B: /home/yukai/test1.txt </p>
-<p>C: /home/yukai/test/test.txt</p>
-<p>那么：</p>
-<p>若基准目录为A, B的路径表示为”test1.txt”</p>
-<p>若基准目录为B, C的路径表示为”test/test.txt”</p>
-<p>若基准目录为C, B的路径表示为”../test1.txt”</p>
-<p>另外，“./”表示当前目录，“../”表示上级目录</p>
+<p>使用电脑的时候，经常需要查找文件。</p>
+<p>在Linux中，有很多方法可以做到这一点。国外网站LinuxHaxor总结了五条命令，你可以看看自己知道几条。大多数程序员，可能经常使用其中的2到3条，对这5条命令都很熟悉的人应该是不多的。</p>
+<h2 id="find"><a href="#find" class="headerlink" title="find"></a>find</h2><p>find是最常见和最强大的查找命令，你可以用它找到任何你想找的文件。</p>
+<p>find的使用格式如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">　　$ find &lt;指定目录&gt; &lt;指定条件&gt; &lt;指定动作&gt;</div><div class="line">　　- &lt;指定目录&gt;： 所要搜索的目录及其所有子目录。默认为当前目录。</div><div class="line">　　- &lt;指定条件&gt;： 所要搜索的文件的特征。</div><div class="line">　　- &lt;指定动作&gt;： 对搜索结果进行特定的处理。</div></pre></td></tr></table></figure></p>
+<p>如果什么参数也不加，find默认搜索当前目录及其子目录，并且不过滤任何结果（也就是返回所有文件），将它们全都显示在屏幕上。</p>
+<p>find的使用实例：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">　　$ find . -name &apos;my*&apos;</div><div class="line">搜索当前目录（含子目录，以下同）中，所有文件名以my开头的文件。</div><div class="line">　　$ find . -name &apos;my*&apos; -ls</div><div class="line">搜索当前目录中，所有文件名以my开头的文件，并显示它们的详细信息。</div><div class="line">　　$ find . -type f -mmin -10</div><div class="line">搜索当前目录中，所有过去10分钟中更新过的普通文件。如果不加-type f参数，则搜索普通文件+特殊文件+目录。</div></pre></td></tr></table></figure></p>
         
           <p class="article-more-link">
-            <a href="/2016/12/04/java中的路径/#more">阅读全文 »</a>
+            <a href="/2017/02/26/Linux的五个查找命令/#more">阅读全文 »</a>
           </p>
         
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2016/12/04/java中的路径/" data-id="cj9qhw1wu002chdnjskk7kbf7" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2017/02/26/Linux的五个查找命令/" data-id="cjgp4npnw0017m2xcp06df37t" class="article-share-link">分享</a>
       
       
       
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/">linux</a></li></ul>
+
     </footer>
   </div>
   
@@ -130,14 +124,14 @@
 
 
   
-    <article id="post-java中的int-byte转换" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-centos7BCM驱动安装" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2016/11/24/java中的int-byte转换/" class="article-date">
-  <time datetime="2016-11-24T14:48:55.000Z" itemprop="datePublished">2016-11-24</time>
+    <a href="/2017/02/25/centos7BCM驱动安装/" class="article-date">
+  <time datetime="2017-02-25T03:22:45.000Z" itemprop="datePublished">2017-02-25</time>
 </a>
     
   <div class="article-category">
-    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/编程/">编程</a>
+    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/Linux/">Linux</a>
   </div>
 
   </div>
@@ -148,156 +142,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2016/11/24/java中的int-byte转换/">java中的int-byte转换</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <!-- Table of Contents -->
-        
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>好久没有动博客了，看了下，将近两个月了吧。最近的两个月里面变懒了，没有了记录的动力。。。最近好像也没啥收获，惭愧。之前电脑中病毒之后(cryptolcker)，还好没有神马重要的东西，索性把硬盘重新格式化一遍，重做了系统。保留一套windows（实在受不了win10的自动更新了…）,又装了一套opensuse的系统。希望可以坚持学点linux。</p>
-<p>这段时间没有怎么看书，说一下读书情况。《重构》这本还是没有看完，读了大半。《深入理解jvm虚拟机》这本算是大致上浏览了一遍，发现确实是一本挺好的java书籍，日后还需多加翻阅理解。《大话设计模式》也是浏览了一遍，其中比较常见的模式有时候也可以用到，需要的时候再看吧。双十一买了一本《java并发编程实战》，看了大半，似懂非懂，但也是有收获的。不得不吐槽一下该书的翻译，实在是不敢恭维，但是想想自己的英语水平，目前还是忍了。。</p>
-<p>必须要振作起精神来了，总觉得自己每天无所事事呢。接下来的计划…..还是把并发编程这块看完吧，虽然没有什么实战的机会，总比不看强。要多写总结了，不然看了跟不看差不多。异常、反射、动态代理、注解等等这些也要学习然后做一个记录。网络、io、并发这三块，并发还在看，也要做好记录，然后网络这部分把大学课本重读一遍，至于io不知道有什么好的书籍，放到最后规划学习把。</p>
-<p>嗯，又想起来最近还写了一个自动打卡的程序，增加了短信通知的功能。总觉得有些不诚信的感觉呢，但是没有迟到早退过呀，好玩罢了。读了webmagic的core部分的源码，感觉理解起来轻松许多。记得大学那会看这个的时候还是一头雾水，结果现在两个小时就把代码搞清楚了（主要是代码量也不大拉）。嗯，说明自己还是在进步的麻，哈哈哈。下载了junit的源码都没有看过，有空研究把。</p>
-<p>终于要进入正题了。这次的记录很短很简单，是关于java中int和byte之间的转换的。虽然简单，但是以前就是拿来即用，没有搞清楚其中的原理，在byte这块就很纠结（只能说基础比较差），今天来学习一下。</p>
-<hr>
-<h2 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h2><p>java中:</p>
-<p>byte: 1字节    int: 4字节</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">int</span> i = -<span class="number">123</span></div><div class="line"><span class="keyword">byte</span> x = (<span class="keyword">byte</span>)i; <span class="comment">//-123</span></div></pre></td></tr></table></figure>
-<p>ps：([]代表几进制，()代表前面的内容重复几次)</p>
-<p>ps:</p>
-<p>-123[2] = 11111111(3)10000101</p>
-<p>int 强转为 byte，直接截取低8位即10000101</p>
-<p>java把byte当做有符号处理，故此时x=-123</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">int</span> j = (<span class="keyword">int</span>)x; <span class="comment">//-123</span></div></pre></td></tr></table></figure>
-<p>ps:</p>
-<p>byte强转为int，高24位补1(自动扩展)</p>
-<p>此时，j[2]=11111111(3)11101010</p>
-<p>即，j=-123</p>
-<p>负数似乎没有问题…</p>
-<hr>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">int</span> i = <span class="number">234</span>;</div><div class="line"><span class="keyword">byte</span> x = (<span class="keyword">byte</span>)i; <span class="comment">//-22</span></div></pre></td></tr></table></figure>
-<p>ps:</p>
-<p>234[2] = 00000000(3)11101010</p>
-<p>int 强转为 byte，直接截取低8位即11101010</p>
-<p>java把byte当做有符号处理，故此时x=-22</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">int</span> j = (<span class="keyword">int</span>)x; <span class="comment">//-22</span></div></pre></td></tr></table></figure>
-<p>ps:</p>
-<p>byte强转为int，高24位补1（自动扩展）</p>
-<p>此时，j[2]=11111111(3)11101010</p>
-<p>即，j=-22</p>
-<p>可见，byte单纯的强转为int是行不通的。(注意，示例中int强转为一个byte,如果int值超过255,发生数据丢失，正确的int转为4字节byte方法见下文)</p>
-<hr>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">int</span> i = <span class="number">234</span>;</div><div class="line"><span class="keyword">byte</span> x = (<span class="keyword">byte</span>)i; <span class="comment">//-22</span></div><div class="line"><span class="keyword">int</span> j = x &amp; <span class="number">0xFF</span>; <span class="comment">//j=234</span></div></pre></td></tr></table></figure>
-<p>ps:</p>
-<p>x &amp; 0xFF = 00000000(3)11101010</p>
-<p>即，j=234</p>
-<p>可见0xFF的作用…</p>
-<hr>
-<ul>
-<li><a href="http://yukai.space/2016/04/28/java%E4%B8%AD%E7%9A%84%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2/">http://yukai.space/2016/04/28/java%E4%B8%AD%E7%9A%84%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2/</a></li>
-</ul>
-<p>byte short char 他们三者在计算时，首先会转换为int类型,故下面几个表达式进行|运算时，是int类型之间的|运算，存在自动扩展(移位操作也会出现这种情况,即int转byte的时候),不进行&amp; 0xFF的运算，则有可能造成第一种情况的出现。</p>
-<ul>
-<li>java字节序</li>
-</ul>
-<p>java为大端字节序（bigendian）：高字节数据存放在低地址处，低字节数据存放在高地址处。</p>
-<p>0x01020304</p>
-<p>故b[0]=0x01,b[1]=0x02,b[2]=0x03,b[3]=0x04</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//byte 数组与 int 的相互转换  </span></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">byteArrayToInt</span><span class="params">(<span class="keyword">byte</span>[] b)</span> </span>&#123;  </div><div class="line">    <span class="keyword">return</span>   b[<span class="number">3</span>] &amp; <span class="number">0xFF</span> |  </div><div class="line">            (b[<span class="number">2</span>] &amp; <span class="number">0xFF</span>) &lt;&lt; <span class="number">8</span> |  </div><div class="line">            (b[<span class="number">1</span>] &amp; <span class="number">0xFF</span>) &lt;&lt; <span class="number">16</span> |  </div><div class="line">            (b[<span class="number">0</span>] &amp; <span class="number">0xFF</span>) &lt;&lt; <span class="number">24</span>;  </div><div class="line">&#125;  </div><div class="line">  </div><div class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">byte</span>[] intToByteArray(<span class="keyword">int</span> a) &#123;  </div><div class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="keyword">byte</span>[] &#123;  </div><div class="line">        (<span class="keyword">byte</span>) ((a &gt;&gt; <span class="number">24</span>) &amp; <span class="number">0xFF</span>),  </div><div class="line">        (<span class="keyword">byte</span>) ((a &gt;&gt; <span class="number">16</span>) &amp; <span class="number">0xFF</span>),     </div><div class="line">        (<span class="keyword">byte</span>) ((a &gt;&gt; <span class="number">8</span>) &amp; <span class="number">0xFF</span>),     </div><div class="line">        (<span class="keyword">byte</span>) (a &amp; <span class="number">0xFF</span>)  </div><div class="line">    &#125;;  </div><div class="line">&#125;</div></pre></td></tr></table></figure>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yukai.space/2016/11/24/java中的int-byte转换/" data-id="cj9qhw1we001whdnjyx1yyfy7" class="article-share-link">分享</a>
-      
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
- 
-
-
-  
-    <article id="post-java泛型学习" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2016/10/10/java泛型学习/" class="article-date">
-  <time datetime="2016-10-10T12:05:03.000Z" itemprop="datePublished">2016-10-10</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/编程/">编程</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/10/10/java泛型学习/">java泛型学习</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>有一段时间没有更新博客了，过了国庆之后，好像变得更懒了~~前两天开发了一个用于记账的公众号，功能很简单，就是普通的增删查改…由于是个人开发者，无法进行公众号的认证，所以没什么高级的接口权限，只能搞的简陋一点了…下一步计划再丰富丰富，目前想到了这几个功能：配合有道或者金山词霸的Api进行中英互译（API怎么用，可不可以用目前还不清楚），配合微博的Api接口整点微博热门什么的，配合豆瓣的Api接口做一个电影或者书籍查询的功能等等….公众号的服务器代码目前还部署在自己的电脑上，用nat123做了一下公网ip的映射，接下来考虑是不是要换成云服务器更为妥当….</p>
-<p>公众号在这里：</p>
-<img src="/2016/10/10/java泛型学习/easybill.jpg" alt="EasyBill" title="EasyBill">
-<p>目前，公众号已经开源：<a href="https://github.com/Hikyu/WechatSubscriptionNumber">WechatSubscriptionNumber</a></p>
-<p>好了，言归正传。今天学习了java的泛型知识，不总结一下老是觉得跟没学一样…</p>
-        
-          <p class="article-more-link">
-            <a href="/2016/10/10/java泛型学习/#more">阅读全文 »</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yukai.space/2016/10/10/java泛型学习/" data-id="cj9qhw1xi003chdnjwatbzd8m" class="article-share-link">分享</a>
-      
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
- 
-
-
-  
-    <article id="post-ssl总结" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2016/09/25/ssl总结/" class="article-date">
-  <time datetime="2016-09-25T02:09:10.000Z" itemprop="datePublished">2016-09-25</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/加密/">加密</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/09/25/ssl总结/">ssl使用总结</a>
+      <a class="article-title" href="/2017/02/25/centos7BCM驱动安装/">centos7BCM驱动安装</a>
     </h1>
   
 
@@ -306,31 +151,27 @@
     <div class="article-entry" itemprop="articleBody">
       
         <blockquote>
-<p>这次维护的web服务器要求使用Https双向认证，了解了一下如何在客户端和服务器之间进行ssl的配置，在此记录。另外，这篇日志主要记录如何使用，并不深入底层原理。</p>
+<p>前段时间安装了centos后，一直使用网线上网。今天是周末，安装了一下无线驱动，可以愉快的使用无线wifi上网啦～</p>
 </blockquote>
-<h2 id="简单认识ssl和证书"><a href="#简单认识ssl和证书" class="headerlink" title="简单认识ssl和证书"></a>简单认识ssl和证书</h2><p>在理解这部分内容之前，建议先看看前面对的一篇总结：<a href="http://yukai.space/2016/08/22/%E5%85%B3%E4%BA%8E%E5%8A%A0%E5%AF%86%E7%9A%84%E4%B8%80%E7%82%B9%E6%80%BB%E7%BB%93/">关于加密的一点总结</a></p>
-<p>SSL(Secure Sockets Layer 安全套接层),及其继任者传输层安全（Transport Layer Security，TLS）是为网络通信提供安全及数据完整性的一种安全协议。TLS与SSL在传输层对网络连接进行加密。</p>
-<p>SSL协议提供的服务主要有：</p>
-<p>1、认证用户和服务器，确保数据发送到正确的客户机和服务器；</p>
-<p>2、加密数据以防止数据中途被窃取；</p>
-<p>3、维护数据的完整性，确保数据在传输过程中不被改变。</p>
-<p>其实，ssl就是一种协议。我们知道Http协议是明文传输的，安全性不高。Https就是在Http基础之上加一层ssl协议，来达到加密通信的目的。具体的ssl握手过程，可以参考<a href="http://baike.baidu.com/view/14121.htm#6">百度百科</a></p>
-<p>附上一张图方便理解：</p>
-<img src="/2016/09/25/ssl总结/sslprocess.jpg" alt="sslprocess" title="sslprocess">
-<p>图片来自网络</p>
+<h2 id="查看无线驱动"><a href="#查看无线驱动" class="headerlink" title="查看无线驱动"></a>查看无线驱动</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">iwconfig</div></pre></td></tr></table></figure>
+<p>如果没有iwconfig命令，则先安装：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo yum install wireless-tools</div></pre></td></tr></table></figure>
+<img src="/2017/02/25/centos7BCM驱动安装/iwconfig.png" alt="iwconfig" title="iwconfig">
+<p>如上图显示有类似wlp7s0这样的信息，则表示无线驱动已经安装好了。若没有，则全部为no wireless extensions.</p>
+<p>没有安装无线驱动，进行下面的操作。</p>
         
           <p class="article-more-link">
-            <a href="/2016/09/25/ssl总结/#more">阅读全文 »</a>
+            <a href="/2017/02/25/centos7BCM驱动安装/#more">阅读全文 »</a>
           </p>
         
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2016/09/25/ssl总结/" data-id="cj9qhw20d004shdnj3xxkiu8e" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2017/02/25/centos7BCM驱动安装/" data-id="cjgp4npom001um2xc3t4ntawy" class="article-share-link">分享</a>
       
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/加密/">加密</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/">linux</a></li></ul>
 
     </footer>
   </div>
@@ -340,14 +181,14 @@
 
 
   
-    <article id="post-记录这周工作遇到的坑" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-ssh的两种用法" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2016/09/24/记录这周工作遇到的坑/" class="article-date">
-  <time datetime="2016-09-24T08:30:44.000Z" itemprop="datePublished">2016-09-24</time>
+    <a href="/2017/02/23/ssh的两种用法/" class="article-date">
+  <time datetime="2017-02-23T12:05:03.000Z" itemprop="datePublished">2017-02-23</time>
 </a>
     
   <div class="article-category">
-    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/编程/">编程</a>
+    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/Linux/">Linux</a>
   </div>
 
   </div>
@@ -358,7 +199,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2016/09/24/记录这周工作遇到的坑/">记录工作遇到的坑</a>
+      <a class="article-title" href="/2017/02/23/ssh的两种用法/">ssh的两种用法</a>
     </h1>
   
 
@@ -366,30 +207,25 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>昨天晚上12.30才进的家门，回来之后还远程合了个代码打了个包，发布restAPI新版本之用。这一周的主要工作就是在做一个web服务器，是一个集群的中间件。因为着急发布新版本，所以昨晚加班到12点多…</p>
-<p>主要实现了几个接口，实现了ssl双向验证功能。其实ssl双向验证的功能主要是了解ssl原理之后如何配置的问题。期间还学习了session和cookie的原理。ssl与cookie、session单开一篇进行总结。这篇日志记录一下这周工作中遇到的一些坑，不一定是技术上的，但是遇到这些小问题还是耽误了一些时间。这篇日志也会持续更新，把以后遇到的坑都总结到这里来。</p>
-<p>希望以后遇到类似的情况能够迅速找到原因将其解决，同时也希望能帮助到可能会看到这篇文章的人。</p>
-<h2 id="Spring项目通过export方法打包为jar的问题"><a href="#Spring项目通过export方法打包为jar的问题" class="headerlink" title="Spring项目通过export方法打包为jar的问题"></a>Spring项目通过export方法打包为jar的问题</h2><p>在前面的日志中已经有<a href="http://yukai.space/2016/09/19/Spring%E9%A1%B9%E7%9B%AE%E6%89%93%E5%8C%85%E4%B8%BAjar/">专门的一篇</a>来总结这个问题:<strong>当通过export方式打包Spring项目时，一定要记得勾选Add Directory Entries这个选项，否则spring无法正确扫描到controller，发生404</strong></p>
-<h2 id="使用-PathVariable注解时抛出java-lang-IllegalArgumentException异常"><a href="#使用-PathVariable注解时抛出java-lang-IllegalArgumentException异常" class="headerlink" title="使用@PathVariable注解时抛出java.lang.IllegalArgumentException异常"></a>使用@PathVariable注解时抛出java.lang.IllegalArgumentException异常</h2><p>假如你的项目中有一个类似下面的controller来接收一个请求：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@GET</span></div><div class="line"><span class="meta">@RequestMapping</span>(<span class="string">"web/&#123;groupName&#125;"</span>)</div><div class="line"><span class="meta">@Consumes</span>(MediaType.APPLICATION_JSON)</div><div class="line"><span class="meta">@Produces</span>(MediaType.APPLICATION_JSON)</div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">getWorkerAddress</span><span class="params">(HttpServletRequest request, HttpServletResponse response,</div><div class="line">		@PathVariable String groupName)</span> </span>&#123;</div><div class="line">		doSomething...</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>当你的项目运行时你发起一个<code>http://ip:port/web/groupName1</code>这样的请求，那么很有可能服务器会报这样一个异常：<strong>java.lang.IllegalArgumentException: Name for argument type [java.lang.String] not available, and parameter name information not found in class file either.</strong></p>
-<p>大概的意思就是参数名称信息没有在类文件中找到。若是浏览器为客户端，浏览器的页面是这样的：</p>
-<img src="/2016/09/24/记录这周工作遇到的坑/error.png" alt="error" title="error">
-<p>解决这个异常的方法有两种：</p>
-<p><strong>1.在@PathVariable注解后面加上参数名，比如：@PathVariable(“groupName”)</strong></p>
+        <blockquote>
+<p>工作中在远程主机上进行一些操作时，经常使用ssh进行远程登录。后来使用github时，也会用到ssh。其中涉及到了ssh的两种用法，记录一下~</p>
+<p>本文主要参考自阮一峰老师的博客：<a href="http://www.ruanyifeng.com/blog/2011/12/ssh_remote_login.html">SSH原理与运用（一）：远程登录</a></p>
+</blockquote>
+<p>ssh是每台linux机器的标准配置。ssh是一种协议，SSH在计算机之间构建网络连接，确保连接双方身份的真实性，同时，它还保证在此连接上传送的数据到达时不会被人更改，不会被他人窃听。</p>
+<p>ssh有多种实现，我们一般使用的是openssh，这是一款免费开源的ssh工具。一般在我们使用的linux发行版中，已经预设了这个软件了，所以可以直接使用它。如果是在windows中使用ssh客户端连接远程linux ssh服务，<br>我使用一款名为MobaXterm的工具。</p>
         
           <p class="article-more-link">
-            <a href="/2016/09/24/记录这周工作遇到的坑/#more">阅读全文 »</a>
+            <a href="/2017/02/23/ssh的两种用法/#more">阅读全文 »</a>
           </p>
         
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2016/09/24/记录这周工作遇到的坑/" data-id="cj9qhw2380080hdnjiowozx0x" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2017/02/23/ssh的两种用法/" data-id="cjgp4nps40055m2xckx6xdv9p" class="article-share-link">分享</a>
       
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/curl/">curl</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/spring/">spring</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/">linux</a></li></ul>
 
     </footer>
   </div>
@@ -399,10 +235,10 @@
 
 
   
-    <article id="post-Eclipse编码问题终极解决方案" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-java日志使用" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2016/09/20/Eclipse编码问题终极解决方案/" class="article-date">
-  <time datetime="2016-09-20T13:57:08.000Z" itemprop="datePublished">2016-09-20</time>
+    <a href="/2017/02/21/java日志使用/" class="article-date">
+  <time datetime="2017-02-21T04:48:55.000Z" itemprop="datePublished">2017-02-21</time>
 </a>
     
   <div class="article-category">
@@ -417,7 +253,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2016/09/20/Eclipse编码问题终极解决方案/">Eclipse乱码问题终极解决方案</a>
+      <a class="article-title" href="/2017/02/21/java日志使用/">java日志框架的使用</a>
     </h1>
   
 
@@ -425,33 +261,26 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>今天在Eclipse中导入一个新项目的时候，出现了乱码问题。研究一番…</p>
-<p>显示乱码的根本原因在于：<strong>文件本身的编码和编辑器打开和编辑文件使用的编码不一致</strong>。当编辑器以不同于文件的编码去解码该文件的时候，就会导致读出来乱码。大部分情况下英文显示正常是因为大部分编码都兼容ASCII，中文则会显示乱码。</p>
-<h2 id="编辑器显示乱码问题"><a href="#编辑器显示乱码问题" class="headerlink" title="编辑器显示乱码问题"></a>编辑器显示乱码问题</h2><p>在Eclipse中，设置编辑器显示和编辑文件所采用编码的方法有四种：</p>
-<p>1.Windows-&gt;Preference-&gt;General-&gt;Workspace ：修改整个工作空间</p>
-<img src="/2016/09/20/Eclipse编码问题终极解决方案/1.png" alt="全局修改" title="全局修改">
-<p>2.右键Project-&gt;Properties-&gt;Resource ：修改某个工程</p>
-<img src="/2016/09/20/Eclipse编码问题终极解决方案/2.png" alt="工程修改" title="工程修改">
-<p>3.右键文件-&gt;Properties ：修改某个文件</p>
-<img src="/2016/09/20/Eclipse编码问题终极解决方案/3.png" alt="文件修改" title="文件修改">
-<p>4.Windows-&gt;Preference-&gt;General-&gt;Content types-&gt;Default encoding :全局修改某种类型的文件</p>
-<img src="/2016/09/20/Eclipse编码问题终极解决方案/4.png" alt="全局文件修改" title="全局文件修改">
-<p>其中，3的优先级最高。也就是说某个文件被编辑器以哪种编码读取最终是由3中的Text file encoding决定的。一般情况下，如果我们不在3中显示指定编码(选择Other那一项)，Eclipse都会默认使用Default那一项的编码。那么，这个Default的编码又是如何决定的呢？</p>
-<img src="/2016/09/20/Eclipse编码问题终极解决方案/5.png" alt="文件修改" title="文件修改">
-<p>注意上图中圈起来的部分：这部分表示了Default采用哪种编码是如何决定的。</p>
+        <blockquote>
+<p>之前在web项目中用到了日志，日志在web应用中很重要，特别是对于程序员追查bug而言。但是由于对混乱的日志框架体系不是十分清楚，导致各种jar包冲突和日志不正常输出。今天来总结一下日志框架的使用<br>主要介绍日志门面slf4j结合日志实现log4j。关于其他的日志框架介绍和使用，参考链接里列出了前辈总结的很好的资料，相信读完之后一定会有收获。</p>
+</blockquote>
+<h2 id="日志门面和实际日志框架"><a href="#日志门面和实际日志框架" class="headerlink" title="日志门面和实际日志框架"></a>日志门面和实际日志框架</h2><p>日志框架有：jdk自带的logging(jul)，log4j1、log4j2、logback<br>日志门面有：apache commons-logging、slf4j</p>
+<p>日志框架很好理解，就是提供日志api，使我们可以很轻易的，有组织有规范的输出日志。日志门面的作用是在日志记录实现的基础上提供一个封装的 API 层次，<br>对日志记录 API 的使用者提供一个统一的接口，使得可以自由切换不同的日志记录实现。日志门面就好比java中的jdbc规范接口，各个数据库厂家实现的jdbc驱动程序就是实际的日志框架，<br>他们遵循了这个规范，使得我们在编写java程序时不用考虑底层驱动的不同，只需调用jdbc规范接口即可。这是典型的面向对象思想。</p>
+<h2 id="slf4j的使用"><a href="#slf4j的使用" class="headerlink" title="slf4j的使用"></a>slf4j的使用</h2><h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><p><img src="https://www.slf4j.org/images/concrete-bindings.png" alt="slf4j使用"></p>
+<p>上图来自slf4j官网</p>
         
           <p class="article-more-link">
-            <a href="/2016/09/20/Eclipse编码问题终极解决方案/#more">阅读全文 »</a>
+            <a href="/2017/02/21/java日志使用/#more">阅读全文 »</a>
           </p>
         
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2016/09/20/Eclipse编码问题终极解决方案/" data-id="cj9qhw1ub0002hdnj37dkekww" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2017/02/21/java日志使用/" data-id="cjgp4npqj003sm2xcs04p23ui" class="article-share-link">分享</a>
       
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Eclipse/">Eclipse</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li></ul>
 
     </footer>
   </div>
@@ -461,10 +290,10 @@
 
 
   
-    <article id="post-Spring项目打包为jar" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-java国际化" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2016/09/19/Spring项目打包为jar/" class="article-date">
-  <time datetime="2016-09-19T13:41:48.000Z" itemprop="datePublished">2016-09-19</time>
+    <a href="/2017/02/19/java国际化/" class="article-date">
+  <time datetime="2017-02-19T11:32:40.000Z" itemprop="datePublished">2017-02-19</time>
 </a>
     
   <div class="article-category">
@@ -479,7 +308,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2016/09/19/Spring项目打包为jar/">记一次苦逼经历--关于spring项目打包为jar运行</a>
+      <a class="article-title" href="/2017/02/19/java国际化/">java国际化</a>
     </h1>
   
 
@@ -487,27 +316,27 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>上周二刚从外包那里接手了一个的项目，主要是实现了一个web服务器，客户端可以以http请求的方式通过该服务器获取一些数据库的信息，技术上主要是使用了SpringBoot和REST API。周三就来新的需求了，实现一个接口，大概看了下代码，感觉soeasy(虽然之前从没有接触过springboot和spring，说来惭愧。不过这也说明了使用框架的好处，可以快速上手)。</p>
-<p>中秋假期结束之后把这个接口弄完了。Eclipse里面跑起来完全没有问题。自信心爆棚。该服务器要求以jar包的方式运行，那就打个包吧。结果苦逼的经历开始了。</p>
-<p>由于项目没有使用任何工具构建，没有maven，也没有Gradle。想着就凑合着用Eclipse里面自带的export导出jar包的功能吧。于是:右键工程，选择export。然后java-&gt;JAR file</p>
-<img src="/2016/09/19/Spring项目打包为jar/1.png" alt="export" title="export">
-<p>jar包打好了。把依赖什么的都放到jar所在的同一个目录，紧接着使用 java -cp interfaceService.jar;lib/* com.XXX.Application  执行。</p>
-<p>服务器跑起来了。nice</p>
-<p>浏览器输入URL，回车，出现了这样的画面：</p>
-<img src="/2016/09/19/Spring项目打包为jar/2.png" alt="404" title="404">
+        <blockquote>
+<p>使用java编写一个带GUI程序或者其他需要给用户传递文字信息的程序的时候，就很有可能需要用到国际化的知识，来总结一下。</p>
+</blockquote>
+<p>所谓的国际化，就是使编写的程序可以适应不同的语言环境，比如，在中文环境下，可以与用户使用中文交互，在英文环境下则切换为英文。而这个切换过程不需要修改代码或者仅仅修改少量的代码。java给我们提供了这样的实现。</p>
+<h2 id="java文件国际化"><a href="#java文件国际化" class="headerlink" title="java文件国际化"></a>java文件国际化</h2><p>我们通过将与界面显示有关系的资源提取出来到资源文件中，然后读取不同的资源文件来达到国际化的目的。在java中，这些是通过ResourceBundle这个类来实现的。</p>
+<p>ResourceBundle分为两种，一种是ListResourceBundle,另一种是PropertyResourceBundle。下面介绍这两种ResourceBundle的使用方法：</p>
+<p>首先列出demo工程的代码结构：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line">TestResourceBundle</div><div class="line">|</div><div class="line">|--src</div><div class="line">    |</div><div class="line">    |--kyu</div><div class="line">        |</div><div class="line">        |--bundle</div><div class="line">        |    |</div><div class="line">        |    |--ListResourceTranslator.java</div><div class="line">        |    |</div><div class="line">        |    |--PropertyResourceTranslator.java</div><div class="line">        |    |</div><div class="line">        |    |--ResourceTranslator.java</div><div class="line">        |</div><div class="line">        |--test</div><div class="line">        |   |</div><div class="line">        |   |--App.java</div><div class="line">        |</div><div class="line">        |--Errors_en_Us.java</div><div class="line">        |</div><div class="line">        |--Errors_zh_CN.java</div><div class="line">        |</div><div class="line">        |--Errors.java</div><div class="line">        |</div><div class="line">        |--Errors_en_Us.properties</div><div class="line">        |</div><div class="line">        |--Errors_zh_CN.properties</div><div class="line">        |</div><div class="line">        |--Errors.properties</div></pre></td></tr></table></figure>
         
           <p class="article-more-link">
-            <a href="/2016/09/19/Spring项目打包为jar/#more">阅读全文 »</a>
+            <a href="/2017/02/19/java国际化/#more">阅读全文 »</a>
           </p>
         
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2016/09/19/Spring项目打包为jar/" data-id="cj9qhw1v5000shdnjn628wi0c" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2017/02/19/java国际化/" data-id="cjgp4npq9003jm2xcrh3ndesy" class="article-share-link">分享</a>
       
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/spring/">spring</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/服务器/">服务器</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li></ul>
 
     </footer>
   </div>
@@ -517,10 +346,125 @@
 
 
   
-    <article id="post-理解java内存模型" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-win7与centos7双系统安装" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2016/09/10/理解java内存模型/" class="article-date">
-  <time datetime="2016-09-10T02:32:40.000Z" itemprop="datePublished">2016-09-10</time>
+    <a href="/2017/02/18/win7与centos7双系统安装/" class="article-date">
+  <time datetime="2017-02-18T13:10:00.000Z" itemprop="datePublished">2017-02-18</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/Linux/">Linux</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/02/18/win7与centos7双系统安装/">win7与centos7双系统安装</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>之前会有同学让帮忙重装操作系统，正好计划重新装一下自己电脑的系统，折腾了win7与linux双系统，在此记录。以后就可以给他们看这篇笔记自己去装啦~</p>
+<p>ps: 由于是双系统的安装操作，而不是虚拟机，所以并未截图，是纯文字说明。如果不清楚，可以参考最下面的参考链接</p>
+</blockquote>
+<h2 id="安装win7"><a href="#安装win7" class="headerlink" title="安装win7"></a>安装win7</h2><h3 id="下载win7镜像文件："><a href="#下载win7镜像文件：" class="headerlink" title="下载win7镜像文件："></a>下载win7镜像文件：</h3><p><a href="http://www.xitongzhijia.net/win7/">系统之家win7下载</a></p>
+<p>选择一款进行下载，我选择了<code>雨林木风 GHOST WIN7 SP1 X64 装机旗舰版 V2017.02（64位）</code></p>
+<h3 id="制作U盘启动工具"><a href="#制作U盘启动工具" class="headerlink" title="制作U盘启动工具"></a>制作U盘启动工具</h3><p>下载启动盘制作工具：</p>
+<p><a href="http://www.laomaotao.org/lmtxz/933.html">老毛桃u盘启动盘制作工具</a></p>
+<p>下载装机版，进行安装</p>
+<p>启动盘制作工具安装完成，且镜像下载完毕之后，启动老毛桃，选择U盘启动-&gt;默认模式</p>
+<p>插入一个可用的U盘，在选择设备这项中，选择插入的U盘设备，注意不要选错</p>
+<p>其他选项默认，点击 开始制作 进行启动盘的制作。</p>
+<p>启动盘制作完毕之后，将下载好的iso文件拷入U盘<br>
+        
+          <p class="article-more-link">
+            <a href="/2017/02/18/win7与centos7双系统安装/#more">阅读全文 »</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yukai.space/2017/02/18/win7与centos7双系统安装/" data-id="cjgp4npsb005lm2xc51r7lmdh" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/">linux</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+ 
+
+
+  
+    <article id="post-Vps使用笔记" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/02/07/Vps使用笔记/" class="article-date">
+  <time datetime="2017-02-07T13:34:16.000Z" itemprop="datePublished">2017-02-07</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/Linux/">Linux</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/02/07/Vps使用笔记/">Vps使用笔记</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>今天折腾了一天，总算是把翻墙的梯子搭起来了，租了国外的vps，然后在上面搭建了shadowsocks服务，手机和电脑就可以使用shadowsocks客户端的方式科学上网了。<br>Shadowsocks 是一个由很多人参与的开源项目，感谢shadowsocks作者<a href="https://github.com/clowwindy/shadowsocks">@clowwindy</a>.关于shadowssocks和vpn等等翻墙方式的区别,不再一一赘述，本文只是记录梯子搭建的过程</p>
+</blockquote>
+<h2 id="购买VPS"><a href="#购买VPS" class="headerlink" title="购买VPS"></a>购买VPS</h2><p>VPS的概念我也不是特别清楚，就把他当成主机好了，类似于阿里云等等。</p>
+<p>购买之后，会分配给你root账户密码，你就拥有了一台国外机房的主机。</p>
+<p>VPS 可以参考 <a href="https://www.zhihu.com/question/20800554">有哪些便宜稳定，速度也不错的Linux VPS 推荐？</a>,我买了Vultr 日本机房的vps,充了5美刀先试试。具体的购买方法自行谷歌</p>
+        
+          <p class="article-more-link">
+            <a href="/2017/02/07/Vps使用笔记/#more">阅读全文 »</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yukai.space/2017/02/07/Vps使用笔记/" data-id="cjgp4npod001nm2xcgp98aoaq" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/">linux</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+ 
+
+
+  
+    <article id="post-java异常的学习" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/12/13/java异常的学习/" class="article-date">
+  <time datetime="2016-12-13T13:46:52.000Z" itemprop="datePublished">2016-12-13</time>
 </a>
     
   <div class="article-category">
@@ -535,7 +479,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2016/09/10/理解java内存模型/">理解java内存模型</a>
+      <a class="article-title" href="/2016/12/13/java异常的学习/">java异常的学习</a>
     </h1>
   
 
@@ -543,19 +487,20 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>最近一直在看周志明所著的《深入理解Java虚拟机》，看到java内存模型这一章。自己从网上也查了一些资料，算是对java内存模型有了一个大概的认识，对理解和编写java并发有很大的帮助。有一段时间没再写博客了，正好利用周末的时间把自己学到的java内存模型的知识总结一下。Have a nice day~</p>
-<h2 id="并发为啥会出现问题"><a href="#并发为啥会出现问题" class="headerlink" title="并发为啥会出现问题"></a>并发为啥会出现问题</h2><p>PS：2016/9/13更新：今天在地铁上看到这篇文章：<a href="http://toutiao.io/posts/493923/app_preview">Java 并发原理无废话指南</a>,感觉跟我这一小节要说明的问题比较相似，参考一下。</p>
-<h3 id="原子性"><a href="#原子性" class="headerlink" title="原子性"></a>原子性</h3><p>其实去了解java内存模型主要是为java并发打下基础。我刚学编程接触多线程的时候，关于多线程并发为什么会有并发问题有过一些思考，老师或者网上的例子都会给出一个类似这样的例子：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BankAccount</span> </span>&#123;</div><div class="line">	<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> accountBalance = <span class="number">10000</span>;</div><div class="line"></div><div class="line">	<span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Save</span> <span class="keyword">implements</span> <span class="title">Runnable</span> </span>&#123;</div><div class="line">		<span class="keyword">private</span> <span class="keyword">int</span> money;</div><div class="line"></div><div class="line">		<span class="function"><span class="keyword">public</span> <span class="title">Save</span><span class="params">(<span class="keyword">int</span> money)</span> </span>&#123;</div><div class="line">			<span class="keyword">this</span>.money = money;</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		<span class="meta">@Override</span></div><div class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</div><div class="line">			<span class="comment">//存钱</span></div><div class="line">			<span class="keyword">int</span> tempAccount = accountBalance + money;</div><div class="line">			<span class="comment">//设置余额</span></div><div class="line">			accountBalance = tempAccount;</div><div class="line">			System.out.println(<span class="string">"此次存入："</span> + money);</div><div class="line">			System.out.println(<span class="string">"当前余额："</span> + accountBalance);</div><div class="line">		&#125;</div><div class="line"></div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Obtain</span> <span class="keyword">implements</span> <span class="title">Runnable</span> </span>&#123;</div><div class="line"></div><div class="line">		<span class="keyword">private</span> <span class="keyword">int</span> money;</div><div class="line"></div><div class="line">		<span class="function"><span class="keyword">public</span> <span class="title">Obtain</span><span class="params">(<span class="keyword">int</span> money)</span> </span>&#123;</div><div class="line">			<span class="keyword">this</span>.money = money;</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		<span class="meta">@Override</span></div><div class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</div><div class="line">			<span class="keyword">if</span> (money &gt; accountBalance) &#123;</div><div class="line">				System.out.println(<span class="string">"余额不足"</span>);</div><div class="line">				<span class="keyword">return</span>;</div><div class="line">			&#125;</div><div class="line">			<span class="comment">//取钱</span></div><div class="line">			<span class="keyword">int</span> tempAccount = accountBalance - money;</div><div class="line">			<span class="keyword">try</span> &#123;</div><div class="line">				Thread.sleep(<span class="number">1000</span>);<span class="comment">//艾玛，卡了一秒</span></div><div class="line">			&#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</div><div class="line">				e.printStackTrace();</div><div class="line">			&#125;</div><div class="line">			<span class="comment">//设置余额</span></div><div class="line">			accountBalance = tempAccount;</div><div class="line">			System.out.println(<span class="string">"此次取出："</span> + money);</div><div class="line">			System.out.println(<span class="string">"当前余额："</span> + accountBalance);</div><div class="line">		&#125;</div><div class="line"></div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String args[])</span> </span>&#123;</div><div class="line">		<span class="keyword">int</span> saveMoney = <span class="number">10000</span>;</div><div class="line">		<span class="keyword">int</span> obtainMoney = <span class="number">10000</span>;</div><div class="line">		<span class="comment">//自己取钱</span></div><div class="line">		Thread obtain = <span class="keyword">new</span> Thread(<span class="keyword">new</span> Obtain(obtainMoney));</div><div class="line">		<span class="comment">//老婆存钱</span></div><div class="line">		Thread save = <span class="keyword">new</span> Thread(<span class="keyword">new</span> Save(saveMoney));</div><div class="line">		obtain.start();</div><div class="line">		save.start();</div><div class="line">	&#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+        <blockquote>
+<p>最近的写代码的过程中，遇到很多异常的处理，以前上大学的时候写代码，遇到异常直接给个try catch了事，只是停留在看懂异常能够找出异常抛出点的水平。真正写代码的时候，不了解java的异常机制给自己编程带来很多不便，基础知识很重要！学习之～～</p>
+</blockquote>
+<h2 id="异常分类"><a href="#异常分类" class="headerlink" title="异常分类"></a>异常分类</h2><img src="/2016/12/13/java异常的学习/java.png" alt="java异常体系" title="java异常体系">
+<p>java异常中的异常大体上可分为两类：Error 与 Exception，他们都继承自Throwable</p>
         
           <p class="article-more-link">
-            <a href="/2016/09/10/理解java内存模型/#more">阅读全文 »</a>
+            <a href="/2016/12/13/java异常的学习/#more">阅读全文 »</a>
           </p>
         
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2016/09/10/理解java内存模型/" data-id="cj9qhw22g007bhdnjys26q6c8" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2016/12/13/java异常的学习/" data-id="cjgp4npqb003mm2xc009gvq79" class="article-share-link">分享</a>
       
       
       
@@ -572,7 +517,7 @@
 
 
   <nav id="page-nav">
-    <a class="extend prev" rel="prev" href="/page/7/">&laquo; 上一页</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><span class="page-number current">8</span><a class="page-number" href="/page/9/">9</a><a class="page-number" href="/page/10/">10</a><a class="page-number" href="/page/11/">11</a><a class="extend next" rel="next" href="/page/9/">下一页&raquo;</a>
+    <a class="extend prev" rel="prev" href="/page/7/">&laquo; 上一页</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><span class="page-number current">8</span><a class="page-number" href="/page/9/">9</a><a class="page-number" href="/page/10/">10</a><span class="space">&hellip;</span><a class="page-number" href="/page/13/">13</a><a class="extend next" rel="next" href="/page/9/">下一页&raquo;</a>
   </nav>
 </section>
            
@@ -595,23 +540,23 @@
       <ul>
         
           <li>
-            <a href="/2017/11/30/简单学习Java-ForkJoin框架/">Java-ForkJoin框架</a>
+            <a href="/2018/05/02/VirtualBox共享文件夹/">VirtualBox设置共享文件夹</a>
           </li>
         
           <li>
-            <a href="/2017/11/23/Java基础-字节/">Java基础-字节</a>
+            <a href="/2018/05/01/Centos7美化/">Centos7美化</a>
           </li>
         
           <li>
-            <a href="/2017/11/21/理解Java-Reference/">理解Java-Reference</a>
+            <a href="/2018/04/30/联通华为HG8347R设置桥接模式/">联通华为HG8347R设置桥接模式</a>
           </li>
         
           <li>
-            <a href="/2017/11/20/如何执行一个延迟任务？/">如何执行一个延迟任务？</a>
+            <a href="/2018/03/29/可能会用到的Git技巧2/">可能会用到的Git技巧(2)</a>
           </li>
         
           <li>
-            <a href="/2017/11/15/从通信协议到装饰者模式/">从通信协议到装饰者模式</a>
+            <a href="/2018/03/01/可能会用到的Git技巧1/">可能会用到的Git技巧(1)</a>
           </li>
         
       </ul>
@@ -629,7 +574,7 @@
   
   <div class="outer">
     <div id="footer-left">
-      &copy; 2014 - 2017 于凯&nbsp;|&nbsp;
+      &copy; 2014 - 2018 于凯&nbsp;|&nbsp;
       主题 <a href="https://github.com/giscafer/hexo-theme-cafe/" target="_blank">Cafe</a>
     </div>
      <div id="footer-right">

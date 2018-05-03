@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>联通华为HG8347R设置桥接模式 | YuKai&#39;s blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="前面的笔记中有提到如何通过外网访问家里的服务。在某些场景下可能会用到，比如想要在单位ssh家里的电脑，或者访问家里的NAS等设备等等。之前用的电信的宽带，是通过自己的路由器拨号上网，并且外网IP也是直接分配好的，配一下DDNS和端口映射即可。前一段时间换了联通的宽带。
+更换宽带的时候，联通提供了一个光猫，华为HG8347R。这个光猫取代了之前的路由器，拨号也由他进行。通过该光猫的无线功能就可以直接">
+<meta property="og:type" content="article">
+<meta property="og:title" content="联通华为HG8347R设置桥接模式">
+<meta property="og:url" content="http://yukai.space/2018/04/30/联通华为HG8347R设置桥接模式/index.html">
+<meta property="og:site_name" content="YuKai's blog">
+<meta property="og:description" content="前面的笔记中有提到如何通过外网访问家里的服务。在某些场景下可能会用到，比如想要在单位ssh家里的电脑，或者访问家里的NAS等设备等等。之前用的电信的宽带，是通过自己的路由器拨号上网，并且外网IP也是直接分配好的，配一下DDNS和端口映射即可。前一段时间换了联通的宽带。
+更换宽带的时候，联通提供了一个光猫，华为HG8347R。这个光猫取代了之前的路由器，拨号也由他进行。通过该光猫的无线功能就可以直接">
+<meta property="og:image" content="http://yukai.space/2018/04/30/联通华为HG8347R设置桥接模式/route.png">
+<meta property="og:updated_time" content="2018-04-30T15:10:36.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="联通华为HG8347R设置桥接模式">
+<meta name="twitter:description" content="前面的笔记中有提到如何通过外网访问家里的服务。在某些场景下可能会用到，比如想要在单位ssh家里的电脑，或者访问家里的NAS等设备等等。之前用的电信的宽带，是通过自己的路由器拨号上网，并且外网IP也是直接分配好的，配一下DDNS和端口映射即可。前一段时间换了联通的宽带。
+更换宽带的时候，联通提供了一个光猫，华为HG8347R。这个光猫取代了之前的路由器，拨号也由他进行。通过该光猫的无线功能就可以直接">
+<meta name="twitter:image" content="http://yukai.space/2018/04/30/联通华为HG8347R设置桥接模式/route.png">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    
+    <div id="header-inner" class="inner">
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yukai.space"></form>
+      </div>
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/archives">归档</a>
+        
+          <a class="main-nav-link" href="/tools">工具</a>
+        
+          <a class="main-nav-link" href="/page">关于</a>
+        
+      </nav>
+      
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">YuKai&#39;s blog</a>
+      </h1>
+      
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-联通华为HG8347R设置桥接模式" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/04/30/联通华为HG8347R设置桥接模式/" class="article-date">
+  <time datetime="2018-04-30T11:43:12.000Z" itemprop="datePublished">2018-04-30</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/工具/">工具</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      联通华为HG8347R设置桥接模式
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <p><a href="http://yukai.space/2017/06/05/%E5%A6%82%E4%BD%95%E4%BB%8E%E5%A4%96%E7%BD%91%E8%AE%BF%E9%97%AE%E5%AE%B6%E9%87%8C%E7%9A%84%E7%94%B5%E8%84%91/">前面的笔记</a>中有提到如何通过外网访问家里的服务。在某些场景下可能会用到，比如想要在单位ssh家里的电脑，或者访问家里的NAS等设备等等。之前用的电信的宽带，是通过自己的路由器拨号上网，并且外网IP也是直接分配好的，配一下DDNS和端口映射即可。前一段时间换了联通的宽带。</p>
+<p>更换宽带的时候，联通提供了一个光猫，华为HG8347R。这个光猫取代了之前的路由器，拨号也由他进行。通过该光猫的无线功能就可以直接连接WIFI上网了。但是这个光猫的无线性能较差，于是在 Lan1 口接了一个自己的TP-link路由器，通过该路由器提供的wifi信号可以正常上网。此时出现了两个WIFI信号，一个是光猫提供的，一个是TP-link路由器提供的。家里的终端设备都使用TP-link提供的WIFI上网。此时的网络拓扑大致如下：</p>
+<img src="/2018/04/30/联通华为HG8347R设置桥接模式/route.png" alt="拓扑" title="拓扑">
+<a id="more"></a>
+<p>上面的拓扑显示了从Internet到家里的终端设备经过了三层NAT转发，分别是联通到光猫，光猫到TP-link，TP-link到终端。</p>
+<p>换成联通的宽带后，NAT转发的层数多了，一定程度上会影响网速。另一方面，如果还想从外网访问家里终端的服务，面临两个问题：</p>
+<p>第一，联通分给用户的是一个 172.16 打头的局域网IP，肯定是不可以从外网直接访问的；</p>
+<p>第二，联通提供的光猫没有提供DDNS和端口映射等高级功能。</p>
+<p>此时就有必要更改一下光猫的配置了。</p>
+<h2 id="基础知识"><a href="#基础知识" class="headerlink" title="基础知识"></a>基础知识</h2><p>首先了解一下路由器的几种工作模式：</p>
+<ul>
+<li>AP(接入点)模式：</li>
+</ul>
+<p>AP(接入点)模式下，只需要把一根可以上网的网线插在路由器上，无需任何配置就可以通过有线和无线上网了，相当于一台拥有无线功能的交换机。</p>
+<p>适用场合：宾馆、酒店或者其它提供了一根网线上网的场所。</p>
+<ul>
+<li>Router(无线路由)模式</li>
+</ul>
+<p>在Router(无线路由)模式下，路由器就相当于一台普通的无线宽带路由器。家里的ADSL或者光猫安装好之后，可以通过路由模式，让无线路由器使用PPPoE（虚拟拨号）连接光猫拨号上网。</p>
+<p>适用场合：用户自己办理了宽带业务情况下使用。</p>
+<ul>
+<li>Repeater（中继）模式</li>
+</ul>
+<p>Repeater（中继）模式下，路由器会通过无线的方式与一台可以上网的无线路由器建立连接，用来放大可以上网的无线路由器上的无线信号。</p>
+<p>适用场合：有一台可以上网的无线路由器，但是该无线路由器的无线信号覆盖有限，希望无线信号可以覆盖更广泛的范围时使用。</p>
+<ul>
+<li>Bridge（桥接）模式</li>
+</ul>
+<p>Bridge（桥接）模式，路由器会通过无线的方式与一台可以上网的无线路由器建立连接，用来放大可以上网的无线路由器上的无线信号；</p>
+<p>适用场合：有一台可以上网的无线路由器，但是该无线路由器的无线信号覆盖有线，希望无线信号可以覆盖更广泛的范围时使用。</p>
+<ul>
+<li>Client（客户端）模式</li>
+</ul>
+<p>像笔记本电脑上的无线网卡那样工作，仅连接其它的无线网络，而不发射自己的无线网络信号。这种模式相当于启用了一个无线的WAN口，且下面的电脑只能通过有线方式接到此设备。</p>
+<p>适用场合：附近有无线信号，并且用户知道该无线信号密码，用户的台式电脑想连接该无线信号上网时使用。</p>
+<p>注意，中继和桥接这两种模式看起来相似。其内部本质上的不同为：</p>
+<p>中继模式下无线路由器仍然提供DHCP及NAT功能，即接入到该无线路由器的终端组成的是一个单独的局域网网段。和原来的无线路由器的LAN口及无线客户接入不在同一个网段。</p>
+<p>桥接模式下接入到该无线路由器上的终端，是和主无线网网络处在相同的网段。内部的DHCP请求，也会被转发到主无线网络上。</p>
+<h2 id="修改光猫配置"><a href="#修改光猫配置" class="headerlink" title="修改光猫配置"></a>修改光猫配置</h2><p>有了上面的基础，我们回头看此时的拓扑情况：</p>
+<p>光猫工作在路由模式下，拨号上网；</p>
+<p>TP-link 工作在接入点模式下，连接光猫的Lan1口。</p>
+<p>如果我们想要使用TP-link的DDNS和端口转发功能，那么首先就需要TP-link获得外网IP的地址，也就是说让TP-link取代光猫的位置，由TP-link来拨号上网。</p>
+<p>此时TP-link需要工作在【路由模式】下，而光猫则需要改为【桥接模式】，这样TP-link才能与光猫的Wan口处在同一网段，才可以进行拨号。</p>
+<p>如何修改光猫的工作模式？网上翻了不少资料，大部分是讲解如何破解光猫的。不过，我找到了一个更加简单的办法，那就是直接使用光猫的超级管理员账户，就可以修改光猫的工作模式啦！</p>
+<p>在此之前，首先需要获得拨号上网的账号密码。这个账号密码在光猫里配好的，但是密码是加密的，不太容易取得，直接拨打10010，询问客服，获得账号密码。</p>
+<p>接下来修改光猫的配置：</p>
+<ol>
+<li><p>登录光猫的Web管理页面</p>
+<p>我的光猫的Web页面是：<a href="http://192.168.18.1/CU.html，使用账户" target="_blank" rel="external">http://192.168.18.1/CU.html，使用账户</a> CUAdmin   密码 CUAdmin 登入。</p>
+<p>注意，一定要加上<strong>CU.html</strong>，否则会提醒你该操作不允许！</p>
+</li>
+<li><p>进入基本设置-&gt;上行线路配置</p>
+<p> 有四个上行线路，分别是管理电话、互联网、IPTV和声音什么的。选择第二个 2_Internet_xxx；</p>
+<p> 模式该为桥接，选择端口1进行绑定;</p>
+<p> 关闭光猫的无线功能和DHCP功能。</p>
+</li>
+<li><p>TP-link接Lan1端口</p>
+<p> 进入TP-link提供的Web管理界面 <a href="http://192.168.1.1/，路由设置-&gt;上网设置；" target="_blank" rel="external">http://192.168.1.1/，路由设置-&gt;上网设置；</a></p>
+<p> 上网方式选择宽带拨号上网，填写从客服处获取的宽带账号密码，点击连接。</p>
+<p> 不出意外的话，可以连接成功，已经可以上网了。</p>
+</li>
+</ol>
+<p>但是，此时在TP-link上看到的路由器Wan口IP地址仍然是内网IP 172.16.X.X，所以还是无法使用DDNS和端口映射等功能。</p>
+<h2 id="取得公网IP"><a href="#取得公网IP" class="headerlink" title="取得公网IP"></a>取得公网IP</h2><p>拨打10010，向客服索要外网IP地址，而不是联通NAT分配的私有地址。</p>
+<p>做完以上的操作，DDNS、DMZ、端口映射等功能又可以用啦！</p>
+<h2 id="疑问"><a href="#疑问" class="headerlink" title="疑问"></a>疑问</h2><p>修改光猫的配置为桥接模式后，就无法访问光猫的Web管理页面了。Ping 192.168.18.1 也显示超时。然后我将电脑用网线直接接光猫的Lan2口，是可以访问192.168.18.1的。</p>
+<p>这说明光猫的地址没有变，但是为什么用TP-link上网之后却Ping不通该地址呢？TP-link接光猫的Lan1口，两者应该是相通的才对呀？</p>
+<p>TP-link的Wan口变成了外网IP，光猫与TP-link之间的网络拓扑是怎样的呢？</p>
+<p>以上。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yukai.space/2018/04/30/联通华为HG8347R设置桥接模式/" data-id="cjgp4npun008ym2xcv4hp5x54" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/">linux</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+ <script src="/jquery/jquery.min.js"></script>
+  <div id="random_posts">
+    <h2>推荐文章</h2>
+    <div class="random_posts_ul">
+      <script>
+          var random_count =4
+          var site = {BASE_URI:'/'};
+          function load_random_posts(obj) {
+              var arr=site.posts;
+              if (!obj) return;
+              // var count = $(obj).attr('data-count') || 6;
+              for (var i, tmp, n = arr.length; n; i = Math.floor(Math.random() * n), tmp = arr[--n], arr[n] = arr[i], arr[i] = tmp);
+              arr = arr.slice(0, random_count);
+              var html = '<ul>';
+            
+              for(var j=0;j<arr.length;j++){
+                var item=arr[j];
+                html += '<li><strong>' + 
+                item.date + ':&nbsp;&nbsp;<a href="' + (site.BASE_URI+item.uri) + '">' + 
+                (item.title || item.uri) + '</a></strong>';
+                if(item.excerpt){
+                  html +='<div class="post-excerpt">'+item.excerpt+'</div>';
+                }
+                html +='</li>';
+                
+              }
+              $(obj).html(html + '</ul>');
+          }
+          $('.random_posts_ul').each(function () {
+              var c = this;
+              if (!site.posts || !site.posts.length){
+                  $.getJSON(site.BASE_URI + 'js/posts.js',function(json){site.posts = json;load_random_posts(c)});
+              } 
+               else{
+                load_random_posts(c);
+              }
+          });
+      </script>
+    </div>
+  </div>
+
+    
+<nav id="article-nav">
+  
+    <a href="/2018/05/01/Centos7美化/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
+        
+          Centos7美化
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/03/29/可能会用到的Git技巧2/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">可能会用到的Git技巧(2)</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+ 
+     
+  <div class="comments" id="comments">
+    
+     
+       
+      <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+    
+       
+      
+      
+           <div id="gitment_comments"></div>
+    
+  </div>
+ 
+  
+
+</section>
+           
+    <aside id="sidebar">
+  
+    
+
+  
+    
+    <div class="widget-wrap">
+    
+      <div class="widget" id="toc-widget-fixed">
+      
+        <strong class="toc-title">文章目录</strong>
+        <div class="toc-widget-list">
+              <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#基础知识"><span class="toc-number">1.</span> <span class="toc-text">基础知识</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#修改光猫配置"><span class="toc-number">2.</span> <span class="toc-text">修改光猫配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#取得公网IP"><span class="toc-number">3.</span> <span class="toc-text">取得公网IP</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#疑问"><span class="toc-number">4.</span> <span class="toc-text">疑问</span></a></li></ol>
+          </div>
+      </div>
+    </div>
+
+  
+    
+
+  
+    
+  
+    
+  
+    
+
+  
+</aside>
+
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-left">
+      &copy; 2014 - 2018 于凯&nbsp;|&nbsp;
+      主题 <a href="https://github.com/giscafer/hexo-theme-cafe/" target="_blank">Cafe</a>
+    </div>
+     <div id="footer-right">
+      联系方式&nbsp;|&nbsp;debiaoyu@gmail.com
+    </div>
+  </div>
+</footer>
+ <script src="/jquery/jquery.min.js"></script>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/archives" class="mobile-nav-link">归档</a>
+  
+    <a href="/tools" class="mobile-nav-link">工具</a>
+  
+    <a href="/page" class="mobile-nav-link">关于</a>
+  
+</nav>
+    <img class="back-to-top-btn" src="/images/fly-to-top.png"/>
+<script>
+// Elevator script included on the page, already.
+window.onload = function() {
+  var elevator = new Elevator({
+    selector:'.back-to-top-btn',
+    element: document.querySelector('.back-to-top-btn'),
+    duration: 1000 // milliseconds
+  });
+}
+</script>
+      
+
+  
+    <script>
+      var cloudTieConfig = {
+        url: document.location.href, 
+        sourceId: "",
+        productKey: "e2fb4051c49842688ce669e634bc983f",
+        target: "cloud-tie-wrapper"
+      };
+    </script>
+    <script src="https://img1.ws.126.net/f2e/tie/yun/sdk/loader.js"></script>
+    
+
+  
+
+
+
+
+
+
+
+<!-- author:forvoid begin -->
+<!-- author:forvoid begin -->
+
+  <link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+  <script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script> 
+  <script>
+  var gitment = new Gitment({
+    // id: '页面 ID', // 可选。默认为 location.href
+    owner: 'Hikyu',
+    repo: 'Hikyu.github.io',
+    oauth: {
+    client_id: '61886569157db60efa97',
+    client_secret: '6475bb7c8faaf44ff2e12c272a46505a0eecf46f',
+    }
+  })
+  gitment.render(document.getElementById("gitment_comments"))
+</script>
+
+
+<!-- author:forvoid end -->
+
+<!-- author:forvoid end -->
+
+
+
+ <script src="/js/is.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+<script src="/js/elevator.js"></script>
+  </div>
+</body>
+</html>

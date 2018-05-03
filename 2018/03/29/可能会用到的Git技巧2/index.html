@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>可能会用到的Git技巧(2) | YuKai&#39;s blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="git worktree我们知道如果工作目录修改到一半的话，是不能随便切换 branch 的。解决方法可以通过 git stash 先暂存起来，随后执行 git stash apply 恢复。
+但是，如果我们想同时修改两个分支呢？或者同时测试两个分支。能想到的方法就是单独再 clone 一份代码到其他目录。但是这种方法不仅麻烦，而且形成了两个独立的 git 目录，双方的同步也比较费劲。
+git 为">
+<meta property="og:type" content="article">
+<meta property="og:title" content="可能会用到的Git技巧(2)">
+<meta property="og:url" content="http://yukai.space/2018/03/29/可能会用到的Git技巧2/index.html">
+<meta property="og:site_name" content="YuKai's blog">
+<meta property="og:description" content="git worktree我们知道如果工作目录修改到一半的话，是不能随便切换 branch 的。解决方法可以通过 git stash 先暂存起来，随后执行 git stash apply 恢复。
+但是，如果我们想同时修改两个分支呢？或者同时测试两个分支。能想到的方法就是单独再 clone 一份代码到其他目录。但是这种方法不仅麻烦，而且形成了两个独立的 git 目录，双方的同步也比较费劲。
+git 为">
+<meta property="og:image" content="http://yukai.space/2018/03/29/可能会用到的Git技巧2/basic-rebase-1.png">
+<meta property="og:image" content="http://yukai.space/2018/03/29/可能会用到的Git技巧2/basic-rebase-2.png">
+<meta property="og:image" content="http://yukai.space/2018/03/29/可能会用到的Git技巧2/basic-rebase-3.png">
+<meta property="og:image" content="http://yukai.space/2018/03/29/可能会用到的Git技巧2/basic-rebase-4.png">
+<meta property="og:image" content="http://yukai.space/2018/03/29/可能会用到的Git技巧2/squash.gif">
+<meta property="og:image" content="http://yukai.space/2018/03/29/可能会用到的Git技巧2/merge.gif">
+<meta property="og:updated_time" content="2018-04-30T11:35:10.973Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="可能会用到的Git技巧(2)">
+<meta name="twitter:description" content="git worktree我们知道如果工作目录修改到一半的话，是不能随便切换 branch 的。解决方法可以通过 git stash 先暂存起来，随后执行 git stash apply 恢复。
+但是，如果我们想同时修改两个分支呢？或者同时测试两个分支。能想到的方法就是单独再 clone 一份代码到其他目录。但是这种方法不仅麻烦，而且形成了两个独立的 git 目录，双方的同步也比较费劲。
+git 为">
+<meta name="twitter:image" content="http://yukai.space/2018/03/29/可能会用到的Git技巧2/basic-rebase-1.png">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    
+    <div id="header-inner" class="inner">
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yukai.space"></form>
+      </div>
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/archives">归档</a>
+        
+          <a class="main-nav-link" href="/tools">工具</a>
+        
+          <a class="main-nav-link" href="/page">关于</a>
+        
+      </nav>
+      
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">YuKai&#39;s blog</a>
+      </h1>
+      
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-可能会用到的Git技巧2" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/03/29/可能会用到的Git技巧2/" class="article-date">
+  <time datetime="2018-03-29T06:56:57.000Z" itemprop="datePublished">2018-03-29</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/工具/">工具</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      可能会用到的Git技巧(2)
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <h2 id="git-worktree"><a href="#git-worktree" class="headerlink" title="git worktree"></a>git worktree</h2><p>我们知道如果工作目录修改到一半的话，是不能随便切换 branch 的。解决方法可以通过 <code>git stash</code> 先暂存起来，随后执行 <code>git stash apply</code> 恢复。</p>
+<p>但是，如果我们想同时修改两个分支呢？或者同时测试两个分支。能想到的方法就是单独再 clone 一份代码到其他目录。但是这种方法不仅麻烦，而且形成了两个独立的 git 目录，双方的同步也比较费劲。</p>
+<p>git 为我们提供了一个命令来解决这个问题，那就是 <code>git worktree add -b &lt;新分支名&gt; &lt;新路径&gt; &lt;从此分支创建&gt;</code>。</p>
+<p>比如，我们正在某个 feature 分支开发，现在希望从 master 分出一个分支来解决某个紧急的 BUG：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git worktree add -b hotfix ../hotfix master</div></pre></td></tr></table></figure>
+<a id="more"></a>
+<p>执行上面的命令，就会在上一层新建立一个 hotfix 目录，并新建一个分支 hotfix。</p>
+<p>这两个工作目录在工作上看起来就像两个独立的仓库一样。因为所有工作目录共享一个仓库，所以一个更新意味着整个更新（A 目录里对分支做的改动，B 目录里切到此分支也是改动后的）。</p>
+<p>使用 <code>git worktree</code> 创建的多个目录，不能有任何两个目录在同一个分支下，因为对于同一个分支的修改都会反映到各个工作目录当中，同时修改同一个分支就会造成混乱。</p>
+<p>如果要删除其中一个工作目录，直接删除文件夹即可。随后使用命令清除已经被删的工作目录：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git worktree prune</div></pre></td></tr></table></figure>
+<h2 id="变基"><a href="#变基" class="headerlink" title="变基"></a>变基</h2><p>在 Git 中整合来自不同分支的修改主要有两种方法：merge 以及 rebase。</p>
+<p>假设我们有两个分支 master 和 experiment，并在这两个分支上分别进行了提交：</p>
+<img src="/2018/03/29/可能会用到的Git技巧2/basic-rebase-1.png" alt="rebase" title="rebase">
+<p>现在我们希望把 experiment 上面的修改合并到 master 上去：</p>
+<ul>
+<li>执行 merge 命令。 它会把两个分支的最新快照（C3 和 C4）以及二者最近的共同祖先（C2）进行三方合并，合并的结果是生成一个新的快照（合并提交）。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">git checkout master </div><div class="line">git merge experiment</div></pre></td></tr></table></figure>
+<img src="/2018/03/29/可能会用到的Git技巧2/basic-rebase-2.png" alt="rebase" title="rebase">
+<ul>
+<li>还有一种合并方法：<a href="https://git-scm.com/book/zh/v2/Git-%E5%88%86%E6%94%AF-%E5%8F%98%E5%9F%BA" target="_blank" rel="external">变基</a>，将提交到 experiment 分支上的所有修改都移至 master 分支上：提取在 C4 中引入的修改，然后在 C3 的基础上应用一次：</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">git checkout experiment</div><div class="line">git rebase master</div></pre></td></tr></table></figure>
+<img src="/2018/03/29/可能会用到的Git技巧2/basic-rebase-3.png" alt="rebase" title="rebase">
+<p>它的原理是首先找到这两个分支（即当前分支 experiment、变基操作的目标基底分支 master）的最近共同祖先 C2，然后对比当前分支相对于该祖先的【历次提交】，提取相应的修改并存为临时文件，然后将当前分支指向目标基底 C3, 最后以此将之前另存为临时文件的修改【依序应用】。</p>
+<p>所以，变基的过程中，历次提交对于同一文件的修改可能产生冲突，如果遇到冲突，则解决冲突，然后执行：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">git add .</div><div class="line">git rebase --continue</div></pre></td></tr></table></figure>
+<p>如果想要跳过这个 patch，则执行 <code>git rebase --skip</code>。意味着这次提交将被抛弃。</p>
+<p>直到所有 patch 应用完毕。</p>
+<p>现在回到 master 分支，进行一次 fast-forward 合并。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">git checkout master</div><div class="line">git merge experiment</div></pre></td></tr></table></figure>
+<img src="/2018/03/29/可能会用到的Git技巧2/basic-rebase-4.png" alt="rebase" title="rebase">
+<p>此时，C4’ 指向的快照就和上面使用 merge 命令的例子中 C5 指向的快照一模一样了。变基的目的是为了确保在向远程分支推送时能保持提交历史的整洁,提交历史是一条直线没有分叉。</p>
+<p>使用变基需要遵循一个原则：不要对在你的仓库外有副本的分支执行变基。</p>
+<h2 id="压缩提交"><a href="#压缩提交" class="headerlink" title="压缩提交"></a>压缩提交</h2><p>git 为我们提供了修改历史 commit 的功能，那就是 <a href="https://git-scm.com/book/zh/v1/Git-%E5%B7%A5%E5%85%B7-%E9%87%8D%E5%86%99%E5%8E%86%E5%8F%B2" target="_blank" rel="external">交互式变基</a>。</p>
+<p>通常在本地进行修改的时候，可能提交的粒度很小。一旦修改完毕，需要把修改推送到远程分支上去，这个时候我们希望能把本地的提交压缩成为一个或几个提交，使得提交历史变得清晰，不那么冗余。这时就需要用到交互式变基中的 squash 功能。</p>
+<p>假设我们本地的最近三次提交历史如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">git log --pretty=format:&quot;%h %s&quot; HEAD~3..HEAD</div><div class="line"></div><div class="line">a5f4a0d added cat-file</div><div class="line">310154e updated README formatting and added blame</div><div class="line">f7f3f6d changed my name a bit</div></pre></td></tr></table></figure>
+<p>我们希望把这三次提交压缩成一次提交：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git rebase -i HEAD~3</div></pre></td></tr></table></figure>
+<p>注意，<code>-i</code> 后面的 commitID 实际上是指向你要修改的提交的父提交，即我们要压缩的是 HEAD~2..HEAD 这三次提交。</p>
+<p>运行这个命令会为我们的文本编辑器提供一个提交列表，看起来像下面这样:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">pick f7f3f6d changed my name a bit</div><div class="line">pick 310154e updated README formatting and added blame</div><div class="line">pick a5f4a0d added cat-file</div><div class="line"></div><div class="line"># Rebase 710f0f8..a5f4a0d onto 710f0f8</div><div class="line">#</div><div class="line"># Commands:</div><div class="line">#  p, pick = use commit</div><div class="line">#  e, edit = use commit, but stop for amending</div><div class="line">#  s, squash = use commit, but meld into previous commit</div><div class="line">#</div><div class="line"># If you remove a line here THAT COMMIT WILL BE LOST.</div><div class="line"># However, if you remove everything, the rebase will be aborted.</div><div class="line">#</div></pre></td></tr></table></figure>
+<p>默认情况下，会省略 merge commit，详见<a href="https://stackoverflow.com/questions/15915430/what-exactly-does-gits-rebase-preserve-merges-do-and-why" target="_blank" rel="external">What exactly does git’s “rebase –preserve-merges” do (and why?)
+</a></p>
+<p>需要注意的是这些提交的顺序与我们通过log命令看到的是相反的，log命令显示的是由新到旧的提交，而上面显示的是由旧到新的几次提交。</p>
+<p>可以看到其中分为两个部分，上方未注释的部分是填写要执行的指令，而下方注释的部分则是指令的提示说明。指令部分中由前方的命令名称、commit hash 和 commit message 组成。</p>
+<p>现在我们只要知道 pick 和 squash 这两个命令即可。</p>
+<ul>
+<li><p>pick 的意思是要会执行这个 commit</p>
+</li>
+<li><p>squash 的意思是这个 commit 会被合并到前一个commit</p>
+</li>
+</ul>
+<p>我们将上面打开的脚本修改成下面这样：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">pick f7f3f6d changed my name a bit</div><div class="line">squash 310154e updated README formatting and added blame</div><div class="line">squash a5f4a0d added cat-file</div></pre></td></tr></table></figure>
+<p>输入:wq以保存并退出，同【变基】章节中介绍到的，其原理与【变基】类似，也是将【历次提交】的 patch 【依序应用】，所以可能会产生冲突。</p>
+<p>冲突解决完毕后，这时我们会看到 commit message 的编辑界面：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"># This is a combination of 3 commits.</div><div class="line"># The first commit&apos;s message is:</div><div class="line">changed my name a bit</div><div class="line"></div><div class="line"># This is the 2nd commit message:</div><div class="line"></div><div class="line">updated README formatting and added blame</div><div class="line"></div><div class="line"># This is the 3rd commit message:</div><div class="line"></div><div class="line">added cat-file</div></pre></td></tr></table></figure>
+<p>其中，非注释部分就是两次的 commit message， 我们要做的就是将这两个修改成新的 commit message。</p>
+<p>输入wq保存并退出，此时就拥有了一个包含前三次提交的全部变更的单一提交。</p>
+<h2 id="git-merge-–suqash"><a href="#git-merge-–suqash" class="headerlink" title="git merge –suqash"></a>git merge –suqash</h2><p>上面的交互式变基，提供了压缩提交的功能。还有一种场景下，我们也需要压缩合并，比如合并 B 分支上的修改到 A 分支，我们可以选择在合并时将 B 分支的多个提交压缩成一个提交，合并到 A 分支上形成【一个】提交节点。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">git checkout A</div><div class="line">git merge --squash B</div></pre></td></tr></table></figure>
+<img src="/2018/03/29/可能会用到的Git技巧2/squash.gif" alt="squash" title="squash">
+<p>此时 A 分支有一个线性的提交历史。</p>
+<p>对比一下单纯的 merge：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">git checkout A</div><div class="line">git merge B</div></pre></td></tr></table></figure>
+<img src="/2018/03/29/可能会用到的Git技巧2/merge.gif" alt="merge" title="merge">
+<p>如果不想生成提交节点，而是想把修改合并过来不进行提交，方便再次修改后统一提交，可以指定<code>--no-commit</code>选项：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git merge --no-commit --squash B</div></pre></td></tr></table></figure>
+<h2 id="git-apply-patch"><a href="#git-apply-patch" class="headerlink" title="git apply patch"></a>git apply patch</h2><p>如果一个软件有了新版本，我们可以完整地下载新版本的代码进行编译安装，但是每次全新下载是有相当大的代价的。然而，每次更新变动的代码可能只有一点点。<br>因此，我们只要能够有两个版本代码的diff的数据，应该就可以以极低的代价更新程序了。这就是patch，它可以根据一个diff文件进行版本更新。</p>
+<ul>
+<li>用 git diff 制作一个 patch</li>
+</ul>
+<p>假设现在我们有两条分支，master 和 test，test 分支基于 master 分支而来，并且进行了几次新的提交。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">git checkout test</div><div class="line">git diff master &gt; patch</div></pre></td></tr></table></figure>
+<p>我们现在得到了一个 patch 文件，内容是 test 分支与 master 分支的 diff 结果。</p>
+<ul>
+<li>应用 patch</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">git checkout master</div><div class="line">git apply patch</div><div class="line">git commit -a -m &quot;Patch Apply&quot;</div></pre></td></tr></table></figure>
+<p>我们切换到 master 分支，将 patch 文件中的更新内容应用到 master 分支上，然后进行提交。</p>
+<p>此时 master 分支的内容已经与 test 分支的内容一模一样了。</p>
+<p>gitlab 提供了一个类似于 <code>git merge --suqash</code> 命令的功能：<a href="https://docs.gitlab.com/ee/user/project/merge_requests/squash_and_merge.html" target="_blank" rel="external">Squash and merge</a>。gitlab 内部的实现并不是使用了<code>git merge --suqash</code>命令，而是利用了 Git 提供的 patch 功能，原理如下：</p>
+<p>首先找到提交的 merge request 中，source branch 和 target branch 的共同祖先节点，然后将 source branch 与 这个节点做对比得到 patch。</p>
+<p>随后将这个 patch 应用到 target branch 的副本(git worktree)上面(在merge之前，已经保证解决了冲突)，然后将这个副本与 target branch 进行 merge。</p>
+<p>这样的话，source branch 上面的多个提交就都看不到了，只形成了一个提交，达到了类似于 <code>git merge --suqash</code> 的效果。</p>
+<p>git 还提供了 <code>git format-patch</code> 生成一个 git 专用的 patch，不再赘述。详细内容可以参考 <a href="https://www.cnblogs.com/y041039/articles/2411600.html" target="_blank" rel="external">Git的Patch功能</a>。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yukai.space/2018/03/29/可能会用到的Git技巧2/" data-id="cjgp4npt3006nm2xcauh14jwi" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/git/">git</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+ <script src="/jquery/jquery.min.js"></script>
+  <div id="random_posts">
+    <h2>推荐文章</h2>
+    <div class="random_posts_ul">
+      <script>
+          var random_count =4
+          var site = {BASE_URI:'/'};
+          function load_random_posts(obj) {
+              var arr=site.posts;
+              if (!obj) return;
+              // var count = $(obj).attr('data-count') || 6;
+              for (var i, tmp, n = arr.length; n; i = Math.floor(Math.random() * n), tmp = arr[--n], arr[n] = arr[i], arr[i] = tmp);
+              arr = arr.slice(0, random_count);
+              var html = '<ul>';
+            
+              for(var j=0;j<arr.length;j++){
+                var item=arr[j];
+                html += '<li><strong>' + 
+                item.date + ':&nbsp;&nbsp;<a href="' + (site.BASE_URI+item.uri) + '">' + 
+                (item.title || item.uri) + '</a></strong>';
+                if(item.excerpt){
+                  html +='<div class="post-excerpt">'+item.excerpt+'</div>';
+                }
+                html +='</li>';
+                
+              }
+              $(obj).html(html + '</ul>');
+          }
+          $('.random_posts_ul').each(function () {
+              var c = this;
+              if (!site.posts || !site.posts.length){
+                  $.getJSON(site.BASE_URI + 'js/posts.js',function(json){site.posts = json;load_random_posts(c)});
+              } 
+               else{
+                load_random_posts(c);
+              }
+          });
+      </script>
+    </div>
+  </div>
+
+    
+<nav id="article-nav">
+  
+    <a href="/2018/04/30/联通华为HG8347R设置桥接模式/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
+        
+          联通华为HG8347R设置桥接模式
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/03/01/可能会用到的Git技巧1/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">可能会用到的Git技巧(1)</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+ 
+     
+  <div class="comments" id="comments">
+    
+     
+       
+      <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+    
+       
+      
+      
+           <div id="gitment_comments"></div>
+    
+  </div>
+ 
+  
+
+</section>
+           
+    <aside id="sidebar">
+  
+    
+
+  
+    
+    <div class="widget-wrap">
+    
+      <div class="widget" id="toc-widget-fixed">
+      
+        <strong class="toc-title">文章目录</strong>
+        <div class="toc-widget-list">
+              <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#git-worktree"><span class="toc-number">1.</span> <span class="toc-text">git worktree</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#变基"><span class="toc-number">2.</span> <span class="toc-text">变基</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#压缩提交"><span class="toc-number">3.</span> <span class="toc-text">压缩提交</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#git-merge-–suqash"><span class="toc-number">4.</span> <span class="toc-text">git merge –suqash</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#git-apply-patch"><span class="toc-number">5.</span> <span class="toc-text">git apply patch</span></a></li></ol>
+          </div>
+      </div>
+    </div>
+
+  
+    
+
+  
+    
+  
+    
+  
+    
+
+  
+</aside>
+
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-left">
+      &copy; 2014 - 2018 于凯&nbsp;|&nbsp;
+      主题 <a href="https://github.com/giscafer/hexo-theme-cafe/" target="_blank">Cafe</a>
+    </div>
+     <div id="footer-right">
+      联系方式&nbsp;|&nbsp;debiaoyu@gmail.com
+    </div>
+  </div>
+</footer>
+ <script src="/jquery/jquery.min.js"></script>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/archives" class="mobile-nav-link">归档</a>
+  
+    <a href="/tools" class="mobile-nav-link">工具</a>
+  
+    <a href="/page" class="mobile-nav-link">关于</a>
+  
+</nav>
+    <img class="back-to-top-btn" src="/images/fly-to-top.png"/>
+<script>
+// Elevator script included on the page, already.
+window.onload = function() {
+  var elevator = new Elevator({
+    selector:'.back-to-top-btn',
+    element: document.querySelector('.back-to-top-btn'),
+    duration: 1000 // milliseconds
+  });
+}
+</script>
+      
+
+  
+    <script>
+      var cloudTieConfig = {
+        url: document.location.href, 
+        sourceId: "",
+        productKey: "e2fb4051c49842688ce669e634bc983f",
+        target: "cloud-tie-wrapper"
+      };
+    </script>
+    <script src="https://img1.ws.126.net/f2e/tie/yun/sdk/loader.js"></script>
+    
+
+  
+
+
+
+
+
+
+
+<!-- author:forvoid begin -->
+<!-- author:forvoid begin -->
+
+  <link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+  <script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script> 
+  <script>
+  var gitment = new Gitment({
+    // id: '页面 ID', // 可选。默认为 location.href
+    owner: 'Hikyu',
+    repo: 'Hikyu.github.io',
+    oauth: {
+    client_id: '61886569157db60efa97',
+    client_secret: '6475bb7c8faaf44ff2e12c272a46505a0eecf46f',
+    }
+  })
+  gitment.render(document.getElementById("gitment_comments"))
+</script>
+
+
+<!-- author:forvoid end -->
+
+<!-- author:forvoid end -->
+
+
+
+ <script src="/js/is.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+<script src="/js/elevator.js"></script>
+  </div>
+</body>
+</html>

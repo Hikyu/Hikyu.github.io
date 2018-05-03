@@ -66,14 +66,14 @@
       <div class="outer">
         <section id="main">
   
-    <article id="post-炒茄子" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-数据库事务浅析" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2017/09/09/炒茄子/" class="article-date">
-  <time datetime="2017-09-09T02:57:56.000Z" itemprop="datePublished">2017-09-09</time>
+    <a href="/2017/10/31/数据库事务浅析/" class="article-date">
+  <time datetime="2017-10-31T12:07:23.000Z" itemprop="datePublished">2017-10-31</time>
 </a>
     
   <div class="article-category">
-    <a class="article-category-link" href="/categories/生活/">生活</a>►<a class="article-category-link" href="/categories/生活/食物/">食物</a>
+    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/编程/">编程</a>
   </div>
 
   </div>
@@ -84,7 +84,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2017/09/09/炒茄子/">炒茄子</a>
+      <a class="article-title" href="/2017/10/31/数据库事务浅析/">数据库事务浅析</a>
     </h1>
   
 
@@ -92,36 +92,38 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="原料"><a href="#原料" class="headerlink" title="原料"></a>原料</h2><p>茄子、姜片、葱、蒜、干辣椒、郫县豆瓣酱、盐、花椒粒、料酒、醋、生抽、白糖、味精</p>
-<h2 id="做法"><a href="#做法" class="headerlink" title="做法"></a>做法</h2><ol>
-<li><p>茄子一个，洗净，切成条</p>
+        <h2 id="ACID"><a href="#ACID" class="headerlink" title="ACID"></a>ACID</h2><blockquote>
+<p>一个数据库事务通常包含了一个序列的对数据库的读/写操作。它的存在包含有以下两个目的：</p>
+<ol>
+<li>为数据库操作序列提供了一个从失败中恢复到正常状态的方法，同时提供了数据库即使在异常状态下仍能保持一致性的方法。</li>
+<li>当多个应用程序在并发访问数据库时，可以在这些应用程序之间提供一个隔离方法，以防止彼此的操作互相干扰。</li>
+</ol>
+</blockquote>
+<p>上面对数据库事务的定义摘自维基百科。先不用着急的去理解这个定义的具体含义，我们从事务的四个特性来逐步了解什么是事务。</p>
+<p>数据库事务拥有以下四个特性，习惯上被称之为ACID特性。</p>
+<ol>
+<li><p>原子性（Atomicity）：事务作为一个整体被执行，包含在其中的对数据库的操作要么全部被执行，要么都不执行。</p>
 </li>
-<li><p>锅烧热，直接将切好的茄条倒入，小火翻炒，直到茄子变软，且水分炒调一些，盛出</p>
+<li><p>一致性（Consistency）：事务应确保数据库的状态从一个一致状态转变为另一个一致状态。一致状态的含义是数据库中的数据应满足完整性约束。</p>
 </li>
-<li><p>锅中倒油，油七成热后加入姜片、葱丝、蒜末、干辣椒、花椒粒炒香</p>
+<li><p>隔离性（Isolation）：多个事务并发执行时，一个事务的执行不应影响其他事务的执行。</p>
 </li>
-<li><p>放入一勺郫县豆瓣酱，继续翻炒出红油和香味</p>
-</li>
-<li><p>倒入茄子条，翻炒几下</p>
-</li>
-<li><p>将香醋3勺，生抽2勺，盐半勺，料酒1勺，白糖1勺，味精半勺调成汁，倒入锅中</p>
-</li>
-<li><p>翻炒均匀，待调味汁收干入味后撒葱花出锅</p>
+<li><p>持久性（Durability）：已被提交的事务对数据库的修改应该永久保存在数据库中。</p>
 </li>
 </ol>
         
           <p class="article-more-link">
-            <a href="/2017/09/09/炒茄子/#more">阅读全文 »</a>
+            <a href="/2017/10/31/数据库事务浅析/#more">阅读全文 »</a>
           </p>
         
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2017/09/09/炒茄子/" data-id="cj9qhw22a0071hdnj7xen6mvr" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2017/10/31/数据库事务浅析/" data-id="cjgp4nptn007fm2xcwco7jr2a" class="article-share-link">分享</a>
       
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/食物/">食物</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/数据库/">数据库</a></li></ul>
 
     </footer>
   </div>
@@ -131,10 +133,63 @@
 
 
   
-    <article id="post-git服务器的配置" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-Java读取资源文件" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2017/09/06/git服务器的配置/" class="article-date">
-  <time datetime="2017-09-06T01:46:49.000Z" itemprop="datePublished">2017-09-06</time>
+    <a href="/2017/10/31/Java读取资源文件/" class="article-date">
+  <time datetime="2017-10-31T11:56:22.000Z" itemprop="datePublished">2017-10-31</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/编程/">编程</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/10/31/Java读取资源文件/">Java读取资源文件</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>写java代码时常常需要加载一些外部的资源，通常我们会使用全路径名加载一份资源，比如：C:\Users\Yukai\Desktop\abc.jpg . 但是，有些时候我们需要加载的是源代码路径下的资源或者配置文件等等，更习惯于使用相对路径，或者直接给一个文件名，就希望能够找到我们需要的配置文件。如何做到？常见的方法是使用了 class.getResource 或 classloader.getResource</p>
+</blockquote>
+<h2 id="class-getResource-amp-amp-classloader-getResource"><a href="#class-getResource-amp-amp-classloader-getResource" class="headerlink" title="class.getResource &amp;&amp; classloader.getResource ?"></a>class.getResource &amp;&amp; classloader.getResource ?</h2><p>这两个方法看起来很相似，他们直接有什么区别？</p>
+<p>直接上网搜索能够得到一些答案，但都不如查看源代码来的直接：</p>
+        
+          <p class="article-more-link">
+            <a href="/2017/10/31/Java读取资源文件/#more">阅读全文 »</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yukai.space/2017/10/31/Java读取资源文件/" data-id="cjgp4npn2000nm2xc9pp6ofy9" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/类加载/">类加载</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+ 
+
+
+  
+    <article id="post-maven打包" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/10/15/maven打包/" class="article-date">
+  <time datetime="2017-10-15T11:56:22.000Z" itemprop="datePublished">2017-10-15</time>
 </a>
     
   <div class="article-category">
@@ -149,7 +204,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2017/09/06/git服务器的配置/">git服务器的配置</a>
+      <a class="article-title" href="/2017/10/15/maven打包/">使用maven打包</a>
     </h1>
   
 
@@ -158,24 +213,26 @@
     <div class="article-entry" itemprop="articleBody">
       
         <blockquote>
-<p>公司一直在使用Starteam作版本控制，这是个很古老的工具，也有不少的BUG…最近为公司搭建了Git服务器试用，把搭建的过程记录下来…</p>
+<p>前段时间做的web项目涉及到了打包的问题，记录一下使用maven打包的过程…</p>
 </blockquote>
-<h2 id="ssh配置"><a href="#ssh配置" class="headerlink" title="ssh配置"></a>ssh配置</h2><p>可以使用ssh协议搭建ssh服务，适合于几个人的小团队，每个人都拥有读写的权限。</p>
-<h3 id="配置git服务器"><a href="#配置git服务器" class="headerlink" title="配置git服务器"></a>配置git服务器</h3><p>通过创建一个专门的git用户，作为访问git服务的账户</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">$ ssh root@192.168.1.110</div><div class="line">$ sudo adduser git</div><div class="line">$ su git</div><div class="line">$ cd</div><div class="line">$ mkdir .ssh &amp;&amp; chmod 700 .ssh</div><div class="line">$ touch .ssh/authorized_keys &amp;&amp; chmod 600 .ssh/authorized_keys</div></pre></td></tr></table></figure>
+<h2 id="项目打包为fatjar"><a href="#项目打包为fatjar" class="headerlink" title="项目打包为fatjar"></a>项目打包为fatjar</h2><p>什么是fatjar？做过java项目的都知道，一个项目从开发到部署，一般需要经过打包，把一些资源文件和类文件压缩到一块，形成一个单独的文件，叫做jar（或者war）。如果这个项目依赖了一些第三方的jar包，在最终的部署阶段，这些jar有两种存在方式：</p>
+<ul>
+<li>一种是单独放到一个与项目jar包并行的文件夹中（一般叫做lib），然后使用<code>-classpath</code>将这个文件夹下的jar加入到classpath</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">---</div><div class="line">  |--VersionManager.jar</div><div class="line">  |</div><div class="line">  |--lib</div><div class="line">      |</div><div class="line">      |--a.jar</div><div class="line">      |</div><div class="line">      |--b.jar</div></pre></td></tr></table></figure>
         
           <p class="article-more-link">
-            <a href="/2017/09/06/git服务器的配置/#more">阅读全文 »</a>
+            <a href="/2017/10/15/maven打包/#more">阅读全文 »</a>
           </p>
         
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2017/09/06/git服务器的配置/" data-id="cj9qhw1vi0018hdnjurqtorjj" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2017/10/15/maven打包/" data-id="cjgp4nprv004om2xcggebm928" class="article-share-link">分享</a>
       
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/git/">git</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/maven/">maven</a></li></ul>
 
     </footer>
   </div>
@@ -185,193 +242,10 @@
 
 
   
-    <article id="post-红烧排骨" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-VncServer的安装与使用" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2017/09/01/红烧排骨/" class="article-date">
-  <time datetime="2017-09-01T03:12:14.000Z" itemprop="datePublished">2017-09-01</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/生活/">生活</a>►<a class="article-category-link" href="/categories/生活/食物/">食物</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/09/01/红烧排骨/">红烧排骨</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="原料"><a href="#原料" class="headerlink" title="原料"></a>原料</h2><p>排骨、葱片、姜片、八角、花椒粒、料酒、生抽、蚝油、盐、白糖</p>
-<h2 id="做法"><a href="#做法" class="headerlink" title="做法"></a>做法</h2><ol>
-<li><p>锅中倒水，将剁好洗净的肋排放入，煮几分钟，撇去杂质后捞出</p>
-</li>
-<li><p>锅中放少许油烧热，放入葱花、姜片、八角、花椒炒香</p>
-</li>
-<li><p>放入肋排，翻炒至肉变色(注意时间不要太长，否则肉会变老)</p>
-</li>
-<li><p>倒入料酒、生抽、蚝油，翻炒几下</p>
-</li>
-<li><p>加入清水(高汤)刚好没过排骨，大火烧开</p>
-</li>
-<li><p>小火慢炖四十分钟左右，大火收汁出锅</p>
-</li>
-</ol>
-        
-          <p class="article-more-link">
-            <a href="/2017/09/01/红烧排骨/#more">阅读全文 »</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yukai.space/2017/09/01/红烧排骨/" data-id="cj9qhw22v007mhdnj1hannckh" class="article-share-link">分享</a>
-      
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/食物/">食物</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
- 
-
-
-  
-    <article id="post-状态机与状态模式" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2017/08/10/状态机与状态模式/" class="article-date">
-  <time datetime="2017-08-10T13:29:46.000Z" itemprop="datePublished">2017-08-10</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/编程/">编程</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/08/10/状态机与状态模式/">状态机与状态模式</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <blockquote>
-<p>又是很长时间没有写博客了(一个月)…最近在做一个SpringBoot+Vue的项目，所以一直在看spring相关的东西。今天要学习的跟spring<br>没有关系，是我在之前维护的一个测试工具是遇到的一个知识点–状态机</p>
-<p>这个测试的一个功能就是解析自己定义的一套脚本语法规则，涉及到对输入的语句进行解析，然后下发到对应的执行器去执行。</p>
-<p>之前的解析逻辑是用一个while循环，对每一个字符判断，然后各种if…else和临时变量…总之读起来十分费劲，并且总容易出BUG，而且十分不容易修改，因为每一个修改都很容易影响到原来的解析结果。<br>于是我把这段解析的代码重构了一遍，就是使用了状态机的思想。</p>
-</blockquote>
-        
-          <p class="article-more-link">
-            <a href="/2017/08/10/状态机与状态模式/#more">阅读全文 »</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yukai.space/2017/08/10/状态机与状态模式/" data-id="cj9qhw22c0074hdnjruywc70e" class="article-share-link">分享</a>
-      
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/设计模式/">设计模式</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
- 
-
-
-  
-    <article id="post-springboot配置https" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2017/07/12/springboot配置https/" class="article-date">
-  <time datetime="2017-07-12T14:19:17.000Z" itemprop="datePublished">2017-07-12</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/加密/">加密</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/07/12/springboot配置https/">springboot配置https</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <blockquote>
-<p>这两天打算在组内做个培训，关于Https方面的。于是一直在查资料，理解，顺便把今天了解的内容总结一下。</p>
-<p>之前已经写过两篇有关ssl方面的笔记：<a href="http://yukai.space/2016/08/22/%E5%85%B3%E4%BA%8E%E5%8A%A0%E5%AF%86%E7%9A%84%E4%B8%80%E7%82%B9%E6%80%BB%E7%BB%93/">关于加密的一点总结</a>，<a href="http://yukai.space/2016/09/25/ssl%E6%80%BB%E7%BB%93/">ssl总结</a>。当时的理解现在看来还有一些欠缺的地方，温故而知新嘛！</p>
-</blockquote>
-<h2 id="数字签名"><a href="#数字签名" class="headerlink" title="数字签名"></a>数字签名</h2><blockquote>
-<p>数字签名是一种类似写在纸上的普通的物理签名，但是使用了公钥加密领域的技术实现，用于鉴别数字信息的方法。(很空洞有木有~)</p>
-</blockquote>
-<p>数字签名的作用：<strong>身份认证与完整性检验</strong></p>
-<p>下面模拟一个场景，小明给小红写一封信。</p>
-<ol>
-<li><p>首先将摘要信息用发送者小明的私钥加密，生成数字签名，与原始信息一起传送给接收者小红。(什么是摘要信息，公钥私钥在前面的笔记中提到了，不再赘述)</p>
-</li>
-<li><p>小红使用小明的公钥对小明私钥加密后的摘要信息进行解密，如果解密成功，则说明接收到的内容确实由小明发出。这就完成了发送者小明的身份认证。</p>
-</li>
-<li><p>小红对收到的原始信息使用信息摘要算法得到其哈希值，与2中解密后的摘要信息进行比较，如果一致，证明原始信息未经篡改。保证了信息完整性（完整性检验）。</p>
-</li>
-</ol>
-<img src="/2017/07/12/springboot配置https/1.png" alt="小明写信" title="小明写信">
-<img src="/2017/07/12/springboot配置https/2.png" alt="小红写信" title="小红写信">
-        
-          <p class="article-more-link">
-            <a href="/2017/07/12/springboot配置https/#more">阅读全文 »</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yukai.space/2017/07/12/springboot配置https/" data-id="cj9qhw209004lhdnjysnd11yu" class="article-share-link">分享</a>
-      
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/加密/">加密</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
- 
-
-
-  
-    <article id="post-Linux网络IO模型" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2017/07/10/Linux网络IO模型/" class="article-date">
-  <time datetime="2017-07-10T14:23:37.000Z" itemprop="datePublished">2017-07-10</time>
+    <a href="/2017/10/01/VncServer的安装与使用/" class="article-date">
+  <time datetime="2017-10-01T00:49:00.000Z" itemprop="datePublished">2017-10-01</time>
 </a>
     
   <div class="article-category">
@@ -386,7 +260,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2017/07/10/Linux网络IO模型/">Linux网络IO模型</a>
+      <a class="article-title" href="/2017/10/01/VncServer的安装与使用/">VncServer的安装与使用</a>
     </h1>
   
 
@@ -395,36 +269,30 @@
     <div class="article-entry" itemprop="articleBody">
       
         <blockquote>
-<p>学习Java-NIO在网络端的应用，就需要了解Linux的网络IO模型，才能够体会为什么需要NIO和NIO的好处在哪里。</p>
+<p>因为新做的版本发布系统需要部署在内网，找了两台空闲的机器做了Centos7的系统，并搭建读写分离的环境。因为读写分离环境的搭建需要用到可视化工具，所以决定在这两台机器上搭一个vnc服务。</p>
 </blockquote>
-<h2 id="什么是同步与异步、阻塞与非阻塞"><a href="#什么是同步与异步、阻塞与非阻塞" class="headerlink" title="什么是同步与异步、阻塞与非阻塞"></a>什么是同步与异步、阻塞与非阻塞</h2><p>引用知乎 <a href="https://www.zhihu.com/question/19732473/answer/23434554">怎样理解阻塞非阻塞与同步异步的区别？</a> 上面的一个回答，很生动的说明了同步异步，阻塞非阻塞之间的区别联系：</p>
-<hr>
-<p>老张爱喝茶，废话不说，煮开水。</p>
-<p>出场人物：老张，水壶两把（普通水壶，简称水壶；会响的水壶，简称响水壶）。</p>
-<p>1 老张把水壶放到火上，立等水开。（同步阻塞）</p>
-<p>老张觉得自己有点傻</p>
-<p>2 老张把水壶放到火上，去客厅看电视，时不时去厨房看看水开没有。（同步非阻塞）</p>
-<p>老张还是觉得自己有点傻，于是变高端了，买了把会响笛的那种水壶。水开之后，能大声发出嘀~~~~的噪音。</p>
-<p>3 老张把响水壶放到火上，立等水开。（异步阻塞）</p>
-<p>老张觉得这样傻等意义不大</p>
-<p>4 老张把响水壶放到火上，去客厅看电视，水壶响之前不再去看它了，响了再去拿壶。（异步非阻塞）</p>
-<p>老张觉得自己聪明了。</p>
-<p>所谓同步异步，只是对于水壶而言。普通水壶，同步；响水壶，异步。虽然都能干活，但响水壶可以在自己完工之后，提示老张水开了。这是普通水壶所不能及的。同步只能让调用者去轮询自己（情况2中），造成老张效率的低下。</p>
-<p>所谓阻塞非阻塞，仅仅对于老张而言。立等的老张，阻塞；看电视的老张，非阻塞。情况1和情况3中老张就是阻塞的，媳妇喊他都不知道。虽然3中响水壶是异步的，可对于立等的老张没有太大的意义。所以一般异步是配合非阻塞使用的，这样才能发挥异步的效用。</p>
-<hr>
+<p>centos7，IP 192.168.1.57</p>
+<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><ol>
+<li>安装VNCServer</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">yum install tigervnc-server -y</div></pre></td></tr></table></figure>
+<ol>
+<li>设置防火墙</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">sudo firewall-cmd --permanent --add-service vnc-server</div><div class="line">sudo systemctl restart firewalld.service</div></pre></td></tr></table></figure>
         
           <p class="article-more-link">
-            <a href="/2017/07/10/Linux网络IO模型/#more">阅读全文 »</a>
+            <a href="/2017/10/01/VncServer的安装与使用/#more">阅读全文 »</a>
           </p>
         
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2017/07/10/Linux网络IO模型/" data-id="cj9qhw1v4000phdnj8cmxi3zy" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2017/10/01/VncServer的安装与使用/" data-id="cjgp4npo9001im2xc5huxs9k8" class="article-share-link">分享</a>
       
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/NIO/">NIO</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/">linux</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/">linux</a></li></ul>
 
     </footer>
   </div>
@@ -434,10 +302,63 @@
 
 
   
-    <article id="post-Java-NIO-Channel" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-Linux下的守护进程" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2017/07/08/Java-NIO-Channel/" class="article-date">
-  <time datetime="2017-07-08T12:31:23.000Z" itemprop="datePublished">2017-07-08</time>
+    <a href="/2017/10/01/Linux下的守护进程/" class="article-date">
+  <time datetime="2017-10-01T00:47:51.000Z" itemprop="datePublished">2017-10-01</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/Linux/">Linux</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/10/01/Linux下的守护进程/">Linux下的守护进程</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>这两天在搭建VNC服务的时候，遇到一个简单的问题，却困扰了我有一会：网上的教程大部分是修改.service文件，然后启动服务，但是我发现使用vncserver这个命令也可以达到同样的目的，这两者之间有什么区别呢？查了一些资料，简单的做一个总结。</p>
+</blockquote>
+<h2 id="工作管理"><a href="#工作管理" class="headerlink" title="工作管理"></a>工作管理</h2><p>一般情况下，我们可能会在命令行下这样启动一个程序，以新做的版本管理系统为例：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">java -jar VersionManager.jar</div></pre></td></tr></table></figure>
+        
+          <p class="article-more-link">
+            <a href="/2017/10/01/Linux下的守护进程/#more">阅读全文 »</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yukai.space/2017/10/01/Linux下的守护进程/" data-id="cjgp4npo0001am2xcpni038ee" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/">linux</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+ 
+
+
+  
+    <article id="post-读懂Java-Thread-Dump" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/09/23/读懂Java-Thread-Dump/" class="article-date">
+  <time datetime="2017-09-23T00:30:09.000Z" itemprop="datePublished">2017-09-23</time>
 </a>
     
   <div class="article-category">
@@ -452,7 +373,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2017/07/08/Java-NIO-Channel/">Java-NIO-Channel</a>
+      <a class="article-title" href="/2017/09/23/读懂Java-Thread-Dump/">读懂Java_Thread_Dump</a>
     </h1>
   
 
@@ -461,85 +382,139 @@
     <div class="article-entry" itemprop="articleBody">
       
         <blockquote>
-<p>Java NIO 学习第三篇–Channel</p>
+<p>前段时间有现场发现死锁的问题，查看发回来的jstack dump文件，发现虽然大致看懂，但是不是很透彻。从网上看了一些介绍jstack的文章，大部分复制粘贴，讲解的也不够透彻，现在有时间来自己整理一下jstack的知识，记录一下~</p>
 </blockquote>
-<h2 id="Channel"><a href="#Channel" class="headerlink" title="Channel"></a>Channel</h2><p>通道(Channel)的作用有类似于流(Stream)，用于传输文件或者网络上的数据。</p>
-<img src="/2017/07/08/Java-NIO-Channel/channel.png" alt="channel" title="channel">
-<p>上图中，箭头就相当于通道。一个不是很准确的例子：把通道想象成铁轨，缓冲区则是列车，铁轨的起始与终点则可以是socket，文件系统和我们的程序。假如当我们在代码中要写入数据到一份文件的时候，我们先把列车(缓冲区)装满，然后把列车(缓冲区)放置到铁轨上(通道)，数据就被传递到通道的另一端，文件系统。读取文件则相反，文件的内容被装到列车上，传递到程序这一侧，然后我们在代码中就可以读取这个列车中的内容(读取缓冲区)。</p>
-<p>通道与传统的流还是有一些区别的：</p>
+<h2 id="获取Dump"><a href="#获取Dump" class="headerlink" title="获取Dump"></a>获取Dump</h2><p>java 提供了查看<strong>当前用户启动的java进程</strong>的工具 JPS：<code>jps</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="number">5008</span> org.eclipse.equinox.launcher_1.3.201.v20161025-<span class="number">1711</span>.jar</div><div class="line"><span class="number">10712</span> Main</div><div class="line"><span class="number">888</span> App</div><div class="line"><span class="number">15804</span> Jps</div><div class="line"><span class="number">34300</span> SynchronizedTest</div></pre></td></tr></table></figure>
+        
+          <p class="article-more-link">
+            <a href="/2017/09/23/读懂Java-Thread-Dump/#more">阅读全文 »</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yukai.space/2017/09/23/读懂Java-Thread-Dump/" data-id="cjgp4npul008um2xc8egyl24u" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+ 
+
+
+  
+    <article id="post-理解JavaScript作用域链" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/09/16/理解JavaScript作用域链/" class="article-date">
+  <time datetime="2017-09-16T01:59:34.000Z" itemprop="datePublished">2017-09-16</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/编程/">编程</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/09/16/理解JavaScript作用域链/">理解JavaScript作用域链</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>最近在读《JavaScript权威指南》，读到“函数作用域和声明提前”这部分内容时有点晕，上网查了一些资料，算是弄明白了，所以把自己的理解记下来~</p>
+</blockquote>
+<h2 id="作用域"><a href="#作用域" class="headerlink" title="作用域"></a>作用域</h2><ol>
+<li>全局作用域</li>
+</ol>
+<p>在代码中任何地方都能访问到的对象拥有全局作用域，一般来说以下几种情形拥有全局作用域:</p>
 <ul>
-<li><p>通道可以同时支持读写(不是一定支持)，而流只支持单方向的操作，比如输入流只能读，输出流只能写。</p>
+<li>最外层函数和在最外层函数外面定义的变量拥有全局作用域，例如：</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> a=<span class="string">"global"</span>;</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">doSomething</span>(<span class="params"></span>)</span>&#123;</div><div class="line">    <span class="keyword">var</span> b=<span class="string">"local"</span>;</div><div class="line">    <span class="function"><span class="keyword">function</span> <span class="title">innerSay</span>(<span class="params"></span>)</span>&#123;</div><div class="line">        alert(b);</div><div class="line">    &#125;</div><div class="line">    innerSay();</div><div class="line">&#125;</div><div class="line">alert(a); <span class="comment">//global</span></div><div class="line">alert(b); <span class="comment">//脚本错误</span></div><div class="line">doSomething(); <span class="comment">//local</span></div><div class="line">innerSay() <span class="comment">//脚本错误</span></div></pre></td></tr></table></figure>
+        
+          <p class="article-more-link">
+            <a href="/2017/09/16/理解JavaScript作用域链/#more">阅读全文 »</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yukai.space/2017/09/16/理解JavaScript作用域链/" data-id="cjgp4nptz007zm2xcrr312eyl" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/javascript/">javascript</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+ 
+
+
+  
+    <article id="post-组合模式的妙用" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/09/16/组合模式的妙用/" class="article-date">
+  <time datetime="2017-09-16T01:40:41.000Z" itemprop="datePublished">2017-09-16</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/编程/">编程</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/09/16/组合模式的妙用/">组合模式的妙用</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="组合模式定义"><a href="#组合模式定义" class="headerlink" title="组合模式定义"></a>组合模式定义</h2><img src="/2017/09/16/组合模式的妙用/component.jpg" alt="component" title="component">
+<ul>
+<li><p>Component 是组合中的对象声明接口，在适当的情况下，实现所有类共有接口的默认行为。声明一个接口用于访问和管理Component<br>子部件。</p>
 </li>
-<li><p>通道可以支持异步的读或写，而流是同步的。</p>
+<li><p>Leaf 在组合中表示叶子结点对象，叶子结点没有子结点。</p>
 </li>
-<li><p>通道的读取或写入是通过缓冲区来进行的，而流则写入或返回字节。</p>
+<li><p>Composite 定义有枝节点行为，用来存储子部件，在Component接口中实现与子部件有关操作，如增加(add)和删除</p>
 </li>
 </ul>
         
           <p class="article-more-link">
-            <a href="/2017/07/08/Java-NIO-Channel/#more">阅读全文 »</a>
+            <a href="/2017/09/16/组合模式的妙用/#more">阅读全文 »</a>
           </p>
         
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2017/07/08/Java-NIO-Channel/" data-id="cj9qhw1un0008hdnjrap2zpsq" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2017/09/16/组合模式的妙用/" data-id="cjgp4npue008lm2xclro2jdex" class="article-share-link">分享</a>
       
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/NIO/">NIO</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
- 
-
-
-  
-    <article id="post-java文件描述符" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2017/07/07/java文件描述符/" class="article-date">
-  <time datetime="2017-07-07T12:54:29.000Z" itemprop="datePublished">2017-07-07</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/编程/">编程</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/07/07/java文件描述符/">java文件描述符</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="文件描述符"><a href="#文件描述符" class="headerlink" title="文件描述符"></a>文件描述符</h2><p>在Linux中，进程是通过文件描述符（file descriptors，简称fd）而不是文件名来访问文件的，文件描述符实际上是一个整数。</p>
-<p>内核中，对应于<strong>每个进程</strong>都有一个文件描述符表，表示这个进程打开的所有文件。文件描述符就是这个表的索引。</p>
-<p>文件描述表中每一项都是一个指针，指向一个用于描述打开的文件的数据块———file对象，file对象中描述了文件的打开模式，读写位置等重要信息。</p>
-<img src="/2017/07/07/java文件描述符/filedescriptors.png" alt="file descriptors" title="file descriptors">
-        
-          <p class="article-more-link">
-            <a href="/2017/07/07/java文件描述符/#more">阅读全文 »</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yukai.space/2017/07/07/java文件描述符/" data-id="cj9qhw1xb0034hdnjm828r3pm" class="article-share-link">分享</a>
-      
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/NIO/">NIO</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/设计模式/">设计模式</a></li></ul>
 
     </footer>
   </div>
@@ -552,7 +527,7 @@
 
 
   <nav id="page-nav">
-    <a class="extend prev" rel="prev" href="/page/2/">&laquo; 上一页</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/page/11/">11</a><a class="extend next" rel="next" href="/page/4/">下一页&raquo;</a>
+    <a class="extend prev" rel="prev" href="/page/2/">&laquo; 上一页</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/page/13/">13</a><a class="extend next" rel="next" href="/page/4/">下一页&raquo;</a>
   </nav>
 </section>
            
@@ -575,23 +550,23 @@
       <ul>
         
           <li>
-            <a href="/2017/11/30/简单学习Java-ForkJoin框架/">Java-ForkJoin框架</a>
+            <a href="/2018/05/02/VirtualBox共享文件夹/">VirtualBox设置共享文件夹</a>
           </li>
         
           <li>
-            <a href="/2017/11/23/Java基础-字节/">Java基础-字节</a>
+            <a href="/2018/05/01/Centos7美化/">Centos7美化</a>
           </li>
         
           <li>
-            <a href="/2017/11/21/理解Java-Reference/">理解Java-Reference</a>
+            <a href="/2018/04/30/联通华为HG8347R设置桥接模式/">联通华为HG8347R设置桥接模式</a>
           </li>
         
           <li>
-            <a href="/2017/11/20/如何执行一个延迟任务？/">如何执行一个延迟任务？</a>
+            <a href="/2018/03/29/可能会用到的Git技巧2/">可能会用到的Git技巧(2)</a>
           </li>
         
           <li>
-            <a href="/2017/11/15/从通信协议到装饰者模式/">从通信协议到装饰者模式</a>
+            <a href="/2018/03/01/可能会用到的Git技巧1/">可能会用到的Git技巧(1)</a>
           </li>
         
       </ul>
@@ -609,7 +584,7 @@
   
   <div class="outer">
     <div id="footer-left">
-      &copy; 2014 - 2017 于凯&nbsp;|&nbsp;
+      &copy; 2014 - 2018 于凯&nbsp;|&nbsp;
       主题 <a href="https://github.com/giscafer/hexo-theme-cafe/" target="_blank">Cafe</a>
     </div>
      <div id="footer-right">

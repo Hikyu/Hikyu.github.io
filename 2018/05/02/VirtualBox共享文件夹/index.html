@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>VirtualBox设置共享文件夹 | YuKai&#39;s blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="最近在做 Gitlab 备份，Gitlab本身运行在虚拟机当中，备份策略是使用 Rsync 备份到远程主机一份；同时在宿主机备份一份。宿主机使用了windows，想到了一个较为简单的办法，即设置共享文件夹，将需要备份的内容定时复制到共享文件夹即可。在设置共享文件夹的过程中遇到一些问题，在此记录下来。
+
+因为虚拟机所在的 IP 无法访问外网，只能访问公司内部网络。所以在进行下面的操作之前，需要配置">
+<meta property="og:type" content="article">
+<meta property="og:title" content="VirtualBox设置共享文件夹">
+<meta property="og:url" content="http://yukai.space/2018/05/02/VirtualBox共享文件夹/index.html">
+<meta property="og:site_name" content="YuKai's blog">
+<meta property="og:description" content="最近在做 Gitlab 备份，Gitlab本身运行在虚拟机当中，备份策略是使用 Rsync 备份到远程主机一份；同时在宿主机备份一份。宿主机使用了windows，想到了一个较为简单的办法，即设置共享文件夹，将需要备份的内容定时复制到共享文件夹即可。在设置共享文件夹的过程中遇到一些问题，在此记录下来。
+
+因为虚拟机所在的 IP 无法访问外网，只能访问公司内部网络。所以在进行下面的操作之前，需要配置">
+<meta property="og:image" content="http://yukai.space/2018/05/02/VirtualBox共享文件夹/iso.png">
+<meta property="og:image" content="http://yukai.space/2018/05/02/VirtualBox共享文件夹/share.png">
+<meta property="og:updated_time" content="2018-05-03T09:03:05.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="VirtualBox设置共享文件夹">
+<meta name="twitter:description" content="最近在做 Gitlab 备份，Gitlab本身运行在虚拟机当中，备份策略是使用 Rsync 备份到远程主机一份；同时在宿主机备份一份。宿主机使用了windows，想到了一个较为简单的办法，即设置共享文件夹，将需要备份的内容定时复制到共享文件夹即可。在设置共享文件夹的过程中遇到一些问题，在此记录下来。
+
+因为虚拟机所在的 IP 无法访问外网，只能访问公司内部网络。所以在进行下面的操作之前，需要配置">
+<meta name="twitter:image" content="http://yukai.space/2018/05/02/VirtualBox共享文件夹/iso.png">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    
+    <div id="header-inner" class="inner">
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yukai.space"></form>
+      </div>
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/archives">归档</a>
+        
+          <a class="main-nav-link" href="/tools">工具</a>
+        
+          <a class="main-nav-link" href="/page">关于</a>
+        
+      </nav>
+      
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">YuKai&#39;s blog</a>
+      </h1>
+      
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-VirtualBox共享文件夹" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/05/02/VirtualBox共享文件夹/" class="article-date">
+  <time datetime="2018-05-02T12:50:30.000Z" itemprop="datePublished">2018-05-02</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/Linux/">Linux</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      VirtualBox设置共享文件夹
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <blockquote>
+<p>最近在做 Gitlab 备份，Gitlab本身运行在虚拟机当中，备份策略是使用 Rsync 备份到远程主机一份；同时在宿主机备份一份。宿主机使用了windows，想到了一个较为简单的办法，即设置共享文件夹，将需要备份的内容定时复制到共享文件夹即可。在设置共享文件夹的过程中遇到一些问题，在此记录下来。</p>
+</blockquote>
+<p>因为虚拟机所在的 IP 无法访问外网，只能访问公司内部网络。所以在进行下面的操作之前，需要配置一下 yum 的代理：</p>
+<p>我在本机开启了 shadowsocks 服务，ip：192.168.1.70，port：1090</p>
+<p>虚拟机内执行：</p>
+<p><code>sudo vim /etc/yum.conf</code></p>
+<p>增加下面内容：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">proxy=socks5h://192.168.1.70:1090</div></pre></td></tr></table></figure>
+<p>保存，退出。yum代理设置成功。</p>
+<h2 id="虚拟机安装增强功能"><a href="#虚拟机安装增强功能" class="headerlink" title="虚拟机安装增强功能"></a>虚拟机安装增强功能</h2><ul>
+<li><p>安装 linux-headers</p>
+<p> 有两种解决办法：</p>
+ <a id="more"></a>
+<ol>
+<li><p>安装与当前 kernel 相同版本的 kernel-headers 和 kernel-devel </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">yum remove kernel-headers -y</div><div class="line">yum install kernel-headers-$(uname -r) kernel-devel-$( uname -r) -y</div><div class="line">yum install gcc make -y</div></pre></td></tr></table></figure>
+</li>
+<li><p>升级到最新内核版本</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">yum update kernel -y</div><div class="line">yum install kernel-headers kernel-devel gcc make -y</div><div class="line"># 重启虚拟机</div><div class="line"># 查看安装的内核版本和kernel-headers版本</div><div class="line">rpm -qa|grep -e  kernel-devel  -e  kernel-headers </div><div class="line">uname -r</div></pre></td></tr></table></figure>
+</li>
+</ol>
+</li>
+<li><p>添加虚拟光驱</p>
+<p>在虚拟机关闭状态下，右键虚拟机-&gt;设置-&gt;存储-&gt;添加虚拟光驱：</p>
+<p>选择 VirtualBox 安装目录，默认为 <code>C:\Program Files\Oracle\VirtualBox</code>，选择光  盘映像文件 VBoxGuestAdditions.iso。</p>
+<img src="/2018/05/02/VirtualBox共享文件夹/iso.png" alt="添加虚拟光驱" title="添加虚拟光驱">
+</li>
+<li><p>安装增强功能</p>
+<p> 启动虚拟机，挂载刚刚添加的虚拟光驱：</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">sudo mkdir /winshare</div><div class="line">sudo mount /dev/cdrom /winshare</div><div class="line">cd /winshare</div><div class="line">sudo ./VBoxLinuxAdditions.run</div><div class="line"></div><div class="line"># 输出如下</div><div class="line"># Verifying archive integrity... All good.</div><div class="line"># Uncompressing VirtualBox 5.2.6 Guest Additions for Linux........</div><div class="line"># VirtualBox Guest Additions installer</div><div class="line"># Removing installed version 5.2.6 of VirtualBox Guest Additions...</div><div class="line"># Copying additional installer modules ...</div><div class="line"># Installing additional modules ...</div><div class="line"># VirtualBox Guest Additions: Building the VirtualBox Guest Additions kernel modules.</div><div class="line"># VirtualBox Guest Additions: Running kernel modules will not be replaced until the system    restarted</div><div class="line"># VirtualBox Guest Additions: Starting.</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="设置共享文件夹"><a href="#设置共享文件夹" class="headerlink" title="设置共享文件夹"></a>设置共享文件夹</h2><p>右键虚拟机-&gt;设置-&gt;共享文件夹：</p>
+<img src="/2018/05/02/VirtualBox共享文件夹/share.png" alt="设置共享文件夹" title="设置共享文件夹">
+<p>配置共享文件夹路径和名称。</p>
+<p>进入虚拟机，执行：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">sudo mkdir /gitlabwin</div><div class="line">sudo mount -t vboxsf gitlabwin /gitlabwin</div></pre></td></tr></table></figure>
+<p>此时，共享文件夹配置完毕，/gitlabwin 映射到宿主机 E:\gitlab</p>
+<p>可以在 /gitlabwin 下面新建文件，然后查看宿主机 E:\gitlab 是否存在对应的文件。</p>
+<h2 id="开机自动挂载"><a href="#开机自动挂载" class="headerlink" title="开机自动挂载"></a>开机自动挂载</h2><p>目前还没有找到好的解决办法，参考<a href="https://segmentfault.com/q/1010000005600781/a-1020000005616990" target="_blank" rel="external">这里</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yukai.space/2018/05/02/VirtualBox共享文件夹/" data-id="cjgp4npnr0012m2xcrgy8h6t2" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/">linux</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+ <script src="/jquery/jquery.min.js"></script>
+  <div id="random_posts">
+    <h2>推荐文章</h2>
+    <div class="random_posts_ul">
+      <script>
+          var random_count =4
+          var site = {BASE_URI:'/'};
+          function load_random_posts(obj) {
+              var arr=site.posts;
+              if (!obj) return;
+              // var count = $(obj).attr('data-count') || 6;
+              for (var i, tmp, n = arr.length; n; i = Math.floor(Math.random() * n), tmp = arr[--n], arr[n] = arr[i], arr[i] = tmp);
+              arr = arr.slice(0, random_count);
+              var html = '<ul>';
+            
+              for(var j=0;j<arr.length;j++){
+                var item=arr[j];
+                html += '<li><strong>' + 
+                item.date + ':&nbsp;&nbsp;<a href="' + (site.BASE_URI+item.uri) + '">' + 
+                (item.title || item.uri) + '</a></strong>';
+                if(item.excerpt){
+                  html +='<div class="post-excerpt">'+item.excerpt+'</div>';
+                }
+                html +='</li>';
+                
+              }
+              $(obj).html(html + '</ul>');
+          }
+          $('.random_posts_ul').each(function () {
+              var c = this;
+              if (!site.posts || !site.posts.length){
+                  $.getJSON(site.BASE_URI + 'js/posts.js',function(json){site.posts = json;load_random_posts(c)});
+              } 
+               else{
+                load_random_posts(c);
+              }
+          });
+      </script>
+    </div>
+  </div>
+
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2018/05/01/Centos7美化/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">Centos7美化</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+ 
+     
+  <div class="comments" id="comments">
+    
+     
+       
+      <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+    
+       
+      
+      
+           <div id="gitment_comments"></div>
+    
+  </div>
+ 
+  
+
+</section>
+           
+    <aside id="sidebar">
+  
+    
+
+  
+    
+    <div class="widget-wrap">
+    
+      <div class="widget" id="toc-widget-fixed">
+      
+        <strong class="toc-title">文章目录</strong>
+        <div class="toc-widget-list">
+              <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#虚拟机安装增强功能"><span class="toc-number">1.</span> <span class="toc-text">虚拟机安装增强功能</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#设置共享文件夹"><span class="toc-number">2.</span> <span class="toc-text">设置共享文件夹</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#开机自动挂载"><span class="toc-number">3.</span> <span class="toc-text">开机自动挂载</span></a></li></ol>
+          </div>
+      </div>
+    </div>
+
+  
+    
+
+  
+    
+  
+    
+  
+    
+
+  
+</aside>
+
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-left">
+      &copy; 2014 - 2018 于凯&nbsp;|&nbsp;
+      主题 <a href="https://github.com/giscafer/hexo-theme-cafe/" target="_blank">Cafe</a>
+    </div>
+     <div id="footer-right">
+      联系方式&nbsp;|&nbsp;debiaoyu@gmail.com
+    </div>
+  </div>
+</footer>
+ <script src="/jquery/jquery.min.js"></script>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/archives" class="mobile-nav-link">归档</a>
+  
+    <a href="/tools" class="mobile-nav-link">工具</a>
+  
+    <a href="/page" class="mobile-nav-link">关于</a>
+  
+</nav>
+    <img class="back-to-top-btn" src="/images/fly-to-top.png"/>
+<script>
+// Elevator script included on the page, already.
+window.onload = function() {
+  var elevator = new Elevator({
+    selector:'.back-to-top-btn',
+    element: document.querySelector('.back-to-top-btn'),
+    duration: 1000 // milliseconds
+  });
+}
+</script>
+      
+
+  
+    <script>
+      var cloudTieConfig = {
+        url: document.location.href, 
+        sourceId: "",
+        productKey: "e2fb4051c49842688ce669e634bc983f",
+        target: "cloud-tie-wrapper"
+      };
+    </script>
+    <script src="https://img1.ws.126.net/f2e/tie/yun/sdk/loader.js"></script>
+    
+
+  
+
+
+
+
+
+
+
+<!-- author:forvoid begin -->
+<!-- author:forvoid begin -->
+
+  <link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+  <script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script> 
+  <script>
+  var gitment = new Gitment({
+    // id: '页面 ID', // 可选。默认为 location.href
+    owner: 'Hikyu',
+    repo: 'Hikyu.github.io',
+    oauth: {
+    client_id: '61886569157db60efa97',
+    client_secret: '6475bb7c8faaf44ff2e12c272a46505a0eecf46f',
+    }
+  })
+  gitment.render(document.getElementById("gitment_comments"))
+</script>
+
+
+<!-- author:forvoid end -->
+
+<!-- author:forvoid end -->
+
+
+
+ <script src="/js/is.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+<script src="/js/elevator.js"></script>
+  </div>
+</body>
+</html>

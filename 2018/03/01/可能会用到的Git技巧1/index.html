@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>可能会用到的Git技巧(1) | YuKai&#39;s blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="最近在看 gitlab 的源码，因为公司希望把 gitlab-ee 的 merge squash 功能集成到 gitlab-ce 上来，供公司内部使用….这个任务交给了我，现在这个功能已经改的差不多了，中间也了解了一些可能会用到的 git 技巧，现在记录下来
+
+
+git cherry-pickgit cherry-pick 可以应用某个分支的某些提交到另一个分支上去。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="可能会用到的Git技巧(1)">
+<meta property="og:url" content="http://yukai.space/2018/03/01/可能会用到的Git技巧1/index.html">
+<meta property="og:site_name" content="YuKai's blog">
+<meta property="og:description" content="最近在看 gitlab 的源码，因为公司希望把 gitlab-ee 的 merge squash 功能集成到 gitlab-ce 上来，供公司内部使用….这个任务交给了我，现在这个功能已经改的差不多了，中间也了解了一些可能会用到的 git 技巧，现在记录下来
+
+
+git cherry-pickgit cherry-pick 可以应用某个分支的某些提交到另一个分支上去。">
+<meta property="og:image" content="http://yukai.space/2018/03/01/可能会用到的Git技巧1/git.jpg">
+<meta property="og:updated_time" content="2018-04-30T11:35:10.973Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="可能会用到的Git技巧(1)">
+<meta name="twitter:description" content="最近在看 gitlab 的源码，因为公司希望把 gitlab-ee 的 merge squash 功能集成到 gitlab-ce 上来，供公司内部使用….这个任务交给了我，现在这个功能已经改的差不多了，中间也了解了一些可能会用到的 git 技巧，现在记录下来
+
+
+git cherry-pickgit cherry-pick 可以应用某个分支的某些提交到另一个分支上去。">
+<meta name="twitter:image" content="http://yukai.space/2018/03/01/可能会用到的Git技巧1/git.jpg">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    
+    <div id="header-inner" class="inner">
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yukai.space"></form>
+      </div>
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/archives">归档</a>
+        
+          <a class="main-nav-link" href="/tools">工具</a>
+        
+          <a class="main-nav-link" href="/page">关于</a>
+        
+      </nav>
+      
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">YuKai&#39;s blog</a>
+      </h1>
+      
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-可能会用到的Git技巧1" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/03/01/可能会用到的Git技巧1/" class="article-date">
+  <time datetime="2018-03-01T06:56:57.000Z" itemprop="datePublished">2018-03-01</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/工具/">工具</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      可能会用到的Git技巧(1)
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <blockquote>
+<p>最近在看 gitlab 的源码，因为公司希望把 gitlab-ee 的 merge squash 功能集成到 gitlab-ce 上来，供公司内部使用….<br>这个任务交给了我，现在这个功能已经改的差不多了，中间也了解了一些可能会用到的 git 技巧，现在记录下来</p>
+</blockquote>
+<img src="/2018/03/01/可能会用到的Git技巧1/git.jpg" alt="git" title="git">
+<h2 id="git-cherry-pick"><a href="#git-cherry-pick" class="headerlink" title="git cherry-pick"></a>git cherry-pick</h2><p><a href="https://git-scm.com/docs/git-cherry-pick" target="_blank" rel="external">git cherry-pick</a> 可以应用某个分支的某些提交到另一个分支上去。</p>
+<a id="more"></a>
+<p>比如，在我们的工作流中，有两个分支分别是特性分支 feature 和发布分支 stable。feature 新增了某个功能并进行了提交且通过了测试。过了一段时间到了发布日，此时我们想要将该功能集成到发布分支 stable 上面进行发布。将 feature 直接合并到 stable？ 不行，stable分支只想集成这个功能，而特性分支很可能已经进行了别的提交。这种情况就需要用到     cherry-pick 的功能。cherry-pick 在 git 工作流中的使用比较常见。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">git checkout stable</div><div class="line">git cherry-pick commit_id</div></pre></td></tr></table></figure>
+<p>首先我们需要在 feature 分支上通过 <code>git log</code> 查询得到我们需要的提交的 commitID，比如 41e59d4(这个提交位于 feature 分支当中)。</p>
+<p>然后切换到 stable 分支，执行 git <code>cherry-pick 41e59d4</code> 如果没有冲突，就会正常提交。</p>
+<p>如果出现了冲突:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">$ git cherry-pick 41e59d4</div><div class="line">error: could not apply 41e59d4... feature</div><div class="line">hint: after resolving the conflicts, mark the corrected paths</div><div class="line">hint: with &apos;git add &lt;paths&gt;&apos; or &apos;git rm &lt;paths&gt;&apos;</div><div class="line">hint: and commit the result with &apos;git commit&apos;</div></pre></td></tr></table></figure>
+<p>先使用 <code>git status</code> 查看哪些文件出现了冲突：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">$ git status</div><div class="line">On branch stable</div><div class="line">You are currently cherry-picking commit 41e59d4.</div><div class="line">  (fix conflicts and run &quot;git cherry-pick --continue&quot;)</div><div class="line">  (use &quot;git cherry-pick --abort&quot; to cancel the cherry-pick operation)</div><div class="line"></div><div class="line">Unmerged paths:</div><div class="line">  (use &quot;git add &lt;file&gt;...&quot; to mark resolution)</div><div class="line"></div><div class="line">        both modified:   test.txt</div><div class="line"></div><div class="line">no changes added to commit (use &quot;git add&quot; and/or &quot;git commit -a&quot;)</div></pre></td></tr></table></figure>
+<p>解决完冲突后，执行 <code>git add</code> 和 <code>git commit</code> 完成合并。</p>
+<p>如果是一次 cherry-pick 多个 commit，则执行 <code>git cherry-pick --continue</code> 继续 cherry-pick。如果想要返回到执行 cherry-pick 前的状态，执行 <code>git cherry-pick --abort</code>。</p>
+<h2 id="git-bisect"><a href="#git-bisect" class="headerlink" title="git bisect"></a>git bisect</h2><p>设想如下场景：我们刚刚发布了一个新版本，运行了一段时间后偶然发现了某个表现不太正常。但是在上一个版本中是不存在这种表现的。新版本与上一个版本中间有一百多次的提交，如何确定是哪一次提交出了问题呢？</p>
+<p>答案就是使用 <code>git bisect</code> 命令。</p>
+<p>首先运行 <code>git bisect start</code> 启动，然后使用 <code>git bisect bad</code> 来告诉系统当前的提交已经有问题了。然后必须告诉 bisect 已知的最后一次正常状态是哪次提交，使用 <code>git bisect good [good_commit]</code>：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">git bisect start</div><div class="line">git bisect bad</div><div class="line">git bisect good v1.0</div><div class="line">Bisecting: 6 revisions left to test after this</div><div class="line">[ecb6e1bc347ccecc5f9350d878ce677feb13d3b2] error handling on repo</div></pre></td></tr></table></figure>
+<p>Git 发现在你标记为正常的提交(v1.0)和当前的错误版本之间有大约12次提交，于是它检出中间的一个。在这里，你可以运行测试来检查问题是否存在于这次提交。如果是，那么它是在这个中间提交之前的某一次引入的；如果否，那么问题是在中间提交之后引入的。如果这里是没有错误的，那么就运行 <code>git bisect good</code> 命令，如果这次提交已经出现了问题，运行 <code>git bisect bad</code>。</p>
+<p>运行了上面的命令之后，就会此次提交和上个错误提交的中间点(git bisect good)或者和上个正常提交的中间点(git bisect bad)。这也是二分查找的原理。</p>
+<p>反复执行上面的过程，最终可以找到第一个错误提交的 commit：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">b047b02ea83310a70fd603dc8cd7a6cd13d15c04 is first bad commit</div></pre></td></tr></table></figure>
+<p>再通过 <code>git show b047b02ea8</code> 就能看到这次错误提交的全部内容。</p>
+<p>这样就可以找出缺陷被引入的根源。</p>
+<h2 id="git-update-index-–assume-unchanged"><a href="#git-update-index-–assume-unchanged" class="headerlink" title="git update-index –assume-unchanged"></a>git update-index –assume-unchanged</h2><p>我们的代码中经常会包含一些配置文件，每个成员的配置文件都有所不同。我们每次 <code>git push</code> 或 <code>git merge</code>时都有可能会重置这些配置文件，这样在每次合并远端代码后都需要我们手动修改他。更合理的办法是告诉 Git 忽略这些本地配置文件的变更：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git update-index --assume-unchanged &lt;your_file_path&gt;</div></pre></td></tr></table></figure>
+<p>我们也可以重新跟踪被忽略的文件：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git update-index --no-assume-unchanged &lt;your_file_path&gt;</div></pre></td></tr></table></figure>
+<p>注意，与 .gitignore 文件的作用不同，.gitignore 文件作用于 Untracked Files，也就是那些从来没有被 Git 记录过的文件(自添加以后，从未 add 及 commit 过的文件)，比如日志文件、临时文件等。这些文件是不需要上传到远程仓库的。</p>
+<p>而 <code>git update-index --assume-unchanged &lt;your_file_path&gt;</code> 忽略的文件是已经存在于代码仓库中，也是代码本身的一部分，比如配置文件等。</p>
+<h2 id="git-log"><a href="#git-log" class="headerlink" title="git log"></a>git log</h2><p><a href="https://git-scm.com/docs/pretty-formats" target="_blank" rel="external">git log</a> 命令可一接受一个 <code>--pretty</code> 选项，来确定输出的格式.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">%H	提交对象（commit）的完整哈希字串</div><div class="line">%h	提交对象的简短哈希字串</div><div class="line">%T	树对象（tree）的完整哈希字串</div><div class="line">%t	树对象的简短哈希字串</div><div class="line">%P	父对象（parent）的完整哈希字串</div><div class="line">%p	父对象的简短哈希字串</div><div class="line">%an	作者（author）的名字</div><div class="line">%ae	作者的电子邮件地址</div><div class="line">%ad	作者修订日期（可以用 -date= 选项定制格式）</div><div class="line">%ar	作者修订日期，按多久以前的方式显示</div><div class="line">%cn	提交者(committer)的名字</div><div class="line">%ce	提交者的电子邮件地址</div><div class="line">%cd	提交日期</div><div class="line">%cr	提交日期，按多久以前的方式显示</div><div class="line">%s	提交说明</div></pre></td></tr></table></figure>
+<p>比如，<code>git shortlog --format=&#39;%H|%cn|%s&#39; | grep &#39;#2230&#39;</code> 可以查找 commit 内容包括某个特定字符的提交。<code>git shortlog</code> 相当于 <code>git log --pretty=short</code></p>
+<p><code>git log --pretty=format:&#39;%h %ad | %s%d [%an]&#39; --graph --date=short</code> 是一个不错的格式化log的命令，我们可以把他做成 alias：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git config --global alias.lg &quot;log --pretty=format:&apos;%h %ad | %s%d [%an]&apos; --graph --date=short&quot;</div></pre></td></tr></table></figure>
+<p>这样，我们就可以直接输入 <code>git lg</code> 查看格式化的 git log 啦。</p>
+<hr>
+<p>遇到文件重命名的情况,使用 <code>git log --follow &lt;filename&gt;</code>更为合适，详细内容查看<a href="https://x-front-team.github.io/2016/12/22/git-log-follow%E5%A5%87%E9%81%87%E8%AE%B0/" target="_blank" rel="external">git log –follow奇遇记</a></p>
+<h2 id="git-blame"><a href="#git-blame" class="headerlink" title="git blame"></a>git blame</h2><p><code>git blame</code> 命令可以查看某个文件现在的代码是由谁在哪一天修改的。使用 <code>-L</code> 参数可以指定文件的某几行的修改情况。</p>
+<p><code>git blame -L 12,22 simplegit.rb</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">^4832fe2 (Scott Chacon  2008-03-15 10:31:28 -0700 12)  def show(tree = &apos;master&apos;)</div><div class="line">^4832fe2 (Scott Chacon  2008-03-15 10:31:28 -0700 13)   command(&quot;git show #&#123;tree&#125;&quot;)</div><div class="line">^4832fe2 (Scott Chacon  2008-03-15 10:31:28 -0700 14)  end</div><div class="line">^4832fe2 (Scott Chacon  2008-03-15 10:31:28 -0700 15)</div><div class="line">9f6560e4 (Scott Chacon  2008-03-17 21:52:20 -0700 16)  def log(tree = &apos;master&apos;)</div><div class="line">79eaf55d (Scott Chacon  2008-04-06 10:15:08 -0700 17)   command(&quot;git log #&#123;tree&#125;&quot;)</div><div class="line">9f6560e4 (Scott Chacon  2008-03-17 21:52:20 -0700 18)  end</div><div class="line">9f6560e4 (Scott Chacon  2008-03-17 21:52:20 -0700 19)</div><div class="line">42cf2861 (Magnus Chacon 2008-04-13 10:45:01 -0700 20)  def blame(path)</div><div class="line">42cf2861 (Magnus Chacon 2008-04-13 10:45:01 -0700 21)   command(&quot;git blame #&#123;path&#125;&quot;)</div><div class="line">42cf2861 (Magnus Chacon 2008-04-13 10:45:01 -0700 22)  end</div></pre></td></tr></table></figure>
+<p>第一列是最后一次修改那行(也就是现在看到的修改)的那次提交的 commitID，第二列和第三列分别是作者的姓名和修改日期，第四列是修改的行号，最后一列显示了这行当前的内容。</p>
+<p>注意类似 <code>^4832fe2</code> 的提交表示这个提交是文件第一次被加入项目时的提交，从那以后这行就未被改变过。</p>
+<p>有时候，我们不仅仅想关注当前某个文件的某行是由谁在什么时候修改的，我们还想看到某行的修改历史。这个时候可以使用 <code>git log -L start,end:file</code> 达到这个目的。</p>
+<p><code>git log -L 17,37:./services/merge_requests/merge_service.rb</code></p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div></pre></td><td class="code"><pre><div class="line">commit 190ea021<span class="built_in">cd</span>1fd89d20c9548a72034a7b941413ca</div><div class="line">Merge: bddbb90fd9 011558ea4a</div><div class="line">Author: Sean McGivern &lt;sean@mcgivern.me.uk&gt;</div><div class="line">Date:   Mon Nov 20 15:08:50 2017 +0000</div><div class="line"></div><div class="line">    Merge branch <span class="string">'osw-merge-process-logs'</span> into <span class="string">'master'</span></div><div class="line"></div><div class="line">    Add logs <span class="keyword">for</span> monitoring the merge process</div><div class="line"></div><div class="line">    See merge request gitlab-org/gitlab-ce!15425</div><div class="line"></div><div class="line"></div><div class="line">commit 011558ea4ac59bce74c18d2f7c55ac257de111c6</div><div class="line">Author: Oswaldo Ferreira &lt;oswaldo@gitlab.com&gt;</div><div class="line">Date:   Thu Nov 16 12:49:01 2017 -0200</div><div class="line"></div><div class="line">    Add logs <span class="keyword">for</span> monitoring the merge process</div><div class="line"></div><div class="line">diff --git a/app/services/merge_requests/merge_service.rb b/app/services/merge_requests/merge_service.rb</div><div class="line">--- a/app/services/merge_requests/merge_service.rb</div><div class="line">+++ b/app/services/merge_requests/merge_service.rb</div><div class="line">@@ -13,28 +15,29 @@</div><div class="line">     def execute(merge_request)</div><div class="line">       <span class="keyword">if</span> project.merge_requests_ff_only_enabled &amp;&amp; !self.is_a?(FfMergeService)</div><div class="line">         FfMergeService.new(project, current_user, params).execute(merge_request)</div><div class="line">         <span class="built_in">return</span></div><div class="line">       end</div><div class="line"></div><div class="line">       @merge_request = merge_request</div><div class="line"></div><div class="line">       unless @merge_request.mergeable?</div><div class="line">         <span class="built_in">return</span> handle_merge_error(log_message: <span class="string">'Merge request is not mergeable'</span>, save_message_on_model: <span class="literal">true</span>)</div><div class="line">       end</div><div class="line"></div><div class="line">       @<span class="built_in">source</span> = find_merge_source</div><div class="line"></div><div class="line">       unless @<span class="built_in">source</span></div><div class="line">         <span class="built_in">return</span> handle_merge_error(log_message: <span class="string">'No source for merge'</span>, save_message_on_model: <span class="literal">true</span>)</div><div class="line">       end</div><div class="line"></div><div class="line">       merge_request.in_locked_state <span class="keyword">do</span></div><div class="line">         <span class="keyword">if</span> commit</div><div class="line">           after_merge</div><div class="line">           clean_merge_jid</div><div class="line">           success</div><div class="line">         end</div><div class="line">       end</div><div class="line">+      log_info(<span class="string">"Merge process finished on JID #&#123;merge_jid&#125; with state #&#123;state&#125;"</span>)</div><div class="line">     rescue MergeError =&gt; e</div><div class="line">       handle_merge_error(log_message: e.message, save_message_on_model: <span class="literal">true</span>)</div><div class="line">     end</div><div class="line"></div><div class="line">......</div></pre></td></tr></table></figure>
+<p>如上，<code>git log -L 17,37:./services/merge_requests/merge_service.rb</code> 这个命令会显示 merge_service.rb 17到37行， 由近到远的修改历史。还会列出相邻两次 commit 的 diff 内容。其中 <code>a/app/services/merge_requests/merge_service.rb</code> 代表前一次提交，<code>b/app/services/merge_requests/merge_service.rb</code> 代表后一次提交。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yukai.space/2018/03/01/可能会用到的Git技巧1/" data-id="cjgp4npsz006jm2xcaj11ac20" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/git/">git</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+ <script src="/jquery/jquery.min.js"></script>
+  <div id="random_posts">
+    <h2>推荐文章</h2>
+    <div class="random_posts_ul">
+      <script>
+          var random_count =4
+          var site = {BASE_URI:'/'};
+          function load_random_posts(obj) {
+              var arr=site.posts;
+              if (!obj) return;
+              // var count = $(obj).attr('data-count') || 6;
+              for (var i, tmp, n = arr.length; n; i = Math.floor(Math.random() * n), tmp = arr[--n], arr[n] = arr[i], arr[i] = tmp);
+              arr = arr.slice(0, random_count);
+              var html = '<ul>';
+            
+              for(var j=0;j<arr.length;j++){
+                var item=arr[j];
+                html += '<li><strong>' + 
+                item.date + ':&nbsp;&nbsp;<a href="' + (site.BASE_URI+item.uri) + '">' + 
+                (item.title || item.uri) + '</a></strong>';
+                if(item.excerpt){
+                  html +='<div class="post-excerpt">'+item.excerpt+'</div>';
+                }
+                html +='</li>';
+                
+              }
+              $(obj).html(html + '</ul>');
+          }
+          $('.random_posts_ul').each(function () {
+              var c = this;
+              if (!site.posts || !site.posts.length){
+                  $.getJSON(site.BASE_URI + 'js/posts.js',function(json){site.posts = json;load_random_posts(c)});
+              } 
+               else{
+                load_random_posts(c);
+              }
+          });
+      </script>
+    </div>
+  </div>
+
+    
+<nav id="article-nav">
+  
+    <a href="/2018/03/29/可能会用到的Git技巧2/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
+        
+          可能会用到的Git技巧(2)
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/01/25/安装Gitlab-Development-Kit/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">安装Gitlab-Development-Kit</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+ 
+     
+  <div class="comments" id="comments">
+    
+     
+       
+      <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+    
+       
+      
+      
+           <div id="gitment_comments"></div>
+    
+  </div>
+ 
+  
+
+</section>
+           
+    <aside id="sidebar">
+  
+    
+
+  
+    
+    <div class="widget-wrap">
+    
+      <div class="widget" id="toc-widget-fixed">
+      
+        <strong class="toc-title">文章目录</strong>
+        <div class="toc-widget-list">
+              <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#git-cherry-pick"><span class="toc-number">1.</span> <span class="toc-text">git cherry-pick</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#git-bisect"><span class="toc-number">2.</span> <span class="toc-text">git bisect</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#git-update-index-–assume-unchanged"><span class="toc-number">3.</span> <span class="toc-text">git update-index –assume-unchanged</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#git-log"><span class="toc-number">4.</span> <span class="toc-text">git log</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#git-blame"><span class="toc-number">5.</span> <span class="toc-text">git blame</span></a></li></ol>
+          </div>
+      </div>
+    </div>
+
+  
+    
+
+  
+    
+  
+    
+  
+    
+
+  
+</aside>
+
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-left">
+      &copy; 2014 - 2018 于凯&nbsp;|&nbsp;
+      主题 <a href="https://github.com/giscafer/hexo-theme-cafe/" target="_blank">Cafe</a>
+    </div>
+     <div id="footer-right">
+      联系方式&nbsp;|&nbsp;debiaoyu@gmail.com
+    </div>
+  </div>
+</footer>
+ <script src="/jquery/jquery.min.js"></script>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/archives" class="mobile-nav-link">归档</a>
+  
+    <a href="/tools" class="mobile-nav-link">工具</a>
+  
+    <a href="/page" class="mobile-nav-link">关于</a>
+  
+</nav>
+    <img class="back-to-top-btn" src="/images/fly-to-top.png"/>
+<script>
+// Elevator script included on the page, already.
+window.onload = function() {
+  var elevator = new Elevator({
+    selector:'.back-to-top-btn',
+    element: document.querySelector('.back-to-top-btn'),
+    duration: 1000 // milliseconds
+  });
+}
+</script>
+      
+
+  
+    <script>
+      var cloudTieConfig = {
+        url: document.location.href, 
+        sourceId: "",
+        productKey: "e2fb4051c49842688ce669e634bc983f",
+        target: "cloud-tie-wrapper"
+      };
+    </script>
+    <script src="https://img1.ws.126.net/f2e/tie/yun/sdk/loader.js"></script>
+    
+
+  
+
+
+
+
+
+
+
+<!-- author:forvoid begin -->
+<!-- author:forvoid begin -->
+
+  <link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+  <script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script> 
+  <script>
+  var gitment = new Gitment({
+    // id: '页面 ID', // 可选。默认为 location.href
+    owner: 'Hikyu',
+    repo: 'Hikyu.github.io',
+    oauth: {
+    client_id: '61886569157db60efa97',
+    client_secret: '6475bb7c8faaf44ff2e12c272a46505a0eecf46f',
+    }
+  })
+  gitment.render(document.getElementById("gitment_comments"))
+</script>
+
+
+<!-- author:forvoid end -->
+
+<!-- author:forvoid end -->
+
+
+
+ <script src="/js/is.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+<script src="/js/elevator.js"></script>
+  </div>
+</body>
+</html>

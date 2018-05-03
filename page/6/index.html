@@ -66,14 +66,14 @@
       <div class="outer">
         <section id="main">
   
-    <article id="post-java类加载" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-凉拌黄瓜" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2017/04/06/java类加载/" class="article-date">
-  <time datetime="2017-04-06T11:56:22.000Z" itemprop="datePublished">2017-04-06</time>
+    <a href="/2017/05/07/凉拌黄瓜/" class="article-date">
+  <time datetime="2017-05-07T10:07:12.000Z" itemprop="datePublished">2017-05-07</time>
 </a>
     
   <div class="article-category">
-    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/编程/">编程</a>
+    <a class="article-category-link" href="/categories/生活/">生活</a>►<a class="article-category-link" href="/categories/生活/食物/">食物</a>
   </div>
 
   </div>
@@ -84,7 +84,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2017/04/06/java类加载/">java类加载</a>
+      <a class="article-title" href="/2017/05/07/凉拌黄瓜/">凉拌黄瓜</a>
     </h1>
   
 
@@ -92,101 +92,34 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <blockquote>
-<p>本篇笔记的目标是理解类加载器的架构，学会实现类加载器并理解热替换的底层原理。</p>
-</blockquote>
-<h2 id="什么是类加载"><a href="#什么是类加载" class="headerlink" title="什么是类加载"></a>什么是类加载</h2><blockquote>
-<p>类从被加载到虚拟机内存中开始，到卸载出内存为止，包括了以下几个生命周期：</p>
-</blockquote>
-<img src="/2017/04/06/java类加载/jiazai.png" alt="jiazai" title="jiazai">
-<blockquote>
-<p>什么时候会触发类加载的第一个阶段(加载)？虚拟机规范没有强制规定，这一点依据不同的虚拟机实现来定。但对于初始化阶段，虚拟机规范规定了有且只有5种&gt;情况必须立即对类进行初始化(加载阶段自然要在此之前开始)：</p>
-<p>1.使用new关键字实例化对象、读取或设置一个类的静态字段(被final修饰的常量字段除外)、调用一个类的静态方法。</p>
-<p>2.使用反射方法对类进行调用</p>
-<p>3.初始化一个类的时候，发现其父类未初始化，则触发父类的初始化</p>
-<p>4.虚拟机启动时，用户需指定一个要执行的主类(包含main的那个类)，虚拟机先初始化该类</p>
-<p>5.当使用jdk1.7的动态语言支持时，如果一个java.lang.invoke。MethodHandle实例最后的解析结果REF_getStatic、REF_putStatic、REF_invokeStatic的方法句柄所对应的类没有进行过初始化，则先触发其初始化(不懂…)</p>
-</blockquote>
-<p>–《深入理解jvm虚拟机》</p>
-        
-          <p class="article-more-link">
-            <a href="/2017/04/06/java类加载/#more">阅读全文 »</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yukai.space/2017/04/06/java类加载/" data-id="cj9qhw1xo003jhdnjn96t04dh" class="article-share-link">分享</a>
-      
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/类加载/">类加载</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
- 
-
-
-  
-    <article id="post-java注解" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2017/03/31/java注解/" class="article-date">
-  <time datetime="2017-03-31T13:07:33.000Z" itemprop="datePublished">2017-03-31</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/编程/">编程</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/03/31/java注解/">java注解</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <blockquote>
-<p>在写java代码的过程中，经常会遇到注解，但是没有去理解注解背后的原理，也没有实现过注解。网上关于java注解的文章已经有很多了，参考了一些资料，整理一下注解这方面的知识~</p>
-</blockquote>
-<h2 id="什么是注解"><a href="#什么是注解" class="headerlink" title="什么是注解"></a>什么是注解</h2><p>注解其实很常见。比如@override、Deprecated等。在使用Junit或Spring boot等一些框架的时候，注解更是无处不在了。那么，到底什么是注解呢？</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Annotations, a form of metadata, provide data about a program that is not part of the program itself. </div><div class="line">Annotations have no direct effect on the operation of the code they annotate.   </div><div class="line">&gt;&gt;[https://docs.oracle.com/javase/tutorial/java/annotations/]</div></pre></td></tr></table></figure>
-<p>注解是元数据的一种，提供了关于程序的一些描述信息，但这些信息并不属于这个程序本身的一部分。注解并不会直接影响到代码的执行。</p>
-<p>翻译起来有点拗口。实际上，注解是那些插入到源代码中用于某种工具进行处理的标签。注解不会改变对编写的程序的编译方式，对于包含和不包含注解的代码，java编译器都会生成相同的虚拟机指令。</p>
-<p>一句话来说，注解只是描述代码的标签。注解本身不会做什么事情，为了使注解起到作用来实现一些黑科技，我们还需要用于处理注解的工具(编写代码处理这些注解)。</p>
-<p>我们使用注解可以：</p>
-<ul>
-<li><p>生成文档</p>
+        <p>天气热起来了，突然想吃黄瓜了，打电话给我妈问了凉拌黄瓜的做法，吃起来不错~</p>
+<p>忘记拍照了…</p>
+<h2 id="原料"><a href="#原料" class="headerlink" title="原料"></a>原料</h2><p>黄瓜、拉皮(粉皮)、醋、生抽、葱、蒜、盐、味精、辣椒面、香油</p>
+<h2 id="做法"><a href="#做法" class="headerlink" title="做法"></a>做法</h2><ol>
+<li><p>黄瓜洗净切片，葱切片，蒜切末(或蒜水)</p>
 </li>
-<li><p>在编译时进行检查。比如@override</p>
+<li><p>黄瓜，拉皮(粉皮)放到碗中，将葱、蒜末倒入(蒜水更佳)</p>
 </li>
-<li><p>替代配置文件，实现自动配置。比如 Springboot</p>
+<li><p>放入盐适量，香油适量，少许味精，生抽适量</p>
 </li>
-</ul>
-<p>注解Annotation是在jdk1.5之后引进的，jdk1.8之后又增加了一些新的特性。接下来的讨论基于jdk1.7。</p>
+<li><p>加入香醋(根据个人口味，喜欢吃醋多加)，喜欢吃辣的可以放入适量辣椒面</p>
+</li>
+<li><p>调匀，品尝口味后可以再适当的加入上述材料，大功告成</p>
+</li>
+</ol>
         
           <p class="article-more-link">
-            <a href="/2017/03/31/java注解/#more">阅读全文 »</a>
+            <a href="/2017/05/07/凉拌黄瓜/#more">阅读全文 »</a>
           </p>
         
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2017/03/31/java注解/" data-id="cj9qhw1xm003ghdnjhtlm7i2i" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2017/05/07/凉拌黄瓜/" data-id="cjgp4npsw006fm2xcdrf55sb4" class="article-share-link">分享</a>
       
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/食物/">食物</a></li></ul>
 
     </footer>
   </div>
@@ -196,10 +129,10 @@
 
 
   
-    <article id="post-java代理机制" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-java任务取消" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2017/03/28/java代理机制/" class="article-date">
-  <time datetime="2017-03-28T08:15:35.000Z" itemprop="datePublished">2017-03-28</time>
+    <a href="/2017/05/02/java任务取消/" class="article-date">
+  <time datetime="2017-05-02T11:45:14.000Z" itemprop="datePublished">2017-05-02</time>
 </a>
     
   <div class="article-category">
@@ -214,7 +147,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2017/03/28/java代理机制/">java代理机制</a>
+      <a class="article-title" href="/2017/05/02/java任务取消/">java任务取消</a>
     </h1>
   
 
@@ -222,26 +155,23 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="代理模式"><a href="#代理模式" class="headerlink" title="代理模式"></a>代理模式</h2><p>代理模式，顾名思义，即一个客户不想或者不能直接访问一个对象，需要通过一个称为代理的第三方对象来实现间接引用。代理对象的作用就是客户端和目标对象<br>之间的一个中介，通过代理对象可以隐藏不让用户看到的内容或实现额外的服务。</p>
-<p>代理机制应用的场景有很多：比如在代理对象中实现缓存，验证，权限控制等功能，真正的业务逻辑封装在真实对象中。RMI远程方法调用也用到了代理。当你调用一个远程方法的时候，相当于调用这个方法的代理对象，<br>在代理对象中封装了网络请求等部分，真实对象存在于另一个进程上。重构老旧代码的时候也常常会用到代理模式。</p>
-<p>代理分两种：静态代理和动态代理</p>
-<h2 id="静态代理"><a href="#静态代理" class="headerlink" title="静态代理"></a>静态代理</h2><p>静态代理即在代码中手动实现代理模式。代理模式涉及到三个角色：</p>
-<p>真实对象RealSubject、抽象主题Subject、代理对象Proxy</p>
-<img src="/2017/03/28/java代理机制/Proxy.jpg" alt="Proxy" title="Proxy">
-<img src="/2017/03/28/java代理机制/seq_Proxy.jpg" alt="seq_Proxy" title="seq_Proxy">
+        <blockquote>
+<p>最近在用思维导图做读书笔记，虽然感觉没有网上所说的那么神奇，但是用来做笔记还是可以的。总结梳理了一下java取消任务执方面的一些内容，也是《java并发编程实战》的读书笔记。</p>
+</blockquote>
+<img src="/2017/05/02/java任务取消/java.png" alt="任务取消" title="任务取消">
         
           <p class="article-more-link">
-            <a href="/2017/03/28/java代理机制/#more">阅读全文 »</a>
+            <a href="/2017/05/02/java任务取消/#more">阅读全文 »</a>
           </p>
         
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2017/03/28/java代理机制/" data-id="cj9qhw1ww002ghdnjyu6yzhso" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2017/05/02/java任务取消/" data-id="cjgp4npq7003fm2xcb0pte90b" class="article-share-link">分享</a>
       
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/多线程/">多线程</a></li></ul>
 
     </footer>
   </div>
@@ -251,10 +181,10 @@
 
 
   
-    <article id="post-java序列化与反序列化" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-线程池异常处理方案" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2017/03/22/java序列化与反序列化/" class="article-date">
-  <time datetime="2017-03-22T12:14:46.000Z" itemprop="datePublished">2017-03-22</time>
+    <a href="/2017/04/26/线程池异常处理方案/" class="article-date">
+  <time datetime="2017-04-26T12:07:01.000Z" itemprop="datePublished">2017-04-26</time>
 </a>
     
   <div class="article-category">
@@ -269,7 +199,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2017/03/22/java序列化与反序列化/">java序列化与反序列化</a>
+      <a class="article-title" href="/2017/04/26/线程池异常处理方案/">线程池异常处理方案</a>
     </h1>
   
 
@@ -277,24 +207,23 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="什么是序列化"><a href="#什么是序列化" class="headerlink" title="什么是序列化"></a>什么是序列化</h2><p>所谓的序列化，即把java对象以二进制形式保存到内存、文件或者进行网络传输。从二进制的形式恢复成为java对象，即反序列化。</p>
-<p>通过序列化可以将对象持久化，或者从一个地方传输到另一个地方。这方面的应用有RMI，远程方法调用。</p>
-<p>java中实现序列化有两种方式，实现Serializable接口或者Externalizable接口。这篇总结只讨论Serializable的情况。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">public class SerializeTest implements Serializable&#123;</div><div class="line">	    private static final long serialVersionUID = 1L;</div><div class="line">		public String str;</div><div class="line">		public SerializeTest(String str) &#123;</div><div class="line">			   this.str = str;</div><div class="line">		&#125;</div><div class="line">		</div><div class="line">		public static void main(String[] args) throws IOException, ClassNotFoundException &#123;</div><div class="line">			   SerializeTest test = new SerializeTest(&quot;hello&quot;);</div><div class="line">			   ByteArrayOutputStream oStream = new ByteArrayOutputStream();</div><div class="line">			   ObjectOutputStream objectOutputStream = new ObjectOutputStream(oStream);</div><div class="line">			   objectOutputStream.writeObject(test);//序列化</div><div class="line">			   </div><div class="line">			   ObjectInputStream inputStream = new ObjectInputStream(new ByteArrayInputStream(oStream.toByteArray()));</div><div class="line">			   SerializeTest obj = (SerializeTest) inputStream.readObject();//反序列化</div><div class="line">			   System.out.println(obj.str);</div><div class="line">		&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>上面的代码演示了类SerializeTest实现序列化和反序列化的过程。</p>
+        <blockquote>
+<p>最近一直在看《java并发编程实战》这本书，之前看过一点，放弃了，现在重新拿过来学习一下。这本书是老外写的，我买的是翻译版。不得不吐槽这本书的翻译，句子晦涩难懂，而且已经读到有好几处错误，差不多跟谷歌翻译一个水平…但是没办法，谁让咱英语差呢？多读几遍，结合jdk源码也能看个大概…</p>
+<p>执行多线程并发任务的时候，如果任务类型相同，一般会考虑使用线程池，一方面利用了并发的优势，一方面避免创建大量线程得不偿失。使用线程池执行的任务一般是我们自己的代码，或者第三方的代码，有没有想过，如果这些代码抛出异常时，线程池会怎么处理呢？如果不处理又会有什么影响？</p>
+</blockquote>
         
           <p class="article-more-link">
-            <a href="/2017/03/22/java序列化与反序列化/#more">阅读全文 »</a>
+            <a href="/2017/04/26/线程池异常处理方案/#more">阅读全文 »</a>
           </p>
         
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2017/03/22/java序列化与反序列化/" data-id="cj9qhw1x7002whdnjvaithyyi" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2017/04/26/线程池异常处理方案/" data-id="cjgp4npuc008im2xcjkbaobjp" class="article-share-link">分享</a>
       
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/多线程/">多线程</a></li></ul>
 
     </footer>
   </div>
@@ -304,14 +233,14 @@
 
 
   
-    <article id="post-I-O总结" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-土豆烧肉" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2017/03/19/I-O总结/" class="article-date">
-  <time datetime="2017-03-19T09:09:19.000Z" itemprop="datePublished">2017-03-19</time>
+    <a href="/2017/04/19/土豆烧肉/" class="article-date">
+  <time datetime="2017-04-19T04:01:30.000Z" itemprop="datePublished">2017-04-19</time>
 </a>
     
   <div class="article-category">
-    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/编程/">编程</a>
+    <a class="article-category-link" href="/categories/生活/">生活</a>►<a class="article-category-link" href="/categories/生活/食物/">食物</a>
   </div>
 
   </div>
@@ -322,7 +251,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2017/03/19/I-O总结/">java I/O总结</a>
+      <a class="article-title" href="/2017/04/19/土豆烧肉/">土豆烧肉</a>
     </h1>
   
 
@@ -330,27 +259,34 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <blockquote>
-<p>在平时维护JDBC驱动的过程中，经常会接触到IO相关的代码。总结梳理一下java中的IO~</p>
-</blockquote>
-<h2 id="IO"><a href="#IO" class="headerlink" title="IO"></a>IO</h2><p>IO，即Input和Output。流可以理解为字节序列的流动，可以从其中读入字节序列的对象称为输入流，可以向其中写入字节序列的对象称为输出流。<br>这些字节序列的来源和目的地可以是文件，网络，或者内存等。</p>
-<p>java中的IO基本可以分为两大类：</p>
-<p>1.基于字节操作的 I/O 接口：InputStream 和 OutputStream</p>
-<p>2.基于字符操作的 I/O 接口：Writer 和 Reader</p>
-<p>不管是磁盘还是网络传输，最小的存储单元都是字节，而不是字符，所以 I/O 操作的都是字节而不是字符。但是我们的程序通常操作的数据都是以字符的形式存在，比如处理网页中的内容或者磁盘文件中的文本。<br>为了操作方便，提供了直接操作字符的接口。操作字符的接口底层还是基于字节的，只不过封装了一些例如编码和解码等操作。</p>
+        <h2 id="原料"><a href="#原料" class="headerlink" title="原料"></a>原料</h2><p>土豆、五花肉、姜片、葱、酱油、料酒、盐、青椒、白糖、胡椒面</p>
+<h2 id="做法"><a href="#做法" class="headerlink" title="做法"></a>做法</h2><ol>
+<li><p>五花肉切块洗净，土豆洗净、去皮，然后切块放到水中备用。青椒切片、葱切段、姜切片备用。</p>
+</li>
+<li><p>锅中水烧开，放两片姜片，倒入洗净的肉块，汆烫两分钟(注意时间不要太长)，捞出肉块沥干备用</p>
+</li>
+<li><p>锅中倒油，油七成热后加入加入姜片、葱段、胡椒面爆香，然后倒入肉块煸炒(注意时间不要太长，否则肉会变老)</p>
+</li>
+<li><p>倒入酱油、精盐、料酒，倒入土豆青椒和肉块一起翻炒几下</p>
+</li>
+<li><p>加入清水(高汤)刚好没过肉块，加入两小勺盐，适当的撒一点白糖，煮沸后转小火，盖上锅盖烧20分钟</p>
+</li>
+<li><p>汤锅中汤汁差不多的时候，大火收汁，撒点葱末装盘</p>
+</li>
+</ol>
         
           <p class="article-more-link">
-            <a href="/2017/03/19/I-O总结/#more">阅读全文 »</a>
+            <a href="/2017/04/19/土豆烧肉/#more">阅读全文 »</a>
           </p>
         
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2017/03/19/I-O总结/" data-id="cj9qhw1ul0006hdnjpbf2z0k4" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2017/04/19/土豆烧肉/" data-id="cjgp4npt7006rm2xctud6c2bv" class="article-share-link">分享</a>
       
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/NIO/">NIO</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/食物/">食物</a></li></ul>
 
     </footer>
   </div>
@@ -360,14 +296,14 @@
 
 
   
-    <article id="post-webservice相关" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-maven学习笔记2" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2017/03/15/webservice相关/" class="article-date">
-  <time datetime="2017-03-15T03:22:45.000Z" itemprop="datePublished">2017-03-15</time>
+    <a href="/2017/04/19/maven学习笔记2/" class="article-date">
+  <time datetime="2017-04-19T03:58:03.000Z" itemprop="datePublished">2017-04-19</time>
 </a>
     
   <div class="article-category">
-    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/编程/">编程</a>
+    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/工具/">工具</a>
   </div>
 
   </div>
@@ -378,7 +314,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2017/03/15/webservice相关/">webservice相关</a>
+      <a class="article-title" href="/2017/04/19/maven学习笔记2/">maven学习笔记(二)</a>
     </h1>
   
 
@@ -386,32 +322,21 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <blockquote>
-<p>上周最后三天去北京培训了Hadoop，了解了一些目前流行的分布式组件。在谈到这些组件的交互过程中，经常会提到RPC，webservice等关键词，所以简单了解了一下这些关键词的含义~</p>
-</blockquote>
-<h2 id="WebService"><a href="#WebService" class="headerlink" title="WebService"></a><a href="https://zh.wikipedia.org/wiki/Web_services">WebService</a></h2><p>webservice，拆开来看就是 web（网络）和service（服务），先了解一下什么是服务：</p>
-<p>计算机的后台进程提供了某种功能，我们把提供了这种功能的进程称为守护进程（Daemon），提供的功能称为服务。比如，我们启动了数据库，数据库进程就会一直运行在后台监听连接数据库的动作，这种监听连接的功能就是一种服务。</p>
-<p>服务分为本地服务和网络服务。使用同一台机器上提供的服务就是本地服务，通过网络连接到另一台计算机使用它提供的服务就是网络服务。</p>
-<p>所以，webservice 就是通过网络使用了其他服务器提供的某种功能或获取了某些资源。</p>
-<p>这样一来，webservice就很常见了。比如我们做了一个显示天气情况的app，使用了百度地图提供的定位功能，使用了其他服务商提供的天气数据，这些都属于webservice。</p>
-<p>webservice可以包含以下几个实现：</p>
-<p>RPC：面向过程</p>
-<p>RMI：面向对象</p>
-<p>REST：面向资源</p>
-<p><a href="http://www.java2blog.com/2013/03/web-service-tutorial.html">Web Service tutorial</a></p>
+        <h2 id="依赖"><a href="#依赖" class="headerlink" title="依赖"></a>依赖</h2><p>dependency标签可以声明以下一些元素：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></div><div class="line">	<span class="tag">&lt;<span class="name">groupId</span>&gt;</span>...<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></div><div class="line">	<span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>...<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></div><div class="line">	<span class="tag">&lt;<span class="name">version</span>&gt;</span>...<span class="tag">&lt;/<span class="name">version</span>&gt;</span></div><div class="line">	<span class="tag">&lt;<span class="name">scope</span>&gt;</span>...<span class="tag">&lt;/<span class="name">scope</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">type</span>&gt;</span>...<span class="tag">&lt;/<span class="name">type</span>&gt;</span></div><div class="line">	<span class="tag">&lt;<span class="name">optional</span>&gt;</span>...<span class="tag">&lt;/<span class="name">optional</span>&gt;</span></div><div class="line">	<span class="tag">&lt;<span class="name">exclusions</span>&gt;</span></div><div class="line">		 <span class="tag">&lt;<span class="name">exclusion</span>&gt;</span>...<span class="tag">&lt;/<span class="name">exclusion</span>&gt;</span></div><div class="line">	<span class="tag">&lt;/<span class="name">exclusions</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></div></pre></td></tr></table></figure>
         
           <p class="article-more-link">
-            <a href="/2017/03/15/webservice相关/#more">阅读全文 »</a>
+            <a href="/2017/04/19/maven学习笔记2/#more">阅读全文 »</a>
           </p>
         
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2017/03/15/webservice相关/" data-id="cj9qhw20q0050hdnjwps4f8h9" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2017/04/19/maven学习笔记2/" data-id="cjgp4nps0004ym2xcuk79p694" class="article-share-link">分享</a>
       
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/web/">web</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/maven/">maven</a></li></ul>
 
     </footer>
   </div>
@@ -421,14 +346,14 @@
 
 
   
-    <article id="post-linux分区" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-maven学习笔记" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2017/03/04/linux分区/" class="article-date">
-  <time datetime="2017-03-04T03:45:43.000Z" itemprop="datePublished">2017-03-04</time>
+    <a href="/2017/04/17/maven学习笔记/" class="article-date">
+  <time datetime="2017-04-17T12:51:25.000Z" itemprop="datePublished">2017-04-17</time>
 </a>
     
   <div class="article-category">
-    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/Linux/">Linux</a>
+    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/工具/">工具</a>
   </div>
 
   </div>
@@ -439,7 +364,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2017/03/04/linux分区/">linux分区</a>
+      <a class="article-title" href="/2017/04/17/maven学习笔记/">maven学习笔记(一)</a>
     </h1>
   
 
@@ -448,32 +373,24 @@
     <div class="article-entry" itemprop="articleBody">
       
         <blockquote>
-<p>每次安装linux的时候，都会选择分区和挂载点。但是基本上没怎么研究过linux分区的细节，今天回顾了一下《鸟哥的linux私房菜》，总结一下分区的相关知识。</p>
+<p>上周末两天时间基本上将《Maven实战》这本书看完了。《Maven实战》是很棒的一本介绍maven相关知识的书籍。读完之后，对学到的maven相关的内容做一个梳理总结。</p>
 </blockquote>
-<h2 id="磁盘的组成"><a href="#磁盘的组成" class="headerlink" title="磁盘的组成"></a>磁盘的组成</h2><img src="/2017/03/04/linux分区/cipan.png" alt="磁盘" title="磁盘">
-<p>磁道（Track）：当磁盘旋转时，磁头若保持在一个位置上，则每个磁头都会在磁盘表面划出一个圆形轨迹，这些圆形轨迹就叫做磁道（Track）。</p>
-<p>柱面（Cylinder）：在有多个盘片构成的盘组中，由不同盘片的面，但处于同一半径圆的多个磁道组成的一个圆柱面（Cylinder）。</p>
-<p>扇区（Sector）：磁盘上的每个磁道被等分为若干个弧段，这些弧段便是硬盘的扇区（Sector）。</p>
-<p>磁头（Heads）</p>
-<p>盘片（Platters）</p>
-<p>每个碟片都有两面，因此也会相对应每碟片有2个磁头。</p>
-<p>硬盘的物理结构一般由磁头与碟片、电动机、主控芯片与排线等部件组成；当主电动机带动碟片旋转时，副电动机带动一组（磁头）到相对应的碟片上并确定读取正面还是反面的碟面，磁头悬浮在碟面上画出一个与碟片同心的圆形轨道（磁轨或称柱面），这时由磁头的磁感线圈感应碟面上的磁性与使用硬盘厂商指定的读取时间或数据间隔定位扇区，从而得到该扇区的数据内容；</p>
-<p>磁盘的第一个扇区记录了整块磁盘的重要信息，主要有两个：</p>
-<p>1.主引导分区：可以安装引导加载程序的地方，有446bytes</p>
-<p>2.分区表：记录整块音盘的分区状况，有64bytes</p>
+<h2 id="Maven基础"><a href="#Maven基础" class="headerlink" title="Maven基础"></a>Maven基础</h2><p>有关<a href="http://maven.apache.org/">Maven</a>如何安装和设置，不在这里啰嗦了，可以到<a href="http://maven.apache.org/">官网</a>下载最新版本然后安装。</p>
+<p>Maven是一个异常强大的构建工具，能够帮助我们自动化构建过程，从清理、编译、测试到生成报告，打包和部署。我们要做的只是使用Maven配置好项目，然后输入简单的命令，Maven会帮我们处理这些任务。</p>
+<p>Maven项目的核心是pom.xml。Pom定义了项目的基本信息，用于描述项目如何构建，声明项目依赖等。下面是一个例子：<br>
         
           <p class="article-more-link">
-            <a href="/2017/03/04/linux分区/#more">阅读全文 »</a>
+            <a href="/2017/04/17/maven学习笔记/#more">阅读全文 »</a>
           </p>
         
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2017/03/04/linux分区/" data-id="cj9qhw1yn003xhdnjpkxupvsb" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2017/04/17/maven学习笔记/" data-id="cjgp4nprs004lm2xck4di26dl" class="article-share-link">分享</a>
       
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/">linux</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/maven/">maven</a></li></ul>
 
     </footer>
   </div>
@@ -483,14 +400,14 @@
 
 
   
-    <article id="post-Linux的五个查找命令" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-木耳炒山药" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2017/02/26/Linux的五个查找命令/" class="article-date">
-  <time datetime="2017-02-26T01:17:33.000Z" itemprop="datePublished">2017-02-26</time>
+    <a href="/2017/04/16/木耳炒山药/" class="article-date">
+  <time datetime="2017-04-16T12:36:36.000Z" itemprop="datePublished">2017-04-16</time>
 </a>
     
   <div class="article-category">
-    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/Linux/">Linux</a>
+    <a class="article-category-link" href="/categories/生活/">生活</a>►<a class="article-category-link" href="/categories/生活/食物/">食物</a>
   </div>
 
   </div>
@@ -501,7 +418,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2017/02/26/Linux的五个查找命令/">Linux的五个查找命令</a>
+      <a class="article-title" href="/2017/04/16/木耳炒山药/">木耳炒山药</a>
     </h1>
   
 
@@ -510,28 +427,72 @@
     <div class="article-entry" itemprop="articleBody">
       
         <blockquote>
-<p>最近一直在读<a href="http://www.ruanyifeng.com">阮一峰老师的博客</a>,今天读到一篇介绍Linux查找命令的文章。恰好最近在学习linux，所以转载过来，当作一篇备忘录。</p>
-<p>原文链接：<a href="http://www.ruanyifeng.com/blog/2009/10/5_ways_to_search_for_files_using_the_terminal.html">Linux的五个查找命令</a></p>
+<p>天气越来越热了，今天炒了一个比较清淡的菜–木耳炒山药。</p>
 </blockquote>
-<p>使用电脑的时候，经常需要查找文件。</p>
-<p>在Linux中，有很多方法可以做到这一点。国外网站LinuxHaxor总结了五条命令，你可以看看自己知道几条。大多数程序员，可能经常使用其中的2到3条，对这5条命令都很熟悉的人应该是不多的。</p>
-<h2 id="find"><a href="#find" class="headerlink" title="find"></a>find</h2><p>find是最常见和最强大的查找命令，你可以用它找到任何你想找的文件。</p>
-<p>find的使用格式如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">　　$ find &lt;指定目录&gt; &lt;指定条件&gt; &lt;指定动作&gt;</div><div class="line">　　- &lt;指定目录&gt;： 所要搜索的目录及其所有子目录。默认为当前目录。</div><div class="line">　　- &lt;指定条件&gt;： 所要搜索的文件的特征。</div><div class="line">　　- &lt;指定动作&gt;： 对搜索结果进行特定的处理。</div></pre></td></tr></table></figure></p>
-<p>如果什么参数也不加，find默认搜索当前目录及其子目录，并且不过滤任何结果（也就是返回所有文件），将它们全都显示在屏幕上。</p>
-<p>find的使用实例：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">　　$ find . -name &apos;my*&apos;</div><div class="line">搜索当前目录（含子目录，以下同）中，所有文件名以my开头的文件。</div><div class="line">　　$ find . -name &apos;my*&apos; -ls</div><div class="line">搜索当前目录中，所有文件名以my开头的文件，并显示它们的详细信息。</div><div class="line">　　$ find . -type f -mmin -10</div><div class="line">搜索当前目录中，所有过去10分钟中更新过的普通文件。如果不加-type f参数，则搜索普通文件+特殊文件+目录。</div></pre></td></tr></table></figure></p>
+<h2 id="原料"><a href="#原料" class="headerlink" title="原料"></a>原料</h2><p>长山药、黑木耳、青椒、食用油、鸡精、盐、淀粉、葱、蒜、胡椒面</p>
         
           <p class="article-more-link">
-            <a href="/2017/02/26/Linux的五个查找命令/#more">阅读全文 »</a>
+            <a href="/2017/04/16/木耳炒山药/#more">阅读全文 »</a>
           </p>
         
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2017/02/26/Linux的五个查找命令/" data-id="cj9qhw1v2000nhdnj7zgy0ycw" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2017/04/16/木耳炒山药/" data-id="cjgp4nptq007jm2xca4ncp2ws" class="article-share-link">分享</a>
       
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/">linux</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/食物/">食物</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+ 
+
+
+  
+    <article id="post-hexo博客备份方案" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/04/11/hexo博客备份方案/" class="article-date">
+  <time datetime="2017-04-11T13:40:40.000Z" itemprop="datePublished">2017-04-11</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/工具/">工具</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/04/11/hexo博客备份方案/">hexo博客备份方案</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>周末的时候给博客换了一个<a href="https://github.com/iissnan/hexo-theme-next">主题</a>，现在的博客看起来比之前的要清爽多了。</p>
+<img src="/2017/04/11/hexo博客备份方案/blog.png" alt="blog" title="blog">
+        
+          <p class="article-more-link">
+            <a href="/2017/04/11/hexo博客备份方案/#more">阅读全文 »</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yukai.space/2017/04/11/hexo博客备份方案/" data-id="cjgp4npov0022m2xcf7sa1f4i" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/hexo/">hexo</a></li></ul>
 
     </footer>
   </div>
@@ -544,7 +505,7 @@
 
 
   <nav id="page-nav">
-    <a class="extend prev" rel="prev" href="/page/5/">&laquo; 上一页</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/page/7/">7</a><a class="page-number" href="/page/8/">8</a><span class="space">&hellip;</span><a class="page-number" href="/page/11/">11</a><a class="extend next" rel="next" href="/page/7/">下一页&raquo;</a>
+    <a class="extend prev" rel="prev" href="/page/5/">&laquo; 上一页</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/page/7/">7</a><a class="page-number" href="/page/8/">8</a><span class="space">&hellip;</span><a class="page-number" href="/page/13/">13</a><a class="extend next" rel="next" href="/page/7/">下一页&raquo;</a>
   </nav>
 </section>
            
@@ -567,23 +528,23 @@
       <ul>
         
           <li>
-            <a href="/2017/11/30/简单学习Java-ForkJoin框架/">Java-ForkJoin框架</a>
+            <a href="/2018/05/02/VirtualBox共享文件夹/">VirtualBox设置共享文件夹</a>
           </li>
         
           <li>
-            <a href="/2017/11/23/Java基础-字节/">Java基础-字节</a>
+            <a href="/2018/05/01/Centos7美化/">Centos7美化</a>
           </li>
         
           <li>
-            <a href="/2017/11/21/理解Java-Reference/">理解Java-Reference</a>
+            <a href="/2018/04/30/联通华为HG8347R设置桥接模式/">联通华为HG8347R设置桥接模式</a>
           </li>
         
           <li>
-            <a href="/2017/11/20/如何执行一个延迟任务？/">如何执行一个延迟任务？</a>
+            <a href="/2018/03/29/可能会用到的Git技巧2/">可能会用到的Git技巧(2)</a>
           </li>
         
           <li>
-            <a href="/2017/11/15/从通信协议到装饰者模式/">从通信协议到装饰者模式</a>
+            <a href="/2018/03/01/可能会用到的Git技巧1/">可能会用到的Git技巧(1)</a>
           </li>
         
       </ul>
@@ -601,7 +562,7 @@
   
   <div class="outer">
     <div id="footer-left">
-      &copy; 2014 - 2017 于凯&nbsp;|&nbsp;
+      &copy; 2014 - 2018 于凯&nbsp;|&nbsp;
       主题 <a href="https://github.com/giscafer/hexo-theme-cafe/" target="_blank">Cafe</a>
     </div>
      <div id="footer-right">

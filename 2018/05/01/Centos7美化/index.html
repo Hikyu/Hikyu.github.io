@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Centos7美化 | YuKai&#39;s blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="五一假期比较闲，把我自己PC上的Centos7美化了一下，能够让自己看着舒服点。
+先上一张效果图：">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Centos7美化">
+<meta property="og:url" content="http://yukai.space/2018/05/01/Centos7美化/index.html">
+<meta property="og:site_name" content="YuKai's blog">
+<meta property="og:description" content="五一假期比较闲，把我自己PC上的Centos7美化了一下，能够让自己看着舒服点。
+先上一张效果图：">
+<meta property="og:image" content="http://yukai.space/2018/05/01/Centos7美化/1.png">
+<meta property="og:image" content="http://yukai.space/2018/05/01/Centos7美化/2.png">
+<meta property="og:updated_time" content="2018-05-01T11:53:40.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Centos7美化">
+<meta name="twitter:description" content="五一假期比较闲，把我自己PC上的Centos7美化了一下，能够让自己看着舒服点。
+先上一张效果图：">
+<meta name="twitter:image" content="http://yukai.space/2018/05/01/Centos7美化/1.png">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    
+    <div id="header-inner" class="inner">
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yukai.space"></form>
+      </div>
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/archives">归档</a>
+        
+          <a class="main-nav-link" href="/tools">工具</a>
+        
+          <a class="main-nav-link" href="/page">关于</a>
+        
+      </nav>
+      
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">YuKai&#39;s blog</a>
+      </h1>
+      
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-Centos7美化" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/05/01/Centos7美化/" class="article-date">
+  <time datetime="2018-05-01T09:43:23.000Z" itemprop="datePublished">2018-05-01</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/Linux/">Linux</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Centos7美化
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <p>五一假期比较闲，把我自己PC上的Centos7美化了一下，能够让自己看着舒服点。</p>
+<p>先上一张效果图：</p>
+<img src="/2018/05/01/Centos7美化/1.png" alt="桌面" title="桌面">
+<a id="more"></a>
+<h2 id="基础知识"><a href="#基础知识" class="headerlink" title="基础知识"></a>基础知识</h2><ul>
+<li><p>Gnome vs KDE</p>
+<p> KDE 和 GNOME 是 LINUX 里最常用的图形界面操作环境,他们不仅仅是一个窗口管理器那么简单, KDE 是 K Desktop    Environment 的缩写.他不仅是一个窗口管理器,还有很多配套的应用软件和方便使用的桌面环境,比如任务栏,开始菜单,桌面图标   等等.</p>
+<p> GNOME 是 GNU Network Object Model Environment 的缩写.和KDE一样,也是一个功能强大的综合环境.</p>
+<p> KDE 早于 Gnome 出现，但是 KDE 基于的 Qt 是不遵循 GPL 开源协议的，GNOME 选择完全遵循 GPL 的 GTK 图形界面库为基   础。Gnome 用的是GTK 库，KDE用的是 QT 库。</p>
+</li>
+<li><p>QT vs GTK vs GTK+</p>
+<p> GTK，GTK + 和 Qt 都是 GUI 工具包。</p>
+<p> Qt 是一个跨平台的 C++ 图形用户界面库，与 Qt 基于C++语言不同，GTK 采用较传统的C语言。</p>
+<p> 这三者类似于 Windows 下的 MFC。</p>
+</li>
+<li><p>Gnome-shell</p>
+<p> GNOME shell 是 GNOME 桌面的用户界面，是 GNOME 3 的关键技术。它提供了一些基本的用户界面功能，比如切换窗口，启动应用程序或者显示通知。</p>
+<p> gnome shell 是一款类似gnome的桌面管理器，相对gnome 它更加智能。</p>
+<p> gnome shell 本质上来说，是窗口管理器、应用启动器、桌面布局的集合。</p>
+</li>
+</ul>
+<p>Centos7 使用 Gnome 作为桌面环境。</p>
+<h2 id="安装主题"><a href="#安装主题" class="headerlink" title="安装主题"></a>安装主题</h2><p>首先打开 应用程序-&gt;工具-&gt;优化工具（或输入<code>gnome-tweak-tool</code>命令启动）：</p>
+<img src="/2018/05/01/Centos7美化/2.png" alt="优化工具" title="优化工具">
+<p>可以看到，我们可以对以下几个部分进行定制：</p>
+<ul>
+<li><p>扩展</p>
+</li>
+<li><p>GTK+ </p>
+</li>
+<li><p>图标</p>
+</li>
+<li><p>光标</p>
+</li>
+<li><p>Shell 主题</p>
+</li>
+</ul>
+<h3 id="安装-Gnome-扩展"><a href="#安装-Gnome-扩展" class="headerlink" title="安装 Gnome 扩展"></a>安装 Gnome 扩展</h3><p>安装Firefox插件：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo yum install gnome-shell-browser-plugin</div></pre></td></tr></table></figure>
+<p>Firefox打开<a href="https://extensions.gnome.org/" target="_blank" rel="external">https://extensions.gnome.org/</a>，在线安装扩展。我安装了以下几款：</p>
+<ul>
+<li><p><a href="https://extensions.gnome.org/extension/779/clipboard-indicator/" target="_blank" rel="external">Clipboard Indicator</a></p>
+<p> 剪贴板管理 </p>
+</li>
+<li><p><a href="https://extensions.gnome.org/extension/97/coverflow-alt-tab/" target="_blank" rel="external">Coverflow Alt-Tab</a></p>
+<p> Alt+Tab 切换应用 3D 效果</p>
+</li>
+<li><p><a href="https://extensions.gnome.org/extension/307/dash-to-dock/" target="_blank" rel="external">Dash to Dock</a></p>
+<p> 定制你的启动器</p>
+</li>
+<li><p><a href="https://extensions.gnome.org/extension/442/drop-down-terminal/" target="_blank" rel="external">Drop Down Terminal</a></p>
+<p> 下拉式模拟终端</p>
+</li>
+<li><p><a href="https://extensions.gnome.org/extension/885/dynamic-top-bar/" target="_blank" rel="external">Dynamic Top Bar </a></p>
+<p> 顶栏透明化</p>
+</li>
+<li><p><a href="https://extensions.gnome.org/extension/19/user-themes/" target="_blank" rel="external">User Themes</a></p>
+<p> 从文件夹加载 gnome-shell 主题</p>
+</li>
+<li><p><a href="https://extensions.gnome.org/extension/104/netspeed/" target="_blank" rel="external">NetSpeed</a></p>
+<p> 顶栏显示网速</p>
+</li>
+</ul>
+<p>扩展可以在优化工具中进行管理。</p>
+<h3 id="安装-GTK-主题"><a href="#安装-GTK-主题" class="headerlink" title="安装 GTK+ 主题"></a>安装 GTK+ 主题</h3><p>GTK+ 主题主要针对的是使用 GTK+ 图形库的应用程序进行定制。</p>
+<p>在 <a href="https://www.gnome-look.org/browse/cat/135/ord/latest/" target="_blank" rel="external">GTK3 Themes</a> 中挑选自己喜欢的主题。</p>
+<p>我选择了一款名为<a href="https://www.gnome-look.org/p/1167049/" target="_blank" rel="external">X-Arc-Collection</a> 的 GTK 主题。</p>
+<p>下载主题到本地，然后将其解压到 <code>/usr/share/themes/</code>目录下。</p>
+<p>通过优化工具在 GTK+ Theme 菜单下找到新安装的主题，选择即可。</p>
+<h3 id="安装图标主题"><a href="#安装图标主题" class="headerlink" title="安装图标主题"></a>安装图标主题</h3><p>在 <a href="https://www.gnome-look.org/browse/cat/132/" target="_blank" rel="external">Icon Themes</a> 中挑选自己喜欢的图标主题。</p>
+<p>我选择了一款名为 <a href="https://www.gnome-look.org/p/1166289/" target="_blank" rel="external"> Papirus</a> 的图标主题。</p>
+<p>下载图标主题到本地，将其解压到 <code>/usr/share/icons/</code> 目录下。</p>
+<p>通过优化工具在 Icon Theme 菜单下找到新安装的主题，选择即可。</p>
+<h3 id="安装光标主题"><a href="#安装光标主题" class="headerlink" title="安装光标主题"></a>安装光标主题</h3><p>在 <a href="https://www.gnome-look.org/browse/cat/107/" target="_blank" rel="external">Cursors</a> 中挑选自己喜欢的光标主题。</p>
+<p>我选择了一款名为 <a href="https://www.gnome-look.org/p/1197198/" target="_blank" rel="external">Bibata</a> 的光标主题。</p>
+<p>下载图标主题到本地，将其解压到 <code>/usr/share/icons/</code> 目录下。</p>
+<p>通过优化工具在 Cursor Theme 菜单下找到新安装的主题，选择即可。</p>
+<h3 id="安装-shell-主题"><a href="#安装-shell-主题" class="headerlink" title="安装 shell 主题"></a>安装 shell 主题</h3><p>shell 主题主要针对顶栏进行定制。</p>
+<p>先备份原来的主题目录 /usr/share/gnome-shell/theme/</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">cd  /usr/share/gnome-shell/</div><div class="line">mv theme theme.backup</div></pre></td></tr></table></figure>
+<p>到<a href="https://www.gnome-look.org" target="_blank" rel="external">gnome-look</a>寻找喜欢的主题包，下载并拷贝到 /usr/share/gnome-shell/ 目录下，解压缩主题包并重命名为 theme。</p>
+<p>在优化工具-&gt;Shell 主题中进行选择。</p>
+<p>注意，如果没有安装<a href="https://extensions.gnome.org/extension/19/user-themes/" target="_blank" rel="external">User Themes</a>扩展，Shell 主题下拉框是灰色的不可编辑。</p>
+<h2 id="隐藏底栏"><a href="#隐藏底栏" class="headerlink" title="隐藏底栏"></a>隐藏底栏</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">cd /usr/share/gnome-shell/</div><div class="line"># 先备份</div><div class="line">cp -r /usr/share/gnome-shell/extensions/  /usr/share/gnome-shell/extensions.backup/</div><div class="line">cp -r /usr/share/gnome-shell/modes/   /usr/share/gnome-shell/modes.backup/</div><div class="line">cp  -r /usr/share/gnome-shell/theme/  /usr/share/gnome-shell/theme.backup/</div><div class="line"># 删除任务栏</div><div class="line">rm -fr /usr/share/gnome-shell/extensions/window-list@gnome-shell-extensions.gcampax.github.com</div></pre></td></tr></table></figure>
+<h2 id="安装搜狗输入法"><a href="#安装搜狗输入法" class="headerlink" title="安装搜狗输入法"></a>安装搜狗输入法</h2><p>启用了新的主题后，原来默认的ibus输入法显示不太友好，灰底白字，但是又无法配置底色和前景色，所以更换了一下输入法。</p>
+<ol>
+<li>下载搜狗输入法的rpm包</li>
+</ol>
+<p><a href="http://pan.baidu.com/s/1c0yR6Ac" target="_blank" rel="external">http://pan.baidu.com/s/1c0yR6Ac</a></p>
+<ol>
+<li>加入epel源和mosquito-myrepo源</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">yum-config-manager --add-repo=https://copr.fedoraproject.org/coprs/mosquito/myrepo/repo/epel-(rpm -E %?rhel).repo</div><div class="line">yum-config-manager --add-repo=https://copr.fedoraproject.org/coprs/mosquito/myrepo/repo/epel-7/mosquito-myrepo-epel-7.repo</div></pre></td></tr></table></figure>
+<ol>
+<li>安装搜狗输入法</li>
+</ol>
+<p>安装刚刚下载的rpm包</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo rpm -ivh sogoupinyin-1.2.0.0056-1.fc22.x86_64.rpm</div></pre></td></tr></table></figure>
+<p>如果提示有依赖的安装包未安装，则先根据提示安装其依赖。直到可以完成安装。</p>
+<ol>
+<li>关闭 gnome-shell 对键盘的监听，然后切换输入法为fcitx</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">gsettings set org.gnome.settings-daemon.plugins.keyboard active false </div><div class="line">imsettings-switch fcitx</div></pre></td></tr></table></figure>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yukai.space/2018/05/01/Centos7美化/" data-id="cjgp4npll0003m2xcgrwoncw3" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/">linux</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+ <script src="/jquery/jquery.min.js"></script>
+  <div id="random_posts">
+    <h2>推荐文章</h2>
+    <div class="random_posts_ul">
+      <script>
+          var random_count =4
+          var site = {BASE_URI:'/'};
+          function load_random_posts(obj) {
+              var arr=site.posts;
+              if (!obj) return;
+              // var count = $(obj).attr('data-count') || 6;
+              for (var i, tmp, n = arr.length; n; i = Math.floor(Math.random() * n), tmp = arr[--n], arr[n] = arr[i], arr[i] = tmp);
+              arr = arr.slice(0, random_count);
+              var html = '<ul>';
+            
+              for(var j=0;j<arr.length;j++){
+                var item=arr[j];
+                html += '<li><strong>' + 
+                item.date + ':&nbsp;&nbsp;<a href="' + (site.BASE_URI+item.uri) + '">' + 
+                (item.title || item.uri) + '</a></strong>';
+                if(item.excerpt){
+                  html +='<div class="post-excerpt">'+item.excerpt+'</div>';
+                }
+                html +='</li>';
+                
+              }
+              $(obj).html(html + '</ul>');
+          }
+          $('.random_posts_ul').each(function () {
+              var c = this;
+              if (!site.posts || !site.posts.length){
+                  $.getJSON(site.BASE_URI + 'js/posts.js',function(json){site.posts = json;load_random_posts(c)});
+              } 
+               else{
+                load_random_posts(c);
+              }
+          });
+      </script>
+    </div>
+  </div>
+
+    
+<nav id="article-nav">
+  
+    <a href="/2018/05/02/VirtualBox共享文件夹/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
+        
+          VirtualBox设置共享文件夹
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/04/30/联通华为HG8347R设置桥接模式/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">联通华为HG8347R设置桥接模式</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+ 
+     
+  <div class="comments" id="comments">
+    
+     
+       
+      <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+    
+       
+      
+      
+           <div id="gitment_comments"></div>
+    
+  </div>
+ 
+  
+
+</section>
+           
+    <aside id="sidebar">
+  
+    
+
+  
+    
+    <div class="widget-wrap">
+    
+      <div class="widget" id="toc-widget-fixed">
+      
+        <strong class="toc-title">文章目录</strong>
+        <div class="toc-widget-list">
+              <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#基础知识"><span class="toc-number">1.</span> <span class="toc-text">基础知识</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#安装主题"><span class="toc-number">2.</span> <span class="toc-text">安装主题</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#安装-Gnome-扩展"><span class="toc-number">2.1.</span> <span class="toc-text">安装 Gnome 扩展</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#安装-GTK-主题"><span class="toc-number">2.2.</span> <span class="toc-text">安装 GTK+ 主题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#安装图标主题"><span class="toc-number">2.3.</span> <span class="toc-text">安装图标主题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#安装光标主题"><span class="toc-number">2.4.</span> <span class="toc-text">安装光标主题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#安装-shell-主题"><span class="toc-number">2.5.</span> <span class="toc-text">安装 shell 主题</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#隐藏底栏"><span class="toc-number">3.</span> <span class="toc-text">隐藏底栏</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#安装搜狗输入法"><span class="toc-number">4.</span> <span class="toc-text">安装搜狗输入法</span></a></li></ol>
+          </div>
+      </div>
+    </div>
+
+  
+    
+
+  
+    
+  
+    
+  
+    
+
+  
+</aside>
+
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-left">
+      &copy; 2014 - 2018 于凯&nbsp;|&nbsp;
+      主题 <a href="https://github.com/giscafer/hexo-theme-cafe/" target="_blank">Cafe</a>
+    </div>
+     <div id="footer-right">
+      联系方式&nbsp;|&nbsp;debiaoyu@gmail.com
+    </div>
+  </div>
+</footer>
+ <script src="/jquery/jquery.min.js"></script>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/archives" class="mobile-nav-link">归档</a>
+  
+    <a href="/tools" class="mobile-nav-link">工具</a>
+  
+    <a href="/page" class="mobile-nav-link">关于</a>
+  
+</nav>
+    <img class="back-to-top-btn" src="/images/fly-to-top.png"/>
+<script>
+// Elevator script included on the page, already.
+window.onload = function() {
+  var elevator = new Elevator({
+    selector:'.back-to-top-btn',
+    element: document.querySelector('.back-to-top-btn'),
+    duration: 1000 // milliseconds
+  });
+}
+</script>
+      
+
+  
+    <script>
+      var cloudTieConfig = {
+        url: document.location.href, 
+        sourceId: "",
+        productKey: "e2fb4051c49842688ce669e634bc983f",
+        target: "cloud-tie-wrapper"
+      };
+    </script>
+    <script src="https://img1.ws.126.net/f2e/tie/yun/sdk/loader.js"></script>
+    
+
+  
+
+
+
+
+
+
+
+<!-- author:forvoid begin -->
+<!-- author:forvoid begin -->
+
+  <link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+  <script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script> 
+  <script>
+  var gitment = new Gitment({
+    // id: '页面 ID', // 可选。默认为 location.href
+    owner: 'Hikyu',
+    repo: 'Hikyu.github.io',
+    oauth: {
+    client_id: '61886569157db60efa97',
+    client_secret: '6475bb7c8faaf44ff2e12c272a46505a0eecf46f',
+    }
+  })
+  gitment.render(document.getElementById("gitment_comments"))
+</script>
+
+
+<!-- author:forvoid end -->
+
+<!-- author:forvoid end -->
+
+
+
+ <script src="/js/is.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+<script src="/js/elevator.js"></script>
+  </div>
+</body>
+</html>

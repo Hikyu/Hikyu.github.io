@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Java同步工具类 | YuKai&#39;s blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="CountDownLatchCountDownLatch(闭锁)的用法：
+CountDownLatch在实例化的时候需要传入一个int类型的计数器，表示需要等待事件的数量。CountDownLatch.countDown()方法递减这个计数器，表示一个事件已经发生了；而调用了CountDownLatch.await()方法的线程等待计数器值达到零，表示所有需要等待的事件已经发生了。若计数器值非零，">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java同步工具类">
+<meta property="og:url" content="http://yukai.space/2017/12/20/Java同步工具类/index.html">
+<meta property="og:site_name" content="YuKai's blog">
+<meta property="og:description" content="CountDownLatchCountDownLatch(闭锁)的用法：
+CountDownLatch在实例化的时候需要传入一个int类型的计数器，表示需要等待事件的数量。CountDownLatch.countDown()方法递减这个计数器，表示一个事件已经发生了；而调用了CountDownLatch.await()方法的线程等待计数器值达到零，表示所有需要等待的事件已经发生了。若计数器值非零，">
+<meta property="og:image" content="http://yukai.space/2017/12/20/Java同步工具类/exchanger.png">
+<meta property="og:image" content="http://yukai.space/2017/12/20/Java同步工具类/ExecutorCompletionService.png">
+<meta property="og:updated_time" content="2018-04-30T11:35:10.939Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java同步工具类">
+<meta name="twitter:description" content="CountDownLatchCountDownLatch(闭锁)的用法：
+CountDownLatch在实例化的时候需要传入一个int类型的计数器，表示需要等待事件的数量。CountDownLatch.countDown()方法递减这个计数器，表示一个事件已经发生了；而调用了CountDownLatch.await()方法的线程等待计数器值达到零，表示所有需要等待的事件已经发生了。若计数器值非零，">
+<meta name="twitter:image" content="http://yukai.space/2017/12/20/Java同步工具类/exchanger.png">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    
+    <div id="header-inner" class="inner">
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yukai.space"></form>
+      </div>
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/archives">归档</a>
+        
+          <a class="main-nav-link" href="/tools">工具</a>
+        
+          <a class="main-nav-link" href="/page">关于</a>
+        
+      </nav>
+      
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">YuKai&#39;s blog</a>
+      </h1>
+      
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-Java同步工具类" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/12/20/Java同步工具类/" class="article-date">
+  <time datetime="2017-12-20T09:53:23.000Z" itemprop="datePublished">2017-12-20</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/编程/">编程</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Java同步工具类
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <h2 id="CountDownLatch"><a href="#CountDownLatch" class="headerlink" title="CountDownLatch"></a>CountDownLatch</h2><p>CountDownLatch(闭锁)的用法：</p>
+<p>CountDownLatch在实例化的时候需要传入一个int类型的计数器，表示需要等待事件的数量。CountDownLatch.countDown()方法递减这个计数器，表示一个事件已经发生了；而调用了CountDownLatch.await()方法的线程等待计数器值达到零，表示所有需要等待的事件已经发生了。若计数器值非零，那么await()方法会一直阻塞到计数器的值为零，或者等待超时。</p>
+<p>CountDownLatch的应用场景：</p>
+<ul>
+<li><p>确保某个计算在其所需要的所有资源都已经初始化后再继续执行。</p>
+</li>
+<li><p>确保某个服务在其依赖的所有其他服务都已经启动之后再启动。</p>
+</li>
+<li><p>等待某个操作的所有参与者都就绪后再执行。比如《荒野行动》，小队所有玩家点击“准备”之后房主才可以开始游戏。</p>
+</li>
+</ul>
+<a id="more"></a>
+<p>比如，我们经常需要测试n个线程并发执行某个任务执行的时间：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">long</span> <span class="title">timeTasks</span><span class="params">(<span class="keyword">int</span> nThreads, <span class="keyword">final</span> Runnable task)</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</div><div class="line">	    <span class="keyword">final</span> CountDownLatch startGate = <span class="keyword">new</span> CountDownLatch(<span class="number">1</span>);</div><div class="line">	    <span class="keyword">final</span> CountDownLatch endGate = <span class="keyword">new</span> CountDownLatch(nThreads);</div><div class="line">	    </div><div class="line">	    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; nThreads; i++) &#123;</div><div class="line">			Thread t = <span class="keyword">new</span> Thread() &#123;</div><div class="line">				<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</div><div class="line">					<span class="keyword">try</span> &#123;</div><div class="line">						startGate.await();</div><div class="line">						<span class="keyword">try</span> &#123;</div><div class="line">							task.run();</div><div class="line">						&#125; <span class="keyword">finally</span> &#123;</div><div class="line">							endGate.countDown();</div><div class="line">						&#125;</div><div class="line">					&#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</div><div class="line">					&#125;</div><div class="line">				&#125;;</div><div class="line">			&#125;;</div><div class="line">			t.start();</div><div class="line">		&#125;</div><div class="line">	    </div><div class="line">	    <span class="keyword">long</span> start = System.nanoTime();</div><div class="line">	    startGate.countDown();</div><div class="line">	    endGate.await();</div><div class="line">	    <span class="keyword">long</span> end = System.nanoTime();</div><div class="line">	    <span class="keyword">return</span> end - start;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>startGate保证了主线程能够<code>同时释放</code>所有的工作线程；endGate是主线程能够等待最后一个线程执行完成，而不是顺序的等待每个线程执行完成。</p>
+<h2 id="Semaphore"><a href="#Semaphore" class="headerlink" title="Semaphore"></a>Semaphore</h2><p>Semaphore(信号量)用来控制同时访问某个特定资源的操作数量，或者同时执行某个指定操作的数量。Semaphore还可以用来实现某种资源池，或对容器添加边界。</p>
+<p>Semaphore的原理是：Semaphore中管理着一组虚拟的”许可”，许可的初始数量可以通过构造函数指定。在执行某个操作时可以先获得许可(acquire)，并在使用后释放许可(release)。如果当前没有许可，那么acquire将阻塞直到有许可；release方法将返回一个许可给Semaphore。注意，Semaphore并不受限于他在创建时初始化的许可数量，只要调用了release方法，Semaphore就会增加一个许可。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">Semaphore sem = <span class="keyword">new</span> Semaphore(<span class="number">2</span>);</div><div class="line">System.out.println(sem.availablePermits());<span class="comment">//2</span></div><div class="line">sem.release();</div><div class="line">System.out.println(sem.availablePermits());<span class="comment">//3</span></div><div class="line">sem.release(<span class="number">2</span>);</div><div class="line">System.out.println(sem.availablePermits());<span class="comment">//5</span></div><div class="line">sem.acquire();</div><div class="line">System.out.println(sem.availablePermits());<span class="comment">//4</span></div></pre></td></tr></table></figure>
+<p>Semaphore还提供了一些其他的方法用来获得许可：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/*</span></div><div class="line"> * 获得一个许可，如果当前没有许可，将阻塞直到有许可或线程被中断</div><div class="line"> * 若线程被中断，抛出InterruptedException</div><div class="line"> */</div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">acquire</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException</span></div><div class="line"><span class="comment">/*</span></div><div class="line"> * 获得指定数量的许可，如果当前没有这么多许可，将阻塞直到有许可或线程被中断</div><div class="line"> * 若线程被中断，抛出InterruptedException</div><div class="line"> */</div><div class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">acquire</span><span class="params">(<span class="keyword">int</span> permits)</span> <span class="keyword">throws</span> InterruptedException</div><div class="line"><span class="comment">/*</span></div><div class="line"> * 获得一个的许可，如果当前没有许可，将阻塞直到有许可；</div><div class="line"> * 不响应线程中断，若检测到线程中断，重新设置中断状态，代码返回后由上层代码处理中断</div><div class="line"> */</div><div class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">acquireUninterruptibly</span><span class="params">()</span></div><div class="line"><span class="comment">/*</span></div><div class="line"> * 获得指定数量的许可，如果当前没有这么多许可，将阻塞直到有许可；</div><div class="line"> * 不响应线程中断，若检测到线程中断，重新设置中断状态，代码返回后由上层代码处理中断</div><div class="line"> */</div><div class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">acquireUninterruptibly</span><span class="params">(<span class="keyword">int</span> permits)</span></div><div class="line"><span class="comment">/*</span></div><div class="line"> * 获得一个的许可，如果当前没有许可，将返回false；</div><div class="line"> */</div><div class="line"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">tryAcquire</span><span class="params">()</span></div><div class="line"><span class="comment">/*</span></div><div class="line"> * 获得指定数量的许可，如果当前没有这么多许可，将返回false；</div><div class="line"> */</div><div class="line"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">tryAcquire</span><span class="params">(<span class="keyword">int</span> permits)</span></div><div class="line"><span class="comment">/*</span></div><div class="line"> * 获得一个的许可，如果当前没有许可，将阻塞直到有许可或线程被中断或超过指定时间；</div><div class="line"> */</div><div class="line"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">tryAcquire</span><span class="params">(<span class="keyword">long</span> timeout, TimeUnit unit)</span> <span class="keyword">throws</span> InterruptedException</div><div class="line"><span class="comment">/*</span></div><div class="line"> * 获得指定数量的许可，如果当前没有这么多许可，将阻塞直到有许可或线程被中断或超过指定时间；</div><div class="line"> */</div><div class="line"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">tryAcquire</span><span class="params">(<span class="keyword">int</span> permits, <span class="keyword">long</span> timeout, TimeUnit unit)</span> <span class="keyword">throws</span> InterruptedException</div></pre></td></tr></table></figure>
+<p>此外，Semaphore构造函数还提供了一个bool参数，用于指定Semaphore是公平(true)还是非公平(false)的。</p>
+<p>Semaphore维护了一个许可的阻塞等待队列；</p>
+<p>公平策略是指：当一个线程A执行acquire方法时，如果阻塞队列有等待的线程，直接插入到阻塞队列尾节点并挂起，等待被唤醒。</p>
+<p>非公平策略是指：当一个线程A执行acquire方法时，会直接尝试获取许可，而不管同一时刻阻塞队列中是否有线程也在等待许可。</p>
+<p>例子：有界阻塞容器BoundedHashSet</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BoundedHashSet</span>&lt;<span class="title">T</span>&gt; </span>&#123;</div><div class="line">	<span class="keyword">private</span> <span class="keyword">final</span> Set&lt;T&gt; set;</div><div class="line">	<span class="keyword">private</span> <span class="keyword">final</span> Semaphore sem;</div><div class="line">	</div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="title">BoundedHashSet</span><span class="params">(<span class="keyword">int</span> bound)</span> </span>&#123;</div><div class="line">		<span class="keyword">this</span>.set = Collections.synchronizedSet(<span class="keyword">new</span> HashSet&lt;T&gt;());</div><div class="line">		<span class="keyword">this</span>.sem = <span class="keyword">new</span> Semaphore(bound);</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">add</span><span class="params">(T o)</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</div><div class="line">		sem.acquire();</div><div class="line">		<span class="keyword">boolean</span> wasAdd = <span class="keyword">false</span>;</div><div class="line">		<span class="keyword">try</span> &#123;</div><div class="line">			wasAdd = set.add(o);</div><div class="line">			<span class="keyword">return</span> wasAdd;</div><div class="line">		&#125; <span class="keyword">finally</span> &#123;</div><div class="line">			<span class="keyword">if</span> (!wasAdd) &#123;</div><div class="line">				sem.release();</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">remove</span><span class="params">(Object o)</span> </span>&#123;</div><div class="line">		<span class="keyword">boolean</span> wasRemoved = set.remove(o);</div><div class="line">		<span class="keyword">if</span> (wasRemoved) &#123;</div><div class="line">			sem.release();</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">return</span> wasRemoved;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="CyclicBarrier"><a href="#CyclicBarrier" class="headerlink" title="CyclicBarrier"></a>CyclicBarrier</h2><p>CyclicBarrier(栅栏)从字面意思上来说，意为”循环栅栏”。所谓栅栏，就是屏障，CyclicBarrier所实现的功能就是让一组线程到达一个屏障点时阻塞(调用await方法)，直到所有的线程都到达屏障的位置(都调用了await方法)，此时所有的线程都被释放，CyclicBarrier也被重置便于下次使用。</p>
+<p>CyclicBarrier提供了两组构造函数：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="title">CyclicBarrier</span><span class="params">(<span class="keyword">int</span> parties, Runnable barrierAction)</span></span></div><div class="line"><span class="keyword">public</span> <span class="title">CyclicBarrier</span><span class="params">(<span class="keyword">int</span> parties)</span></div></pre></td></tr></table></figure>
+<p>parties 表示需要在屏障点阻塞的线程数。即，有 parties 个线程需要调用 CyclicBarrier 的 await 方法。</p>
+<p>barrierAction 表示在所有线程到达屏障点之后需要执行的特殊动作。</p>
+<p>若想理解 CyclicBarrier，看一下await的源码即可：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">await</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException, BrokenBarrierException </span>&#123;</div><div class="line">    <span class="keyword">try</span> &#123;</div><div class="line">        <span class="keyword">return</span> dowait(<span class="keyword">false</span>, <span class="number">0L</span>);</div><div class="line">    &#125; <span class="keyword">catch</span> (TimeoutException toe) &#123;</div><div class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> Error(toe); <span class="comment">// cannot happen;</span></div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">int</span> <span class="title">dowait</span><span class="params">(<span class="keyword">boolean</span> timed, <span class="keyword">long</span> nanos)</span></span></div><div class="line">    <span class="keyword">throws</span> InterruptedException, BrokenBarrierException,</div><div class="line">           TimeoutException &#123;</div><div class="line">    <span class="keyword">final</span> ReentrantLock lock = <span class="keyword">this</span>.lock;</div><div class="line">    lock.lock();</div><div class="line">    <span class="keyword">try</span> &#123;</div><div class="line">		<span class="comment">// 屏障</span></div><div class="line">        <span class="keyword">final</span> Generation g = generation;</div><div class="line">        <span class="keyword">if</span> (g.broken)</div><div class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> BrokenBarrierException();</div><div class="line">        <span class="keyword">if</span> (Thread.interrupted()) &#123;</div><div class="line">            breakBarrier();</div><div class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> InterruptedException();</div><div class="line">        &#125;</div><div class="line">       <span class="keyword">int</span> index = --count;</div><div class="line">	   <span class="comment">// index ==0 表示此时所有线程都已经调用await方法，到达了屏障点</span></div><div class="line">       <span class="keyword">if</span> (index == <span class="number">0</span>) &#123;  <span class="comment">// tripped</span></div><div class="line">           <span class="keyword">boolean</span> ranAction = <span class="keyword">false</span>;</div><div class="line">           <span class="keyword">try</span> &#123;</div><div class="line">			   <span class="comment">// 可以看到，由最后一个到达屏障点的线程执行了barrierAction</span></div><div class="line">               <span class="keyword">final</span> Runnable command = barrierCommand;</div><div class="line">               <span class="keyword">if</span> (command != <span class="keyword">null</span>)</div><div class="line">                   command.run();</div><div class="line">               ranAction = <span class="keyword">true</span>;</div><div class="line">			   <span class="comment">// 唤醒所有等待的线程，设置新的屏障，恢复Count</span></div><div class="line">               nextGeneration();</div><div class="line">               <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">           &#125; <span class="keyword">finally</span> &#123;</div><div class="line">               <span class="keyword">if</span> (!ranAction)</div><div class="line">                   breakBarrier();</div><div class="line">           &#125;</div><div class="line">       &#125;</div><div class="line">        <span class="comment">// loop until tripped, broken, interrupted, or timed out</span></div><div class="line">		<span class="comment">// 还有线程没有到达屏障(调用await)，本线程阻塞</span></div><div class="line">        <span class="keyword">for</span> (;;) &#123;</div><div class="line">            <span class="keyword">try</span> &#123;</div><div class="line">                <span class="keyword">if</span> (!timed)</div><div class="line">                    trip.await();</div><div class="line">                <span class="keyword">else</span> <span class="keyword">if</span> (nanos &gt; <span class="number">0L</span>)</div><div class="line">                    nanos = trip.awaitNanos(nanos);</div><div class="line">            &#125; <span class="keyword">catch</span> (InterruptedException ie) &#123;</div><div class="line">                <span class="keyword">if</span> (g == generation &amp;&amp; ! g.broken) &#123;</div><div class="line">					<span class="comment">// await的线程被中断了，打破了栅栏</span></div><div class="line">					<span class="comment">// 所有的线程都将被唤醒，抛出BrokenBarrierException</span></div><div class="line">                    breakBarrier();</div><div class="line">                    <span class="keyword">throw</span> ie;</div><div class="line">                &#125; <span class="keyword">else</span> &#123;</div><div class="line">                    <span class="comment">// We're about to finish waiting even if we had not</span></div><div class="line">                    <span class="comment">// been interrupted, so this interrupt is deemed to</span></div><div class="line">                    <span class="comment">// "belong" to subsequent execution.</span></div><div class="line">                    Thread.currentThread().interrupt();</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">            <span class="keyword">if</span> (g.broken)</div><div class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> BrokenBarrierException();</div><div class="line">			<span class="comment">// 线程被唤醒，可能是所有线程执行到屏障点被唤醒；也可能是到达了超时时间被唤醒</span></div><div class="line">			<span class="comment">// 检查是否更新了屏障，如果更新了屏障，表示所有线程都执行到了屏障点，屏障被重置，返回当前索引</span></div><div class="line">            <span class="keyword">if</span> (g != generation)</div><div class="line">                <span class="keyword">return</span> index;</div><div class="line">            <span class="keyword">if</span> (timed &amp;&amp; nanos &lt;= <span class="number">0L</span>) &#123;</div><div class="line">                breakBarrier();</div><div class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> TimeoutException();</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125; <span class="keyword">finally</span> &#123;</div><div class="line">        lock.unlock();</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">nextGeneration</span><span class="params">()</span> </span>&#123;</div><div class="line">    <span class="comment">// signal completion of last generation</span></div><div class="line">    trip.signalAll();</div><div class="line">    <span class="comment">// set up next generation</span></div><div class="line">    count = parties;</div><div class="line">    generation = <span class="keyword">new</span> Generation();</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">breakBarrier</span><span class="params">()</span> </span>&#123;</div><div class="line">    generation.broken = <span class="keyword">true</span>;</div><div class="line">    count = parties;</div><div class="line">    trip.signalAll();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>例子：A,B,C 三个家庭开了三辆车自驾游，由于每辆车的速度不一致，约定每到达一个休息站，先到达的家庭需要等后面的家庭，等所有家庭都到齐了之后，买点东西，再同时出发。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Traveling</span> </span>&#123;</div><div class="line">	<span class="keyword">private</span> <span class="keyword">final</span> CyclicBarrier barrier;</div><div class="line">	<span class="keyword">private</span> <span class="keyword">final</span> Family[] families;</div><div class="line">	<span class="comment">/** 已经经过的休息站数量 */</span></div><div class="line">	<span class="keyword">private</span> <span class="keyword">volatile</span> <span class="keyword">int</span> restingCount = <span class="number">0</span>;</div><div class="line">	</div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="title">Traveling</span><span class="params">(String[] names)</span> </span>&#123;</div><div class="line">		<span class="keyword">this</span>.families = <span class="keyword">new</span> Family[names.length];</div><div class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; families.length; ++i) &#123;</div><div class="line">			families[i] = <span class="keyword">new</span> Family(names[i]);</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">int</span> count = families.length;</div><div class="line">		barrier = <span class="keyword">new</span> CyclicBarrier(count, <span class="keyword">new</span> Runnable() &#123;</div><div class="line">			</div><div class="line">			<span class="meta">@Override</span></div><div class="line">			<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</div><div class="line">				restingCount ++;</div><div class="line">				System.out.println(<span class="string">"所有人到达休息站 "</span> + restingCount + <span class="string">", 休息一下，买点东西..."</span>);</div><div class="line">			&#125;</div><div class="line">		&#125;);</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">start</span><span class="params">()</span> </span>&#123;</div><div class="line">		<span class="keyword">for</span> (Family family : families) &#123;</div><div class="line">			<span class="keyword">new</span> Thread(family).start();</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	<span class="class"><span class="keyword">class</span> <span class="title">Family</span> <span class="keyword">implements</span> <span class="title">Runnable</span> </span>&#123;</div><div class="line">		<span class="keyword">private</span> String name;</div><div class="line">		</div><div class="line">		<span class="function"><span class="keyword">public</span> <span class="title">Family</span><span class="params">(String name)</span> </span>&#123;</div><div class="line">			<span class="keyword">this</span>.name = name;</div><div class="line">		&#125;</div><div class="line">		</div><div class="line">		<span class="meta">@Override</span></div><div class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</div><div class="line">			<span class="keyword">while</span> (restingCount &lt; <span class="number">5</span>) &#123;<span class="comment">// 总共需要经过5个休息站才到达终点</span></div><div class="line">				System.out.println(name + <span class="string">" 出发啦..."</span>);</div><div class="line">				<span class="keyword">int</span> runTime = <span class="keyword">new</span> Random().nextInt(<span class="number">5</span>);</div><div class="line">				<span class="keyword">try</span> &#123;</div><div class="line">					Thread.sleep(runTime * <span class="number">1000</span>);</div><div class="line">				&#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</div><div class="line">				&#125;</div><div class="line">				System.out.println(name + <span class="string">" 到达休息站..."</span>);</div><div class="line">				<span class="keyword">try</span> &#123;</div><div class="line">					barrier.await();</div><div class="line">				&#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</div><div class="line">				&#125; <span class="keyword">catch</span> (BrokenBarrierException e) &#123;</div><div class="line">				&#125;</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line">		Traveling traveling = <span class="keyword">new</span> Traveling(<span class="keyword">new</span> String[]&#123;<span class="string">"A"</span>, <span class="string">"B"</span>, <span class="string">"C"</span>&#125;);</div><div class="line">		traveling.start();</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="Exchanger"><a href="#Exchanger" class="headerlink" title="Exchanger"></a>Exchanger</h2><p>Exchanger常用于<code>两个线程</code>之间安全的交换数据，在生产者-消费者线程模型中有可能会被用到。</p>
+<img src="/2017/12/20/Java同步工具类/exchanger.png" alt="exchanger" title="exchanger">
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ExchangerTest</span> </span>&#123;</div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line">		Exchanger&lt;List&lt;Integer&gt;&gt; exchanger = <span class="keyword">new</span> Exchanger&lt;&gt;();</div><div class="line">		<span class="keyword">new</span> Consumer(exchanger).start();</div><div class="line">		<span class="keyword">new</span> Producer(exchanger).start();</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Producer</span> <span class="keyword">extends</span> <span class="title">Thread</span> </span>&#123;</div><div class="line">	List&lt;Integer&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;();</div><div class="line">	Exchanger&lt;List&lt;Integer&gt;&gt; exchanger = <span class="keyword">null</span>;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="title">Producer</span><span class="params">(Exchanger&lt;List&lt;Integer&gt;&gt; exchanger)</span> </span>&#123;</div><div class="line">		<span class="keyword">super</span>();</div><div class="line">		<span class="keyword">this</span>.exchanger = exchanger;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="meta">@Override</span></div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</div><div class="line">		Random rand = <span class="keyword">new</span> Random();</div><div class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++) &#123;</div><div class="line">			list.clear();</div><div class="line">			<span class="comment">// 生产数据</span></div><div class="line">			list.add(rand.nextInt(<span class="number">10000</span>));</div><div class="line">			list.add(rand.nextInt(<span class="number">10000</span>));</div><div class="line">			list.add(rand.nextInt(<span class="number">10000</span>));</div><div class="line">			list.add(rand.nextInt(<span class="number">10000</span>));</div><div class="line">			list.add(rand.nextInt(<span class="number">10000</span>));</div><div class="line">			<span class="keyword">try</span> &#123;</div><div class="line">				list = exchanger.exchange(list);</div><div class="line">			&#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</div><div class="line">				e.printStackTrace();</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Consumer</span> <span class="keyword">extends</span> <span class="title">Thread</span> </span>&#123;</div><div class="line">	List&lt;Integer&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;();</div><div class="line">	Exchanger&lt;List&lt;Integer&gt;&gt; exchanger = <span class="keyword">null</span>;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="title">Consumer</span><span class="params">(Exchanger&lt;List&lt;Integer&gt;&gt; exchanger)</span> </span>&#123;</div><div class="line">		<span class="keyword">super</span>();</div><div class="line">		<span class="keyword">this</span>.exchanger = exchanger;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="meta">@Override</span></div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</div><div class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++) &#123;</div><div class="line">			<span class="keyword">try</span> &#123;</div><div class="line">				list = exchanger.exchange(list);</div><div class="line">			&#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</div><div class="line">				e.printStackTrace();</div><div class="line">			&#125;</div><div class="line">			<span class="comment">// 消费数据</span></div><div class="line">			System.out.print(list.get(<span class="number">0</span>) + <span class="string">", "</span>);</div><div class="line">			System.out.print(list.get(<span class="number">1</span>) + <span class="string">", "</span>);</div><div class="line">			System.out.print(list.get(<span class="number">2</span>) + <span class="string">", "</span>);</div><div class="line">			System.out.print(list.get(<span class="number">3</span>) + <span class="string">", "</span>);</div><div class="line">			System.out.println(list.get(<span class="number">4</span>) + <span class="string">", "</span>);</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="FutureTask"><a href="#FutureTask" class="headerlink" title="FutureTask"></a>FutureTask</h2><p>在<a href="http://yukai.space/2017/06/24/%E5%B9%B6%E5%8F%91%E5%9C%BA%E6%99%AF%E4%B8%8B%E7%BC%93%E5%AD%98%E7%9A%84%E5%88%9B%E5%BB%BA/">并发场景下缓存的创建</a>这篇文章中已经涉及到了FutureTask，FutureTask实现了Runnable和Future接口：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Future</span>&lt;<span class="title">V</span>&gt; </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">boolean</span> <span class="title">cancel</span><span class="params">(<span class="keyword">boolean</span> mayInterruptIfRunning)</span></span>;</div><div class="line">    <span class="function"><span class="keyword">boolean</span> <span class="title">isCancelled</span><span class="params">()</span></span>;</div><div class="line">    <span class="function"><span class="keyword">boolean</span> <span class="title">isDone</span><span class="params">()</span></span>;</div><div class="line">    <span class="function">V <span class="title">get</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException, ExecutionException</span>;</div><div class="line">    <span class="function">V <span class="title">get</span><span class="params">(<span class="keyword">long</span> timeout, TimeUnit unit)</span> <span class="keyword">throws</span> InterruptedException, ExecutionException, TimeoutException</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>可以看出来，Future接口主要用来管理和查询一个任务的生命周期。FutureTask表示的任务是通过Callable来实现的，任务可能处于以下三种状态：</p>
+<ul>
+<li><p>等待运行</p>
+</li>
+<li><p>正在运行</p>
+</li>
+<li><p>执行完毕，包括正常结束、由于取消而结束或由于异常而结束</p>
+</li>
+</ul>
+<p>Future.get方法的行为取决于任务的状态：如果任务已经完成，get方法会立即返回结果，否则get方法将一直阻塞直到任务进入完成状态，然后<code>返回结果</code>或<code>抛出异常</code>。FutureTask安全地将计算结果从计算结果的线程 传递到 获取这个结果的线程。</p>
+<p>FutureTask可以表示一个异步的任务，用来执行一些时间较长的计算，这些计算可以在使用计算结果之前启动。</p>
+<p>例子：实现一个Html页面渲染器。</p>
+<p>最简单的方法是对HTML文档串行处理。遇到文本标签时，将其绘制到画布；遇到图片引用时，先通过网络获取他，然后绘制到画布。这种方法的缺点显而易见，那就是网络获取图片可能会比较耗时，用户需要等待较长的时间才能看到所有的文本。</p>
+<p>在这里，我们找到了可以利用的并行性：将渲染过程分解为两个任务，一个是渲染所有的文本，另一个是下载所有的图片。绘制文本和下载图片可以同时进行。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">FutureRenderer</span> </span>&#123;</div><div class="line">    <span class="keyword">private</span> <span class="keyword">final</span> ExecutorService executor = Executors.newCachedThreadPool();</div><div class="line"> </div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">renderPage</span><span class="params">(CharSequence source)</span> </span>&#123;</div><div class="line">        <span class="keyword">final</span> List&lt;ImageInfo&gt; imageInfos = scanForImageInfo(source);</div><div class="line">        Callable&lt;List&lt;ImageData&gt;&gt; task =</div><div class="line">                <span class="keyword">new</span> Callable&lt;List&lt;ImageData&gt;&gt;() &#123;</div><div class="line">                    <span class="function"><span class="keyword">public</span> List&lt;ImageData&gt; <span class="title">call</span><span class="params">()</span> </span>&#123;</div><div class="line">                        List&lt;ImageData&gt; result = <span class="keyword">new</span> ArrayList&lt;ImageData&gt;();</div><div class="line">                        <span class="keyword">for</span> (ImageInfo imageInfo : imageInfos)</div><div class="line">                            result.add(imageInfo.downloadImage());</div><div class="line">                        <span class="keyword">return</span> result;</div><div class="line">                    &#125;</div><div class="line">                &#125;;</div><div class="line"> </div><div class="line">        Future&lt;List&lt;ImageData&gt;&gt; future = executor.submit(task);</div><div class="line">        renderText(source);</div><div class="line"> </div><div class="line">        <span class="keyword">try</span> &#123;</div><div class="line">            List&lt;ImageData&gt; imageData = future.get();</div><div class="line">            <span class="keyword">for</span> (ImageData data : imageData)</div><div class="line">                renderImage(data);</div><div class="line">        &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</div><div class="line">            Thread.currentThread().interrupt();</div><div class="line">            future.cancel(<span class="keyword">true</span>);</div><div class="line">        &#125; <span class="keyword">catch</span> (ExecutionException e) &#123;</div><div class="line">            <span class="keyword">throw</span> launderThrowable(e.getCause());</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>可以看到，在渲染文本的任务开始之前，已经将下载图片的任务提交到线程池了。文本渲染完毕后，等待Future.get获取结果，然后渲染图片。这样，图片下载与文本渲染这两个任务就实现了并行执行。</p>
+<h2 id="CompletionService"><a href="#CompletionService" class="headerlink" title="CompletionService"></a>CompletionService</h2><p>上个小结页面渲染的不足在于：用户需要等待所有的图片下载完毕，没有办法下载一张显示一张；如果渲染文本的速度远远大于下载图片的速度，那么程序并行后的性能与串行执行差别不大。</p>
+<p>我们可以利用CompletionService将每张图片的下载创建成为并行的任务，减少下载所有图形需要的总时间；然后实现下载一张图片就立刻显示的功能。</p>
+<p>CompletionService将Executor和BlockingQueue的功能结合在了一起，可以将Callable类型的任务提交给他执行，然后使用类似于队列的操作take或poll等方法获取已经完成的结果。</p>
+<p>ExecutorCompletionService实现了CompletionService接口。ExecutorCompletionService的实现很简单，ExecutorCompletionService内部维护了一个BlockingQueue，用来保存计算结果。同时将任务包装为FutureTask的子类QueueingFuture：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">private</span> <span class="class"><span class="keyword">class</span> <span class="title">QueueingFuture</span> <span class="keyword">extends</span> <span class="title">FutureTask</span>&lt;<span class="title">Void</span>&gt; </span>&#123;</div><div class="line">        QueueingFuture(RunnableFuture&lt;V&gt; task) &#123;</div><div class="line">            <span class="keyword">super</span>(task, <span class="keyword">null</span>);</div><div class="line">            <span class="keyword">this</span>.task = task;</div><div class="line">        &#125;</div><div class="line">        <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">done</span><span class="params">()</span> </span>&#123; completionQueue.add(task); &#125;</div><div class="line">        <span class="keyword">private</span> <span class="keyword">final</span> Future&lt;V&gt; task;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>当任务执行完毕后，会调用done方法，将结果放入BlockingQueue当中，CompletionService的take和poll方法委托给BlockingQueue，这些方法会在得出结果之前阻塞。</p>
+<img src="/2017/12/20/Java同步工具类/ExecutorCompletionService.png" alt="ExecutorCompletionService" title="ExecutorCompletionService">
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Renderer</span> </span>&#123;</div><div class="line">    <span class="keyword">private</span> <span class="keyword">final</span> ExecutorService executor;</div><div class="line"></div><div class="line">    Renderer(ExecutorService executor) &#123;</div><div class="line">        <span class="keyword">this</span>.executor = executor;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">renderPage</span><span class="params">(CharSequence source)</span> </span>&#123;</div><div class="line">        <span class="keyword">final</span> List&lt;ImageInfo&gt; info = scanForImageInfo(source);</div><div class="line">        CompletionService&lt;ImageData&gt; completionService =</div><div class="line">                <span class="keyword">new</span> ExecutorCompletionService&lt;ImageData&gt;(executor);</div><div class="line">        <span class="keyword">for</span> (<span class="keyword">final</span> ImageInfo imageInfo : info)</div><div class="line">            completionService.submit(<span class="keyword">new</span> Callable&lt;ImageData&gt;() &#123;</div><div class="line">                <span class="function"><span class="keyword">public</span> ImageData <span class="title">call</span><span class="params">()</span> </span>&#123;</div><div class="line">                    <span class="keyword">return</span> imageInfo.downloadImage();</div><div class="line">                &#125;</div><div class="line">            &#125;);</div><div class="line"></div><div class="line">        renderText(source);</div><div class="line"></div><div class="line">        <span class="keyword">try</span> &#123;</div><div class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> t = <span class="number">0</span>, n = info.size(); t &lt; n; t++) &#123;</div><div class="line">                Future&lt;ImageData&gt; f = completionService.take();</div><div class="line">                ImageData imageData = f.get();</div><div class="line">                renderImage(imageData);</div><div class="line">            &#125;</div><div class="line">        &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</div><div class="line">            Thread.currentThread().interrupt();</div><div class="line">        &#125; <span class="keyword">catch</span> (ExecutionException e) &#123;</div><div class="line">            <span class="keyword">throw</span> launderThrowable(e.getCause());</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yukai.space/2017/12/20/Java同步工具类/" data-id="cjgp4npmu000im2xcarhhwmx9" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/多线程/">多线程</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+ <script src="/jquery/jquery.min.js"></script>
+  <div id="random_posts">
+    <h2>推荐文章</h2>
+    <div class="random_posts_ul">
+      <script>
+          var random_count =4
+          var site = {BASE_URI:'/'};
+          function load_random_posts(obj) {
+              var arr=site.posts;
+              if (!obj) return;
+              // var count = $(obj).attr('data-count') || 6;
+              for (var i, tmp, n = arr.length; n; i = Math.floor(Math.random() * n), tmp = arr[--n], arr[n] = arr[i], arr[i] = tmp);
+              arr = arr.slice(0, random_count);
+              var html = '<ul>';
+            
+              for(var j=0;j<arr.length;j++){
+                var item=arr[j];
+                html += '<li><strong>' + 
+                item.date + ':&nbsp;&nbsp;<a href="' + (site.BASE_URI+item.uri) + '">' + 
+                (item.title || item.uri) + '</a></strong>';
+                if(item.excerpt){
+                  html +='<div class="post-excerpt">'+item.excerpt+'</div>';
+                }
+                html +='</li>';
+                
+              }
+              $(obj).html(html + '</ul>');
+          }
+          $('.random_posts_ul').each(function () {
+              var c = this;
+              if (!site.posts || !site.posts.length){
+                  $.getJSON(site.BASE_URI + 'js/posts.js',function(json){site.posts = json;load_random_posts(c)});
+              } 
+               else{
+                load_random_posts(c);
+              }
+          });
+      </script>
+    </div>
+  </div>
+
+    
+<nav id="article-nav">
+  
+    <a href="/2018/01/17/Gitlab调研/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
+        
+          Gitlab调研
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/12/10/Java阻塞队列/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">Java阻塞队列</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+ 
+     
+  <div class="comments" id="comments">
+    
+     
+       
+      <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+    
+       
+      
+      
+           <div id="gitment_comments"></div>
+    
+  </div>
+ 
+  
+
+</section>
+           
+    <aside id="sidebar">
+  
+    
+
+  
+    
+    <div class="widget-wrap">
+    
+      <div class="widget" id="toc-widget-fixed">
+      
+        <strong class="toc-title">文章目录</strong>
+        <div class="toc-widget-list">
+              <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#CountDownLatch"><span class="toc-number">1.</span> <span class="toc-text">CountDownLatch</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Semaphore"><span class="toc-number">2.</span> <span class="toc-text">Semaphore</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CyclicBarrier"><span class="toc-number">3.</span> <span class="toc-text">CyclicBarrier</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Exchanger"><span class="toc-number">4.</span> <span class="toc-text">Exchanger</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#FutureTask"><span class="toc-number">5.</span> <span class="toc-text">FutureTask</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CompletionService"><span class="toc-number">6.</span> <span class="toc-text">CompletionService</span></a></li></ol>
+          </div>
+      </div>
+    </div>
+
+  
+    
+
+  
+    
+  
+    
+  
+    
+
+  
+</aside>
+
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-left">
+      &copy; 2014 - 2018 于凯&nbsp;|&nbsp;
+      主题 <a href="https://github.com/giscafer/hexo-theme-cafe/" target="_blank">Cafe</a>
+    </div>
+     <div id="footer-right">
+      联系方式&nbsp;|&nbsp;debiaoyu@gmail.com
+    </div>
+  </div>
+</footer>
+ <script src="/jquery/jquery.min.js"></script>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/archives" class="mobile-nav-link">归档</a>
+  
+    <a href="/tools" class="mobile-nav-link">工具</a>
+  
+    <a href="/page" class="mobile-nav-link">关于</a>
+  
+</nav>
+    <img class="back-to-top-btn" src="/images/fly-to-top.png"/>
+<script>
+// Elevator script included on the page, already.
+window.onload = function() {
+  var elevator = new Elevator({
+    selector:'.back-to-top-btn',
+    element: document.querySelector('.back-to-top-btn'),
+    duration: 1000 // milliseconds
+  });
+}
+</script>
+      
+
+  
+    <script>
+      var cloudTieConfig = {
+        url: document.location.href, 
+        sourceId: "",
+        productKey: "e2fb4051c49842688ce669e634bc983f",
+        target: "cloud-tie-wrapper"
+      };
+    </script>
+    <script src="https://img1.ws.126.net/f2e/tie/yun/sdk/loader.js"></script>
+    
+
+  
+
+
+
+
+
+
+
+<!-- author:forvoid begin -->
+<!-- author:forvoid begin -->
+
+  <link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+  <script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script> 
+  <script>
+  var gitment = new Gitment({
+    // id: '页面 ID', // 可选。默认为 location.href
+    owner: 'Hikyu',
+    repo: 'Hikyu.github.io',
+    oauth: {
+    client_id: '61886569157db60efa97',
+    client_secret: '6475bb7c8faaf44ff2e12c272a46505a0eecf46f',
+    }
+  })
+  gitment.render(document.getElementById("gitment_comments"))
+</script>
+
+
+<!-- author:forvoid end -->
+
+<!-- author:forvoid end -->
+
+
+
+ <script src="/js/is.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+<script src="/js/elevator.js"></script>
+  </div>
+</body>
+</html>
