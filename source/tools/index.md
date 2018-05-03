@@ -36,15 +36,13 @@ github访问：octotree
 
 下载管理器：chrono
 
-markdown: markdown here
-
 翻译: Google翻译
 
 ssh: secure shell
 
 代理: SwitchyOmega
 
-markdown编辑器：
+markdown编辑器：[马克飞象](https://chrome.google.com/webstore/detail/marxico/kidnkfckhbdkfgbicccmdggmpgogehop?hl=zh-CN)
 
 ## 移动端(Android)
 ---
@@ -76,7 +74,7 @@ diff 在线对比 : [diffchecker](https://www.diffchecker.com/)
 
 编辑器 : vscode notepad++(打开大文件)
 
-markdown编辑：[MDPUB](http://md.phodal.com/)
+文档：gitbook
 
 命令行浏览器 : curl(测试用的着)
 
