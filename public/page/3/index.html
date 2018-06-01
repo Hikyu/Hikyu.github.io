@@ -66,6 +66,76 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-认识MVCC" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/11/02/认识MVCC/" class="article-date">
+  <time datetime="2017-11-02T12:18:07.000Z" itemprop="datePublished">2017-11-02</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/编程/">编程</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/11/02/认识MVCC/">认识MVCC</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>前一篇总结提到了数据库事务的隔离性可以由锁机制来实现。锁是传统数据库控制事务并发的主要手段，这里提到的锁(S锁和X锁)可以认为是悲观锁，在对数据实现读写之前加上相应的锁，实现了独占访问机制，从而控制并发行为。神通数据库7.0主要使用了锁来实现事务并发控制。</p>
+<p>那么数据库事务的并发控制还有其他的实现方式吗？当然是有的。去年刚推出的神通数据库8.0，就使用了MVCC(Multiversion Concurrency Control) 即多版本控制来控制事务的并发行为。</p>
+<p>研究一下什么是MVCC…</p>
+<h2 id="MVCC"><a href="#MVCC" class="headerlink" title="MVCC"></a>MVCC</h2><blockquote>
+<p>多版本并发控制技术,它使得大部分支持行锁的事务引擎,不再单纯的使用行锁来进行数据库的并发控制,取而代之的是,把数据库的行锁与行的多个版本结合起来,只需要很小的开销,就可以实现非锁定读,从而大大提高数据库系统的并发性能.</p>
+</blockquote>
+<p>多版本并发控制，意味着同一时刻看到的相同行的数据可能是不一样的,即一个行可能有多个版本.有点平行宇宙的意思。要实现这种效果，需要做一些操作：</p>
+<ul>
+<li><p>对于每一行记录，新增两个隐藏列：</p>
+<p>行的更新时间(创建版本号)</p>
+<p>行的删除时间(删除版本号)</p>
+</li>
+<li><p>数据版本</p>
+<p>同一行数据，在同一时刻对于不同的事务，可能看到不同的版本。即同一行数据有多个版本同时存在。</p>
+</li>
+<li><p>事务版本</p>
+<p>每个事务有其唯一的事务版本号</p>
+</li>
+<li><p>版本有序</p>
+<p>无论是数据版本，还是事务版本，其版本号随时间增长而增长，即版本号是递增的。</p>
+</li>
+</ul>
+        
+          <p class="article-more-link">
+            <a href="/2017/11/02/认识MVCC/#more">阅读全文 »</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yukai.space/2017/11/02/认识MVCC/" data-id="cjhw3qeni00aww3xcfzz5lhl3" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/数据库/">数据库</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+ 
+
+
+  
     <article id="post-数据库事务浅析" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2017/10/31/数据库事务浅析/" class="article-date">
@@ -119,7 +189,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2017/10/31/数据库事务浅析/" data-id="cjgp4nptn007fm2xcwco7jr2a" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2017/10/31/数据库事务浅析/" data-id="cjhw3qelu009iw3xcz8ztvg6e" class="article-share-link">分享</a>
       
       
       
@@ -172,7 +242,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2017/10/31/Java读取资源文件/" data-id="cjgp4npn2000nm2xc9pp6ofy9" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2017/10/31/Java读取资源文件/" data-id="cjhw3qedl000sw3xcqv4yl0uf" class="article-share-link">分享</a>
       
       
       
@@ -228,7 +298,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2017/10/15/maven打包/" data-id="cjgp4nprv004om2xcggebm928" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2017/10/15/maven打包/" data-id="cjhw3qejq006sw3xc5sezpd5g" class="article-share-link">分享</a>
       
       
       
@@ -288,7 +358,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2017/10/01/VncServer的安装与使用/" data-id="cjgp4npo9001im2xc5huxs9k8" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2017/10/01/VncServer的安装与使用/" data-id="cjhw3qee7001aw3xcg4pomqw7" class="article-share-link">分享</a>
       
       
       
@@ -341,7 +411,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2017/10/01/Linux下的守护进程/" data-id="cjgp4npo0001am2xcpni038ee" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2017/10/01/Linux下的守护进程/" data-id="cjhw3qeeu001uw3xct6vymovl" class="article-share-link">分享</a>
       
       
       
@@ -394,7 +464,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2017/09/23/读懂Java-Thread-Dump/" data-id="cjgp4npul008um2xc8egyl24u" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2017/09/23/读懂Java-Thread-Dump/" data-id="cjhw3qenu00b9w3xcvmml3m4i" class="article-share-link">分享</a>
       
       
       
@@ -453,68 +523,11 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2017/09/16/理解JavaScript作用域链/" data-id="cjgp4nptz007zm2xcrr312eyl" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2017/09/16/理解JavaScript作用域链/" data-id="cjhw3qemp00a4w3xcn6xukqs2" class="article-share-link">分享</a>
       
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/javascript/">javascript</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
- 
-
-
-  
-    <article id="post-组合模式的妙用" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2017/09/16/组合模式的妙用/" class="article-date">
-  <time datetime="2017-09-16T01:40:41.000Z" itemprop="datePublished">2017-09-16</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/编程/">编程</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/09/16/组合模式的妙用/">组合模式的妙用</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="组合模式定义"><a href="#组合模式定义" class="headerlink" title="组合模式定义"></a>组合模式定义</h2><img src="/2017/09/16/组合模式的妙用/component.jpg" alt="component" title="component">
-<ul>
-<li><p>Component 是组合中的对象声明接口，在适当的情况下，实现所有类共有接口的默认行为。声明一个接口用于访问和管理Component<br>子部件。</p>
-</li>
-<li><p>Leaf 在组合中表示叶子结点对象，叶子结点没有子结点。</p>
-</li>
-<li><p>Composite 定义有枝节点行为，用来存储子部件，在Component接口中实现与子部件有关操作，如增加(add)和删除</p>
-</li>
-</ul>
-        
-          <p class="article-more-link">
-            <a href="/2017/09/16/组合模式的妙用/#more">阅读全文 »</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yukai.space/2017/09/16/组合模式的妙用/" data-id="cjgp4npue008lm2xclro2jdex" class="article-share-link">分享</a>
-      
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/设计模式/">设计模式</a></li></ul>
 
     </footer>
   </div>
@@ -550,6 +563,10 @@
       <ul>
         
           <li>
+            <a href="/2018/06/01/SSH端口转发/">SSH端口转发</a>
+          </li>
+        
+          <li>
             <a href="/2018/05/02/VirtualBox共享文件夹/">VirtualBox设置共享文件夹</a>
           </li>
         
@@ -563,10 +580,6 @@
         
           <li>
             <a href="/2018/03/29/可能会用到的Git技巧2/">可能会用到的Git技巧(2)</a>
-          </li>
-        
-          <li>
-            <a href="/2018/03/01/可能会用到的Git技巧1/">可能会用到的Git技巧(1)</a>
           </li>
         
       </ul>

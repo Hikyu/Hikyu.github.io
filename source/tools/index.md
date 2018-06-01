@@ -42,7 +42,7 @@ ssh: secure shell
 
 代理: SwitchyOmega
 
-markdown编辑器：[马克飞象](https://chrome.google.com/webstore/detail/marxico/kidnkfckhbdkfgbicccmdggmpgogehop?hl=zh-CN)
+markdown编辑器：[马克飞象](https://chrome.google.com/webstore/detail/marxico/kidnkfckhbdkfgbicccmdggmpgogehop?hl=zh-CN)  [Md2All](http://md.aclickall.com/)
 
 ## 移动端(Android)
 ---
