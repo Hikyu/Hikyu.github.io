@@ -66,6 +66,71 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-java中的编码问题" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/04/20/java中的编码问题/" class="article-date">
+  <time datetime="2016-04-20T04:48:55.000Z" itemprop="datePublished">2016-04-20</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/编程/">编程</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/04/20/java中的编码问题/">java中的编码问题</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>最近在工作过程中总是被编码困扰，出现了很多意想不到的情况。故上网查看资料，总结一番。</p>
+</blockquote>
+<p>2016/9/11 更新：今天在网上看到一篇讲解有关编码的文章 <a href="http://blog.csdn.net/zklth/article/details/7016886">Java中字符编码和字符串所占字节数</a>,个人认为作者写的十分清晰明了。把文章中的例子看懂的话再遇到乱码的情况解决起来应该不难！</p>
+<h2 id="编码"><a href="#编码" class="headerlink" title="编码"></a>编码</h2><p>什么是编码？程序员应该都知道计算机能够识别的只是1和0，我们看到的文字、图片、视频等在计算机的 世界里都是以二进制的形式存在的。包括你的硬盘或者网络上传输的字节序列，都是无数个0和1组成的。英文字母，数字，汉字等都是字符。不同字符对应二进制数的规则，也就是说不同的字符翻译为不同的0、1组合，就是字符的编码。这个过程的逆过程，就是解码。</p>
+<ul>
+<li><h4 id="Ascii编码"><a href="#Ascii编码" class="headerlink" title="Ascii编码"></a><strong><a href="http://baike.baidu.com/view/15482.htm?fromtitle=ascii%E7%A0%81&amp;fromid=99077&amp;type=syn">Ascii编码</a></strong></h4></li>
+</ul>
+<p>标准的ASCII编码使用的是7（2^7 = 128）位二进制数来表示所有的大小写字母、数字和标点符号已经一些特殊的控制字符，最前面的一位统一规定为0。(一个字节8位)。缺点是只能显示128个字符，显示的字符十分有限，比如对中文就无能为力了。</p>
+<ul>
+<li><h4 id="GB2312"><a href="#GB2312" class="headerlink" title="GB2312"></a><strong><a href="http://baike.baidu.com/view/443268.htm?fromtitle=GB2312&amp;fromid=483170&amp;type=syn">GB2312</a></strong></h4></li>
+</ul>
+<p>GB2312编码适用于汉字处理、汉字通信等系统之间的信息交换，通行于中国大陆；新加坡等地也采用此编码。中国大陆几乎所有的中文系统和国际化的软件都支持GB 2312。</p>
+<ul>
+<li><h4 id="UTF-8"><a href="#UTF-8" class="headerlink" title="UTF-8"></a><strong><a href="http://baike.baidu.com/view/25412.htm">UTF-8</a></strong></h4></li>
+</ul>
+<p>事实上世界上那么多国家，存在更多的字符是前面的编码所不能表示的。不同国家的不同编码之间也不能够兼容。所以就需要一套通用的编码能够表示世界上所有的符号，这就是<a href="http://baike.baidu.com/item/unicode">Unicode编码</a><br>事实上，Unicode也是一套字符集。</p>
+        
+          <p class="article-more-link">
+            <a href="/2016/04/20/java中的编码问题/#more">阅读全文 »</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yukai.space/2016/04/20/java中的编码问题/" data-id="cjhw3qefr002yw3xcklaz0238" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/编码/">编码</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+ 
+
+
+  
     <article id="post-关于抽象类和接口" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2016/04/15/关于抽象类和接口/" class="article-date">
@@ -121,7 +186,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2016/04/15/关于抽象类和接口/" data-id="cjgp4npsn0063m2xcovfwnugb" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2016/04/15/关于抽象类和接口/" data-id="cjhw3qekl0087w3xcmy98uy2m" class="article-share-link">分享</a>
       
       
       
@@ -171,7 +236,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2016/04/14/他可是科比·布莱恩特!/" data-id="cjgp4npsl0060m2xci9rcxlcl" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2016/04/14/他可是科比·布莱恩特!/" data-id="cjhw3qekd007vw3xcxyzggq2p" class="article-share-link">分享</a>
       
       
       
@@ -220,7 +285,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2016/04/12/junit使用/" data-id="cjgp4nprk004am2xce9k2uwi9" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2016/04/12/junit使用/" data-id="cjhw3qei2006aw3xc7j2wqvge" class="article-share-link">分享</a>
       
       
       
@@ -281,7 +346,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2016/03/30/sphinx安装问题/" data-id="cjgp4npry004vm2xchi6xu88s" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2016/03/30/sphinx安装问题/" data-id="cjhw3qejv006zw3xcijfb6zc9" class="article-share-link">分享</a>
       
       
       
@@ -368,7 +433,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2016/03/29/代码格式/" data-id="cjgp4npsp0067m2xcrk4wp0rw" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2016/03/29/代码格式/" data-id="cjhw3qekj0083w3xc2dx8q3xp" class="article-share-link">分享</a>
       
       
       
@@ -437,7 +502,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2016/03/22/常用快捷键总结/" data-id="cjgp4npth0078m2xcrjy5eu0f" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2016/03/22/常用快捷键总结/" data-id="cjhw3qenm00azw3xc0lan2eis" class="article-share-link">分享</a>
       
       
       
@@ -494,61 +559,11 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2016/03/03/markdown/" data-id="cjgp4nprq004hm2xcf8fgr8og" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2016/03/03/markdown/" data-id="cjhw3qejy0073w3xcivixl2x3" class="article-share-link">分享</a>
       
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/markdown/">markdown</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
- 
-
-
-  
-    <article id="post-notify问题" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2015/12/21/notify问题/" class="article-date">
-  <time datetime="2015-12-21T04:48:55.000Z" itemprop="datePublished">2015-12-21</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/编程/">编程</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/12/21/notify问题/">notify 问题</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>今天遇到了这么个情况：<br>有线程若干，我需要他们按顺序执行。<br>代码大概长这样：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line">class SyncTag &#123;</div><div class="line">	public int threadNO;</div><div class="line">	public SyncTag() &#123;</div><div class="line">	    threadNO = 0;</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line">class ThreadA extend Thread&#123;</div><div class="line">	SyncTag syncTag;</div><div class="line">	int scriptNO;</div><div class="line">	ThreadA(SyncTag syncTag,int scriptNO)&#123;</div><div class="line">			this.syncTag=syncTag;</div><div class="line">			this.scriptNO=scriptNO;</div><div class="line">	&#125;</div><div class="line">	public void Run()&#123;</div><div class="line">			synchronized (syncTag) &#123;</div><div class="line">                if (syncTag.threadNO != scriptNO) &#123;</div><div class="line">                        try &#123;</div><div class="line">                                syncTag.wait();</div><div class="line">                        &#125; catch (InterruptedException e) &#123;</div><div class="line">                                    e.printStackTrace();</div><div class="line">                        &#125;</div><div class="line">                &#125;</div><div class="line">                dosomething();</div><div class="line">                syncTag.threadNO++;</div><div class="line">                syncTag.notifyAll();</div><div class="line">			&#125;</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line">public class Test&#123;</div><div class="line">	public static void main(String args[])&#123;</div><div class="line">		    SyncTag syncTag=new SyncTag();</div><div class="line">			for(int i=0;i&lt;10;++i)&#123;</div><div class="line">				ThreadA t=new ThreadA(syncTag,i);</div><div class="line">				t.start();</div><div class="line">			&#125;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-        
-          <p class="article-more-link">
-            <a href="/2015/12/21/notify问题/#more">阅读全文 »</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yukai.space/2015/12/21/notify问题/" data-id="cjgp4nprx004rm2xcuv58m0ah" class="article-share-link">分享</a>
-      
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/多线程/">多线程</a></li></ul>
 
     </footer>
   </div>
@@ -584,6 +599,10 @@
       <ul>
         
           <li>
+            <a href="/2018/06/01/SSH端口转发/">SSH端口转发</a>
+          </li>
+        
+          <li>
             <a href="/2018/05/02/VirtualBox共享文件夹/">VirtualBox设置共享文件夹</a>
           </li>
         
@@ -597,10 +616,6 @@
         
           <li>
             <a href="/2018/03/29/可能会用到的Git技巧2/">可能会用到的Git技巧(2)</a>
-          </li>
-        
-          <li>
-            <a href="/2018/03/01/可能会用到的Git技巧1/">可能会用到的Git技巧(1)</a>
           </li>
         
       </ul>

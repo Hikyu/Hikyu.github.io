@@ -66,6 +66,56 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-notify问题" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/12/21/notify问题/" class="article-date">
+  <time datetime="2015-12-21T04:48:55.000Z" itemprop="datePublished">2015-12-21</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/编程/">编程</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/12/21/notify问题/">notify 问题</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>今天遇到了这么个情况：<br>有线程若干，我需要他们按顺序执行。<br>代码大概长这样：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line">class SyncTag &#123;</div><div class="line">	public int threadNO;</div><div class="line">	public SyncTag() &#123;</div><div class="line">	    threadNO = 0;</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line">class ThreadA extend Thread&#123;</div><div class="line">	SyncTag syncTag;</div><div class="line">	int scriptNO;</div><div class="line">	ThreadA(SyncTag syncTag,int scriptNO)&#123;</div><div class="line">			this.syncTag=syncTag;</div><div class="line">			this.scriptNO=scriptNO;</div><div class="line">	&#125;</div><div class="line">	public void Run()&#123;</div><div class="line">			synchronized (syncTag) &#123;</div><div class="line">                if (syncTag.threadNO != scriptNO) &#123;</div><div class="line">                        try &#123;</div><div class="line">                                syncTag.wait();</div><div class="line">                        &#125; catch (InterruptedException e) &#123;</div><div class="line">                                    e.printStackTrace();</div><div class="line">                        &#125;</div><div class="line">                &#125;</div><div class="line">                dosomething();</div><div class="line">                syncTag.threadNO++;</div><div class="line">                syncTag.notifyAll();</div><div class="line">			&#125;</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line">public class Test&#123;</div><div class="line">	public static void main(String args[])&#123;</div><div class="line">		    SyncTag syncTag=new SyncTag();</div><div class="line">			for(int i=0;i&lt;10;++i)&#123;</div><div class="line">				ThreadA t=new ThreadA(syncTag,i);</div><div class="line">				t.start();</div><div class="line">			&#125;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+        
+          <p class="article-more-link">
+            <a href="/2015/12/21/notify问题/#more">阅读全文 »</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yukai.space/2015/12/21/notify问题/" data-id="cjhw3qejs006ww3xck6fg3kax" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/多线程/">多线程</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+ 
+
+
+  
     <article id="post-java同步锁锁什么" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2015/12/17/java同步锁锁什么/" class="article-date">
@@ -102,7 +152,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2015/12/17/java同步锁锁什么/" data-id="cjgp4nppp0035m2xcq6a2bo8u" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2015/12/17/java同步锁锁什么/" data-id="cjhw3qefz0039w3xcmhz2e2nh" class="article-share-link">分享</a>
       
       
       
@@ -142,6 +192,10 @@
       <ul>
         
           <li>
+            <a href="/2018/06/01/SSH端口转发/">SSH端口转发</a>
+          </li>
+        
+          <li>
             <a href="/2018/05/02/VirtualBox共享文件夹/">VirtualBox设置共享文件夹</a>
           </li>
         
@@ -155,10 +209,6 @@
         
           <li>
             <a href="/2018/03/29/可能会用到的Git技巧2/">可能会用到的Git技巧(2)</a>
-          </li>
-        
-          <li>
-            <a href="/2018/03/01/可能会用到的Git技巧1/">可能会用到的Git技巧(1)</a>
           </li>
         
       </ul>

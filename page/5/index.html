@@ -66,6 +66,69 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-Java-NIO-Channel" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/07/08/Java-NIO-Channel/" class="article-date">
+  <time datetime="2017-07-08T12:31:23.000Z" itemprop="datePublished">2017-07-08</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/编程/">编程</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/07/08/Java-NIO-Channel/">Java-NIO-Channel</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>Java NIO 学习第三篇–Channel</p>
+</blockquote>
+<h2 id="Channel"><a href="#Channel" class="headerlink" title="Channel"></a>Channel</h2><p>通道(Channel)的作用有类似于流(Stream)，用于传输文件或者网络上的数据。</p>
+<img src="/2017/07/08/Java-NIO-Channel/channel.png" alt="channel" title="channel">
+<p>上图中，箭头就相当于通道。一个不是很准确的例子：把通道想象成铁轨，缓冲区则是列车，铁轨的起始与终点则可以是socket，文件系统和我们的程序。假如当我们在代码中要写入数据到一份文件的时候，我们先把列车(缓冲区)装满，然后把列车(缓冲区)放置到铁轨上(通道)，数据就被传递到通道的另一端，文件系统。读取文件则相反，文件的内容被装到列车上，传递到程序这一侧，然后我们在代码中就可以读取这个列车中的内容(读取缓冲区)。</p>
+<p>通道与传统的流还是有一些区别的：</p>
+<ul>
+<li><p>通道可以同时支持读写(不是一定支持)，而流只支持单方向的操作，比如输入流只能读，输出流只能写。</p>
+</li>
+<li><p>通道可以支持异步的读或写，而流是同步的。</p>
+</li>
+<li><p>通道的读取或写入是通过缓冲区来进行的，而流则写入或返回字节。</p>
+</li>
+</ul>
+        
+          <p class="article-more-link">
+            <a href="/2017/07/08/Java-NIO-Channel/#more">阅读全文 »</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yukai.space/2017/07/08/Java-NIO-Channel/" data-id="cjhw3qedb000jw3xcdtrhru53" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/NIO/">NIO</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+ 
+
+
+  
     <article id="post-java文件描述符" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2017/07/07/java文件描述符/" class="article-date">
@@ -104,7 +167,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2017/07/07/java文件描述符/" data-id="cjgp4npqh003pm2xcjtfxt9bx" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2017/07/07/java文件描述符/" data-id="cjhw3qeg9003mw3xc9z5i6acm" class="article-share-link">分享</a>
       
       
       
@@ -162,7 +225,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2017/07/04/Java-NIO-MappedByteBuffer/" data-id="cjgp4npmn000dm2xc5d68p8mz" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2017/07/04/Java-NIO-MappedByteBuffer/" data-id="cjhw3qed9000fw3xchz6wwui2" class="article-share-link">分享</a>
       
       
       
@@ -222,7 +285,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2017/06/28/java-NIO-Buffer/" data-id="cjgp4npoz0026m2xcuamyxtr1" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2017/06/28/java-NIO-Buffer/" data-id="cjhw3qef20022w3xcxypobdqt" class="article-share-link">分享</a>
       
       
       
@@ -273,7 +336,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2017/06/24/并发场景下缓存的创建/" data-id="cjgp4npy900d5m2xc44drqnrf" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2017/06/24/并发场景下缓存的创建/" data-id="cjhw3qelr009ew3xcgh2avn88" class="article-share-link">分享</a>
       
       
       
@@ -324,7 +387,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2017/06/05/如何从外网访问家里的电脑/" data-id="cjgp4nptb006ym2xcu8xg1w04" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2017/06/05/如何从外网访问家里的电脑/" data-id="cjhw3qele008zw3xcwhg2knwv" class="article-share-link">分享</a>
       
       
       
@@ -379,7 +442,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2017/05/29/建造者模式的使用/" data-id="cjgp4npya00d6m2xcxaxhyepl" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2017/05/29/建造者模式的使用/" data-id="cjhw3qely009lw3xcfzohslhb" class="article-share-link">分享</a>
       
       
       
@@ -432,78 +495,11 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2017/05/08/java线程池的使用/" data-id="cjgp4nprg0044m2xcb68k0814" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2017/05/08/java线程池的使用/" data-id="cjhw3qei5006cw3xcxt498wl6" class="article-share-link">分享</a>
       
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/多线程/">多线程</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
- 
-
-
-  
-    <article id="post-如何炒肉" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2017/05/07/如何炒肉/" class="article-date">
-  <time datetime="2017-05-07T13:07:12.000Z" itemprop="datePublished">2017-05-07</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/生活/">生活</a>►<a class="article-category-link" href="/categories/生活/食物/">食物</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/05/07/如何炒肉/">如何炒肉</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>这个炒肉是跟我妈学的，炒菜或者调面均可，很好吃～</p>
-<p>图比较丑，就不上了…</p>
-<h2 id="原料"><a href="#原料" class="headerlink" title="原料"></a>原料</h2><p>里脊肉、醋、生姜、葱、蒜、酱油、花椒面、盐、味精、清水</p>
-<h2 id="做法"><a href="#做法" class="headerlink" title="做法"></a>做法</h2><ol>
-<li><p>将里脊肉洗净，切成小块或肉片均可</p>
-</li>
-<li><p>生姜切片、葱切段、蒜切片备用</p>
-</li>
-<li><p>锅中倒油，放入备用的里脊肉翻炒</p>
-</li>
-<li><p>倒入少许醋，继续翻炒</p>
-</li>
-<li><p>片刻后加入备用的生姜、葱蒜，花椒面(花椒水更好)、味精以及少许盐继续翻炒</p>
-</li>
-<li><p>倒入适量酱油，翻炒片刻后加入适量清水</p>
-</li>
-<li><p>小火，待水被熬的差不多时起锅，倒入碗中，完成</p>
-</li>
-</ol>
-        
-          <p class="article-more-link">
-            <a href="/2017/05/07/如何炒肉/#more">阅读全文 »</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yukai.space/2017/05/07/如何炒肉/" data-id="cjgp4nptf0075m2xcw6fmh7ma" class="article-share-link">分享</a>
-      
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/食物/">食物</a></li></ul>
 
     </footer>
   </div>
@@ -539,6 +535,10 @@
       <ul>
         
           <li>
+            <a href="/2018/06/01/SSH端口转发/">SSH端口转发</a>
+          </li>
+        
+          <li>
             <a href="/2018/05/02/VirtualBox共享文件夹/">VirtualBox设置共享文件夹</a>
           </li>
         
@@ -552,10 +552,6 @@
         
           <li>
             <a href="/2018/03/29/可能会用到的Git技巧2/">可能会用到的Git技巧(2)</a>
-          </li>
-        
-          <li>
-            <a href="/2018/03/01/可能会用到的Git技巧1/">可能会用到的Git技巧(1)</a>
           </li>
         
       </ul>

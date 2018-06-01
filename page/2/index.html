@@ -66,6 +66,65 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-Java同步工具类" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/12/20/Java同步工具类/" class="article-date">
+  <time datetime="2017-12-20T09:53:23.000Z" itemprop="datePublished">2017-12-20</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/编程/">编程</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/12/20/Java同步工具类/">Java同步工具类</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="CountDownLatch"><a href="#CountDownLatch" class="headerlink" title="CountDownLatch"></a>CountDownLatch</h2><p>CountDownLatch(闭锁)的用法：</p>
+<p>CountDownLatch在实例化的时候需要传入一个int类型的计数器，表示需要等待事件的数量。CountDownLatch.countDown()方法递减这个计数器，表示一个事件已经发生了；而调用了CountDownLatch.await()方法的线程等待计数器值达到零，表示所有需要等待的事件已经发生了。若计数器值非零，那么await()方法会一直阻塞到计数器的值为零，或者等待超时。</p>
+<p>CountDownLatch的应用场景：</p>
+<ul>
+<li><p>确保某个计算在其所需要的所有资源都已经初始化后再继续执行。</p>
+</li>
+<li><p>确保某个服务在其依赖的所有其他服务都已经启动之后再启动。</p>
+</li>
+<li><p>等待某个操作的所有参与者都就绪后再执行。比如《荒野行动》，小队所有玩家点击“准备”之后房主才可以开始游戏。</p>
+</li>
+</ul>
+        
+          <p class="article-more-link">
+            <a href="/2017/12/20/Java同步工具类/#more">阅读全文 »</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yukai.space/2017/12/20/Java同步工具类/" data-id="cjhw3qede000kw3xcpiitmtk5" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/多线程/">多线程</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+ 
+
+
+  
     <article id="post-Java阻塞队列" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2017/12/10/Java阻塞队列/" class="article-date">
@@ -102,7 +161,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2017/12/10/Java阻塞队列/" data-id="cjgp4npn4000pm2xcuc2toyhy" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2017/12/10/Java阻塞队列/" data-id="cjhw3qee10017w3xcbe0s9bg5" class="article-share-link">分享</a>
       
       
       
@@ -161,7 +220,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2017/11/30/简单学习Java-ForkJoin框架/" data-id="cjgp4npu50089m2xcsr2uiqwi" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2017/11/30/简单学习Java-ForkJoin框架/" data-id="cjhw3qen100ahw3xc2r1jau9n" class="article-share-link">分享</a>
       
       
       
@@ -222,7 +281,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2017/11/23/Java基础-字节/" data-id="cjgp4npmx000km2xc595qp517" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2017/11/23/Java基础-字节/" data-id="cjhw3qedh000nw3xco20tftue" class="article-share-link">分享</a>
       
       
       
@@ -289,7 +348,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2017/11/21/理解Java-Reference/" data-id="cjgp4nptx007wm2xcmckndw97" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2017/11/21/理解Java-Reference/" data-id="cjhw3qemb009yw3xc2ohd46t7" class="article-share-link">分享</a>
       
       
       
@@ -349,7 +408,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2017/11/20/如何执行一个延迟任务？/" data-id="cjgp4nptd0072m2xc6lx2mfry" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2017/11/20/如何执行一个延迟任务？/" data-id="cjhw3qela008ww3xchxv8kr6q" class="article-share-link">分享</a>
       
       
       
@@ -402,7 +461,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2017/11/15/从通信协议到装饰者模式/" data-id="cjgp4npsi005wm2xcsjpc243c" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2017/11/15/从通信协议到装饰者模式/" data-id="cjhw3qelo009bw3xcvw96qfkx" class="article-share-link">分享</a>
       
       
       
@@ -455,81 +514,11 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2017/11/05/大型网站技术架构/" data-id="cjgp4npt9006vm2xcpxpe1fqx" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2017/11/05/大型网站技术架构/" data-id="cjhw3qel5008tw3xcfblm3cts" class="article-share-link">分享</a>
       
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/web/">web</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
- 
-
-
-  
-    <article id="post-认识MVCC" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2017/11/02/认识MVCC/" class="article-date">
-  <time datetime="2017-11-02T12:18:07.000Z" itemprop="datePublished">2017-11-02</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/编程/">编程</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/11/02/认识MVCC/">认识MVCC</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>前一篇总结提到了数据库事务的隔离性可以由锁机制来实现。锁是传统数据库控制事务并发的主要手段，这里提到的锁(S锁和X锁)可以认为是悲观锁，在对数据实现读写之前加上相应的锁，实现了独占访问机制，从而控制并发行为。神通数据库7.0主要使用了锁来实现事务并发控制。</p>
-<p>那么数据库事务的并发控制还有其他的实现方式吗？当然是有的。去年刚推出的神通数据库8.0，就使用了MVCC(Multiversion Concurrency Control) 即多版本控制来控制事务的并发行为。</p>
-<p>研究一下什么是MVCC…</p>
-<h2 id="MVCC"><a href="#MVCC" class="headerlink" title="MVCC"></a>MVCC</h2><blockquote>
-<p>多版本并发控制技术,它使得大部分支持行锁的事务引擎,不再单纯的使用行锁来进行数据库的并发控制,取而代之的是,把数据库的行锁与行的多个版本结合起来,只需要很小的开销,就可以实现非锁定读,从而大大提高数据库系统的并发性能.</p>
-</blockquote>
-<p>多版本并发控制，意味着同一时刻看到的相同行的数据可能是不一样的,即一个行可能有多个版本.有点平行宇宙的意思。要实现这种效果，需要做一些操作：</p>
-<ul>
-<li><p>对于每一行记录，新增两个隐藏列：</p>
-<p>行的更新时间(创建版本号)</p>
-<p>行的删除时间(删除版本号)</p>
-</li>
-<li><p>数据版本</p>
-<p>同一行数据，在同一时刻对于不同的事务，可能看到不同的版本。即同一行数据有多个版本同时存在。</p>
-</li>
-<li><p>事务版本</p>
-<p>每个事务有其唯一的事务版本号</p>
-</li>
-<li><p>版本有序</p>
-<p>无论是数据版本，还是事务版本，其版本号随时间增长而增长，即版本号是递增的。</p>
-</li>
-</ul>
-        
-          <p class="article-more-link">
-            <a href="/2017/11/02/认识MVCC/#more">阅读全文 »</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yukai.space/2017/11/02/认识MVCC/" data-id="cjgp4npug008om2xc0xbl7llr" class="article-share-link">分享</a>
-      
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/数据库/">数据库</a></li></ul>
 
     </footer>
   </div>
@@ -565,6 +554,10 @@
       <ul>
         
           <li>
+            <a href="/2018/06/01/SSH端口转发/">SSH端口转发</a>
+          </li>
+        
+          <li>
             <a href="/2018/05/02/VirtualBox共享文件夹/">VirtualBox设置共享文件夹</a>
           </li>
         
@@ -578,10 +571,6 @@
         
           <li>
             <a href="/2018/03/29/可能会用到的Git技巧2/">可能会用到的Git技巧(2)</a>
-          </li>
-        
-          <li>
-            <a href="/2018/03/01/可能会用到的Git技巧1/">可能会用到的Git技巧(1)</a>
           </li>
         
       </ul>

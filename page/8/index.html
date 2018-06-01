@@ -66,6 +66,68 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-linux分区" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/03/04/linux分区/" class="article-date">
+  <time datetime="2017-03-04T03:45:43.000Z" itemprop="datePublished">2017-03-04</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/Linux/">Linux</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/03/04/linux分区/">linux分区</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>每次安装linux的时候，都会选择分区和挂载点。但是基本上没怎么研究过linux分区的细节，今天回顾了一下《鸟哥的linux私房菜》，总结一下分区的相关知识。</p>
+</blockquote>
+<h2 id="磁盘的组成"><a href="#磁盘的组成" class="headerlink" title="磁盘的组成"></a>磁盘的组成</h2><img src="/2017/03/04/linux分区/cipan.png" alt="磁盘" title="磁盘">
+<p>磁道（Track）：当磁盘旋转时，磁头若保持在一个位置上，则每个磁头都会在磁盘表面划出一个圆形轨迹，这些圆形轨迹就叫做磁道（Track）。</p>
+<p>柱面（Cylinder）：在有多个盘片构成的盘组中，由不同盘片的面，但处于同一半径圆的多个磁道组成的一个圆柱面（Cylinder）。</p>
+<p>扇区（Sector）：磁盘上的每个磁道被等分为若干个弧段，这些弧段便是硬盘的扇区（Sector）。</p>
+<p>磁头（Heads）</p>
+<p>盘片（Platters）</p>
+<p>每个碟片都有两面，因此也会相对应每碟片有2个磁头。</p>
+<p>硬盘的物理结构一般由磁头与碟片、电动机、主控芯片与排线等部件组成；当主电动机带动碟片旋转时，副电动机带动一组（磁头）到相对应的碟片上并确定读取正面还是反面的碟面，磁头悬浮在碟面上画出一个与碟片同心的圆形轨道（磁轨或称柱面），这时由磁头的磁感线圈感应碟面上的磁性与使用硬盘厂商指定的读取时间或数据间隔定位扇区，从而得到该扇区的数据内容；</p>
+<p>磁盘的第一个扇区记录了整块磁盘的重要信息，主要有两个：</p>
+<p>1.主引导分区：可以安装引导加载程序的地方，有446bytes</p>
+<p>2.分区表：记录整块音盘的分区状况，有64bytes</p>
+        
+          <p class="article-more-link">
+            <a href="/2017/03/04/linux分区/#more">阅读全文 »</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yukai.space/2017/03/04/linux分区/" data-id="cjhw3qejo006pw3xcxiiyu87d" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/">linux</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+ 
+
+
+  
     <article id="post-Linux的五个查找命令" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2017/02/26/Linux的五个查找命令/" class="article-date">
@@ -110,7 +172,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2017/02/26/Linux的五个查找命令/" data-id="cjgp4npnw0017m2xcp06df37t" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2017/02/26/Linux的五个查找命令/" data-id="cjhw3qedp000uw3xc6704n4nt" class="article-share-link">分享</a>
       
       
       
@@ -167,7 +229,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2017/02/25/centos7BCM驱动安装/" data-id="cjgp4npom001um2xc3t4ntawy" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2017/02/25/centos7BCM驱动安装/" data-id="cjhw3qefa002aw3xc5ddic0y9" class="article-share-link">分享</a>
       
       
       
@@ -221,7 +283,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2017/02/23/ssh的两种用法/" data-id="cjgp4nps40055m2xckx6xdv9p" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2017/02/23/ssh的两种用法/" data-id="cjhw3qek5007hw3xc5fjaobl9" class="article-share-link">分享</a>
       
       
       
@@ -276,7 +338,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2017/02/21/java日志使用/" data-id="cjgp4npqj003sm2xcs04p23ui" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2017/02/21/java日志使用/" data-id="cjhw3qegd003qw3xckj3ewrm3" class="article-share-link">分享</a>
       
       
       
@@ -332,7 +394,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2017/02/19/java国际化/" data-id="cjgp4npq9003jm2xcrh3ndesy" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2017/02/19/java国际化/" data-id="cjhw3qeg3003gw3xc6iuv5rd4" class="article-share-link">分享</a>
       
       
       
@@ -393,7 +455,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2017/02/18/win7与centos7双系统安装/" data-id="cjgp4npsb005lm2xc51r7lmdh" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2017/02/18/win7与centos7双系统安装/" data-id="cjhw3qek9007pw3xc8jf5u4rr" class="article-share-link">分享</a>
       
       
       
@@ -447,64 +509,11 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2017/02/07/Vps使用笔记/" data-id="cjgp4npod001nm2xcgp98aoaq" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2017/02/07/Vps使用笔记/" data-id="cjhw3qeeg001ew3xcr25d79zk" class="article-share-link">分享</a>
       
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/">linux</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
- 
-
-
-  
-    <article id="post-java异常的学习" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2016/12/13/java异常的学习/" class="article-date">
-  <time datetime="2016-12-13T13:46:52.000Z" itemprop="datePublished">2016-12-13</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/编程/">编程</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/12/13/java异常的学习/">java异常的学习</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <blockquote>
-<p>最近的写代码的过程中，遇到很多异常的处理，以前上大学的时候写代码，遇到异常直接给个try catch了事，只是停留在看懂异常能够找出异常抛出点的水平。真正写代码的时候，不了解java的异常机制给自己编程带来很多不便，基础知识很重要！学习之～～</p>
-</blockquote>
-<h2 id="异常分类"><a href="#异常分类" class="headerlink" title="异常分类"></a>异常分类</h2><img src="/2016/12/13/java异常的学习/java.png" alt="java异常体系" title="java异常体系">
-<p>java异常中的异常大体上可分为两类：Error 与 Exception，他们都继承自Throwable</p>
-        
-          <p class="article-more-link">
-            <a href="/2016/12/13/java异常的学习/#more">阅读全文 »</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yukai.space/2016/12/13/java异常的学习/" data-id="cjgp4npqb003mm2xc009gvq79" class="article-share-link">分享</a>
-      
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li></ul>
 
     </footer>
   </div>
@@ -540,6 +549,10 @@
       <ul>
         
           <li>
+            <a href="/2018/06/01/SSH端口转发/">SSH端口转发</a>
+          </li>
+        
+          <li>
             <a href="/2018/05/02/VirtualBox共享文件夹/">VirtualBox设置共享文件夹</a>
           </li>
         
@@ -553,10 +566,6 @@
         
           <li>
             <a href="/2018/03/29/可能会用到的Git技巧2/">可能会用到的Git技巧(2)</a>
-          </li>
-        
-          <li>
-            <a href="/2018/03/01/可能会用到的Git技巧1/">可能会用到的Git技巧(1)</a>
           </li>
         
       </ul>

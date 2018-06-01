@@ -66,6 +66,61 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-java_Tips" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/07/24/java_Tips/" class="article-date">
+  <time datetime="2016-07-24T04:48:55.000Z" itemprop="datePublished">2016-07-24</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/编程/">编程</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/07/24/java_Tips/">java编程技巧</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>突然想到把自己平时用到的，网上看到的java编程过程中的小技巧总结下来~~</p>
+</blockquote>
+<p> <strong>1</strong>. 循环中尽量不要使用try..catch 代码块，应该将其放在最外层</p>
+<p> <strong>2</strong>. if语句中,判断条件尽量不要使用if(!…)的形式，这样只会使代码更加难以理解</p>
+<p> <strong>3</strong>. 循环内不要不断创建对象引用，而应该：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">Object obj = <span class="keyword">null</span>;</div><div class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt;= count; i++) &#123; </div><div class="line"> obj = <span class="keyword">new</span> Object(); </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+        
+          <p class="article-more-link">
+            <a href="/2016/07/24/java_Tips/#more">阅读全文 »</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yukai.space/2016/07/24/java_Tips/" data-id="cjhw3qeg1003cw3xca40dmarn" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+ 
+
+
+  
     <article id="post-Ant的使用" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2016/07/18/Ant的使用/" class="article-date">
@@ -110,7 +165,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2016/07/18/Ant的使用/" data-id="cjgp4npld0001m2xcm2p3qbk2" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2016/07/18/Ant的使用/" data-id="cjhw3qect0009w3xc8920nsxo" class="article-share-link">分享</a>
       
       
       
@@ -160,7 +215,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2016/06/30/毕业了/" data-id="cjgp4npts007mm2xcc4jiila5" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2016/06/30/毕业了/" data-id="cjhw3qem5009sw3xc9mx4ad7r" class="article-share-link">分享</a>
       
       
       
@@ -213,7 +268,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2016/06/30/java中的枚举/" data-id="cjgp4nppn0031m2xclac92blu" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2016/06/30/java中的枚举/" data-id="cjhw3qefn002qw3xch7mmo11g" class="article-share-link">分享</a>
       
       
       
@@ -269,11 +324,69 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2016/06/21/java中的ThreadLocal/" data-id="cjgp4npp1002am2xcqqdvr1ly" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2016/06/21/java中的ThreadLocal/" data-id="cjhw3qefe002ew3xc1k8q3lfx" class="article-share-link">分享</a>
       
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/多线程/">多线程</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+ 
+
+
+  
+    <article id="post-java中的equals与hashcode" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/04/28/java中的equals与hashcode/" class="article-date">
+  <time datetime="2016-04-28T04:48:55.000Z" itemprop="datePublished">2016-04-28</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/编程/">编程</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/04/28/java中的equals与hashcode/">通过HashMap认识equals与hashcode</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>最近读了HashMap的源码，对HashCode与equals有了一定的了解，总结一下，顺便理一下HashMap中的核心算法。</p>
+</blockquote>
+<h2 id="什么是hashcode-hashcode的作用是什么"><a href="#什么是hashcode-hashcode的作用是什么" class="headerlink" title="什么是hashcode,hashcode的作用是什么"></a>什么是hashcode,hashcode的作用是什么</h2><p>hashcode并不是java中独有的。设想一下，如果让你设计一个算法，根据关键码去得到一个集合中的某个值或者这个关键码所在的位置。普通的做法就是挨个比较，高级一点的使用二分检索或者树形检索等算法。但是以上的检索算法都跟集合的长度N有关，当问题规模N很大时，这些检索的效率可能十分低下。</p>
+<p>理想的情况是，根据关键码，我们就可以定位记录所在的位置，而不用去挨个进行比较。也就是说，在关键码与记录存放的位置之间做一种映射。这个映射的方法就是hash(哈希)函数，或者叫散列函数，也就是java中的hashCode()方法，他所返回的值就是hashcode，根据hashcode可以找到记录的位置。</p>
+<p>按照散列的存储方式构造的存储结构叫做散列表。散列表中的一个位置称之为一个槽。</p>
+<p>hashCode()方法存在于java.lang.Object类当中，任何类都可以继承修改这个方法。hashCode()方法返回调用它的实例的hashCode值，是个int值。</p>
+<p>注：以下代码均来自jdk1.7</p>
+<p>String中hashCode()方法的实现：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">hashCode</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">int</span> h = hash;</div><div class="line">        <span class="keyword">if</span> (h == <span class="number">0</span> &amp;&amp; value.length &gt; <span class="number">0</span>) &#123;</div><div class="line">            <span class="keyword">char</span> val[] = value;</div><div class="line"></div><div class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; value.length; i++) &#123;</div><div class="line">                h = <span class="number">31</span> * h + val[i];</div><div class="line">            &#125;</div><div class="line">            hash = h;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> h;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+        
+          <p class="article-more-link">
+            <a href="/2016/04/28/java中的equals与hashcode/#more">阅读全文 »</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yukai.space/2016/04/28/java中的equals与hashcode/" data-id="cjhw3qefi002iw3xcbcj3vc4i" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li></ul>
 
     </footer>
   </div>
@@ -335,65 +448,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2016/04/28/java中的类型转换/" data-id="cjgp4nppc002mm2xcqsnprglq" class="article-share-link">分享</a>
-      
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
- 
-
-
-  
-    <article id="post-java中的equals与hashcode" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2016/04/28/java中的equals与hashcode/" class="article-date">
-  <time datetime="2016-04-28T04:48:55.000Z" itemprop="datePublished">2016-04-28</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/编程/">编程</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/04/28/java中的equals与hashcode/">通过HashMap认识equals与hashcode</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <blockquote>
-<p>最近读了HashMap的源码，对HashCode与equals有了一定的了解，总结一下，顺便理一下HashMap中的核心算法。</p>
-</blockquote>
-<h2 id="什么是hashcode-hashcode的作用是什么"><a href="#什么是hashcode-hashcode的作用是什么" class="headerlink" title="什么是hashcode,hashcode的作用是什么"></a>什么是hashcode,hashcode的作用是什么</h2><p>hashcode并不是java中独有的。设想一下，如果让你设计一个算法，根据关键码去得到一个集合中的某个值或者这个关键码所在的位置。普通的做法就是挨个比较，高级一点的使用二分检索或者树形检索等算法。但是以上的检索算法都跟集合的长度N有关，当问题规模N很大时，这些检索的效率可能十分低下。</p>
-<p>理想的情况是，根据关键码，我们就可以定位记录所在的位置，而不用去挨个进行比较。也就是说，在关键码与记录存放的位置之间做一种映射。这个映射的方法就是hash(哈希)函数，或者叫散列函数，也就是java中的hashCode()方法，他所返回的值就是hashcode，根据hashcode可以找到记录的位置。</p>
-<p>按照散列的存储方式构造的存储结构叫做散列表。散列表中的一个位置称之为一个槽。</p>
-<p>hashCode()方法存在于java.lang.Object类当中，任何类都可以继承修改这个方法。hashCode()方法返回调用它的实例的hashCode值，是个int值。</p>
-<p>注：以下代码均来自jdk1.7</p>
-<p>String中hashCode()方法的实现：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">hashCode</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">int</span> h = hash;</div><div class="line">        <span class="keyword">if</span> (h == <span class="number">0</span> &amp;&amp; value.length &gt; <span class="number">0</span>) &#123;</div><div class="line">            <span class="keyword">char</span> val[] = value;</div><div class="line"></div><div class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; value.length; i++) &#123;</div><div class="line">                h = <span class="number">31</span> * h + val[i];</div><div class="line">            &#125;</div><div class="line">            hash = h;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> h;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-        
-          <p class="article-more-link">
-            <a href="/2016/04/28/java中的equals与hashcode/#more">阅读全文 »</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yukai.space/2016/04/28/java中的equals与hashcode/" data-id="cjgp4npp3002em2xctqzqqzke" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2016/04/28/java中的类型转换/" data-id="cjhw3qefp002uw3xcdruiagv6" class="article-share-link">分享</a>
       
       
       
@@ -455,76 +510,11 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2016/04/25/ant编译java工程jdk路径的设置/" data-id="cjgp4npoh001qm2xccx7za75z" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2016/04/25/ant编译java工程jdk路径的设置/" data-id="cjhw3qeeq001qw3xcvgz9pr75" class="article-share-link">分享</a>
       
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ant/">ant</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
- 
-
-
-  
-    <article id="post-java中的编码问题" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2016/04/20/java中的编码问题/" class="article-date">
-  <time datetime="2016-04-20T04:48:55.000Z" itemprop="datePublished">2016-04-20</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/编程/">编程</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/04/20/java中的编码问题/">java中的编码问题</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <blockquote>
-<p>最近在工作过程中总是被编码困扰，出现了很多意想不到的情况。故上网查看资料，总结一番。</p>
-</blockquote>
-<p>2016/9/11 更新：今天在网上看到一篇讲解有关编码的文章 <a href="http://blog.csdn.net/zklth/article/details/7016886">Java中字符编码和字符串所占字节数</a>,个人认为作者写的十分清晰明了。把文章中的例子看懂的话再遇到乱码的情况解决起来应该不难！</p>
-<h2 id="编码"><a href="#编码" class="headerlink" title="编码"></a>编码</h2><p>什么是编码？程序员应该都知道计算机能够识别的只是1和0，我们看到的文字、图片、视频等在计算机的 世界里都是以二进制的形式存在的。包括你的硬盘或者网络上传输的字节序列，都是无数个0和1组成的。英文字母，数字，汉字等都是字符。不同字符对应二进制数的规则，也就是说不同的字符翻译为不同的0、1组合，就是字符的编码。这个过程的逆过程，就是解码。</p>
-<ul>
-<li><h4 id="Ascii编码"><a href="#Ascii编码" class="headerlink" title="Ascii编码"></a><strong><a href="http://baike.baidu.com/view/15482.htm?fromtitle=ascii%E7%A0%81&amp;fromid=99077&amp;type=syn">Ascii编码</a></strong></h4></li>
-</ul>
-<p>标准的ASCII编码使用的是7（2^7 = 128）位二进制数来表示所有的大小写字母、数字和标点符号已经一些特殊的控制字符，最前面的一位统一规定为0。(一个字节8位)。缺点是只能显示128个字符，显示的字符十分有限，比如对中文就无能为力了。</p>
-<ul>
-<li><h4 id="GB2312"><a href="#GB2312" class="headerlink" title="GB2312"></a><strong><a href="http://baike.baidu.com/view/443268.htm?fromtitle=GB2312&amp;fromid=483170&amp;type=syn">GB2312</a></strong></h4></li>
-</ul>
-<p>GB2312编码适用于汉字处理、汉字通信等系统之间的信息交换，通行于中国大陆；新加坡等地也采用此编码。中国大陆几乎所有的中文系统和国际化的软件都支持GB 2312。</p>
-<ul>
-<li><h4 id="UTF-8"><a href="#UTF-8" class="headerlink" title="UTF-8"></a><strong><a href="http://baike.baidu.com/view/25412.htm">UTF-8</a></strong></h4></li>
-</ul>
-<p>事实上世界上那么多国家，存在更多的字符是前面的编码所不能表示的。不同国家的不同编码之间也不能够兼容。所以就需要一套通用的编码能够表示世界上所有的符号，这就是<a href="http://baike.baidu.com/item/unicode">Unicode编码</a><br>事实上，Unicode也是一套字符集。</p>
-        
-          <p class="article-more-link">
-            <a href="/2016/04/20/java中的编码问题/#more">阅读全文 »</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yukai.space/2016/04/20/java中的编码问题/" data-id="cjgp4nppf002qm2xciioo7ww8" class="article-share-link">分享</a>
-      
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/编码/">编码</a></li></ul>
 
     </footer>
   </div>
@@ -560,6 +550,10 @@
       <ul>
         
           <li>
+            <a href="/2018/06/01/SSH端口转发/">SSH端口转发</a>
+          </li>
+        
+          <li>
             <a href="/2018/05/02/VirtualBox共享文件夹/">VirtualBox设置共享文件夹</a>
           </li>
         
@@ -573,10 +567,6 @@
         
           <li>
             <a href="/2018/03/29/可能会用到的Git技巧2/">可能会用到的Git技巧(2)</a>
-          </li>
-        
-          <li>
-            <a href="/2018/03/01/可能会用到的Git技巧1/">可能会用到的Git技巧(1)</a>
           </li>
         
       </ul>
