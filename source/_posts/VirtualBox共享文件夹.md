@@ -104,3 +104,25 @@ sudo mount -t vboxsf gitlabwin /gitlabwin
 ## 开机自动挂载
 
 目前还没有找到好的解决办法，参考[这里](https://segmentfault.com/q/1010000005600781/a-1020000005616990)
+
+如果对挂载的目录没有特殊要求，可以选择自动挂载，右键虚拟机->设置->共享文件夹
+
+共享文件夹会开机自动挂载到`/media/sf_XXX` 目录。
+
+## 设置挂载目录权限
+
+> VirtualBox shared folders present a very simplified file system implementation, just enough to read/write files from/to the guest. Many applications can error when using shared folders, because they expect advanced features, like file locking or access controls, which don't exist for shared folders.
+
+由于共享文件夹并不是虚拟机的本地目录，我们在虚拟机中可以配置共享文件夹的权限是有限的。
+
+手动挂载或自动挂载的目录，所属用户默认为root，组为vboxsf，并且使用 `chmod chown` 等命令是无法改变的。
+
+如果想要配置挂载目录的权限，需要在手动挂载的时候指定一些选项：
+
+```java
+// uid gid指定挂载目录的所属用户和组
+sudo mount -t vboxsf -o uid=1000,gid=1000  <folder name given in VirtualBox>
+// fmode指定文件权限，dmode指定目录权限
+// 注意，若同时指定挂载目录的所属用户和组，则fmode和dmode选项失效
+sudo mount -t vboxsf -o fmode=700,dmode=700  <folder name given in VirtualBox>
+```
