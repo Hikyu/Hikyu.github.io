@@ -17,7 +17,7 @@
 因为虚拟机所在的 IP 无法访问外网，只能访问公司内部网络。所以在进行下面的操作之前，需要配置">
 <meta property="og:image" content="http://yukai.space/2018/05/02/VirtualBox共享文件夹/iso.png">
 <meta property="og:image" content="http://yukai.space/2018/05/02/VirtualBox共享文件夹/share.png">
-<meta property="og:updated_time" content="2018-05-03T09:03:05.000Z">
+<meta property="og:updated_time" content="2018-06-16T23:18:09.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="VirtualBox设置共享文件夹">
 <meta name="twitter:description" content="最近在做 Gitlab 备份，Gitlab本身运行在虚拟机当中，备份策略是使用 Rsync 备份到远程主机一份；同时在宿主机备份一份。宿主机使用了windows，想到了一个较为简单的办法，即设置共享文件夹，将需要备份的内容定时复制到共享文件夹即可。在设置共享文件夹的过程中遇到一些问题，在此记录下来。
@@ -143,11 +143,19 @@
 <p>此时，共享文件夹配置完毕，/gitlabwin 映射到宿主机 E:\gitlab</p>
 <p>可以在 /gitlabwin 下面新建文件，然后查看宿主机 E:\gitlab 是否存在对应的文件。</p>
 <h2 id="开机自动挂载"><a href="#开机自动挂载" class="headerlink" title="开机自动挂载"></a>开机自动挂载</h2><p>目前还没有找到好的解决办法，参考<a href="https://segmentfault.com/q/1010000005600781/a-1020000005616990" target="_blank" rel="external">这里</a></p>
-
+<p>如果对挂载的目录没有特殊要求，可以选择自动挂载，右键虚拟机-&gt;设置-&gt;共享文件夹</p>
+<p>共享文件夹会开机自动挂载到<code>/media/sf_XXX</code> 目录。</p>
+<h2 id="设置挂载目录权限"><a href="#设置挂载目录权限" class="headerlink" title="设置挂载目录权限"></a>设置挂载目录权限</h2><blockquote>
+<p>VirtualBox shared folders present a very simplified file system implementation, just enough to read/write files from/to the guest. Many applications can error when using shared folders, because they expect advanced features, like file locking or access controls, which don’t exist for shared folders.</p>
+</blockquote>
+<p>由于共享文件夹并不是虚拟机的本地目录，我们在虚拟机中可以配置共享文件夹的权限是有限的。</p>
+<p>手动挂载或自动挂载的目录，所属用户默认为root，组为vboxsf，并且使用 <code>chmod chown</code> 等命令是无法改变的。</p>
+<p>如果想要配置挂载目录的权限，需要在手动挂载的时候指定一些选项：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// uid gid指定挂载目录的所属用户和组</span></div><div class="line">sudo mount -t vboxsf -o uid=<span class="number">1000</span>,gid=<span class="number">1000</span>  &lt;folder name given in VirtualBox&gt;</div><div class="line"><span class="comment">// fmode指定文件权限，dmode指定目录权限</span></div><div class="line"><span class="comment">// 注意，若同时指定挂载目录的所属用户和组，则fmode和dmode选项失效</span></div><div class="line">sudo mount -t vboxsf -o fmode=<span class="number">700</span>,dmode=<span class="number">700</span>  &lt;folder name given in VirtualBox&gt;</div></pre></td></tr></table></figure>
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2018/05/02/VirtualBox共享文件夹/" data-id="cjhw3qeel001mw3xczas536z4" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2018/05/02/VirtualBox共享文件夹/" data-id="cjii0wk4n0016l7xc27xomm44" class="article-share-link">分享</a>
       
       
       
@@ -251,7 +259,7 @@
       
         <strong class="toc-title">文章目录</strong>
         <div class="toc-widget-list">
-              <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#虚拟机安装增强功能"><span class="toc-number">1.</span> <span class="toc-text">虚拟机安装增强功能</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#设置共享文件夹"><span class="toc-number">2.</span> <span class="toc-text">设置共享文件夹</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#开机自动挂载"><span class="toc-number">3.</span> <span class="toc-text">开机自动挂载</span></a></li></ol>
+              <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#虚拟机安装增强功能"><span class="toc-number">1.</span> <span class="toc-text">虚拟机安装增强功能</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#设置共享文件夹"><span class="toc-number">2.</span> <span class="toc-text">设置共享文件夹</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#开机自动挂载"><span class="toc-number">3.</span> <span class="toc-text">开机自动挂载</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#设置挂载目录权限"><span class="toc-number">4.</span> <span class="toc-text">设置挂载目录权限</span></a></li></ol>
           </div>
       </div>
     </div>

@@ -66,6 +66,68 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-Eclipse编码问题终极解决方案" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/09/20/Eclipse编码问题终极解决方案/" class="article-date">
+  <time datetime="2016-09-20T13:57:08.000Z" itemprop="datePublished">2016-09-20</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/工具/">工具</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/09/20/Eclipse编码问题终极解决方案/">Eclipse乱码问题终极解决方案</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>今天在Eclipse中导入一个新项目的时候，出现了乱码问题。研究一番…</p>
+<p>显示乱码的根本原因在于：<strong>文件本身的编码和编辑器打开和编辑文件使用的编码不一致</strong>。当编辑器以不同于文件的编码去解码该文件的时候，就会导致读出来乱码。大部分情况下英文显示正常是因为大部分编码都兼容ASCII，中文则会显示乱码。</p>
+<h2 id="编辑器显示乱码问题"><a href="#编辑器显示乱码问题" class="headerlink" title="编辑器显示乱码问题"></a>编辑器显示乱码问题</h2><p>在Eclipse中，设置编辑器显示和编辑文件所采用编码的方法有四种：</p>
+<p>1.Windows-&gt;Preference-&gt;General-&gt;Workspace ：修改整个工作空间</p>
+<img src="/2016/09/20/Eclipse编码问题终极解决方案/1.png" alt="全局修改" title="全局修改">
+<p>2.右键Project-&gt;Properties-&gt;Resource ：修改某个工程</p>
+<img src="/2016/09/20/Eclipse编码问题终极解决方案/2.png" alt="工程修改" title="工程修改">
+<p>3.右键文件-&gt;Properties ：修改某个文件</p>
+<img src="/2016/09/20/Eclipse编码问题终极解决方案/3.png" alt="文件修改" title="文件修改">
+<p>4.Windows-&gt;Preference-&gt;General-&gt;Content types-&gt;Default encoding :全局修改某种类型的文件</p>
+<img src="/2016/09/20/Eclipse编码问题终极解决方案/4.png" alt="全局文件修改" title="全局文件修改">
+<p>其中，3的优先级最高。也就是说某个文件被编辑器以哪种编码读取最终是由3中的Text file encoding决定的。一般情况下，如果我们不在3中显示指定编码(选择Other那一项)，Eclipse都会默认使用Default那一项的编码。那么，这个Default的编码又是如何决定的呢？</p>
+<img src="/2016/09/20/Eclipse编码问题终极解决方案/5.png" alt="文件修改" title="文件修改">
+<p>注意上图中圈起来的部分：这部分表示了Default采用哪种编码是如何决定的。</p>
+        
+          <p class="article-more-link">
+            <a href="/2016/09/20/Eclipse编码问题终极解决方案/#more">阅读全文 »</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yukai.space/2016/09/20/Eclipse编码问题终极解决方案/" data-id="cjii0wk2o0003l7xc4ks1gxwz" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Eclipse/">Eclipse</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+ 
+
+
+  
     <article id="post-Spring项目打包为jar" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2016/09/19/Spring项目打包为jar/" class="article-date">
@@ -108,7 +170,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2016/09/19/Spring项目打包为jar/" data-id="cjhw3qeej001iw3xcix1fw1rq" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2016/09/19/Spring项目打包为jar/" data-id="cjii0wk53001hl7xcynku7cqq" class="article-share-link">分享</a>
       
       
       
@@ -160,7 +222,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2016/09/10/理解java内存模型/" data-id="cjhw3qemu00abw3xcwdoqdxg9" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2016/09/10/理解java内存模型/" data-id="cjii0wkdi00b2l7xccuee8h8e" class="article-share-link">分享</a>
       
       
       
@@ -229,7 +291,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2016/08/31/理解notify notifyall sleep/" data-id="cjhw3qemr00a7w3xcy6kx7cw3" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2016/08/31/理解notify notifyall sleep/" data-id="cjii0wkdk00b6l7xcl1wgkfdf" class="article-share-link">分享</a>
       
       
       
@@ -285,7 +347,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2016/08/22/关于加密的一点总结/" data-id="cjhw3qekn008aw3xc9wxova1e" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2016/08/22/关于加密的一点总结/" data-id="cjii0wkab009jl7xcst3togri" class="article-share-link">分享</a>
       
       
       
@@ -337,7 +399,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2016/08/16/Java集合框架学习总结/" data-id="cjhw3qedi000ow3xcwnml6r48" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2016/08/16/Java集合框架学习总结/" data-id="cjii0wk4d000tl7xcr8ofixeq" class="article-share-link">分享</a>
       
       
       
@@ -393,7 +455,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2016/08/16/synchronized的一些用法/" data-id="cjhw3qekb007sw3xc4ze3awh3" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2016/08/16/synchronized的一些用法/" data-id="cjii0wk7w005cl7xck9q6su9e" class="article-share-link">分享</a>
       
       
       
@@ -458,64 +520,10 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2016/08/15/一些计划/" data-id="cjhw3qelj0095w3xcdcb93n23" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2016/08/15/一些计划/" data-id="cjii0wk9t0094l7xca4fkhsn6" class="article-share-link">分享</a>
       
       
       
-    </footer>
-  </div>
-  
-</article>
- 
-
-
-  
-    <article id="post-为什么是final" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2016/07/31/为什么是final/" class="article-date">
-  <time datetime="2016-07-31T09:30:55.000Z" itemprop="datePublished">2016-07-31</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/编程/">编程</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/07/31/为什么是final/">为什么是final</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <blockquote>
-<p>之前一直知道这样一个事实：在java中，匿名内部类或局部内部类访问包含自己的函数的局部变量或形参时，该变量或形参必须声明为final类型的。今天逛博客时偶尔看到有人提问：为什么必须是final呢？？？对啊，为什么必须是final呢？翻了很多资料，网上关于这个问题的总结还挺多，但是都不懂他们在说什么（可能是自己理解不到位），所以自己总结一下。</p>
-</blockquote>
-<p>注：以下提到的局部变量和形参，都是指产生这个匿名内部类的函数的局部变量和形参。</p>
-<p>例子是这样的：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Outer</span> </span>&#123;</div><div class="line">	<span class="keyword">private</span> <span class="keyword">int</span> outerVar=<span class="number">0</span>;</div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testInner</span><span class="params">(<span class="keyword">final</span> String paramVal)</span></span>&#123;</div><div class="line">		<span class="keyword">final</span> Integer localVal = <span class="number">1</span>;</div><div class="line">		Inner inner = <span class="keyword">new</span> Inner()&#123;</div><div class="line">			<span class="meta">@Override</span></div><div class="line">			<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doSomething</span><span class="params">()</span> </span>&#123;</div><div class="line">				System.out.println(localVal+paramVal);</div><div class="line">			&#125;</div><div class="line">			</div><div class="line">		&#125;;</div><div class="line">		</div><div class="line">		<span class="keyword">final</span> <span class="keyword">int</span> localVal1 = <span class="number">2</span>;</div><div class="line">		<span class="class"><span class="keyword">class</span> <span class="title">Inner2</span></span>&#123;</div><div class="line">			<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testInner2</span><span class="params">()</span></span>&#123;</div><div class="line">				System.out.println(localVal1);</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">	<span class="class"><span class="keyword">interface</span> <span class="title">Inner</span></span>&#123;</div><div class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doSomething</span><span class="params">()</span></span>;</div><div class="line">	&#125;</div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String args[])</span></span>&#123;</div><div class="line">		Outer outer = <span class="keyword">new</span> Outer();</div><div class="line">		outer.testInner(<span class="string">"hello"</span>);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-        
-          <p class="article-more-link">
-            <a href="/2016/07/31/为什么是final/#more">阅读全文 »</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yukai.space/2016/07/31/为什么是final/" data-id="cjhw3qelh0092w3xcsce3k53c" class="article-share-link">分享</a>
-      
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li></ul>
-
     </footer>
   </div>
   
@@ -550,6 +558,10 @@
       <ul>
         
           <li>
+            <a href="/2018/06/17/gitlab备份恢复方案/">gitlab备份恢复方案</a>
+          </li>
+        
+          <li>
             <a href="/2018/06/01/SSH端口转发/">SSH端口转发</a>
           </li>
         
@@ -563,10 +575,6 @@
         
           <li>
             <a href="/2018/04/30/联通华为HG8347R设置桥接模式/">联通华为HG8347R设置桥接模式</a>
-          </li>
-        
-          <li>
-            <a href="/2018/03/29/可能会用到的Git技巧2/">可能会用到的Git技巧(2)</a>
           </li>
         
       </ul>

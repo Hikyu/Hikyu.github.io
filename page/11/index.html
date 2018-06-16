@@ -66,6 +66,60 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-为什么是final" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/07/31/为什么是final/" class="article-date">
+  <time datetime="2016-07-31T09:30:55.000Z" itemprop="datePublished">2016-07-31</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/编程/">编程</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/07/31/为什么是final/">为什么是final</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>之前一直知道这样一个事实：在java中，匿名内部类或局部内部类访问包含自己的函数的局部变量或形参时，该变量或形参必须声明为final类型的。今天逛博客时偶尔看到有人提问：为什么必须是final呢？？？对啊，为什么必须是final呢？翻了很多资料，网上关于这个问题的总结还挺多，但是都不懂他们在说什么（可能是自己理解不到位），所以自己总结一下。</p>
+</blockquote>
+<p>注：以下提到的局部变量和形参，都是指产生这个匿名内部类的函数的局部变量和形参。</p>
+<p>例子是这样的：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Outer</span> </span>&#123;</div><div class="line">	<span class="keyword">private</span> <span class="keyword">int</span> outerVar=<span class="number">0</span>;</div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testInner</span><span class="params">(<span class="keyword">final</span> String paramVal)</span></span>&#123;</div><div class="line">		<span class="keyword">final</span> Integer localVal = <span class="number">1</span>;</div><div class="line">		Inner inner = <span class="keyword">new</span> Inner()&#123;</div><div class="line">			<span class="meta">@Override</span></div><div class="line">			<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doSomething</span><span class="params">()</span> </span>&#123;</div><div class="line">				System.out.println(localVal+paramVal);</div><div class="line">			&#125;</div><div class="line">			</div><div class="line">		&#125;;</div><div class="line">		</div><div class="line">		<span class="keyword">final</span> <span class="keyword">int</span> localVal1 = <span class="number">2</span>;</div><div class="line">		<span class="class"><span class="keyword">class</span> <span class="title">Inner2</span></span>&#123;</div><div class="line">			<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testInner2</span><span class="params">()</span></span>&#123;</div><div class="line">				System.out.println(localVal1);</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">	<span class="class"><span class="keyword">interface</span> <span class="title">Inner</span></span>&#123;</div><div class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doSomething</span><span class="params">()</span></span>;</div><div class="line">	&#125;</div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String args[])</span></span>&#123;</div><div class="line">		Outer outer = <span class="keyword">new</span> Outer();</div><div class="line">		outer.testInner(<span class="string">"hello"</span>);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+        
+          <p class="article-more-link">
+            <a href="/2016/07/31/为什么是final/#more">阅读全文 »</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yukai.space/2016/07/31/为什么是final/" data-id="cjii0wk9v0097l7xcyn1e6qhr" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+ 
+
+
+  
     <article id="post-java_Tips" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2016/07/24/java_Tips/" class="article-date">
@@ -107,7 +161,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2016/07/24/java_Tips/" data-id="cjhw3qeg1003cw3xca40dmarn" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2016/07/24/java_Tips/" data-id="cjii0wk6n003cl7xch8dy8ext" class="article-share-link">分享</a>
       
       
       
@@ -165,7 +219,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2016/07/18/Ant的使用/" data-id="cjhw3qect0009w3xc8920nsxo" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2016/07/18/Ant的使用/" data-id="cjii0wk3d000bl7xcfcpi35tu" class="article-share-link">分享</a>
       
       
       
@@ -215,7 +269,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2016/06/30/毕业了/" data-id="cjhw3qem5009sw3xc9mx4ad7r" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2016/06/30/毕业了/" data-id="cjii0wkd000ajl7xcsd3585tm" class="article-share-link">分享</a>
       
       
       
@@ -268,7 +322,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2016/06/30/java中的枚举/" data-id="cjhw3qefn002qw3xch7mmo11g" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2016/06/30/java中的枚举/" data-id="cjii0wk65002nl7xcsasw3dkm" class="article-share-link">分享</a>
       
       
       
@@ -324,69 +378,11 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2016/06/21/java中的ThreadLocal/" data-id="cjhw3qefe002ew3xc1k8q3lfx" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2016/06/21/java中的ThreadLocal/" data-id="cjii0wk5y002dl7xc1i0obvta" class="article-share-link">分享</a>
       
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/多线程/">多线程</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
- 
-
-
-  
-    <article id="post-java中的equals与hashcode" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2016/04/28/java中的equals与hashcode/" class="article-date">
-  <time datetime="2016-04-28T04:48:55.000Z" itemprop="datePublished">2016-04-28</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/编程/">编程</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/04/28/java中的equals与hashcode/">通过HashMap认识equals与hashcode</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <blockquote>
-<p>最近读了HashMap的源码，对HashCode与equals有了一定的了解，总结一下，顺便理一下HashMap中的核心算法。</p>
-</blockquote>
-<h2 id="什么是hashcode-hashcode的作用是什么"><a href="#什么是hashcode-hashcode的作用是什么" class="headerlink" title="什么是hashcode,hashcode的作用是什么"></a>什么是hashcode,hashcode的作用是什么</h2><p>hashcode并不是java中独有的。设想一下，如果让你设计一个算法，根据关键码去得到一个集合中的某个值或者这个关键码所在的位置。普通的做法就是挨个比较，高级一点的使用二分检索或者树形检索等算法。但是以上的检索算法都跟集合的长度N有关，当问题规模N很大时，这些检索的效率可能十分低下。</p>
-<p>理想的情况是，根据关键码，我们就可以定位记录所在的位置，而不用去挨个进行比较。也就是说，在关键码与记录存放的位置之间做一种映射。这个映射的方法就是hash(哈希)函数，或者叫散列函数，也就是java中的hashCode()方法，他所返回的值就是hashcode，根据hashcode可以找到记录的位置。</p>
-<p>按照散列的存储方式构造的存储结构叫做散列表。散列表中的一个位置称之为一个槽。</p>
-<p>hashCode()方法存在于java.lang.Object类当中，任何类都可以继承修改这个方法。hashCode()方法返回调用它的实例的hashCode值，是个int值。</p>
-<p>注：以下代码均来自jdk1.7</p>
-<p>String中hashCode()方法的实现：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">hashCode</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">int</span> h = hash;</div><div class="line">        <span class="keyword">if</span> (h == <span class="number">0</span> &amp;&amp; value.length &gt; <span class="number">0</span>) &#123;</div><div class="line">            <span class="keyword">char</span> val[] = value;</div><div class="line"></div><div class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; value.length; i++) &#123;</div><div class="line">                h = <span class="number">31</span> * h + val[i];</div><div class="line">            &#125;</div><div class="line">            hash = h;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> h;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-        
-          <p class="article-more-link">
-            <a href="/2016/04/28/java中的equals与hashcode/#more">阅读全文 »</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yukai.space/2016/04/28/java中的equals与hashcode/" data-id="cjhw3qefi002iw3xcbcj3vc4i" class="article-share-link">分享</a>
-      
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li></ul>
 
     </footer>
   </div>
@@ -448,7 +444,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2016/04/28/java中的类型转换/" data-id="cjhw3qefp002uw3xcdruiagv6" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2016/04/28/java中的类型转换/" data-id="cjii0wk67002rl7xc362ocfh2" class="article-share-link">分享</a>
       
       
       
@@ -462,14 +458,14 @@
 
 
   
-    <article id="post-ant编译java工程jdk路径的设置" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-java中的equals与hashcode" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2016/04/25/ant编译java工程jdk路径的设置/" class="article-date">
-  <time datetime="2016-04-25T04:48:55.000Z" itemprop="datePublished">2016-04-25</time>
+    <a href="/2016/04/28/java中的equals与hashcode/" class="article-date">
+  <time datetime="2016-04-28T04:48:55.000Z" itemprop="datePublished">2016-04-28</time>
 </a>
     
   <div class="article-category">
-    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/工具/">工具</a>
+    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/编程/">编程</a>
   </div>
 
   </div>
@@ -480,7 +476,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2016/04/25/ant编译java工程jdk路径的设置/">ANT编译java工程经jdk路径的设置</a>
+      <a class="article-title" href="/2016/04/28/java中的equals与hashcode/">通过HashMap认识equals与hashcode</a>
     </h1>
   
 
@@ -489,32 +485,28 @@
     <div class="article-entry" itemprop="articleBody">
       
         <blockquote>
-<p>今天工作的时候涉及到使用ant对项目进行编译，打包。此前只知道ant是一个构建工具（当然，现在也是），也基本上没有接触过。但是build.xml是从仓库下载的已经配置好的文件。本来想着只要在eclipse轻轻一点Ant Build 就万事大吉，但是这个打包却折腾了我两个小时。</p>
+<p>最近读了HashMap的源码，对HashCode与equals有了一定的了解，总结一下，顺便理一下HashMap中的核心算法。</p>
 </blockquote>
-<p>打包过程中总是报：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">[javac] 警告: [options] 未与 -source <span class="number">1.5</span> 一起设置引导类路径</div><div class="line">[javac] E:\doc\oscartools\driver\oscarJavaDriver\jdbc\V1.0\build\com\oscar\Driver.java:<span class="number">50</span>: 错误: com.oscar.Driver不是抽象的, 并且未覆盖java.sql.Driver中的抽象方法getParentLogger()</div><div class="line">[javac] <span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Driver</span> <span class="keyword">implements</span> <span class="title">java</span>.<span class="title">sql</span>.<span class="title">Driver</span> </span>&#123;</div><div class="line">....</div></pre></td></tr></table></figure>
-<p>类似这样的一堆错误。</p>
-<p>没有过多的思考，百度之…出现了一堆没用的资料和争论。80%的时间花在了看这些人扯淡上面（或许正真的大神并不关注这些问题）。</p>
-<p>严重的浪费时间和影响心情，遂放弃。</p>
-<p>静下来想想，工程的java build path使用1.5，java compiler 使用1.5，没什么问题啊。。。</p>
-<p>后来灵光一现，build.xml中的javac难道与java home有关（原谅我现在才想到）？java home使用jdk为1.7，遂改为1.5。</p>
-<p>重启eclipse，悲催，eclipse要求jdk必须大于等于1.7。</p>
-<p>等等，如果不同的工程依赖不同的jdk的话，修改java home并不是一个明智的解决方案，一定可以针对某个工程修改它所依赖的javac，谷歌之 ‘ant set java_home in build.xml’</p>
-<p>果然，stackoverflow拯救了我，只需要在build.xml文件中javac标签下添加</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">executable=<span class="string">"C:\Program Files\Java\jdk1.5.0_22/bin/javac"</span></div><div class="line">fork=<span class="string">"yes"</span></div></pre></td></tr></table></figure>
+<h2 id="什么是hashcode-hashcode的作用是什么"><a href="#什么是hashcode-hashcode的作用是什么" class="headerlink" title="什么是hashcode,hashcode的作用是什么"></a>什么是hashcode,hashcode的作用是什么</h2><p>hashcode并不是java中独有的。设想一下，如果让你设计一个算法，根据关键码去得到一个集合中的某个值或者这个关键码所在的位置。普通的做法就是挨个比较，高级一点的使用二分检索或者树形检索等算法。但是以上的检索算法都跟集合的长度N有关，当问题规模N很大时，这些检索的效率可能十分低下。</p>
+<p>理想的情况是，根据关键码，我们就可以定位记录所在的位置，而不用去挨个进行比较。也就是说，在关键码与记录存放的位置之间做一种映射。这个映射的方法就是hash(哈希)函数，或者叫散列函数，也就是java中的hashCode()方法，他所返回的值就是hashcode，根据hashcode可以找到记录的位置。</p>
+<p>按照散列的存储方式构造的存储结构叫做散列表。散列表中的一个位置称之为一个槽。</p>
+<p>hashCode()方法存在于java.lang.Object类当中，任何类都可以继承修改这个方法。hashCode()方法返回调用它的实例的hashCode值，是个int值。</p>
+<p>注：以下代码均来自jdk1.7</p>
+<p>String中hashCode()方法的实现：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">hashCode</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">int</span> h = hash;</div><div class="line">        <span class="keyword">if</span> (h == <span class="number">0</span> &amp;&amp; value.length &gt; <span class="number">0</span>) &#123;</div><div class="line">            <span class="keyword">char</span> val[] = value;</div><div class="line"></div><div class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; value.length; i++) &#123;</div><div class="line">                h = <span class="number">31</span> * h + val[i];</div><div class="line">            &#125;</div><div class="line">            hash = h;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> h;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
         
           <p class="article-more-link">
-            <a href="/2016/04/25/ant编译java工程jdk路径的设置/#more">阅读全文 »</a>
+            <a href="/2016/04/28/java中的equals与hashcode/#more">阅读全文 »</a>
           </p>
         
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2016/04/25/ant编译java工程jdk路径的设置/" data-id="cjhw3qeeq001qw3xcvgz9pr75" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2016/04/28/java中的equals与hashcode/" data-id="cjii0wk61002gl7xcurrins7j" class="article-share-link">分享</a>
       
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ant/">ant</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li></ul>
 
     </footer>
   </div>
@@ -550,6 +542,10 @@
       <ul>
         
           <li>
+            <a href="/2018/06/17/gitlab备份恢复方案/">gitlab备份恢复方案</a>
+          </li>
+        
+          <li>
             <a href="/2018/06/01/SSH端口转发/">SSH端口转发</a>
           </li>
         
@@ -563,10 +559,6 @@
         
           <li>
             <a href="/2018/04/30/联通华为HG8347R设置桥接模式/">联通华为HG8347R设置桥接模式</a>
-          </li>
-        
-          <li>
-            <a href="/2018/03/29/可能会用到的Git技巧2/">可能会用到的Git技巧(2)</a>
           </li>
         
       </ul>

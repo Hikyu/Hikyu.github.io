@@ -66,6 +66,72 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-Linux网络IO模型" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/07/10/Linux网络IO模型/" class="article-date">
+  <time datetime="2017-07-10T14:23:37.000Z" itemprop="datePublished">2017-07-10</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/Linux/">Linux</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/07/10/Linux网络IO模型/">Linux网络IO模型</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>学习Java-NIO在网络端的应用，就需要了解Linux的网络IO模型，才能够体会为什么需要NIO和NIO的好处在哪里。</p>
+</blockquote>
+<h2 id="什么是同步与异步、阻塞与非阻塞"><a href="#什么是同步与异步、阻塞与非阻塞" class="headerlink" title="什么是同步与异步、阻塞与非阻塞"></a>什么是同步与异步、阻塞与非阻塞</h2><p>引用知乎 <a href="https://www.zhihu.com/question/19732473/answer/23434554">怎样理解阻塞非阻塞与同步异步的区别？</a> 上面的一个回答，很生动的说明了同步异步，阻塞非阻塞之间的区别联系：</p>
+<hr>
+<p>老张爱喝茶，废话不说，煮开水。</p>
+<p>出场人物：老张，水壶两把（普通水壶，简称水壶；会响的水壶，简称响水壶）。</p>
+<p>1 老张把水壶放到火上，立等水开。（同步阻塞）</p>
+<p>老张觉得自己有点傻</p>
+<p>2 老张把水壶放到火上，去客厅看电视，时不时去厨房看看水开没有。（同步非阻塞）</p>
+<p>老张还是觉得自己有点傻，于是变高端了，买了把会响笛的那种水壶。水开之后，能大声发出嘀~~~~的噪音。</p>
+<p>3 老张把响水壶放到火上，立等水开。（异步阻塞）</p>
+<p>老张觉得这样傻等意义不大</p>
+<p>4 老张把响水壶放到火上，去客厅看电视，水壶响之前不再去看它了，响了再去拿壶。（异步非阻塞）</p>
+<p>老张觉得自己聪明了。</p>
+<p>所谓同步异步，只是对于水壶而言。普通水壶，同步；响水壶，异步。虽然都能干活，但响水壶可以在自己完工之后，提示老张水开了。这是普通水壶所不能及的。同步只能让调用者去轮询自己（情况2中），造成老张效率的低下。</p>
+<p>所谓阻塞非阻塞，仅仅对于老张而言。立等的老张，阻塞；看电视的老张，非阻塞。情况1和情况3中老张就是阻塞的，媳妇喊他都不知道。虽然3中响水壶是异步的，可对于立等的老张没有太大的意义。所以一般异步是配合非阻塞使用的，这样才能发挥异步的效用。</p>
+<hr>
+        
+          <p class="article-more-link">
+            <a href="/2017/07/10/Linux网络IO模型/#more">阅读全文 »</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yukai.space/2017/07/10/Linux网络IO模型/" data-id="cjii0wk4j0011l7xcmridjsp1" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/NIO/">NIO</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/">linux</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+ 
+
+
+  
     <article id="post-Java-NIO-Channel" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2017/07/08/Java-NIO-Channel/" class="article-date">
@@ -115,7 +181,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2017/07/08/Java-NIO-Channel/" data-id="cjhw3qedb000jw3xcdtrhru53" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2017/07/08/Java-NIO-Channel/" data-id="cjii0wk40000jl7xcdj4t18cf" class="article-share-link">分享</a>
       
       
       
@@ -167,7 +233,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2017/07/07/java文件描述符/" data-id="cjhw3qeg9003mw3xc9z5i6acm" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2017/07/07/java文件描述符/" data-id="cjii0wk6t003ml7xcqn3qm4wc" class="article-share-link">分享</a>
       
       
       
@@ -225,7 +291,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2017/07/04/Java-NIO-MappedByteBuffer/" data-id="cjhw3qed9000fw3xchz6wwui2" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2017/07/04/Java-NIO-MappedByteBuffer/" data-id="cjii0wk3q000el7xce8o3u34w" class="article-share-link">分享</a>
       
       
       
@@ -285,7 +351,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2017/06/28/java-NIO-Buffer/" data-id="cjhw3qef20022w3xcxypobdqt" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2017/06/28/java-NIO-Buffer/" data-id="cjii0wk5o0021l7xckiyyk31j" class="article-share-link">分享</a>
       
       
       
@@ -336,7 +402,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2017/06/24/并发场景下缓存的创建/" data-id="cjhw3qelr009ew3xcgh2avn88" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2017/06/24/并发场景下缓存的创建/" data-id="cjii0wkcw00adl7xc3nbqbpkc" class="article-share-link">分享</a>
       
       
       
@@ -387,7 +453,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2017/06/05/如何从外网访问家里的电脑/" data-id="cjhw3qele008zw3xcwhg2knwv" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2017/06/05/如何从外网访问家里的电脑/" data-id="cjii0wkcl00a1l7xcvgx05aml" class="article-share-link">分享</a>
       
       
       
@@ -442,64 +508,11 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2017/05/29/建造者模式的使用/" data-id="cjhw3qely009lw3xcfzohslhb" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2017/05/29/建造者模式的使用/" data-id="cjii0wkcu00aal7xcjzuiuwe2" class="article-share-link">分享</a>
       
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/设计模式/">设计模式</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
- 
-
-
-  
-    <article id="post-java线程池的使用" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2017/05/08/java线程池的使用/" class="article-date">
-  <time datetime="2017-05-08T12:37:58.000Z" itemprop="datePublished">2017-05-08</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/编程/">编程</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/05/08/java线程池的使用/">java线程池的使用</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <blockquote>
-<p>在并发应用程序中，线程池是很重要的一块。读完《java并发编程实战》以及研究了一遍jdk源代码之后，总结一下线程池方面的知识~</p>
-</blockquote>
-<img src="/2017/05/08/java线程池的使用/pool.jpg" alt="线程池" title="线程池">
-<h2 id="使用线程池的原因"><a href="#使用线程池的原因" class="headerlink" title="使用线程池的原因"></a>使用线程池的原因</h2>
-        
-          <p class="article-more-link">
-            <a href="/2017/05/08/java线程池的使用/#more">阅读全文 »</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yukai.space/2017/05/08/java线程池的使用/" data-id="cjhw3qei5006cw3xcxt498wl6" class="article-share-link">分享</a>
-      
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/多线程/">多线程</a></li></ul>
 
     </footer>
   </div>
@@ -535,6 +548,10 @@
       <ul>
         
           <li>
+            <a href="/2018/06/17/gitlab备份恢复方案/">gitlab备份恢复方案</a>
+          </li>
+        
+          <li>
             <a href="/2018/06/01/SSH端口转发/">SSH端口转发</a>
           </li>
         
@@ -548,10 +565,6 @@
         
           <li>
             <a href="/2018/04/30/联通华为HG8347R设置桥接模式/">联通华为HG8347R设置桥接模式</a>
-          </li>
-        
-          <li>
-            <a href="/2018/03/29/可能会用到的Git技巧2/">可能会用到的Git技巧(2)</a>
           </li>
         
       </ul>
