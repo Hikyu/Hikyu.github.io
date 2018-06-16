@@ -78,7 +78,7 @@ show_count: true
 
 # 标签云TagClound
 # 如果启动，则标签云颜色为随机
-tagcloud_color: false
+tagcloud_color: true
 
 # MathJax Support
 # 设置enable属性为true即可开启mathjax
