@@ -66,6 +66,64 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-java中的equals与hashcode" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/04/28/java中的equals与hashcode/" class="article-date">
+  <time datetime="2016-04-28T04:48:55.000Z" itemprop="datePublished">2016-04-28</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/编程/">编程</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/04/28/java中的equals与hashcode/">通过HashMap认识equals与hashcode</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>最近读了HashMap的源码，对HashCode与equals有了一定的了解，总结一下，顺便理一下HashMap中的核心算法。</p>
+</blockquote>
+<h2 id="什么是hashcode-hashcode的作用是什么"><a href="#什么是hashcode-hashcode的作用是什么" class="headerlink" title="什么是hashcode,hashcode的作用是什么"></a>什么是hashcode,hashcode的作用是什么</h2><p>hashcode并不是java中独有的。设想一下，如果让你设计一个算法，根据关键码去得到一个集合中的某个值或者这个关键码所在的位置。普通的做法就是挨个比较，高级一点的使用二分检索或者树形检索等算法。但是以上的检索算法都跟集合的长度N有关，当问题规模N很大时，这些检索的效率可能十分低下。</p>
+<p>理想的情况是，根据关键码，我们就可以定位记录所在的位置，而不用去挨个进行比较。也就是说，在关键码与记录存放的位置之间做一种映射。这个映射的方法就是hash(哈希)函数，或者叫散列函数，也就是java中的hashCode()方法，他所返回的值就是hashcode，根据hashcode可以找到记录的位置。</p>
+<p>按照散列的存储方式构造的存储结构叫做散列表。散列表中的一个位置称之为一个槽。</p>
+<p>hashCode()方法存在于java.lang.Object类当中，任何类都可以继承修改这个方法。hashCode()方法返回调用它的实例的hashCode值，是个int值。</p>
+<p>注：以下代码均来自jdk1.7</p>
+<p>String中hashCode()方法的实现：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">hashCode</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">int</span> h = hash;</div><div class="line">        <span class="keyword">if</span> (h == <span class="number">0</span> &amp;&amp; value.length &gt; <span class="number">0</span>) &#123;</div><div class="line">            <span class="keyword">char</span> val[] = value;</div><div class="line"></div><div class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; value.length; i++) &#123;</div><div class="line">                h = <span class="number">31</span> * h + val[i];</div><div class="line">            &#125;</div><div class="line">            hash = h;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> h;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+        
+          <p class="article-more-link">
+            <a href="/2016/04/28/java中的equals与hashcode/#more">阅读全文 »</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yukai.space/2016/04/28/java中的equals与hashcode/" data-id="cjjk5kgbh002tytnj7hizyh5o" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+ 
+
+
+  
     <article id="post-ant编译java工程jdk路径的设置" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2016/04/25/ant编译java工程jdk路径的设置/" class="article-date">
@@ -114,7 +172,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2016/04/25/ant编译java工程jdk路径的设置/" data-id="cjii0wk5c001pl7xczcxhgwxb" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2016/04/25/ant编译java工程jdk路径的设置/" data-id="cjjk5kgay001xytnjbgcn21uq" class="article-share-link">分享</a>
       
       
       
@@ -179,7 +237,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2016/04/20/java中的编码问题/" data-id="cjii0wk69002ul7xc34mq4xkk" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2016/04/20/java中的编码问题/" data-id="cjjk5kgbo0038ytnjsgmjozzz" class="article-share-link">分享</a>
       
       
       
@@ -248,7 +306,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2016/04/15/关于抽象类和接口/" data-id="cjii0wka9009gl7xcrcd2dsdz" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2016/04/15/关于抽象类和接口/" data-id="cjjk5kgdg006lytnjam7txap4" class="article-share-link">分享</a>
       
       
       
@@ -298,7 +356,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2016/04/14/他可是科比·布莱恩特!/" data-id="cjii0wk9o0090l7xcpauv44bm" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2016/04/14/他可是科比·布莱恩特!/" data-id="cjjk5kgdc006dytnjr15y63nl" class="article-share-link">分享</a>
       
       
       
@@ -347,7 +405,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2016/04/12/junit使用/" data-id="cjii0wk7a0047l7xc9zuf3d4b" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2016/04/12/junit使用/" data-id="cjjk5kgcf004kytnjztjyfdyw" class="article-share-link">分享</a>
       
       
       
@@ -408,7 +466,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2016/03/30/sphinx安装问题/" data-id="cjii0wk7s0055l7xcl26v4lyn" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2016/03/30/sphinx安装问题/" data-id="cjjk5kgcu0058ytnjwxpcx6v7" class="article-share-link">分享</a>
       
       
       
@@ -495,80 +553,11 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2016/03/29/代码格式/" data-id="cjii0wk9r0092l7xc99m6seof" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2016/03/29/代码格式/" data-id="cjjk5kgdb006aytnjtoswa2fr" class="article-share-link">分享</a>
       
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
- 
-
-
-  
-    <article id="post-常用快捷键总结" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2016/03/22/常用快捷键总结/" class="article-date">
-  <time datetime="2016-03-22T08:31:55.000Z" itemprop="datePublished">2016-03-22</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/工具/">工具</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/03/22/常用快捷键总结/">常用快捷键总结</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <ul>
-<li><h2 id="ECLIPSE"><a href="#ECLIPSE" class="headerlink" title="ECLIPSE:"></a>ECLIPSE:</h2><p> <strong>查看代码</strong></p>
-<p> Ctrl+O 搜索当前类变量及方法</p>
-<p> Ctrl+H 打开搜索对话框</p>
-<p> Ctrl+Shift+G  搜索选中变量或方法的引用</p>
-<p> Ctrl+D 删除当前行</p>
-<p> Ctrl+Shift+F 格式化代码</p>
-<p> F4 查看当前类继承结构</p>
-<p> Ctrl+Shift+R 搜索类，文件等资源</p>
-<p> Ctrl+Shift+O 倒包</p>
-<p> Ctrl + 1 ：快速修复</p>
-<p> Ctrl + Shift + /(小键盘) ：收起左侧导航树或代码(依据当前焦点而定)</p>
-<p> Ctrl + *(小键盘) ：展开代码</p>
-<p> Shift + Enter ：在当前行下方插入一行空行</p>
-<p> Alt + 向上键 ：当前行与上方行交换</p>
-<p> Alt + 向下键 ：当前行与下方行交换</p>
-<p> Shift + Alt + R : 重命名</p>
-<p> Shift + Alt + L (表达式末尾)：为表达式赋值为局部变量</p>
-<p> Shift + 向上键/向下键 : 选中此行</p>
-<p> Shift + Alt + M : 提取选中代码为一个方法</p>
-<p> Ctrl + . : 下一个错误</p>
-        
-          <p class="article-more-link">
-            <a href="/2016/03/22/常用快捷键总结/#more">阅读全文 »</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yukai.space/2016/03/22/常用快捷键总结/" data-id="cjii0wkdq00bfl7xcl53owh1a" class="article-share-link">分享</a>
-      
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/快捷键/">快捷键</a></li></ul>
 
     </footer>
   </div>
@@ -604,6 +593,10 @@
       <ul>
         
           <li>
+            <a href="/2018/07/13/JUC概述/">JUC概述</a>
+          </li>
+        
+          <li>
             <a href="/2018/06/17/gitlab备份恢复方案/">gitlab备份恢复方案</a>
           </li>
         
@@ -617,10 +610,6 @@
         
           <li>
             <a href="/2018/05/01/Centos7美化/">Centos7美化</a>
-          </li>
-        
-          <li>
-            <a href="/2018/04/30/联通华为HG8347R设置桥接模式/">联通华为HG8347R设置桥接模式</a>
           </li>
         
       </ul>

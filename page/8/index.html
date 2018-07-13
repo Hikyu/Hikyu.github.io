@@ -66,6 +66,62 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-I-O总结" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/03/19/I-O总结/" class="article-date">
+  <time datetime="2017-03-19T09:09:19.000Z" itemprop="datePublished">2017-03-19</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/编程/">编程</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/03/19/I-O总结/">java I/O总结</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>在平时维护JDBC驱动的过程中，经常会接触到IO相关的代码。总结梳理一下java中的IO~</p>
+</blockquote>
+<h2 id="IO"><a href="#IO" class="headerlink" title="IO"></a>IO</h2><p>IO，即Input和Output。流可以理解为字节序列的流动，可以从其中读入字节序列的对象称为输入流，可以向其中写入字节序列的对象称为输出流。<br>这些字节序列的来源和目的地可以是文件，网络，或者内存等。</p>
+<p>java中的IO基本可以分为两大类：</p>
+<p>1.基于字节操作的 I/O 接口：InputStream 和 OutputStream</p>
+<p>2.基于字符操作的 I/O 接口：Writer 和 Reader</p>
+<p>不管是磁盘还是网络传输，最小的存储单元都是字节，而不是字符，所以 I/O 操作的都是字节而不是字符。但是我们的程序通常操作的数据都是以字符的形式存在，比如处理网页中的内容或者磁盘文件中的文本。<br>为了操作方便，提供了直接操作字符的接口。操作字符的接口底层还是基于字节的，只不过封装了一些例如编码和解码等操作。</p>
+        
+          <p class="article-more-link">
+            <a href="/2017/03/19/I-O总结/#more">阅读全文 »</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yukai.space/2017/03/19/I-O总结/" data-id="cjjk5kg9u000bytnjac7g0c8i" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/NIO/">NIO</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+ 
+
+
+  
     <article id="post-webservice相关" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2017/03/15/webservice相关/" class="article-date">
@@ -113,7 +169,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2017/03/15/webservice相关/" data-id="cjii0wk7y005gl7xc3oc3exrh" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2017/03/15/webservice相关/" data-id="cjjk5kgd1005rytnjmzhrbzkl" class="article-share-link">分享</a>
       
       
       
@@ -175,7 +231,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2017/03/04/linux分区/" data-id="cjii0wk7j004ol7xc5x3jer3a" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2017/03/04/linux分区/" data-id="cjjk5kgch004oytnjof6jrlhk" class="article-share-link">分享</a>
       
       
       
@@ -233,7 +289,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2017/02/26/Linux的五个查找命令/" data-id="cjii0wk4f000ul7xcrcx1y0xr" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2017/02/26/Linux的五个查找命令/" data-id="cjjk5kgag0012ytnjll72n8sf" class="article-share-link">分享</a>
       
       
       
@@ -290,7 +346,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2017/02/25/centos7BCM驱动安装/" data-id="cjii0wk5s0029l7xcrtliqpum" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2017/02/25/centos7BCM驱动安装/" data-id="cjjk5kgb00021ytnjp4ysyuaj" class="article-share-link">分享</a>
       
       
       
@@ -344,7 +400,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2017/02/23/ssh的两种用法/" data-id="cjii0wk9l008zl7xcshdn80q5" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2017/02/23/ssh的两种用法/" data-id="cjjk5kgcx005fytnjowy59fuu" class="article-share-link">分享</a>
       
       
       
@@ -399,7 +455,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2017/02/21/java日志使用/" data-id="cjii0wk6x003ql7xc3fehny50" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2017/02/21/java日志使用/" data-id="cjjk5kgc60042ytnjmr3a72jh" class="article-share-link">分享</a>
       
       
       
@@ -455,72 +511,11 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2017/02/19/java国际化/" data-id="cjii0wk6q003fl7xcnj4byndl" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2017/02/19/java国际化/" data-id="cjjk5kgc1003tytnj80hm4xgn" class="article-share-link">分享</a>
       
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
- 
-
-
-  
-    <article id="post-win7与centos7双系统安装" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2017/02/18/win7与centos7双系统安装/" class="article-date">
-  <time datetime="2017-02-18T13:10:00.000Z" itemprop="datePublished">2017-02-18</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/Linux/">Linux</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/02/18/win7与centos7双系统安装/">win7与centos7双系统安装</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <blockquote>
-<p>之前会有同学让帮忙重装操作系统，正好计划重新装一下自己电脑的系统，折腾了win7与linux双系统，在此记录。以后就可以给他们看这篇笔记自己去装啦~</p>
-<p>ps: 由于是双系统的安装操作，而不是虚拟机，所以并未截图，是纯文字说明。如果不清楚，可以参考最下面的参考链接</p>
-</blockquote>
-<h2 id="安装win7"><a href="#安装win7" class="headerlink" title="安装win7"></a>安装win7</h2><h3 id="下载win7镜像文件："><a href="#下载win7镜像文件：" class="headerlink" title="下载win7镜像文件："></a>下载win7镜像文件：</h3><p><a href="http://www.xitongzhijia.net/win7/">系统之家win7下载</a></p>
-<p>选择一款进行下载，我选择了<code>雨林木风 GHOST WIN7 SP1 X64 装机旗舰版 V2017.02（64位）</code></p>
-<h3 id="制作U盘启动工具"><a href="#制作U盘启动工具" class="headerlink" title="制作U盘启动工具"></a>制作U盘启动工具</h3><p>下载启动盘制作工具：</p>
-<p><a href="http://www.laomaotao.org/lmtxz/933.html">老毛桃u盘启动盘制作工具</a></p>
-<p>下载装机版，进行安装</p>
-<p>启动盘制作工具安装完成，且镜像下载完毕之后，启动老毛桃，选择U盘启动-&gt;默认模式</p>
-<p>插入一个可用的U盘，在选择设备这项中，选择插入的U盘设备，注意不要选错</p>
-<p>其他选项默认，点击 开始制作 进行启动盘的制作。</p>
-<p>启动盘制作完毕之后，将下载好的iso文件拷入U盘<br>
-        
-          <p class="article-more-link">
-            <a href="/2017/02/18/win7与centos7双系统安装/#more">阅读全文 »</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yukai.space/2017/02/18/win7与centos7双系统安装/" data-id="cjii0wk80005kl7xcy0ybadcn" class="article-share-link">分享</a>
-      
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/">linux</a></li></ul>
 
     </footer>
   </div>
@@ -556,6 +551,10 @@
       <ul>
         
           <li>
+            <a href="/2018/07/13/JUC概述/">JUC概述</a>
+          </li>
+        
+          <li>
             <a href="/2018/06/17/gitlab备份恢复方案/">gitlab备份恢复方案</a>
           </li>
         
@@ -569,10 +568,6 @@
         
           <li>
             <a href="/2018/05/01/Centos7美化/">Centos7美化</a>
-          </li>
-        
-          <li>
-            <a href="/2018/04/30/联通华为HG8347R设置桥接模式/">联通华为HG8347R设置桥接模式</a>
           </li>
         
       </ul>

@@ -66,6 +66,65 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-记录这周工作遇到的坑" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/09/24/记录这周工作遇到的坑/" class="article-date">
+  <time datetime="2016-09-24T08:30:44.000Z" itemprop="datePublished">2016-09-24</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/编程/">编程</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/09/24/记录这周工作遇到的坑/">记录工作遇到的坑</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>昨天晚上12.30才进的家门，回来之后还远程合了个代码打了个包，发布restAPI新版本之用。这一周的主要工作就是在做一个web服务器，是一个集群的中间件。因为着急发布新版本，所以昨晚加班到12点多…</p>
+<p>主要实现了几个接口，实现了ssl双向验证功能。其实ssl双向验证的功能主要是了解ssl原理之后如何配置的问题。期间还学习了session和cookie的原理。ssl与cookie、session单开一篇进行总结。这篇日志记录一下这周工作中遇到的一些坑，不一定是技术上的，但是遇到这些小问题还是耽误了一些时间。这篇日志也会持续更新，把以后遇到的坑都总结到这里来。</p>
+<p>希望以后遇到类似的情况能够迅速找到原因将其解决，同时也希望能帮助到可能会看到这篇文章的人。</p>
+<h2 id="Spring项目通过export方法打包为jar的问题"><a href="#Spring项目通过export方法打包为jar的问题" class="headerlink" title="Spring项目通过export方法打包为jar的问题"></a>Spring项目通过export方法打包为jar的问题</h2><p>在前面的日志中已经有<a href="http://yukai.space/2016/09/19/Spring%E9%A1%B9%E7%9B%AE%E6%89%93%E5%8C%85%E4%B8%BAjar/">专门的一篇</a>来总结这个问题:<strong>当通过export方式打包Spring项目时，一定要记得勾选Add Directory Entries这个选项，否则spring无法正确扫描到controller，发生404</strong></p>
+<h2 id="使用-PathVariable注解时抛出java-lang-IllegalArgumentException异常"><a href="#使用-PathVariable注解时抛出java-lang-IllegalArgumentException异常" class="headerlink" title="使用@PathVariable注解时抛出java.lang.IllegalArgumentException异常"></a>使用@PathVariable注解时抛出java.lang.IllegalArgumentException异常</h2><p>假如你的项目中有一个类似下面的controller来接收一个请求：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@GET</span></div><div class="line"><span class="meta">@RequestMapping</span>(<span class="string">"web/&#123;groupName&#125;"</span>)</div><div class="line"><span class="meta">@Consumes</span>(MediaType.APPLICATION_JSON)</div><div class="line"><span class="meta">@Produces</span>(MediaType.APPLICATION_JSON)</div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">getWorkerAddress</span><span class="params">(HttpServletRequest request, HttpServletResponse response,</div><div class="line">		@PathVariable String groupName)</span> </span>&#123;</div><div class="line">		doSomething...</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>当你的项目运行时你发起一个<code>http://ip:port/web/groupName1</code>这样的请求，那么很有可能服务器会报这样一个异常：<strong>java.lang.IllegalArgumentException: Name for argument type [java.lang.String] not available, and parameter name information not found in class file either.</strong></p>
+<p>大概的意思就是参数名称信息没有在类文件中找到。若是浏览器为客户端，浏览器的页面是这样的：</p>
+<img src="/2016/09/24/记录这周工作遇到的坑/error.png" alt="error" title="error">
+<p>解决这个异常的方法有两种：</p>
+<p><strong>1.在@PathVariable注解后面加上参数名，比如：@PathVariable(“groupName”)</strong></p>
+        
+          <p class="article-more-link">
+            <a href="/2016/09/24/记录这周工作遇到的坑/#more">阅读全文 »</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yukai.space/2016/09/24/记录这周工作遇到的坑/" data-id="cjjk5kget009aytnjf0xqvg73" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/curl/">curl</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/spring/">spring</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+ 
+
+
+  
     <article id="post-Eclipse编码问题终极解决方案" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2016/09/20/Eclipse编码问题终极解决方案/" class="article-date">
@@ -114,7 +173,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2016/09/20/Eclipse编码问题终极解决方案/" data-id="cjii0wk2o0003l7xc4ks1gxwz" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2016/09/20/Eclipse编码问题终极解决方案/" data-id="cjjk5kg9p0007ytnjn0wh9k47" class="article-share-link">分享</a>
       
       
       
@@ -170,7 +229,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2016/09/19/Spring项目打包为jar/" data-id="cjii0wk53001hl7xcynku7cqq" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2016/09/19/Spring项目打包为jar/" data-id="cjjk5kgan001hytnj3coa7xqn" class="article-share-link">分享</a>
       
       
       
@@ -222,7 +281,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2016/09/10/理解java内存模型/" data-id="cjii0wkdi00b2l7xccuee8h8e" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2016/09/10/理解java内存模型/" data-id="cjjk5kgef008iytnjm6hqp7dg" class="article-share-link">分享</a>
       
       
       
@@ -291,7 +350,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2016/08/31/理解notify notifyall sleep/" data-id="cjii0wkdk00b6l7xcl1wgkfdf" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2016/08/31/理解notify notifyall sleep/" data-id="cjjk5kgeh008mytnjn5tut3rb" class="article-share-link">分享</a>
       
       
       
@@ -347,7 +406,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2016/08/22/关于加密的一点总结/" data-id="cjii0wkab009jl7xcst3togri" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2016/08/22/关于加密的一点总结/" data-id="cjjk5kgde006hytnj0ne35xuf" class="article-share-link">分享</a>
       
       
       
@@ -399,7 +458,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2016/08/16/Java集合框架学习总结/" data-id="cjii0wk4d000tl7xcr8ofixeq" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2016/08/16/Java集合框架学习总结/" data-id="cjjk5kgaf000zytnjwx59cvut" class="article-share-link">分享</a>
       
       
       
@@ -455,75 +514,12 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2016/08/16/synchronized的一些用法/" data-id="cjii0wk7w005cl7xck9q6su9e" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2016/08/16/synchronized的一些用法/" data-id="cjjk5kgd0005nytnj48csjd18" class="article-share-link">分享</a>
       
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/多线程/">多线程</a></li></ul>
 
-    </footer>
-  </div>
-  
-</article>
- 
-
-
-  
-    <article id="post-一些计划" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2016/08/15/一些计划/" class="article-date">
-  <time datetime="2016-08-15T06:54:55.000Z" itemprop="datePublished">2016-08-15</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/生活/">生活</a>►<a class="article-category-link" href="/categories/生活/随笔/">随笔</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/08/15/一些计划/">一些计划</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="http://music.163.com/outchain/player?type=2&id=168153&auto=1&height=66"></iframe><br>转眼之间毕业已有整整两个月。这两个月里，大家各奔东西，找工作的找工作，考研的继续考研。跟我一起工作了一个多月的哥们也要辞职去考研了，直接原因是刚发的工资让我们都很失望，房价的飞速上涨又让我们这些刚刚步入工作岗位的年轻人感到一阵恐慌。最后或许考研是个不错的解决方案，起码三年内不用考虑这些烂事了，而且据说考研后薪资与本科生大大的不同，具体情况因人而异吧。生活就是这样，真的猛士，敢于直面这操蛋的人生。是时候来点正能量了，无论如何生活都是要继续的。砖，还是要搬的。</p>
-<p>上周末把博客从Jekyll迁移到了Hexo，使用了PacMan的模板。在此要感谢模板的<a href="https://github.com/A-limon/pacman">作者</a>，使我这样一个对前端一窍不通的菜鸟也能整出另自己满意的博客效果。花了61大洋买了五年的域名<a href="www.yukai.space">www.yukai.space</a>作为博客的新域名。域名是从阿里云上买的，我认为是相当便宜了。希望有一个新的开始。在此作出一些生活和学习上的计划，让自己能有所改变吧。</p>
-<h2 id="关于学习"><a href="#关于学习" class="headerlink" title="关于学习"></a>关于学习</h2><p>程序员的价值在于不断学习，工作中我也发现自己真的是太菜了，专业水平有待提高，从以下几个方面开始吧：</p>
-<h3 id="java"><a href="#java" class="headerlink" title="java"></a>java</h3><p>吃饭的家伙，必须得用好了。虽然用java写过不少”小DEMO”,但是java中的很多东西自己并没有涉及，或者只是知道怎么用。说白了就是基础上还要下功夫。这点上决定从读JDK源代码开始，现在在读java中的集合类。前段时间在重构JDBC的过程中，发现自己对面向对象好像理解的较之前更为深刻了。面向对象和设计模式也是我接下来要重点关注的地方。毕竟是要励志成为架构师的男人，哈哈哈。下面列出读书清单：</p>
-<ul>
-<li><p>Thinking In Java</p>
-</li>
-<li><p>Effect Java</p>
-</li>
-<li><p>大话设计模式</p>
-</li>
-<li><p>深入理解Jvm虚拟机</p>
-</li>
-<li><p>重构：改善既有的代码</p>
-</li>
-</ul>
-<p>前两本书可以作为工具书来使用。后三本计划在今年之前读一遍。</p>
-        
-          <p class="article-more-link">
-            <a href="/2016/08/15/一些计划/#more">阅读全文 »</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yukai.space/2016/08/15/一些计划/" data-id="cjii0wk9t0094l7xca4fkhsn6" class="article-share-link">分享</a>
-      
-      
-      
     </footer>
   </div>
   
@@ -558,6 +554,10 @@
       <ul>
         
           <li>
+            <a href="/2018/07/13/JUC概述/">JUC概述</a>
+          </li>
+        
+          <li>
             <a href="/2018/06/17/gitlab备份恢复方案/">gitlab备份恢复方案</a>
           </li>
         
@@ -571,10 +571,6 @@
         
           <li>
             <a href="/2018/05/01/Centos7美化/">Centos7美化</a>
-          </li>
-        
-          <li>
-            <a href="/2018/04/30/联通华为HG8347R设置桥接模式/">联通华为HG8347R设置桥接模式</a>
           </li>
         
       </ul>
