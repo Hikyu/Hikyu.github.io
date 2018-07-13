@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>JUC概述 | YuKai&#39;s blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="JUC概述java.util.concurrent的缩写，该包参考自EDU.oswego.cs.dl.util.concurrent，是JSR 166标准规范的一个实现；
+JSR 166，是一个关于Java并发编程的规范提案，在JDK中，该规范由java.util.concurrent包实现。
+即，JUC是Java提供的并发包，其中包含了一些并发编程用到的基础组件。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JUC概述">
+<meta property="og:url" content="http://yukai.space/2018/07/13/JUC概述/index.html">
+<meta property="og:site_name" content="YuKai's blog">
+<meta property="og:description" content="JUC概述java.util.concurrent的缩写，该包参考自EDU.oswego.cs.dl.util.concurrent，是JSR 166标准规范的一个实现；
+JSR 166，是一个关于Java并发编程的规范提案，在JDK中，该规范由java.util.concurrent包实现。
+即，JUC是Java提供的并发包，其中包含了一些并发编程用到的基础组件。">
+<meta property="og:image" content="http://yukai.space/2018/07/13/JUC概述/juc.png">
+<meta property="og:image" content="http://yukai.space/2018/07/13/JUC概述/aqs.png">
+<meta property="og:image" content="http://yukai.space/2018/07/13/JUC概述/condition.png">
+<meta property="og:updated_time" content="2018-07-13T14:28:19.057Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="JUC概述">
+<meta name="twitter:description" content="JUC概述java.util.concurrent的缩写，该包参考自EDU.oswego.cs.dl.util.concurrent，是JSR 166标准规范的一个实现；
+JSR 166，是一个关于Java并发编程的规范提案，在JDK中，该规范由java.util.concurrent包实现。
+即，JUC是Java提供的并发包，其中包含了一些并发编程用到的基础组件。">
+<meta name="twitter:image" content="http://yukai.space/2018/07/13/JUC概述/juc.png">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    
+    <div id="header-inner" class="inner">
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yukai.space"></form>
+      </div>
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/archives">归档</a>
+        
+          <a class="main-nav-link" href="/tools">工具</a>
+        
+          <a class="main-nav-link" href="/page">关于</a>
+        
+      </nav>
+      
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">YuKai&#39;s blog</a>
+      </h1>
+      
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-JUC概述" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/07/13/JUC概述/" class="article-date">
+  <time datetime="2018-07-13T14:20:40.000Z" itemprop="datePublished">2018-07-13</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/编程/">编程</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      JUC概述
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <h1 id="JUC概述"><a href="#JUC概述" class="headerlink" title="JUC概述"></a>JUC概述</h1><p>java.util.concurrent的缩写，该包参考自EDU.oswego.cs.dl.util.concurrent，是JSR 166标准规范的一个实现；</p>
+<p>JSR 166，是一个关于Java并发编程的规范提案，在JDK中，该规范由java.util.concurrent包实现。</p>
+<p>即，JUC是Java提供的并发包，其中包含了一些并发编程用到的基础组件。</p>
+<a id="more"></a>
+<h2 id="JUC"><a href="#JUC" class="headerlink" title="JUC"></a>JUC</h2><img src="/2018/07/13/JUC概述/juc.png" alt="JUC" title="JUC">
+<p>JUC这个包下的类基本上包含了我们在并发编程时用到的一些工具。大致可以分为以下几类：</p>
+<ul>
+<li><p>原子更新</p>
+<p>Java从JDK1.5开始提供了java.util.concurrent.atomic包，方便程序员在多线程环  境下，无锁的进行原子操作。</p>
+<p>在Atomic包里一共有12个类，四种原子更新方式，分别是原子更新基本类型，原子更新  数组，原子更新引用和原子更新字段。</p>
+</li>
+<li><p>锁和条件变量</p>
+<p>java.util.concurrent.locks包下包含了同步器的框架  AbstractQueuedSynchronizer，基于AQS构建的Lock以及与Lock配合可以实现等待/通知模式的Condition。</p>
+<p>JUC 下的大多数工具类用到了Lock和Condition来实现并发。</p>
+</li>
+<li><p><a href="http://yukai.space/2017/05/08/java%E7%BA%BF%E7%A8%8B%E6%B1%A0%E7%9A%84%E4%BD%BF%E7%94%A8/">线程池</a></p>
+<p>涉及到的类比如：Executor、Executors、ThreadPoolExector、  AbstractExecutorService、Future、Callable、ScheduledThreadPoolExecutor等等。</p>
+</li>
+<li><p><a href="http://yukai.space/2017/12/10/Java%E9%98%BB%E5%A1%9E%E9%98%9F%E5%88%97/">阻塞队列</a></p>
+<p>涉及到的类比如：ArrayBlockingQueue、LinkedBlockingQueue、PriorityBlockingQueue、LinkedBlockingDeque等等。</p>
+</li>
+<li><p>并发容器</p>
+<p>涉及到的类比如：ConcurrentHashMap、CopyOnWriteArrayList、ConcurrentLinkedQueue、CopyOnWriteArraySet等等。</p>
+</li>
+<li><p><a href="http://yukai.space/2017/12/20/Java%E5%90%8C%E6%AD%A5%E5%B7%A5%E5%85%B7%E7%B1%BB/">同步器</a></p>
+<p>剩下的是一些在并发编程中时常会用到的<a href="http://yukai.space/2017/12/20/Java%E5%90%8C%E6%AD%A5%E5%B7%A5%E5%85%B7%E7%B1%BB/">工具类</a>，主要用来协助线程同步。比如：CountDownLatch、CyclicBarrier、Exchanger、Semaphore、FutureTask等等。</p>
+</li>
+</ul>
+<h2 id="CAS"><a href="#CAS" class="headerlink" title="CAS"></a>CAS</h2><p>CAS理论是实现整个java并发包的基石，谈到AQS之前，我们还需要对CAS有所了解。</p>
+<p>在JAVA中，sun.misc.Unsafe 类提供了硬件级别的原子操作来实现CAS。 java.util.concurrent 包下的大量类都使用了这个 Unsafe 类的CAS操作。</p>
+<h3 id="乐观锁和悲观锁"><a href="#乐观锁和悲观锁" class="headerlink" title="乐观锁和悲观锁"></a>乐观锁和悲观锁</h3><p>Java在JDK1.5之前都是靠synchronized关键字保证同步的，这种通过使用一致的锁定协议来协调对共享状态的访问，可以确保无论哪个线程持有共享变量的锁，都采用独占的方式来访问这些变量。独占锁其实就是一种悲观锁，所以可以说synchronized是悲观锁。</p>
+<p>悲观锁机制存在以下问题：</p>
+<ul>
+<li><p>在多线程竞争下，加锁、释放锁会导致比较多的上下文切换和调度延时，引起性能问题。</p>
+</li>
+<li><p>一个线程持有锁会导致其它所有需要此锁的线程挂起。</p>
+</li>
+<li><p>如果一个优先级高的线程等待一个优先级低的线程释放锁会导致优先级倒置，引起性能风险。</p>
+</li>
+</ul>
+<p>而另一个更加有效的锁就是乐观锁。所谓乐观锁就是，每次不加锁而是假设没有冲突而去完成某项操作，如果因为冲突失败就重试，直到成功为止。</p>
+<h3 id="CAS实现乐观锁"><a href="#CAS实现乐观锁" class="headerlink" title="CAS实现乐观锁"></a>CAS实现乐观锁</h3><p>CAS是项乐观锁技术，当多个线程尝试使用CAS同时更新同一个变量时，只有其中一个线程能更新变量的值，而其它线程都失败，失败的线程并不会被挂起，而是被告知这次竞争中失败，并可以再次尝试。</p>
+<blockquote>
+<p>CAS 操作包含三个操作数 —— 内存位置（V）、预期原值（A）和新值(B)。如果内存位置的值与预期原值相匹配，那么处理器会自动将该位置值更新为新值。否则，处理器不做任何操作。无论哪种情况，它都会在 CAS 指令之前返回该位置的值。（在 CAS 的一些特殊情况下将仅返回 CAS 是否成功，而不提取当前值。）</p>
+<p>CAS 有效地说明了“我认为位置 V 应该包含值 A；如果包含该值，则将 B 放到这个位置；否则，不要更改该位置，只告诉我这个位置现在的值即可。”</p>
+</blockquote>
+<p>比如，Unsafe中的int类型的CAS操作方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">public final native boolean compareAndSwapInt(Object o, long offset,</div><div class="line">                                                int expected,</div><div class="line">                                                int x);</div></pre></td></tr></table></figure>
+<p>参数o就是要进行cas操作的对象，offset参数是内存位置，expected参数就是期望的值，x参数是需要更新到的值。</p>
+<p>比如，把1这个数字属性更新到2的话，需要这样调用：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">compareAndSwapInt(this, valueOffset, 1, 2)</div></pre></td></tr></table></figure>
+<p>若此时内存位置的值为1，则更新为2，更新成功。否则更新失败,返回false。</p>
+<h2 id="AQS"><a href="#AQS" class="headerlink" title="AQS"></a>AQS</h2><p>AQS(AbstractQueuedSynchronizer)是构建锁或者其他同步组件的基础框架，位于 java.util.concurrent.locks 下。</p>
+<p>JUC(java.util.concurrent)里所有的锁机制都是基于AQS框架上构建的。</p>
+<img src="/2018/07/13/JUC概述/aqs.png" alt="AQS" title="AQS">
+<p>首先通过上面我画的结构图（只是一个大致的框架，很多类并未列出），可以大致的了解到，JUC当中，锁、条件变量和一些并发工具类都围绕AQS进行构建。同时，线程池、阻塞队列等又依赖于锁和条件变量实现并发。所以说，AQS是JUC并发包中的核心基础组件。</p>
+<p>AQS在内部定义了一个int state变量,用来表示同步状态，并通过一个双向的FIFO 同步队列来完成同步状态的管理，当有线程获取锁失败后,就被添加到队列末尾。</p>
+<p>可以看到，ReentrantLock、Semaphore等类并没有直接继承AQS，而是通过一个内部类Sync继承AQS来使用这个同步器。原因在于，这些工具类面向的是用户,而同步器面向的则是线程控制，两者并不存在<code>is-a</code>的关系，故使用组合，而不是继承。</p>
+<p>以ReentrantLock的lock方法为例，简单了解AQS的内部原理：</p>
+<p>注意，lock有公平与非公平之分：</p>
+<ul>
+<li><p>公平锁（Fair）：加锁前检查是否有排队等待的线程，优先排队等待的线程，先来先得 </p>
+</li>
+<li><p>非公平锁（Nonfair）：加锁时不考虑排队等待问题，直接尝试获取锁，获取不到自动到队尾等待</p>
+</li>
+</ul>
+<p>ReentrantLock 默认的lock()方法采用的是非公平锁。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// ReentrantLock.NonfairSync，继承自AbstractQueuedSynchronizer:</span></div><div class="line"><span class="function"><span class="keyword">final</span> <span class="keyword">void</span> <span class="title">lock</span><span class="params">()</span> </span>&#123;</div><div class="line">    <span class="keyword">if</span> (compareAndSetState(<span class="number">0</span>, <span class="number">1</span>))</div><div class="line">        setExclusiveOwnerThread(Thread.currentThread());</div><div class="line">    <span class="keyword">else</span></div><div class="line">        acquire(<span class="number">1</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>注意，下文提到的【锁】，并不是正真的锁对象，而是一种同步状态，指向AbstractQueuedSynchronizer中的state变量。加锁即state加上某个值，释放锁即state减去某个值。</p>
+<p>可以看到，lock()方法先通过CAS尝试将同步状态state从0修改为1。若恰好锁的状态为0，则直接修改成功。然后将独占锁的owner设置为当前线程。</p>
+<p>若加锁失败，则调用acquire(1)：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// AbstractQueuedSynchronizer:</span></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">void</span> <span class="title">acquire</span><span class="params">(<span class="keyword">int</span> arg)</span> </span>&#123;</div><div class="line">    <span class="keyword">if</span> (!tryAcquire(arg) &amp;&amp;</div><div class="line">        acquireQueued(addWaiter(Node.EXCLUSIVE), arg))</div><div class="line">        selfInterrupt();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>tryAcquire(arg)方法由AQS的子类（ReentrantLock.NonfairSync）实现，再次尝试获取锁，如果获取到，则执行完毕，否则，执行<code>addWaiter(Node.EXCLUSIVE)</code>。</p>
+<p>通过<code>addWaiter(Node.EXCLUSIVE)</code>方法生成一个新的节点node，并将该节点节点添加到同步队列末尾，并返回该节点。</p>
+<p>在把node插入队列末尾后，它并不立即挂起该节点中线程,因为在插入它的过程中,前面的线程可能已经执行完成，所以它会先进行自旋操作<code>acquireQueued(node, arg)</code>，尝试让该线程重新获取锁。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// AbstractQueuedSynchronizer:</span></div><div class="line"><span class="function"><span class="keyword">final</span> <span class="keyword">boolean</span> <span class="title">acquireQueued</span><span class="params">(<span class="keyword">final</span> Node node, <span class="keyword">int</span> arg)</span> </span>&#123;</div><div class="line">    <span class="keyword">try</span> &#123;</div><div class="line">        <span class="keyword">boolean</span> interrupted = <span class="keyword">false</span>;</div><div class="line">        <span class="keyword">for</span> (;;) &#123;</div><div class="line">            <span class="keyword">final</span> Node p = node.predecessor();</div><div class="line">            <span class="keyword">if</span> (p == head &amp;&amp; tryAcquire(arg)) &#123;</div><div class="line">                setHead(node);</div><div class="line">                p.next = <span class="keyword">null</span>; <span class="comment">// help GC</span></div><div class="line">                <span class="keyword">return</span> interrupted;</div><div class="line">            &#125;</div><div class="line">            <span class="keyword">if</span> (shouldParkAfterFailedAcquire(p, node) &amp;&amp;</div><div class="line">                parkAndCheckInterrupt())</div><div class="line">                interrupted = <span class="keyword">true</span>;</div><div class="line">        &#125;</div><div class="line">    &#125; <span class="keyword">catch</span> (RuntimeException ex) &#123;</div><div class="line">        cancelAcquire(node);</div><div class="line">        <span class="keyword">throw</span> ex;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>上述方法中是一个for循环，首先判断前驱节点是否是head（head是持有锁的节点），若是则再次尝试获取锁。若成功则返回，否则，执行<code>shouldParkAfterFailedAcquire(p, node)</code>，判断此时是否应该挂起。若<code>shouldParkAfterFailedAcquire(p, node)</code>返回true，表示应挂起，执行<code>parkAndCheckInterrupt()</code>，将当前线程挂起。</p>
+<p>该线程被唤醒后，继续执行for循环中的代码，尝试获取锁。</p>
+<p>有关AQS的详细介绍，参考<a href="https://zhuanlan.zhihu.com/p/27134110" target="_blank" rel="external">深入学习java同步器AQS</a>、<a href="http://ifeve.com/java-special-troops-aqs/" target="_blank" rel="external">AQS的原理浅析</a></p>
+<h2 id="条件变量（Condition）"><a href="#条件变量（Condition）" class="headerlink" title="条件变量（Condition）"></a>条件变量（Condition）</h2><p>条件变量用于实现<code>等待/通知模式</code>，比如LinkedBlockingQueue:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//首先创建一个可重入锁，它本质是独占锁</span></div><div class="line"><span class="keyword">private</span> <span class="keyword">final</span> ReentrantLock takeLock = <span class="keyword">new</span> ReentrantLock();</div><div class="line"><span class="comment">//创建该锁上的条件队列</span></div><div class="line"><span class="keyword">private</span> <span class="keyword">final</span> Condition notEmpty = takeLock.newCondition();</div><div class="line"><span class="comment">//使用过程</span></div><div class="line"><span class="function"><span class="keyword">public</span> E <span class="title">take</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</div><div class="line">    <span class="comment">//首先进行加锁</span></div><div class="line">    takeLock.lockInterruptibly();</div><div class="line">    <span class="keyword">try</span> &#123;</div><div class="line">        <span class="comment">//如果队列是空的，则进行等待</span></div><div class="line">        notEmpty.await();</div><div class="line">        <span class="comment">//取元素的操作...</span></div><div class="line">        </div><div class="line">        <span class="comment">//如果有剩余，则唤醒等待元素的线程</span></div><div class="line">        notEmpty.signal();</div><div class="line">    &#125; <span class="keyword">finally</span> &#123;</div><div class="line">        <span class="comment">//释放锁</span></div><div class="line">        takeLock.unlock();</div><div class="line">    &#125;</div><div class="line">    <span class="comment">//取完元素以后唤醒等待放入元素的线程</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>Condition接口由AQS内部类ConditionObject实现。ConditionObject在内部也维护了一个队列，与同步队列相对应的，称之为条件队列。该队列与同步队列类似，其节点为AQS内部类Node。</p>
+<img src="/2018/07/13/JUC概述/condition.png" alt="条件队列" title="条件队列">
+<p>当持有锁的线程调用了Condition.await()方法时，代表该线程的节点进入该Condition对象（ConditionObject）的条件队列，同时释放其持有的锁并挂起，等待被唤醒。</p>
+<p>当在条件队列中的节点被其他线程调用Condition.signal()唤醒，该节点从条件队列中移除并被加入到同步队列中，同时尝试获取锁，若获取失败则继续挂起。</p>
+<p>需要注意的是，条件队列只能用于独占锁。Condition对象由ReentrantLock.newCondition()方法返回，其内部是返回了AQS内部类ConditionObject对象。</p>
+<p>对于同一个ReentrantLock对象，每调用一次newCondition()方法，便返回一个新的ConditionObject实例。这些ConditionObject实例之间是独立的，拥有各自的条件队列。但是这些ConditionObject实例都被绑定到了同一个同步队列上，即他们竞争的是同一把锁。</p>
+<p>其原理是，ConditionObject是AQS的内部类，内部类中隐含了指向外部类AQS的引用。所有由同一个AQS对象实例化的ConditionObject，他们的外部类的引用指向了相同的AQS对象，故他们访问的外部类的同步队列也是同一个。</p>
+<p>关于条件队列的详细解释，参考<a href="https://segmentfault.com/a/1190000011429685" target="_blank" rel="external">深入浅出AQS之条件队列</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yukai.space/2018/07/13/JUC概述/" data-id="cjjk2ryg5000g0ynjvdn5kwht" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/多线程/">多线程</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2018/06/17/gitlab备份恢复方案/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">gitlab备份恢复方案</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+ 
+     
+  <div class="comments" id="comments">
+    
+     
+       
+      <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+    
+       
+      
+      
+           <div id="gitment_comments"></div>
+    
+  </div>
+ 
+  
+
+</section>
+           
+    <aside id="sidebar">
+  
+    
+
+  
+    
+    <div class="widget-wrap">
+    
+      <div class="widget" id="toc-widget-fixed">
+      
+        <strong class="toc-title">文章目录</strong>
+        <div class="toc-widget-list">
+              <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#JUC概述"><span class="toc-number">1.</span> <span class="toc-text">JUC概述</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#JUC"><span class="toc-number">1.1.</span> <span class="toc-text">JUC</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CAS"><span class="toc-number">1.2.</span> <span class="toc-text">CAS</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#乐观锁和悲观锁"><span class="toc-number">1.2.1.</span> <span class="toc-text">乐观锁和悲观锁</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#CAS实现乐观锁"><span class="toc-number">1.2.2.</span> <span class="toc-text">CAS实现乐观锁</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#AQS"><span class="toc-number">1.3.</span> <span class="toc-text">AQS</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#条件变量（Condition）"><span class="toc-number">1.4.</span> <span class="toc-text">条件变量（Condition）</span></a></li></ol></li></ol>
+          </div>
+      </div>
+    </div>
+
+  
+    
+
+  
+    
+  
+    
+  
+    
+
+  
+</aside>
+
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-left">
+      &copy; 2014 - 2018 于凯&nbsp;|&nbsp;
+      主题 <a href="https://github.com/giscafer/hexo-theme-cafe/" target="_blank">Cafe</a>
+    </div>
+     <div id="footer-right">
+      联系方式&nbsp;|&nbsp;debiaoyu@gmail.com
+    </div>
+  </div>
+</footer>
+ <script src="/jquery/jquery.min.js"></script>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/archives" class="mobile-nav-link">归档</a>
+  
+    <a href="/tools" class="mobile-nav-link">工具</a>
+  
+    <a href="/page" class="mobile-nav-link">关于</a>
+  
+</nav>
+    <img class="back-to-top-btn" src="/images/fly-to-top.png"/>
+<script>
+// Elevator script included on the page, already.
+window.onload = function() {
+  var elevator = new Elevator({
+    selector:'.back-to-top-btn',
+    element: document.querySelector('.back-to-top-btn'),
+    duration: 1000 // milliseconds
+  });
+}
+</script>
+      
+
+  
+    <script>
+      var cloudTieConfig = {
+        url: document.location.href, 
+        sourceId: "",
+        productKey: "e2fb4051c49842688ce669e634bc983f",
+        target: "cloud-tie-wrapper"
+      };
+    </script>
+    <script src="https://img1.ws.126.net/f2e/tie/yun/sdk/loader.js"></script>
+    
+
+  
+
+
+
+
+
+
+
+<!-- author:forvoid begin -->
+<!-- author:forvoid begin -->
+
+  <link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+  <script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script> 
+  <script>
+  var gitment = new Gitment({
+    // id: '页面 ID', // 可选。默认为 location.href
+    owner: 'Hikyu',
+    repo: 'Hikyu.github.io',
+    oauth: {
+    client_id: '61886569157db60efa97',
+    client_secret: '6475bb7c8faaf44ff2e12c272a46505a0eecf46f',
+    }
+  })
+  gitment.render(document.getElementById("gitment_comments"))
+</script>
+
+
+<!-- author:forvoid end -->
+
+<!-- author:forvoid end -->
+
+
+
+ <script src="/js/is.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+<script src="/js/elevator.js"></script>
+  </div>
+</body>
+</html>
