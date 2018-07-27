@@ -66,6 +66,67 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-ssl总结" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/09/25/ssl总结/" class="article-date">
+  <time datetime="2016-09-25T02:09:10.000Z" itemprop="datePublished">2016-09-25</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/加密/">加密</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/09/25/ssl总结/">ssl使用总结</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>这次维护的web服务器要求使用Https双向认证，了解了一下如何在客户端和服务器之间进行ssl的配置，在此记录。另外，这篇日志主要记录如何使用，并不深入底层原理。</p>
+</blockquote>
+<h2 id="简单认识ssl和证书"><a href="#简单认识ssl和证书" class="headerlink" title="简单认识ssl和证书"></a>简单认识ssl和证书</h2><p>在理解这部分内容之前，建议先看看前面对的一篇总结：<a href="http://yukai.space/2016/08/22/%E5%85%B3%E4%BA%8E%E5%8A%A0%E5%AF%86%E7%9A%84%E4%B8%80%E7%82%B9%E6%80%BB%E7%BB%93/">关于加密的一点总结</a></p>
+<p>SSL(Secure Sockets Layer 安全套接层),及其继任者传输层安全（Transport Layer Security，TLS）是为网络通信提供安全及数据完整性的一种安全协议。TLS与SSL在传输层对网络连接进行加密。</p>
+<p>SSL协议提供的服务主要有：</p>
+<p>1、认证用户和服务器，确保数据发送到正确的客户机和服务器；</p>
+<p>2、加密数据以防止数据中途被窃取；</p>
+<p>3、维护数据的完整性，确保数据在传输过程中不被改变。</p>
+<p>其实，ssl就是一种协议。我们知道Http协议是明文传输的，安全性不高。Https就是在Http基础之上加一层ssl协议，来达到加密通信的目的。具体的ssl握手过程，可以参考<a href="http://baike.baidu.com/view/14121.htm#6">百度百科</a></p>
+<p>附上一张图方便理解：</p>
+<img src="/2016/09/25/ssl总结/sslprocess.jpg" alt="sslprocess" title="sslprocess">
+<p>图片来自网络</p>
+        
+          <p class="article-more-link">
+            <a href="/2016/09/25/ssl总结/#more">阅读全文 »</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yukai.space/2016/09/25/ssl总结/" data-id="cjk3tf78c005y6onjsz8w2n5s" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/加密/">加密</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+ 
+
+
+  
     <article id="post-记录这周工作遇到的坑" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2016/09/24/记录这周工作遇到的坑/" class="article-date">
@@ -111,7 +172,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2016/09/24/记录这周工作遇到的坑/" data-id="cjjk5kget009aytnjf0xqvg73" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2016/09/24/记录这周工作遇到的坑/" data-id="cjk3tf7ex00dc6onjot1a93wv" class="article-share-link">分享</a>
       
       
       
@@ -173,7 +234,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2016/09/20/Eclipse编码问题终极解决方案/" data-id="cjjk5kg9p0007ytnjn0wh9k47" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2016/09/20/Eclipse编码问题终极解决方案/" data-id="cjk3tf72k00076onj3n91f8a1" class="article-share-link">分享</a>
       
       
       
@@ -229,7 +290,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2016/09/19/Spring项目打包为jar/" data-id="cjjk5kgan001hytnj3coa7xqn" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2016/09/19/Spring项目打包为jar/" data-id="cjk3tf74i001e6onjy9sxmiee" class="article-share-link">分享</a>
       
       
       
@@ -281,7 +342,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2016/09/10/理解java内存模型/" data-id="cjjk5kgef008iytnjm6hqp7dg" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2016/09/10/理解java内存模型/" data-id="cjk3tf7bf00ci6onjt98pjl5x" class="article-share-link">分享</a>
       
       
       
@@ -350,7 +411,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2016/08/31/理解notify notifyall sleep/" data-id="cjjk5kgeh008mytnjn5tut3rb" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2016/08/31/理解notify notifyall sleep/" data-id="cjk3tf7bc00cg6onjsf458r6t" class="article-share-link">分享</a>
       
       
       
@@ -406,7 +467,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2016/08/22/关于加密的一点总结/" data-id="cjjk5kgde006hytnj0ne35xuf" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2016/08/22/关于加密的一点总结/" data-id="cjk3tf79c00746onj9ukhaydc" class="article-share-link">分享</a>
       
       
       
@@ -458,67 +519,11 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2016/08/16/Java集合框架学习总结/" data-id="cjjk5kgaf000zytnjwx59cvut" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2016/08/16/Java集合框架学习总结/" data-id="cjk3tf73u000u6onj9rtkwutu" class="article-share-link">分享</a>
       
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/源码/">源码</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
- 
-
-
-  
-    <article id="post-synchronized的一些用法" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2016/08/16/synchronized的一些用法/" class="article-date">
-  <time datetime="2016-08-16T07:31:44.000Z" itemprop="datePublished">2016-08-16</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/编程/">编程</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/08/16/synchronized的一些用法/">synchronized的用法</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <blockquote>
-<p>以前的工作过程中，偶尔会遇到synchronized的使用，比如<a href="http://yukai.space/2015/12/21/notify%E9%97%AE%E9%A2%98/">这篇总结</a>。今天来总结一下自己对synchronized的关键字的一些认识。</p>
-</blockquote>
-<h2 id="同步锁"><a href="#同步锁" class="headerlink" title="同步锁"></a>同步锁</h2><p>synchronized顾名思义，就是用来进行一些同步工作的，我们常常在多线程的环境中使用到它，实现互斥的效果。</p>
-<p>每一个java对象都可以当做一个同步锁，线程进入同步代码块或方法的时候会自动获得该锁，在退出同步代码块或方法时会释放该锁。获得锁的唯一途径就是进入这个锁的保护的同步代码块或方法。这里的同步代码块和同步方法，就是使用synchronized关键字标记的代码块和方法。比如：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">synchronized</span> (object) &#123;</div><div class="line">	<span class="comment">//doSomething...		</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>上面的 ‘{‘ ‘}’ 中间的内容，就是同步代码块，object可以认为是同步锁。同步锁实现了互斥的效果，这就是意味着最多只有一个线程能够获得该锁，当线程A尝试去获得线程B持有的锁时，线程A必须等待或者阻塞，知道线程B释放这个锁，如果B线程不释放这个锁，那么A线程将永远等待下去。</p>
-<h2 id="synchronized修饰代码块"><a href="#synchronized修饰代码块" class="headerlink" title="synchronized修饰代码块"></a>synchronized修饰代码块</h2><h3 id="synchronized同步锁为普通对象"><a href="#synchronized同步锁为普通对象" class="headerlink" title="synchronized同步锁为普通对象"></a>synchronized同步锁为普通对象</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">function</span><span class="params">()</span></span>&#123;</div><div class="line">	<span class="keyword">synchronized</span> (object) &#123;</div><div class="line">		<span class="comment">//doSomething...		</span></div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-        
-          <p class="article-more-link">
-            <a href="/2016/08/16/synchronized的一些用法/#more">阅读全文 »</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yukai.space/2016/08/16/synchronized的一些用法/" data-id="cjjk5kgd0005nytnj48csjd18" class="article-share-link">分享</a>
-      
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/多线程/">多线程</a></li></ul>
 
     </footer>
   </div>
@@ -554,6 +559,10 @@
       <ul>
         
           <li>
+            <a href="/2018/07/24/从进程到协程/">从进程到协程</a>
+          </li>
+        
+          <li>
             <a href="/2018/07/13/JUC概述/">JUC概述</a>
           </li>
         
@@ -567,10 +576,6 @@
         
           <li>
             <a href="/2018/05/02/VirtualBox共享文件夹/">VirtualBox设置共享文件夹</a>
-          </li>
-        
-          <li>
-            <a href="/2018/05/01/Centos7美化/">Centos7美化</a>
           </li>
         
       </ul>

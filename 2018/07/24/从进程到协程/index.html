@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>从进程到协程 | YuKai&#39;s blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="如何一步一步压榨CPU …
+
+
+进程早期的计算机执行程序，是顺序执行的。按顺序一次做一件事情，只有当前的程序执行完了，才能执行下一个程序。
+这样做有什么问题呢？
+
+程序只能按顺序执行，如果当前的程序计算量比较大，运行时间比较长，后序的程序就长时间得不到运行。系统会表现的像死机一样。
+
+属于同一个程序的计算和IO直接也是顺序执行的。在程序进行IO的时候，CPU只能等待。资源利用率很低。
+
+
+为此，">
+<meta property="og:type" content="article">
+<meta property="og:title" content="从进程到协程">
+<meta property="og:url" content="http://yukai.space/2018/07/24/从进程到协程/index.html">
+<meta property="og:site_name" content="YuKai's blog">
+<meta property="og:description" content="如何一步一步压榨CPU …
+
+
+进程早期的计算机执行程序，是顺序执行的。按顺序一次做一件事情，只有当前的程序执行完了，才能执行下一个程序。
+这样做有什么问题呢？
+
+程序只能按顺序执行，如果当前的程序计算量比较大，运行时间比较长，后序的程序就长时间得不到运行。系统会表现的像死机一样。
+
+属于同一个程序的计算和IO直接也是顺序执行的。在程序进行IO的时候，CPU只能等待。资源利用率很低。
+
+
+为此，">
+<meta property="og:image" content="http://yukai.space/2018/07/24/从进程到协程/cpu.jpg">
+<meta property="og:image" content="http://yukai.space/2018/07/24/从进程到协程/node.png">
+<meta property="og:image" content="http://yukai.space/2018/07/24/从进程到协程/nodeio.png">
+<meta property="og:image" content="http://yukai.space/2018/07/24/从进程到协程/eventloop.png">
+<meta property="og:updated_time" content="2018-07-27T09:59:16.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="从进程到协程">
+<meta name="twitter:description" content="如何一步一步压榨CPU …
+
+
+进程早期的计算机执行程序，是顺序执行的。按顺序一次做一件事情，只有当前的程序执行完了，才能执行下一个程序。
+这样做有什么问题呢？
+
+程序只能按顺序执行，如果当前的程序计算量比较大，运行时间比较长，后序的程序就长时间得不到运行。系统会表现的像死机一样。
+
+属于同一个程序的计算和IO直接也是顺序执行的。在程序进行IO的时候，CPU只能等待。资源利用率很低。
+
+
+为此，">
+<meta name="twitter:image" content="http://yukai.space/2018/07/24/从进程到协程/cpu.jpg">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    
+    <div id="header-inner" class="inner">
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yukai.space"></form>
+      </div>
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/archives">归档</a>
+        
+          <a class="main-nav-link" href="/tools">工具</a>
+        
+          <a class="main-nav-link" href="/page">关于</a>
+        
+      </nav>
+      
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">YuKai&#39;s blog</a>
+      </h1>
+      
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-从进程到协程" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/07/24/从进程到协程/" class="article-date">
+  <time datetime="2018-07-24T09:25:46.000Z" itemprop="datePublished">2018-07-24</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/编程/">编程</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      从进程到协程
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <blockquote>
+<p>如何一步一步压榨CPU …</p>
+</blockquote>
+<img src="/2018/07/24/从进程到协程/cpu.jpg" alt="cpu" title="cpu">
+<h2 id="进程"><a href="#进程" class="headerlink" title="进程"></a>进程</h2><p>早期的计算机执行程序，是顺序执行的。按顺序一次做一件事情，只有当前的程序执行完了，才能执行下一个程序。</p>
+<p>这样做有什么问题呢？</p>
+<ol>
+<li><p>程序只能按顺序执行，如果当前的程序计算量比较大，运行时间比较长，后序的程序就长时间得不到运行。系统会表现的像死机一样。</p>
+</li>
+<li><p>属于同一个程序的计算和IO直接也是顺序执行的。在程序进行IO的时候，CPU只能等待。资源利用率很低。</p>
+</li>
+</ol>
+<p>为此，在系统中引入多道程序技术，使得程序直接可以并发执行。</p>
+<a id="more"></a>
+<p>程序并发执行，在单CPU环境下，表现为时间分片。程序快速切换，看起来像是大家一块跑。</p>
+<p>程序并发执行，系统中的资源由各个程序共享，那么将失去其封闭性，并具有间断性和不可再现性。比如，某个程序进行多次方程的解运算，计算到一半，别的程序突然插进来，此时的中间状态怎么办？内存会不会被覆盖？所以，跑并发需要处理上下文切换的问题。</p>
+<p><code>进程</code>就是这样抽象出来的一个概念，进程是指在系统中能够独立运行并作为资源分配的基本单位，由一组机器指令、数据和堆栈等组成。这样就可以对并发执行的程序加以描述和控制，管理独立的程序运行、切换。</p>
+<p>多CPU环境下，同一时间，不同的进程可以跑在不同的CPU上，这就是并行。</p>
+<h2 id="线程"><a href="#线程" class="headerlink" title="线程"></a>线程</h2><p>进程的管理，是由操作系统来做的。程序运行期间遇到了IO访问，阻塞了后面的计算，为了不浪费CPU，此时操作系统就会将当前进程挂起，把CPU让给其他进程使用。一切换进程，就得陷入内核，置换掉一大堆的状态，这个代价的很大的。如果系统中的进程数一多，IO操作也多，进程切换频繁发生，系统资源就都被进程切换吃掉了。整个系统就会变得很慢。</p>
+<p>于是又提出了<code>线程</code>的概念，大致意思就是，这个地方阻塞了，但我还有其他地方的逻辑流可以计算，这些逻辑流是共享一个地址空间的，不用特别麻烦的切换页表、刷新TLB，只要把寄存器刷新一遍就行，能比切换进程开销少点。比如，进程内的线程遇到IO操作，就切换到其他线程执行，该进程并不需要被切换出去，避免了大量进程切换，提高了工作效率。</p>
+<p>同时，一个进程中的多个线程可以并发执行，不同进程中的线程也能并发执行，使得操作系统具有更好的并发性，从而能够更加有效的提高系统资源的利用率和系统的吞吐量。</p>
+<h2 id="异步IO"><a href="#异步IO" class="headerlink" title="异步IO"></a>异步IO</h2><h3 id="多路复用"><a href="#多路复用" class="headerlink" title="多路复用"></a>多路复用</h3><p>在写一个服务器程序的时候，我们为每一个连接进来的用户创建一个线程为其服务。当用户量很小的时候，这么做是没有问题的。后来用户量上来了，为每个用户创建线程的做法就不行了，因为线程虽然比进程更轻量，但是创建、切换、销毁线程也是一笔很大的开销，线程也会占用系统资源，操作系统所能支持的线程数目也是有限的。</p>
+<p>于是，有了<code>线程池</code>。程序维护一定数量的线程，线程不会被轻易的创建和销毁，而是得到了复用。如果连接超出了线程池能承受的范围，就将其放入队列，等待有空闲线程了再行分配。</p>
+<p>这样看起来好像一定程度上解决了问题，但是也有其致命的缺陷，因为其本质还是依赖线程：</p>
+<ol>
+<li><p>线程很占内存</p>
+</li>
+<li><p>线程的切换带来的资源消耗。有可能恰好轮到一个线程的时间片，但此时这个线程被io阻塞，这时会发生线程切换(无意义的损耗)</p>
+</li>
+<li><p>如果线程池定义了100个线程，意味着同时只能为100个用户服务。倘若服务器同故障节点通信，由于其io是阻塞的，如果所有可用线程被故障节点阻塞，那么新的请求在队列中排队，直到连接超时。</p>
+</li>
+</ol>
+<p>所以，面对数十万的连接请求，线程池也是无能为力的。</p>
+<p>于是，<a href="http://yukai.space/2017/07/10/Linux%E7%BD%91%E7%BB%9CIO%E6%A8%A1%E5%9E%8B/#IO%E5%A4%8D%E7%94%A8">IO多路复用</a>登场。IO复用的优势在于它可以同时处理多个connection。这意味着单个线程就有可能处理成千上万个连接。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// epoll</span></div><div class="line"><span class="comment">// 事先调用epoll_ctl注册感兴趣的事件到epollfd</span></div><div class="line"><span class="keyword">while</span> <span class="keyword">true</span> &#123;</div><div class="line">    <span class="comment">// 返回触发注册事件的流</span></div><div class="line">    active_stream[] = epoll_wait(epollfd)</div><div class="line">    <span class="comment">// 无须遍历所有的流</span></div><div class="line">    <span class="keyword">for</span> i in active_stream[] &#123;</div><div class="line">        read or write till</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>很多工具都使用了IO多路复用的技术，比如，Netty、Redis、Nginx等等。</p>
+<h3 id="异步IO-1"><a href="#异步IO-1" class="headerlink" title="异步IO"></a>异步IO</h3><p>比IO多路复用更为理想的IO模型是<a href="http://yukai.space/2017/07/10/Linux%E7%BD%91%E7%BB%9CIO%E6%A8%A1%E5%9E%8B/#%E5%BC%82%E6%AD%A5IO">异步IO</a>:应用程序发起异步调用，而不需要进行轮询，进而处理下一个任务，只需在I/O完成后通过信号或是回调将数据传递给应用程序即可。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> fs = <span class="built_in">require</span>(<span class="string">'fs'</span>);</div><div class="line">fs.open(<span class="string">'./test.txt'</span>, <span class="string">"w"</span>, <span class="function"><span class="keyword">function</span>(<span class="params">err, fd</span>) </span>&#123;</div><div class="line">	<span class="comment">//..do something</span></div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>上面是一个典型的NodeJs读取文件的操作。调用<code>fs.open</code>的线程不会阻塞，他只是发起了一个调用，然后就马上返回了，紧接着便可以处理后续的代码。原因在于<code>fs.open</code>这个函数是异步函数，调用函数发起了一个IO读操作便可直接返回。而IO操作是由别的线程异步执行的，当读取文件这个IO操作完成后，NodeJs会调用传入的callback函数进行处理。</p>
+<p>回想一下Java读取文件的操作：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">File file = <span class="keyword">new</span> File(fileName);</div><div class="line">InputStream in = <span class="keyword">null</span>;</div><div class="line"><span class="keyword">try</span> &#123;</div><div class="line">    in = <span class="keyword">new</span> FileInputStream(file);</div><div class="line">    <span class="keyword">int</span> tempbyte;</div><div class="line">    <span class="keyword">while</span> ((tempbyte = in.read()) != -<span class="number">1</span>) &#123;</div><div class="line">        System.out.write(tempbyte);</div><div class="line">    &#125;</div><div class="line">    in.close();</div><div class="line">&#125; <span class="keyword">catch</span> (IOException e) &#123;</div><div class="line">    e.printStackTrace();</div><div class="line">    <span class="keyword">return</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>如果忽略掉缓存的话，每次调用<code>in.read</code>方法，便发起了一个阻塞IO，当前线程便会被挂起，CPU切换到其他线程执行。这样便发生了线程切换。</p>
+<p>异步IO与之相比，让单线程远离阻塞，同时规避了线程切换（恢复现场）的开销，让单一线程在执行 I/O 操作后立即进行其他操作。</p>
+<p>那么，NodeJs是如何实现异步IO的呢？答案是<code>线程池+IO复用|阻塞IO</code>模拟异步IO。</p>
+<img src="/2018/07/24/从进程到协程/node.png" alt="node异步" title="node异步">
+<p>由于Windows平台和*nix平台的差异，Node.js提供了libuv来作为抽象封装层，Linux下，采用<code>线程池+IO复用|阻塞IO</code>模拟异步IO，Windows下，采用其独有的内核异步IO实现IOCP（IOCP的思路也是通过线程实现，不同在于这些线程由系统内核接手管理）。</p>
+<img src="/2018/07/24/从进程到协程/nodeio.png" alt="node异步" title="node异步">
+<p>有了异步IO，再搭配<a href="http://taobaofed.org/blog/2015/10/29/deep-into-node-1/" target="_blank" rel="external">事件循环</a>，单线程的NodeJS便可以处理成千上万条连接。</p>
+<img src="/2018/07/24/从进程到协程/eventloop.png" alt="事件循环" title="事件循环">
+<p>注意，单线程的NodeJS只适合处理IO密集型的任务，IO操作较多时，NodeJS才能快速的执行事件循环，各个任务能够得到执行的机会；一旦涉及到大量的计算，那么线程便会阻塞，影响到事件循环的进行。</p>
+<h2 id="协程"><a href="#协程" class="headerlink" title="协程"></a>协程</h2><h3 id="异步回调的缺点"><a href="#异步回调的缺点" class="headerlink" title="异步回调的缺点"></a>异步回调的缺点</h3><p>异步IO的后续操作需要通过回调进行，回调函数本身并没有问题，它的问题出现在多个回调函数嵌套。假定读取A文件之后，再读取B文件，代码如下。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">fs.readFile(fileA, <span class="function"><span class="keyword">function</span> (<span class="params">err, data</span>) </span>&#123;</div><div class="line">  fs.readFile(fileB, <span class="function"><span class="keyword">function</span> (<span class="params">err, data</span>) </span>&#123;</div><div class="line">    <span class="comment">// ...</span></div><div class="line">  &#125;);</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>不难想象，如果依次读取多个文件，就会出现多重嵌套。代码不是纵向发展，而是横向发展，很快就会乱成一团，无法管理。这种情况就称为”回调地狱”。</p>
+<p>怎么解决这个问题？也就是说，异步的代码如何用同步的方式来书写？答案就是协程。</p>
+<h3 id="NodeJs中的协程"><a href="#NodeJs中的协程" class="headerlink" title="NodeJs中的协程"></a>NodeJs中的协程</h3><p>协程有点像线程，是运行与线程之内的。它的运行流程大致如下。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">第一步，协程A开始执行。</div><div class="line"></div><div class="line">第二步，协程A执行到一半，进入暂停，执行权转移到协程B。</div><div class="line"></div><div class="line">第三步，（一段时间后）协程B交还执行权。</div><div class="line"></div><div class="line">第四步，协程A恢复执行。</div></pre></td></tr></table></figure>
+<p>在单个线程内，协程A和协程B交互运行。这种情况类似于单CPU下的多个线程的执行。</p>
+<p>本质上，协程就是用户空间下的线程。在NodeJs里，对于协程的支持就是Generator。</p>
+<p>TJ Holowaychuk编写的co模块，可以帮助程序员把异步执行的代码封装成同步的写法。其原理就是利用Promise对象。将异步操作包装成Promise对象，用then方法交回执行权。可以让Generator函数的自动执行，从而实现Generator函数的自动流程管理。</p>
+<p>关于co的原理，详细的解释参考阮一峰的博客：</p>
+<ul>
+<li><p><a href="http://www.ruanyifeng.com/blog/2015/04/generator.html" target="_blank" rel="external">Generator 函数的含义与用法</a></p>
+</li>
+<li><p><a href="http://www.ruanyifeng.com/blog/2015/05/thunk.html" target="_blank" rel="external">Thunk 函数的含义和用法</a></p>
+</li>
+<li><p><a href="http://www.ruanyifeng.com/blog/2015/05/co.html" target="_blank" rel="external">co 函数库的含义和用法</a></p>
+</li>
+<li><p><a href="http://www.ruanyifeng.com/blog/2015/05/async.html" target="_blank" rel="external">async 函数的含义和用法</a></p>
+</li>
+</ul>
+<p>就性能而言，调度协程有CPU开销，保存协程上下文有内存开销，性能可能反而不如事件驱动异步回调的编程模型。</p>
+<h3 id="Golang中的协程"><a href="#Golang中的协程" class="headerlink" title="Golang中的协程"></a>Golang中的协程</h3><p><code>Golang</code>对于协程的支持则更为先进，他在语言层面实现了协程的调度器。</p>
+<blockquote>
+<p>协程是基于线程的。内部实现上，维护了一组数据结构和n个线程，真正的执行还是线程，协程执行的代码被扔进一个待执行队列中，有这n个线程从队列中拉出来执行。这就解决了协程的执行问题。那么协程是怎么切换的呢？答案是:golang对各种io函数进行了封装，这些封装的函数提供给应用程序使用，而其内部调用了操作系统的异步io函数，当这些异步函数返回busy或bloking时，golang利用这个时机将现有的执行序列压栈，让线程去拉另外一个协程的代码来执行，基本原理就是这样，利用并封装了操作系统的异步函数。包括linux的epoll，select和windows的iocp,event等。</p>
+</blockquote>
+<p>在NodeJs中，协程的切换需要手动控制，而Golang在协程阻塞时自动切换协程，在写Golang的时候所有的代码可以都写同步代码，然后用go关键字去调用。</p>
+<p>Golang中可以启用多个线程并行执行相同数量的协程，线程:协程 = m:n。</p>
+<p>而NodeJs的用户代码只能跑在单线程中，无法并行执行，故无法处理计算密集型应用场景。</p>
+<p>（完）</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yukai.space/2018/07/24/从进程到协程/" data-id="cjk3tf789005v6onjac8ltv2m" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/nodejs/">nodejs</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/协程/">协程</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/异步/">异步</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2018/07/13/JUC概述/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">JUC概述</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+ 
+     
+  <div class="comments" id="comments">
+    
+     
+       
+      <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+    
+       
+      
+      
+           <div id="gitment_comments"></div>
+    
+  </div>
+ 
+  
+
+</section>
+           
+    <aside id="sidebar">
+  
+    
+
+  
+    
+    <div class="widget-wrap">
+    
+      <div class="widget" id="toc-widget-fixed">
+      
+        <strong class="toc-title">文章目录</strong>
+        <div class="toc-widget-list">
+              <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#进程"><span class="toc-number">1.</span> <span class="toc-text">进程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#线程"><span class="toc-number">2.</span> <span class="toc-text">线程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#异步IO"><span class="toc-number">3.</span> <span class="toc-text">异步IO</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#多路复用"><span class="toc-number">3.1.</span> <span class="toc-text">多路复用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#异步IO-1"><span class="toc-number">3.2.</span> <span class="toc-text">异步IO</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#协程"><span class="toc-number">4.</span> <span class="toc-text">协程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#异步回调的缺点"><span class="toc-number">4.1.</span> <span class="toc-text">异步回调的缺点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#NodeJs中的协程"><span class="toc-number">4.2.</span> <span class="toc-text">NodeJs中的协程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Golang中的协程"><span class="toc-number">4.3.</span> <span class="toc-text">Golang中的协程</span></a></li></ol></li></ol>
+          </div>
+      </div>
+    </div>
+
+  
+    
+
+  
+    
+  
+    
+  
+    
+
+  
+</aside>
+
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-left">
+      &copy; 2014 - 2018 于凯&nbsp;|&nbsp;
+      主题 <a href="https://github.com/giscafer/hexo-theme-cafe/" target="_blank">Cafe</a>
+    </div>
+     <div id="footer-right">
+      联系方式&nbsp;|&nbsp;debiaoyu@gmail.com
+    </div>
+  </div>
+</footer>
+ <script src="/jquery/jquery.min.js"></script>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/archives" class="mobile-nav-link">归档</a>
+  
+    <a href="/tools" class="mobile-nav-link">工具</a>
+  
+    <a href="/page" class="mobile-nav-link">关于</a>
+  
+</nav>
+    <img class="back-to-top-btn" src="/images/fly-to-top.png"/>
+<script>
+// Elevator script included on the page, already.
+window.onload = function() {
+  var elevator = new Elevator({
+    selector:'.back-to-top-btn',
+    element: document.querySelector('.back-to-top-btn'),
+    duration: 1000 // milliseconds
+  });
+}
+</script>
+      
+
+  
+    <script>
+      var cloudTieConfig = {
+        url: document.location.href, 
+        sourceId: "",
+        productKey: "e2fb4051c49842688ce669e634bc983f",
+        target: "cloud-tie-wrapper"
+      };
+    </script>
+    <script src="https://img1.ws.126.net/f2e/tie/yun/sdk/loader.js"></script>
+    
+
+  
+
+
+
+
+
+
+
+<!-- author:forvoid begin -->
+<!-- author:forvoid begin -->
+
+  <link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+  <script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script> 
+  <script>
+  var gitment = new Gitment({
+    // id: '页面 ID', // 可选。默认为 location.href
+    owner: 'Hikyu',
+    repo: 'Hikyu.github.io',
+    oauth: {
+    client_id: '61886569157db60efa97',
+    client_secret: '6475bb7c8faaf44ff2e12c272a46505a0eecf46f',
+    }
+  })
+  gitment.render(document.getElementById("gitment_comments"))
+</script>
+
+
+<!-- author:forvoid end -->
+
+<!-- author:forvoid end -->
+
+
+
+ <script src="/js/is.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+<script src="/js/elevator.js"></script>
+  </div>
+</body>
+</html>

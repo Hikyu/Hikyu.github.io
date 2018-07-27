@@ -66,6 +66,62 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-java国际化" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/02/19/java国际化/" class="article-date">
+  <time datetime="2017-02-19T11:32:40.000Z" itemprop="datePublished">2017-02-19</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/编程/">编程</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/02/19/java国际化/">java国际化</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>使用java编写一个带GUI程序或者其他需要给用户传递文字信息的程序的时候，就很有可能需要用到国际化的知识，来总结一下。</p>
+</blockquote>
+<p>所谓的国际化，就是使编写的程序可以适应不同的语言环境，比如，在中文环境下，可以与用户使用中文交互，在英文环境下则切换为英文。而这个切换过程不需要修改代码或者仅仅修改少量的代码。java给我们提供了这样的实现。</p>
+<h2 id="java文件国际化"><a href="#java文件国际化" class="headerlink" title="java文件国际化"></a>java文件国际化</h2><p>我们通过将与界面显示有关系的资源提取出来到资源文件中，然后读取不同的资源文件来达到国际化的目的。在java中，这些是通过ResourceBundle这个类来实现的。</p>
+<p>ResourceBundle分为两种，一种是ListResourceBundle,另一种是PropertyResourceBundle。下面介绍这两种ResourceBundle的使用方法：</p>
+<p>首先列出demo工程的代码结构：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line">TestResourceBundle</div><div class="line">|</div><div class="line">|--src</div><div class="line">    |</div><div class="line">    |--kyu</div><div class="line">        |</div><div class="line">        |--bundle</div><div class="line">        |    |</div><div class="line">        |    |--ListResourceTranslator.java</div><div class="line">        |    |</div><div class="line">        |    |--PropertyResourceTranslator.java</div><div class="line">        |    |</div><div class="line">        |    |--ResourceTranslator.java</div><div class="line">        |</div><div class="line">        |--test</div><div class="line">        |   |</div><div class="line">        |   |--App.java</div><div class="line">        |</div><div class="line">        |--Errors_en_Us.java</div><div class="line">        |</div><div class="line">        |--Errors_zh_CN.java</div><div class="line">        |</div><div class="line">        |--Errors.java</div><div class="line">        |</div><div class="line">        |--Errors_en_Us.properties</div><div class="line">        |</div><div class="line">        |--Errors_zh_CN.properties</div><div class="line">        |</div><div class="line">        |--Errors.properties</div></pre></td></tr></table></figure>
+        
+          <p class="article-more-link">
+            <a href="/2017/02/19/java国际化/#more">阅读全文 »</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yukai.space/2017/02/19/java国际化/" data-id="cjk3tf76e003h6onjvckw6w00" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+ 
+
+
+  
     <article id="post-win7与centos7双系统安装" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2017/02/18/win7与centos7双系统安装/" class="article-date">
@@ -113,7 +169,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2017/02/18/win7与centos7双系统安装/" data-id="cjjk5kgd4005vytnj3guowaq3" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2017/02/18/win7与centos7双系统安装/" data-id="cjk3tf787005r6onj95eoms32" class="article-share-link">分享</a>
       
       
       
@@ -167,7 +223,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2017/02/07/Vps使用笔记/" data-id="cjjk5kgav001tytnj8pbb9w6s" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2017/02/07/Vps使用笔记/" data-id="cjk3tf74r001m6onj229mu1mm" class="article-share-link">分享</a>
       
       
       
@@ -220,7 +276,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2016/12/13/java异常的学习/" data-id="cjjk5kgey009hytnjz3bm2ej8" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2016/12/13/java异常的学习/" data-id="cjk3tf76y003u6onjr6yflbvo" class="article-share-link">分享</a>
       
       
       
@@ -284,7 +340,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2016/12/07/java远程调试学习/" data-id="cjjk5kgce004hytnjhpr5z7la" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2016/12/07/java远程调试学习/" data-id="cjk3tf77o004s6onjp3c8dm2v" class="article-share-link">分享</a>
       
       
       
@@ -350,7 +406,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2016/12/04/java中的路径/" data-id="cjjk5kgbq003dytnjlm0nvuz9" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2016/12/04/java中的路径/" data-id="cjk3tf76h003m6onj9oa5zzp2" class="article-share-link">分享</a>
       
       
       
@@ -444,7 +500,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2016/11/24/java中的int-byte转换/" data-id="cjjk5kgbi002xytnjaspnjpjz" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2016/11/24/java中的int-byte转换/" data-id="cjk3tf75l002m6onjr60ao8ai" class="article-share-link">分享</a>
       
       
       
@@ -497,72 +553,11 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2016/10/10/java泛型学习/" data-id="cjjk5kgc80045ytnj5uph2k38" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2016/10/10/java泛型学习/" data-id="cjk3tf77600436onjgn68xeh1" class="article-share-link">分享</a>
       
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
- 
-
-
-  
-    <article id="post-ssl总结" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2016/09/25/ssl总结/" class="article-date">
-  <time datetime="2016-09-25T02:09:10.000Z" itemprop="datePublished">2016-09-25</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/加密/">加密</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/09/25/ssl总结/">ssl使用总结</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <blockquote>
-<p>这次维护的web服务器要求使用Https双向认证，了解了一下如何在客户端和服务器之间进行ssl的配置，在此记录。另外，这篇日志主要记录如何使用，并不深入底层原理。</p>
-</blockquote>
-<h2 id="简单认识ssl和证书"><a href="#简单认识ssl和证书" class="headerlink" title="简单认识ssl和证书"></a>简单认识ssl和证书</h2><p>在理解这部分内容之前，建议先看看前面对的一篇总结：<a href="http://yukai.space/2016/08/22/%E5%85%B3%E4%BA%8E%E5%8A%A0%E5%AF%86%E7%9A%84%E4%B8%80%E7%82%B9%E6%80%BB%E7%BB%93/">关于加密的一点总结</a></p>
-<p>SSL(Secure Sockets Layer 安全套接层),及其继任者传输层安全（Transport Layer Security，TLS）是为网络通信提供安全及数据完整性的一种安全协议。TLS与SSL在传输层对网络连接进行加密。</p>
-<p>SSL协议提供的服务主要有：</p>
-<p>1、认证用户和服务器，确保数据发送到正确的客户机和服务器；</p>
-<p>2、加密数据以防止数据中途被窃取；</p>
-<p>3、维护数据的完整性，确保数据在传输过程中不被改变。</p>
-<p>其实，ssl就是一种协议。我们知道Http协议是明文传输的，安全性不高。Https就是在Http基础之上加一层ssl协议，来达到加密通信的目的。具体的ssl握手过程，可以参考<a href="http://baike.baidu.com/view/14121.htm#6">百度百科</a></p>
-<p>附上一张图方便理解：</p>
-<img src="/2016/09/25/ssl总结/sslprocess.jpg" alt="sslprocess" title="sslprocess">
-<p>图片来自网络</p>
-        
-          <p class="article-more-link">
-            <a href="/2016/09/25/ssl总结/#more">阅读全文 »</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yukai.space/2016/09/25/ssl总结/" data-id="cjjk5kgcy005jytnja4glpvkw" class="article-share-link">分享</a>
-      
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/加密/">加密</a></li></ul>
 
     </footer>
   </div>
@@ -598,6 +593,10 @@
       <ul>
         
           <li>
+            <a href="/2018/07/24/从进程到协程/">从进程到协程</a>
+          </li>
+        
+          <li>
             <a href="/2018/07/13/JUC概述/">JUC概述</a>
           </li>
         
@@ -611,10 +610,6 @@
         
           <li>
             <a href="/2018/05/02/VirtualBox共享文件夹/">VirtualBox设置共享文件夹</a>
-          </li>
-        
-          <li>
-            <a href="/2018/05/01/Centos7美化/">Centos7美化</a>
           </li>
         
       </ul>
