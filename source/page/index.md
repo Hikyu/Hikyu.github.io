@@ -21,15 +21,11 @@ Java
 
 Git
 
-设计模式
-
 Linux
 
-Eclipse RCP
+NodeJs
 
 Docker
-
-Python
 
 # 书单
 
@@ -60,3 +56,5 @@ Python
 《深入浅出node.js》人民邮电出版社
 
 《Springboot揭密》机械工业出版社
+
+《敏捷软件开发　原则、模式与实践》清华大学出版社

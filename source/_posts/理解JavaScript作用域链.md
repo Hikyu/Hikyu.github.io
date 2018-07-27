@@ -5,7 +5,7 @@ date: 2017-09-16 09:59:34
 categories: 
 - 技术
 - 编程
-tags: javascript
+tags: nodejs
 ---
 
 > 最近在读《JavaScript权威指南》，读到“函数作用域和声明提前”这部分内容时有点晕，上网查了一些资料，算是弄明白了，所以把自己的理解记下来~
