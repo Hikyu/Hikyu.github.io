@@ -5,10 +5,7 @@
   
   <title>从进程到协程 | YuKai&#39;s blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="如何一步一步压榨CPU …
-
-
-进程早期的计算机执行程序，是顺序执行的。按顺序一次做一件事情，只有当前的程序执行完了，才能执行下一个程序。
+  <meta name="description" content="进程早期的计算机执行程序，是顺序执行的。按顺序一次做一件事情，只有当前的程序执行完了，才能执行下一个程序。
 这样做有什么问题呢？
 
 程序只能按顺序执行，如果当前的程序计算量比较大，运行时间比较长，后序的程序就长时间得不到运行。系统会表现的像死机一样。
@@ -16,15 +13,12 @@
 属于同一个程序的计算和IO直接也是顺序执行的。在程序进行IO的时候，CPU只能等待。资源利用率很低。
 
 
-为此，">
+为此，在系统中引入多道程序技术，使得程">
 <meta property="og:type" content="article">
 <meta property="og:title" content="从进程到协程">
 <meta property="og:url" content="http://yukai.space/2018/07/24/从进程到协程/index.html">
 <meta property="og:site_name" content="YuKai's blog">
-<meta property="og:description" content="如何一步一步压榨CPU …
-
-
-进程早期的计算机执行程序，是顺序执行的。按顺序一次做一件事情，只有当前的程序执行完了，才能执行下一个程序。
+<meta property="og:description" content="进程早期的计算机执行程序，是顺序执行的。按顺序一次做一件事情，只有当前的程序执行完了，才能执行下一个程序。
 这样做有什么问题呢？
 
 程序只能按顺序执行，如果当前的程序计算量比较大，运行时间比较长，后序的程序就长时间得不到运行。系统会表现的像死机一样。
@@ -32,18 +26,15 @@
 属于同一个程序的计算和IO直接也是顺序执行的。在程序进行IO的时候，CPU只能等待。资源利用率很低。
 
 
-为此，">
+为此，在系统中引入多道程序技术，使得程">
 <meta property="og:image" content="http://yukai.space/2018/07/24/从进程到协程/cpu.jpg">
 <meta property="og:image" content="http://yukai.space/2018/07/24/从进程到协程/node.png">
 <meta property="og:image" content="http://yukai.space/2018/07/24/从进程到协程/nodeio.png">
 <meta property="og:image" content="http://yukai.space/2018/07/24/从进程到协程/eventloop.png">
-<meta property="og:updated_time" content="2018-07-27T09:59:16.000Z">
+<meta property="og:updated_time" content="2018-07-27T10:09:04.701Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="从进程到协程">
-<meta name="twitter:description" content="如何一步一步压榨CPU …
-
-
-进程早期的计算机执行程序，是顺序执行的。按顺序一次做一件事情，只有当前的程序执行完了，才能执行下一个程序。
+<meta name="twitter:description" content="进程早期的计算机执行程序，是顺序执行的。按顺序一次做一件事情，只有当前的程序执行完了，才能执行下一个程序。
 这样做有什么问题呢？
 
 程序只能按顺序执行，如果当前的程序计算量比较大，运行时间比较长，后序的程序就长时间得不到运行。系统会表现的像死机一样。
@@ -51,7 +42,7 @@
 属于同一个程序的计算和IO直接也是顺序执行的。在程序进行IO的时候，CPU只能等待。资源利用率很低。
 
 
-为此，">
+为此，在系统中引入多道程序技术，使得程">
 <meta name="twitter:image" content="http://yukai.space/2018/07/24/从进程到协程/cpu.jpg">
   
   
@@ -131,10 +122,7 @@
       
         <!-- Table of Contents -->
         
-        <blockquote>
-<p>如何一步一步压榨CPU …</p>
-</blockquote>
-<img src="/2018/07/24/从进程到协程/cpu.jpg" alt="cpu" title="cpu">
+        <img src="/2018/07/24/从进程到协程/cpu.jpg" alt="cpu" title="cpu">
 <h2 id="进程"><a href="#进程" class="headerlink" title="进程"></a>进程</h2><p>早期的计算机执行程序，是顺序执行的。按顺序一次做一件事情，只有当前的程序执行完了，才能执行下一个程序。</p>
 <p>这样做有什么问题呢？</p>
 <ol>
