@@ -66,6 +66,66 @@
       <div class="outer">
         <section id="main">
   
+    <article id="posts-如何执行一个延迟任务？" class="article article-type-posts" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/11/20/如何执行一个延迟任务？/" class="article-date">
+  <time datetime="2017-11-20T02:57:45.000Z" itemprop="datePublished">2017-11-20</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/编程/">编程</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/11/20/如何执行一个延迟任务？/">如何执行一个延迟任务？</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>前段时间做到临时版本管理系统的项目中有这样一个需求：</p>
+<p>最新发布的版本发布记录状态为<code>未处理</code>，用户手动确认后状态修改为<code>已处理</code>。超过七天后状态为未处理的记录状态自动修改为<code>过期提醒</code>，同时向用户发送一封邮件。</p>
+<p>“修改状态为过期提醒” 的任务就是一个延迟任务，如何执行这样一个任务呢？思考了两种方案：</p>
+<h2 id="轮询"><a href="#轮询" class="headerlink" title="轮询"></a>轮询</h2><p>启动一个定时任务，每隔一天执行一次，执行的内容如下：</p>
+<ol>
+<li><p>select id from release where status = 2 and release_time &gt; 7days</p>
+</li>
+<li><p>update release set status = 3 where id in (…) </p>
+</li>
+<li><p>向用户发送过期通知邮件(可以交给专门的线程去做)</p>
+</li>
+</ol>
+        
+          <p class="article-more-link">
+            <a href="/2017/11/20/如何执行一个延迟任务？/#more">阅读全文 »</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yukai.space/2017/11/20/如何执行一个延迟任务？/" data-id="cjk3tf79m007j6onj6rvh1gol" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/多线程/">多线程</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+ 
+
+
+  
     <article id="post-从通信协议到装饰者模式" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2017/11/15/从通信协议到装饰者模式/" class="article-date">
@@ -105,7 +165,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2017/11/15/从通信协议到装饰者模式/" data-id="cjjk5kgda0067ytnjhzv8jib2" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2017/11/15/从通信协议到装饰者模式/" data-id="cjk3tf78t006d6onjx8ughx2z" class="article-share-link">分享</a>
       
       
       
@@ -158,7 +218,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2017/11/05/大型网站技术架构/" data-id="cjjk5kgdq0075ytnj15c65sm3" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2017/11/05/大型网站技术架构/" data-id="cjk3tf79e00786onjefs664cn" class="article-share-link">分享</a>
       
       
       
@@ -228,7 +288,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2017/11/02/认识MVCC/" data-id="cjjk5kges0097ytnj2i2h4xcn" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2017/11/02/认识MVCC/" data-id="cjk3tf7es00d66onjwjtxcdyx" class="article-share-link">分享</a>
       
       
       
@@ -295,7 +355,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2017/10/31/数据库事务浅析/" data-id="cjjk5kge4007wytnjbwjnuym4" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2017/10/31/数据库事务浅析/" data-id="cjk3tf79t007t6onjypca30xa" class="article-share-link">分享</a>
       
       
       
@@ -348,7 +408,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2017/10/31/Java读取资源文件/" data-id="cjjk5kgab000tytnjz77ld94j" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2017/10/31/Java读取资源文件/" data-id="cjk3tf73p000s6onjqhh03sqa" class="article-share-link">分享</a>
       
       
       
@@ -404,7 +464,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2017/10/15/maven打包/" data-id="cjjk5kgcn0051ytnj5xedggk8" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2017/10/15/maven打包/" data-id="cjk3tf77w00556onje3rcm8en" class="article-share-link">分享</a>
       
       
       
@@ -464,60 +524,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2017/10/01/VncServer的安装与使用/" data-id="cjjk5kgap001lytnjnevbqrki" class="article-share-link">分享</a>
-      
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/">linux</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
- 
-
-
-  
-    <article id="post-Linux下的守护进程" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2017/10/01/Linux下的守护进程/" class="article-date">
-  <time datetime="2017-10-01T00:47:51.000Z" itemprop="datePublished">2017-10-01</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/Linux/">Linux</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/10/01/Linux下的守护进程/">Linux下的守护进程</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <blockquote>
-<p>这两天在搭建VNC服务的时候，遇到一个简单的问题，却困扰了我有一会：网上的教程大部分是修改.service文件，然后启动服务，但是我发现使用vncserver这个命令也可以达到同样的目的，这两者之间有什么区别呢？查了一些资料，简单的做一个总结。</p>
-</blockquote>
-<h2 id="工作管理"><a href="#工作管理" class="headerlink" title="工作管理"></a>工作管理</h2><p>一般情况下，我们可能会在命令行下这样启动一个程序，以新做的版本管理系统为例：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">java -jar VersionManager.jar</div></pre></td></tr></table></figure>
-        
-          <p class="article-more-link">
-            <a href="/2017/10/01/Linux下的守护进程/#more">阅读全文 »</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yukai.space/2017/10/01/Linux下的守护进程/" data-id="cjjk5kgai0015ytnjs83ifl9l" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2017/10/01/VncServer的安装与使用/" data-id="cjk3tf74m001i6onjk4wifcka" class="article-share-link">分享</a>
       
       
       
@@ -557,6 +564,10 @@
       <ul>
         
           <li>
+            <a href="/2018/07/24/从进程到协程/">从进程到协程</a>
+          </li>
+        
+          <li>
             <a href="/2018/07/13/JUC概述/">JUC概述</a>
           </li>
         
@@ -570,10 +581,6 @@
         
           <li>
             <a href="/2018/05/02/VirtualBox共享文件夹/">VirtualBox设置共享文件夹</a>
-          </li>
-        
-          <li>
-            <a href="/2018/05/01/Centos7美化/">Centos7美化</a>
           </li>
         
       </ul>
