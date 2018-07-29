@@ -66,6 +66,61 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-java日志使用" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/02/21/java日志使用/" class="article-date">
+  <time datetime="2017-02-21T04:48:55.000Z" itemprop="datePublished">2017-02-21</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/工具/">工具</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/02/21/java日志使用/">java日志框架的使用</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>之前在web项目中用到了日志，日志在web应用中很重要，特别是对于程序员追查bug而言。但是由于对混乱的日志框架体系不是十分清楚，导致各种jar包冲突和日志不正常输出。今天来总结一下日志框架的使用<br>主要介绍日志门面slf4j结合日志实现log4j。关于其他的日志框架介绍和使用，参考链接里列出了前辈总结的很好的资料，相信读完之后一定会有收获。</p>
+</blockquote>
+<h2 id="日志门面和实际日志框架"><a href="#日志门面和实际日志框架" class="headerlink" title="日志门面和实际日志框架"></a>日志门面和实际日志框架</h2><p>日志框架有：jdk自带的logging(jul)，log4j1、log4j2、logback<br>日志门面有：apache commons-logging、slf4j</p>
+<p>日志框架很好理解，就是提供日志api，使我们可以很轻易的，有组织有规范的输出日志。日志门面的作用是在日志记录实现的基础上提供一个封装的 API 层次，<br>对日志记录 API 的使用者提供一个统一的接口，使得可以自由切换不同的日志记录实现。日志门面就好比java中的jdbc规范接口，各个数据库厂家实现的jdbc驱动程序就是实际的日志框架，<br>他们遵循了这个规范，使得我们在编写java程序时不用考虑底层驱动的不同，只需调用jdbc规范接口即可。这是典型的面向对象思想。</p>
+<h2 id="slf4j的使用"><a href="#slf4j的使用" class="headerlink" title="slf4j的使用"></a>slf4j的使用</h2><h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><p><img src="https://www.slf4j.org/images/concrete-bindings.png" alt="slf4j使用"></p>
+<p>上图来自slf4j官网</p>
+        
+          <p class="article-more-link">
+            <a href="/2017/02/21/java日志使用/#more">阅读全文 »</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yukai.space/2017/02/21/java日志使用/" data-id="cjk6brpya00463gnjzjyp5ao6" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+ 
+
+
+  
     <article id="post-java国际化" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2017/02/19/java国际化/" class="article-date">
@@ -108,7 +163,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2017/02/19/java国际化/" data-id="cjk3tf76e003h6onjvckw6w00" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2017/02/19/java国际化/" data-id="cjk6brpxy003s3gnjb2jbhsq1" class="article-share-link">分享</a>
       
       
       
@@ -169,7 +224,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2017/02/18/win7与centos7双系统安装/" data-id="cjk3tf787005r6onj95eoms32" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2017/02/18/win7与centos7双系统安装/" data-id="cjk6brpzi005z3gnjdr3odj04" class="article-share-link">分享</a>
       
       
       
@@ -223,7 +278,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2017/02/07/Vps使用笔记/" data-id="cjk3tf74r001m6onj229mu1mm" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2017/02/07/Vps使用笔记/" data-id="cjk6brpw1001w3gnjj167n6zx" class="article-share-link">分享</a>
       
       
       
@@ -276,7 +331,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2016/12/13/java异常的学习/" data-id="cjk3tf76y003u6onjr6yflbvo" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2016/12/13/java异常的学习/" data-id="cjk6brpy4003z3gnjyvow10zt" class="article-share-link">分享</a>
       
       
       
@@ -340,7 +395,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2016/12/07/java远程调试学习/" data-id="cjk3tf77o004s6onjp3c8dm2v" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2016/12/07/java远程调试学习/" data-id="cjk6brpyk004l3gnj0czkwz78" class="article-share-link">分享</a>
       
       
       
@@ -406,7 +461,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2016/12/04/java中的路径/" data-id="cjk3tf76h003m6onj9oa5zzp2" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2016/12/04/java中的路径/" data-id="cjk6brpxp003f3gnjx4jfxacq" class="article-share-link">分享</a>
       
       
       
@@ -500,60 +555,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2016/11/24/java中的int-byte转换/" data-id="cjk3tf75l002m6onjr60ao8ai" class="article-share-link">分享</a>
-      
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
- 
-
-
-  
-    <article id="post-java泛型学习" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2016/10/10/java泛型学习/" class="article-date">
-  <time datetime="2016-10-10T12:05:03.000Z" itemprop="datePublished">2016-10-10</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/编程/">编程</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/10/10/java泛型学习/">java泛型学习</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>有一段时间没有更新博客了，过了国庆之后，好像变得更懒了~~前两天开发了一个用于记账的公众号，功能很简单，就是普通的增删查改…由于是个人开发者，无法进行公众号的认证，所以没什么高级的接口权限，只能搞的简陋一点了…下一步计划再丰富丰富，目前想到了这几个功能：配合有道或者金山词霸的Api进行中英互译（API怎么用，可不可以用目前还不清楚），配合微博的Api接口整点微博热门什么的，配合豆瓣的Api接口做一个电影或者书籍查询的功能等等….公众号的服务器代码目前还部署在自己的电脑上，用nat123做了一下公网ip的映射，接下来考虑是不是要换成云服务器更为妥当….</p>
-<p>公众号在这里：</p>
-<img src="/2016/10/10/java泛型学习/easybill.jpg" alt="EasyBill" title="EasyBill">
-<p>目前，公众号已经开源：<a href="https://github.com/Hikyu/WechatSubscriptionNumber">WechatSubscriptionNumber</a></p>
-<p>好了，言归正传。今天学习了java的泛型知识，不总结一下老是觉得跟没学一样…</p>
-        
-          <p class="article-more-link">
-            <a href="/2016/10/10/java泛型学习/#more">阅读全文 »</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yukai.space/2016/10/10/java泛型学习/" data-id="cjk3tf77600436onjgn68xeh1" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2016/11/24/java中的int-byte转换/" data-id="cjk6brpxb00303gnjobar85o4" class="article-share-link">分享</a>
       
       
       
@@ -593,7 +595,11 @@
       <ul>
         
           <li>
-            <a href="/2018/07/24/从进程到协程/">从进程到协程</a>
+            <a href="/2018/07/27/从进程到协程/">从进程到协程</a>
+          </li>
+        
+          <li>
+            <a href="/2018/07/22/Java中各种锁的概念/">Synchronized的锁机制</a>
           </li>
         
           <li>
@@ -606,10 +612,6 @@
         
           <li>
             <a href="/2018/06/01/SSH端口转发/">SSH端口转发</a>
-          </li>
-        
-          <li>
-            <a href="/2018/05/02/VirtualBox共享文件夹/">VirtualBox设置共享文件夹</a>
           </li>
         
       </ul>

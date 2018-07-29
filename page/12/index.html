@@ -66,10 +66,10 @@
       <div class="outer">
         <section id="main">
   
-    <article id="post-java中的类型转换" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-java中的ThreadLocal" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2016/04/28/java中的类型转换/" class="article-date">
-  <time datetime="2016-04-28T04:48:55.000Z" itemprop="datePublished">2016-04-28</time>
+    <a href="/2016/06/21/java中的ThreadLocal/" class="article-date">
+  <time datetime="2016-06-21T04:48:55.000Z" itemprop="datePublished">2016-06-21</time>
 </a>
     
   <div class="article-category">
@@ -84,7 +84,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2016/04/28/java中的类型转换/">java中的类型转换</a>
+      <a class="article-title" href="/2016/06/21/java中的ThreadLocal/">java中的ThreadLocal</a>
     </h1>
   
 
@@ -93,36 +93,26 @@
     <div class="article-entry" itemprop="articleBody">
       
         <blockquote>
-<p>以前一直对java中的类型转换了解的不是很清楚，因为平时写代码有IDE的帮助，所以往往忽略这一块的内容，但往往就是这样的小知识点不清楚，很有可能造成很大的错误。所以在闲暇时间总结一下这些可能被遗忘的知识点。网上已经有很多相关的介绍文章了，现在来梳理一番：</p>
+<p>今天测试那边在做压力测试的时候，发现新版本的Jdbc占用CPU很高，导致并发量降低，研究半天，发现出问题的地方在于每条语句执行过后都会调用ThreadLocal的get方法。研究一番ThreadLocal…</p>
 </blockquote>
-<h2 id="基本类型"><a href="#基本类型" class="headerlink" title="基本类型"></a><strong>基本类型</strong></h2><ul>
-<li><strong>基本类型优先级</strong></li>
-</ul>
-<p>首先来看java中的基本类型有哪些：</p>
-<p>byte：byte数据类型是一个8位有符号二进制补码整数。</p>
-<p>short：short数据类型为16位有符号二进制补码整数。</p>
-<p>int：int数据类型是一个32位有符号二进制补码整数</p>
-<p>long: long数据类型是一个64位二进制补码整数</p>
-<p>float: float数据类型是单精度、32位、符合IEEE 754标准的浮点数</p>
-<p>boolean: boolean数据类型只有两个可能的值：true和false</p>
-<p>double: double数据类型是双精度、64位、符合IEEE 754标准的浮点数；</p>
-<p>char: char数据类型是一个16位的Unicode字符</p>
-<p>基本类型优先级由低到高排序：</p>
-<p>(byte short char) int long float double</p>
-<p>其中，byte short char 平级</p>
+<h2 id="问题背景："><a href="#问题背景：" class="headerlink" title="问题背景："></a><strong>问题背景</strong>：</h2><p>每次sql语句执行结束之后，最后都会接受后台传回的ReadyForQueryPacket包，标记语句执行完毕。在新版本的协议当中，针对读写分离的功能，在这个包中增加了一些要接收的数据：标记数据库主机状态的lsn。这个lsn标志着主备机之间的数据是否存在差异。每次执行完sql语句之后，都要将数据库后台传回来的lsn与当前主机的lsn进行比较，从而决定下一步的读写过程。每次取本机的lsn操作长这样：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">LsnVo lv = ((LsnVo)DispatchConnection.threadLocalLsn.get());</div></pre></td></tr></table></figure>
+<p>其中，threadLocalLsn是DispatchConnection中的一个ThreadLocal类的静态对象。由于每次执行sql语句之后都会执行它的get方法，导致不必要的cpu浪费。这就是cpu异常的原因。</p>
+<p>遂改之：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">LsnVo lv = ((DispatchConnection) conn).getLsnVo();</div></pre></td></tr></table></figure>
         
           <p class="article-more-link">
-            <a href="/2016/04/28/java中的类型转换/#more">阅读全文 »</a>
+            <a href="/2016/06/21/java中的ThreadLocal/#more">阅读全文 »</a>
           </p>
         
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2016/04/28/java中的类型转换/" data-id="cjk3tf75t002u6onj7l2sfdro" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2016/06/21/java中的ThreadLocal/" data-id="cjk6brpx7002s3gnjat7b4l3g" class="article-share-link">分享</a>
       
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/多线程/">多线程</a></li></ul>
 
     </footer>
   </div>
@@ -176,7 +166,73 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2016/04/28/java中的equals与hashcode/" data-id="cjk3tf75j002i6onjr9m0rs02" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2016/04/28/java中的equals与hashcode/" data-id="cjk6brpx9002w3gnjpjka3zsb" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+ 
+
+
+  
+    <article id="post-java中的类型转换" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/04/28/java中的类型转换/" class="article-date">
+  <time datetime="2016-04-28T04:48:55.000Z" itemprop="datePublished">2016-04-28</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/编程/">编程</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/04/28/java中的类型转换/">java中的类型转换</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>以前一直对java中的类型转换了解的不是很清楚，因为平时写代码有IDE的帮助，所以往往忽略这一块的内容，但往往就是这样的小知识点不清楚，很有可能造成很大的错误。所以在闲暇时间总结一下这些可能被遗忘的知识点。网上已经有很多相关的介绍文章了，现在来梳理一番：</p>
+</blockquote>
+<h2 id="基本类型"><a href="#基本类型" class="headerlink" title="基本类型"></a><strong>基本类型</strong></h2><ul>
+<li><strong>基本类型优先级</strong></li>
+</ul>
+<p>首先来看java中的基本类型有哪些：</p>
+<p>byte：byte数据类型是一个8位有符号二进制补码整数。</p>
+<p>short：short数据类型为16位有符号二进制补码整数。</p>
+<p>int：int数据类型是一个32位有符号二进制补码整数</p>
+<p>long: long数据类型是一个64位二进制补码整数</p>
+<p>float: float数据类型是单精度、32位、符合IEEE 754标准的浮点数</p>
+<p>boolean: boolean数据类型只有两个可能的值：true和false</p>
+<p>double: double数据类型是双精度、64位、符合IEEE 754标准的浮点数；</p>
+<p>char: char数据类型是一个16位的Unicode字符</p>
+<p>基本类型优先级由低到高排序：</p>
+<p>(byte short char) int long float double</p>
+<p>其中，byte short char 平级</p>
+        
+          <p class="article-more-link">
+            <a href="/2016/04/28/java中的类型转换/#more">阅读全文 »</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yukai.space/2016/04/28/java中的类型转换/" data-id="cjk6brpxh00383gnj91oavt7i" class="article-share-link">分享</a>
       
       
       
@@ -238,7 +294,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2016/04/25/ant编译java工程jdk路径的设置/" data-id="cjk3tf74v001q6onj2834tipi" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2016/04/25/ant编译java工程jdk路径的设置/" data-id="cjk6brpw600203gnj2b2j90qx" class="article-share-link">分享</a>
       
       
       
@@ -303,7 +359,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2016/04/20/java中的编码问题/" data-id="cjk3tf75w002y6onjacnrowos" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2016/04/20/java中的编码问题/" data-id="cjk6brpxk003b3gnjj03kq1g0" class="article-share-link">分享</a>
       
       
       
@@ -372,7 +428,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2016/04/15/关于抽象类和接口/" data-id="cjk3tf795006s6onjzksvowrd" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2016/04/15/关于抽象类和接口/" data-id="cjk6brq09006t3gnj4jirm9a8" class="article-share-link">分享</a>
       
       
       
@@ -422,7 +478,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2016/04/14/他可是科比·布莱恩特!/" data-id="cjk3tf78h00626onj2erxlfw5" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2016/04/14/他可是科比·布莱恩特!/" data-id="cjk6brq00006h3gnj3kxuhc6q" class="article-share-link">分享</a>
       
       
       
@@ -471,72 +527,11 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2016/04/12/junit使用/" data-id="cjk3tf77k004l6onj1gp6uwbc" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2016/04/12/junit使用/" data-id="cjk6brpyl004o3gnjkbw0pwnc" class="article-share-link">分享</a>
       
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/junit/">junit</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/测试/">测试</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
- 
-
-
-  
-    <article id="post-sphinx安装问题" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2016/03/30/sphinx安装问题/" class="article-date">
-  <time datetime="2016-03-30T04:48:55.000Z" itemprop="datePublished">2016-03-30</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/工具/">工具</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/03/30/sphinx安装问题/">sphinx安装问题</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <blockquote>
-<p>领导给安排的任务是修改数据库的帮助手册。从仓库下载了代码以后就一直在倒腾环境的安装。生成文档的工具是Python<br> 环境下的Sphinx。就是这个Sphinx,昨天倒腾了一天都没装上，郁闷。</p>
-<p>一开始安装Python3，到是一路顺畅，没有什么问题。但是在使用Sphinx的时候就报错了。原因是之前文档的创建环境是<br> Python2，Python3与Python2是不兼容的，在编码问题上报错。</p>
-<p>遂改之，卸载Python3，安装Python2.问题来了。</p>
-</blockquote>
-<p>安装完Python2之后，使用 easy_install sphinx<br>指令来安装sphinx。可是死活装不上，换源和使用pip都不行，苦逼。报这样一个错误：</p>
-<p>UnicodeEncodeError: ‘ascii’ codec can’t encode characters in position 4-5: ordi al not in range(128)</p>
-<p>意思就是Python执行环境的默认编码是ascii码，Python调用ascii编码解码程序去处理字符流，当字符流不属于ascii范围内<br>，就会抛出异常（ordinal not in range(128)）。</p>
-<p>看了一下报错的位置，都是在安装sphinx之前安装的所需的依赖出了问题，都是一堆<br>.py文件。某些函数读取字符流的时候出了问题。这可咋整。。。我也没法知道他读的流是啥啊。</p>
-<p>后来想到了一个解决办法，那就是修改Python编码环境为UTF-8，问题可能就迎刃而解了。</p>
-<p>首先所有修改的动作都是要创建一个叫 <strong>sitecustomize.py</strong>的文件，为什么要创建这个文件呢，是因为python在启动的时候会<br>去load的这个文件，所以你如果要修改一些启动的变量就可以把操作写在这个文件。</p>
-<p>修改默认字符编码的代码很简单就2行：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"># sitecustomize.py                   # this file can be anywhere in your Python path,</div><div class="line"># but it usually goes in $&#123;pythondir&#125;/lib/site-packages/</div><div class="line">import sys</div><div class="line">sys.setdefaultencoding(&apos;utf-8&apos;)</div></pre></td></tr></table></figure>
-        
-          <p class="article-more-link">
-            <a href="/2016/03/30/sphinx安装问题/#more">阅读全文 »</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yukai.space/2016/03/30/sphinx安装问题/" data-id="cjk3tf77z005c6onjg62p5wa3" class="article-share-link">分享</a>
-      
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/">python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/编码/">编码</a></li></ul>
 
     </footer>
   </div>
@@ -572,7 +567,11 @@
       <ul>
         
           <li>
-            <a href="/2018/07/24/从进程到协程/">从进程到协程</a>
+            <a href="/2018/07/27/从进程到协程/">从进程到协程</a>
+          </li>
+        
+          <li>
+            <a href="/2018/07/22/Java中各种锁的概念/">Synchronized的锁机制</a>
           </li>
         
           <li>
@@ -585,10 +584,6 @@
         
           <li>
             <a href="/2018/06/01/SSH端口转发/">SSH端口转发</a>
-          </li>
-        
-          <li>
-            <a href="/2018/05/02/VirtualBox共享文件夹/">VirtualBox设置共享文件夹</a>
           </li>
         
       </ul>

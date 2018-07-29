@@ -66,6 +66,57 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-并发场景下缓存的创建" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/06/24/并发场景下缓存的创建/" class="article-date">
+  <time datetime="2017-06-24T11:34:24.000Z" itemprop="datePublished">2017-06-24</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/编程/">编程</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/06/24/并发场景下缓存的创建/">并发场景下缓存的创建</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>问题背景：<br>现场提了一个新的需求：jdbc需要提供一个新的接口，用于查询session的执行进度。后台提供了查询视图，jdbc要做的只是在这个接口中查询这个视图，获得当前session的执行进度返回给客户。<br>查询当前session的执行进度，说明当前session很有可能正在执行某条sql，是阻塞的。所以需要通过创建新的session并以当前session的sessionID作为条件在视图中查找当前session的执行情况。这个接口的调用在某些特定场景下是比较频繁的，比如用户每隔5秒就需要调用一次，那么每次都创建新的session去查询是不是显得太low？是不是可以在第一次查询时创建新的session，然后缓存起来，下次可以直接用？于是涉及到了缓存session的问题。（其实完全可以使用连接池来做到缓存，这次讨论的是并发场景下缓存的创建问题~~思路主要来自于《java并发编程实战》）</p>
+</blockquote>
+        
+          <p class="article-more-link">
+            <a href="/2017/06/24/并发场景下缓存的创建/#more">阅读全文 »</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yukai.space/2017/06/24/并发场景下缓存的创建/" data-id="cjk6brq0v007x3gnjyoh0r42k" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/多线程/">多线程</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+ 
+
+
+  
     <article id="post-如何从外网访问家里的电脑" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2017/06/05/如何从外网访问家里的电脑/" class="article-date">
@@ -103,7 +154,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2017/06/05/如何从外网访问家里的电脑/" data-id="cjk3tf79j007f6onjazbg8g7m" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2017/06/05/如何从外网访问家里的电脑/" data-id="cjk6brq0l007g3gnjngdlg0us" class="article-share-link">分享</a>
       
       
       
@@ -158,7 +209,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2017/05/29/建造者模式的使用/" data-id="cjk3tf79v007x6onjvewcky5v" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2017/05/29/建造者模式的使用/" data-id="cjk6brq0w00803gnjt34tysed" class="article-share-link">分享</a>
       
       
       
@@ -211,7 +262,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2017/05/08/java线程池的使用/" data-id="cjk3tf77i004i6onjqfhblljy" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2017/05/08/java线程池的使用/" data-id="cjk6brpyi004i3gnjx5n9imde" class="article-share-link">分享</a>
       
       
       
@@ -278,7 +329,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2017/05/07/如何炒肉/" data-id="cjk3tf7ec00cq6onjyehhwx8n" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2017/05/07/如何炒肉/" data-id="cjk6brq0p007m3gnj7brz2j4a" class="article-share-link">分享</a>
       
       
       
@@ -341,7 +392,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2017/05/07/凉拌黄瓜/" data-id="cjk3tf792006o6onjqhszk1lv" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2017/05/07/凉拌黄瓜/" data-id="cjk6brq0b006x3gnjp5dv77fl" class="article-share-link">分享</a>
       
       
       
@@ -393,7 +444,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2017/05/02/java任务取消/" data-id="cjk3tf77b00496onjodvpopn4" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2017/05/02/java任务取消/" data-id="cjk6brpxt003l3gnj8940fd85" class="article-share-link">分享</a>
       
       
       
@@ -445,74 +496,11 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2017/04/26/线程池异常处理方案/" data-id="cjk3tf7eq00d36onjshymhlx9" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2017/04/26/线程池异常处理方案/" data-id="cjk6brq1q00983gnjapy3h4cq" class="article-share-link">分享</a>
       
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/多线程/">多线程</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
- 
-
-
-  
-    <article id="post-土豆烧肉" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2017/04/19/土豆烧肉/" class="article-date">
-  <time datetime="2017-04-19T04:01:30.000Z" itemprop="datePublished">2017-04-19</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/生活/">生活</a>►<a class="article-category-link" href="/categories/生活/食物/">食物</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/04/19/土豆烧肉/">土豆烧肉</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="原料"><a href="#原料" class="headerlink" title="原料"></a>原料</h2><p>土豆、五花肉、姜片、葱、酱油、料酒、盐、青椒、白糖、胡椒面</p>
-<h2 id="做法"><a href="#做法" class="headerlink" title="做法"></a>做法</h2><ol>
-<li><p>五花肉切块洗净，土豆洗净、去皮，然后切块放到水中备用。青椒切片、葱切段、姜切片备用。</p>
-</li>
-<li><p>锅中水烧开，放两片姜片，倒入洗净的肉块，汆烫两分钟(注意时间不要太长)，捞出肉块沥干备用</p>
-</li>
-<li><p>锅中倒油，油七成热后加入加入姜片、葱段、胡椒面爆香，然后倒入肉块煸炒(注意时间不要太长，否则肉会变老)</p>
-</li>
-<li><p>倒入酱油、精盐、料酒，倒入土豆青椒和肉块一起翻炒几下</p>
-</li>
-<li><p>加入清水(高汤)刚好没过肉块，加入两小勺盐，适当的撒一点白糖，煮沸后转小火，盖上锅盖烧20分钟</p>
-</li>
-<li><p>汤锅中汤汁差不多的时候，大火收汁，撒点葱末装盘</p>
-</li>
-</ol>
-        
-          <p class="article-more-link">
-            <a href="/2017/04/19/土豆烧肉/#more">阅读全文 »</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yukai.space/2017/04/19/土豆烧肉/" data-id="cjk3tf79900706onjl18l8c0r" class="article-share-link">分享</a>
-      
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/食物/">食物</a></li></ul>
 
     </footer>
   </div>
@@ -548,7 +536,11 @@
       <ul>
         
           <li>
-            <a href="/2018/07/24/从进程到协程/">从进程到协程</a>
+            <a href="/2018/07/27/从进程到协程/">从进程到协程</a>
+          </li>
+        
+          <li>
+            <a href="/2018/07/22/Java中各种锁的概念/">Synchronized的锁机制</a>
           </li>
         
           <li>
@@ -561,10 +553,6 @@
         
           <li>
             <a href="/2018/06/01/SSH端口转发/">SSH端口转发</a>
-          </li>
-        
-          <li>
-            <a href="/2018/05/02/VirtualBox共享文件夹/">VirtualBox设置共享文件夹</a>
           </li>
         
       </ul>

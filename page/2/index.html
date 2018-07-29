@@ -66,6 +66,59 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-可能会用到的Git技巧2" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/03/29/可能会用到的Git技巧2/" class="article-date">
+  <time datetime="2018-03-29T06:56:57.000Z" itemprop="datePublished">2018-03-29</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/工具/">工具</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/03/29/可能会用到的Git技巧2/">可能会用到的Git技巧(2)</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="git-worktree"><a href="#git-worktree" class="headerlink" title="git worktree"></a>git worktree</h2><p>我们知道如果工作目录修改到一半的话，是不能随便切换 branch 的。解决方法可以通过 <code>git stash</code> 先暂存起来，随后执行 <code>git stash apply</code> 恢复。</p>
+<p>但是，如果我们想同时修改两个分支呢？或者同时测试两个分支。能想到的方法就是单独再 clone 一份代码到其他目录。但是这种方法不仅麻烦，而且形成了两个独立的 git 目录，双方的同步也比较费劲。</p>
+<p>git 为我们提供了一个命令来解决这个问题，那就是 <code>git worktree add -b &lt;新分支名&gt; &lt;新路径&gt; &lt;从此分支创建&gt;</code>。</p>
+<p>比如，我们正在某个 feature 分支开发，现在希望从 master 分出一个分支来解决某个紧急的 BUG：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git worktree add -b hotfix ../hotfix master</div></pre></td></tr></table></figure>
+        
+          <p class="article-more-link">
+            <a href="/2018/03/29/可能会用到的Git技巧2/#more">阅读全文 »</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yukai.space/2018/03/29/可能会用到的Git技巧2/" data-id="cjk6brq0f00743gnjsrz4r498" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/git/">git</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+ 
+
+
+  
     <article id="post-可能会用到的Git技巧1" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2018/03/01/可能会用到的Git技巧1/" class="article-date">
@@ -105,7 +158,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2018/03/01/可能会用到的Git技巧1/" data-id="cjk3tf797006w6onj40j1zusa" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2018/03/01/可能会用到的Git技巧1/" data-id="cjk6brq0e00713gnjy51rtp2f" class="article-share-link">分享</a>
       
       
       
@@ -162,7 +215,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2018/01/25/安装Gitlab-Development-Kit/" data-id="cjk3tf79o007m6onjsitsgq3f" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2018/01/25/安装Gitlab-Development-Kit/" data-id="cjk6brq0r007q3gnj1d2x3gzc" class="article-share-link">分享</a>
       
       
       
@@ -218,7 +271,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2018/01/17/Gitlab调研/" data-id="cjk3tf72r00096onjol95fhot" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2018/01/17/Gitlab调研/" data-id="cjk6brpu800093gnj8mrqh07i" class="article-share-link">分享</a>
       
       
       
@@ -277,7 +330,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2017/12/20/Java同步工具类/" data-id="cjk3tf73j000n6onjaaqrt7wm" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2017/12/20/Java同步工具类/" data-id="cjk6brpux000o3gnjyso1neme" class="article-share-link">分享</a>
       
       
       
@@ -327,7 +380,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2017/12/10/Java阻塞队列/" data-id="cjk3tf74e001a6onj1sramodm" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2017/12/10/Java阻塞队列/" data-id="cjk6brpv9000z3gnjrvycuk0q" class="article-share-link">分享</a>
       
       
       
@@ -386,7 +439,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2017/11/30/简单学习Java-ForkJoin框架/" data-id="cjk3tf7ek00cx6onjjfat5v1i" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2017/11/30/简单学习Java-ForkJoin框架/" data-id="cjk6brq1j008z3gnjr1g79ghx" class="article-share-link">分享</a>
       
       
       
@@ -447,74 +500,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yukai.space/2017/11/23/Java基础-字节/" data-id="cjk3tf73m000p6onjsdv1ggmm" class="article-share-link">分享</a>
-      
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
- 
-
-
-  
-    <article id="posts-理解Java-Reference" class="article article-type-posts" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2017/11/21/理解Java-Reference/" class="article-date">
-  <time datetime="2017-11-21T01:28:46.000Z" itemprop="datePublished">2017-11-21</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/技术/">技术</a>►<a class="article-category-link" href="/categories/技术/编程/">编程</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/11/21/理解Java-Reference/">理解Java-Reference</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>最近重读《深入理解Java虚拟机》，讲到Java中的几种引用类型，结合源码总结梳理一遍。</p>
-<h2 id="引用类型"><a href="#引用类型" class="headerlink" title="引用类型"></a>引用类型</h2><p>JDK1.2之后，Java扩充了引用的概念，将引用分为强引用、软引用、弱引用和虚引用四种。</p>
-<ul>
-<li><p>强引用</p>
-<p>类似于”Object a = new Object()”这类的引用，只要垃圾强引用存在，垃圾回收器就不会回收掉被引用的对象。</p>
-</li>
-<li><p>软引用</p>
-<p>对于软引用关联的对象，在系统将要发生内存溢出异常之前，会把这些对象列入垃圾回收范围中进行回收。如果这次回收还没有足够内存，则抛出内存异常。</p>
-<p>使用SoftReference类实现软引用</p>
-</li>
-<li><p>弱引用</p>
-<p>强度比软引用更弱，被弱引用关联的对象只能存活到下一次垃圾回收发生之前。当发生GC时，无论当前内存是否足够，都会回收掉只被弱引用关联的对象。</p>
-<p>使用WeakReference类实现弱引用</p>
-</li>
-<li><p>虚引用</p>
-<p>一个对象是否有虚引用的存在，完全不会对其生存时间构成影响，也无法通过虚引用取得一个对象的实例。为一个对象设置虚引用关联的唯一目的就是能够在这个对象被垃圾回收器回收掉后收到一个通知。</p>
-<p>使用PhantomReference类实现虚引用</p>
-</li>
-</ul>
-        
-          <p class="article-more-link">
-            <a href="/2017/11/21/理解Java-Reference/#more">阅读全文 »</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yukai.space/2017/11/21/理解Java-Reference/" data-id="cjk3tf7a2008b6onj92qo6y41" class="article-share-link">分享</a>
+      <a data-url="http://yukai.space/2017/11/23/Java基础-字节/" data-id="cjk6brpuz000s3gnjas3xhepl" class="article-share-link">分享</a>
       
       
       
@@ -554,7 +540,11 @@
       <ul>
         
           <li>
-            <a href="/2018/07/24/从进程到协程/">从进程到协程</a>
+            <a href="/2018/07/27/从进程到协程/">从进程到协程</a>
+          </li>
+        
+          <li>
+            <a href="/2018/07/22/Java中各种锁的概念/">Synchronized的锁机制</a>
           </li>
         
           <li>
@@ -567,10 +557,6 @@
         
           <li>
             <a href="/2018/06/01/SSH端口转发/">SSH端口转发</a>
-          </li>
-        
-          <li>
-            <a href="/2018/05/02/VirtualBox共享文件夹/">VirtualBox设置共享文件夹</a>
           </li>
         
       </ul>
